@@ -820,6 +820,118 @@ const DB = [
     defense:"Attributes can compensate for poor technique up to a level. At the level of blue belt and above, attribute-based grappling hits a ceiling. Technique-based grappling has no ceiling.",
     mistake:"Substituting effort for precision. When a technique doesn't work, the solution is almost never to try harder — it is to find the one detail that's wrong and fix it.",
     drill:"Slow-motion drilling: execute any submission at 20% speed, partner gives zero resistance. Focus entirely on position: grip placement, angle, fulcrum position. If it works at 20%, it works at 100%."
+  },
+
+  // ── JUDO THROWING TECHNIQUES (Diaz — Judo For Beginners) ────────
+  {
+    id:"ippon_seoinage", cat:"takedown",
+    name:"Ippon Seoi-Nage (One-Arm Shoulder Throw)",
+    tagline:"The first throw most Judo students learn. One of the highest-percentage throws in competition at every level.",
+    tags:["Judo","Te-Waza","Hand Throw","Shoulder"],
+    objective:"Load uke's weight over your shoulder with their balance broken forward. The throw rotates over your shoulder — your arm is the axle, their body is the wheel.",
+    mechanics:"Kuzushi: pull uke's sleeve with your left hand and push their lapel forward-right to break balance. Entry (tai sabaki): step your right foot forward, pivot left so your back faces uke. Let go of the lapel and insert your right arm under their armpit with elbow pointing down. Maintain sleeve grip with your left hand. Lower your right shoulder, bend forward from the waist — NOT at the knees. Pull the sleeve down as you rotate forward, throwing uke over your right shoulder.",
+    defense:"Stepping around the entry before the pivot completes. Dropping into a low base. Grabbing their belt or hips to prevent rotation.",
+    mistake:"Arching your back backward on the entry step. A backward arch means uke regains balance and you have no throwing force. Back must stay flat and body must fold forward to complete the throw.",
+    drill:"Uchi-komi (entry only, no throw): 20 reps at full speed. Focus on: entry angle, arm position under armpit, forward bend of the upper body. No throw until the mechanics feel automatic."
+  },
+  {
+    id:"tai_otoshi", cat:"takedown",
+    name:"Tai-Otoshi (Body Drop)",
+    tagline:"Phil's signature throw. Minimal body contact, powerful when timed to opponent's forward movement. Works against pushers and rushers.",
+    tags:["Judo","Te-Waza","Forward Throw","Body Drop"],
+    objective:"Use uke's forward momentum as the throw. You rotate them over your outstretched leg — you don't lift, you redirect.",
+    mechanics:"Setup: pull uke's sleeve when they move forward, creating forward imbalance. Tai sabaki: turn to your left, spread your legs, place your right foot outside uke's right foot (the outstretched blocking leg). Pull the sleeve and push the lapel simultaneously, rotating uke over your right leg. Your hands do the work — avoid the temptation to use your hips. Your leg is the trip point, not the lever.",
+    defense:"Stepping around the outstretched leg. Sitting back to negate forward momentum.",
+    mistake:"Using your hips like a hip throw. Tai otoshi works with the hands and the blocking leg. Adding hip rotation kills it — it becomes a failed o-goshi instead of a clean body drop.",
+    drill:"Entry timing drill: partner walks forward, execute tai otoshi only at the moment of maximum forward lean. 15 reps. If they're not leaning, wait. Timing is 90% of this throw."
+  },
+  {
+    id:"o_goshi", cat:"takedown",
+    name:"O-Goshi (Large Hip Throw)",
+    tagline:"The fundamental hip throw. First koshi-waza most judoka learn. Your hip is the fulcrum — load their center of gravity over it.",
+    tags:["Judo","Koshi-Waza","Hip Throw","Kuzushi"],
+    objective:"Position your hip below uke's center of gravity. Their weight tips forward over your hip with minimal effort — if you need to lift, your position is wrong.",
+    mechanics:"Kuzushi: pull uke's sleeve forward with your left hand. Simultaneously wrap your right arm around uke's waist. Tai sabaki: pivot so your hips are against uke's hips, your back against their front. Your right hip should be positioned at or just below uke's center of gravity (approximately their hip bone). Drive your hips back into them, pull the sleeve down, and push forward with the waist grip. Uke rotates over your hip.",
+    defense:"Stepping forward to close the gap and deny the hip entry. Dropping their weight below your hip entry point.",
+    mistake:"Positioning your hip too high (at their chest). The hip throw only works when your hip is below their center of gravity — high entry just pushes them backward.",
+    drill:"Hip position check: achieve the entry position with a partner, then pause and feel whether your hip is below their center of gravity before committing to the throw. 10 reps, checking position each time."
+  },
+  {
+    id:"harai_goshi", cat:"takedown",
+    name:"Harai-Goshi (Sweeping Hip Throw)",
+    tagline:"The hip throw with a leg sweep. Works when uke's weight is loaded onto one leg — sweep the loaded leg.",
+    tags:["Judo","Koshi-Waza","Hip Throw","Leg Sweep"],
+    objective:"Pull uke's weight onto their right leg, then sweep that exact leg. A balanced opponent absorbs a harai goshi — you must create the single-leg loading first.",
+    mechanics:"Pull uke forward-right to load their right leg. Turn (tai sabaki) with hips against their hips. As they commit their weight to the right, sweep your right leg backward and through, hitting their right thigh (not their lower leg). The sweep and the hip rotation happen simultaneously — not sequentially.",
+    defense:"Spreading the feet to distribute weight. Stepping around the sweep direction.",
+    mistake:"Sweeping before the weight is loaded. A two-legged sweep fails because uke just shifts weight to the other leg. Wait for the loading, then sweep the loaded leg.",
+    drill:"Harai goshi weight loading: pull uke sideways until you can feel their weight shift to one leg, then sweep. 10 reps — if you can't feel the weight shift, don't sweep."
+  },
+  {
+    id:"uchi_mata", cat:"takedown",
+    name:"Uchi-Mata (Inner Thigh Throw)",
+    tagline:"Devastating against opponents with a wide or parallel stance. One of the most competition-successful throws in Judo history.",
+    tags:["Judo","Ashi-Waza","Foot Throw","Inner Thigh"],
+    objective:"Thread your leg between uke's legs and sweep the inner thigh of the weight-bearing leg. The sweep drives upward and through.",
+    mechanics:"Pull uke forward to break balance. Insert your right leg between their legs, targeting the inner thigh of their left leg (the far leg). Sweep upward through the inner thigh while pulling the sleeve and driving the lapel grip forward. The sweep should travel upward and through — not sideways. Uke is swept forward and over.",
+    defense:"Closing the stance to prevent leg entry. Hopping the target leg away from the sweep.",
+    mistake:"Sweeping the lower leg instead of the inner thigh. The lower leg sweep is ashi barai — uchi mata targets high on the inner thigh for maximum leverage and control.",
+    drill:"Leg thread and sweep isolation: thread the leg between partner's feet and sweep the inner thigh with no throw. 15 reps, focusing purely on the sweep path — upward and through, not sideways."
+  },
+  {
+    id:"osoto_gari_judo", cat:"takedown",
+    name:"O-Soto-Gari (Large Outer Reap)",
+    tagline:"Load their right leg, step deep past it, reap diagonally backward. The reap is the finish, kuzushi is the technique.",
+    tags:["Judo","Ashi-Waza","Leg Reap","Kuzushi-First"],
+    objective:"Break balance forward-right until almost all of uke's weight is on their right leg. Then reap that leg diagonally backward. Without the kuzushi, the reap does nothing.",
+    mechanics:"Kuzushi: push uke backward-right to load their right leg. Step your left foot deep outside their right foot. Bring your right leg in a large diagonal reaping arc — drive your thigh through and past their right thigh in a backward-diagonal direction. Simultaneously drive your chest through theirs and pull down and back with your grip. The reap and chest drive happen together.",
+    defense:"Stepping back before the reap connects. Distributing weight to prevent single-leg loading. Counter to the opposite side.",
+    mistake:"Reaping before the kuzushi is established. Against a balanced opponent, the reap requires overpowering leg strength. Against a broken-balance opponent, it's effortless. The kuzushi is not the setup — it IS the technique.",
+    drill:"Kuzushi-then-reap: push uke until you feel their weight commit to the right leg, then reap. If they're still two-legged, abort and re-establish kuzushi. 15 reps."
+  },
+  {
+    id:"ukemi", cat:"position",
+    name:"Ukemi (Break Falls)",
+    tagline:"Learn to fall before you learn to throw. Ukemi is not a warm-up drill — it is the foundational safety system of all grappling.",
+    tags:["Judo","Fundamentals","Safety","Break Fall"],
+    objective:"Dissipate the force of a throw through the body's surface area — not through the joints. A proper break fall is the difference between standing up and getting injured.",
+    mechanics:"Four types. Yoko ukemi (sideward): fall to the side, slap the mat with the full arm (not just the hand) as hip and leg land simultaneously. Head stays off the mat — chin to opposite shoulder. Ushiro ukemi (backward): chin tucked to chest, roll onto the rounded back, slap with both arms at 45 degrees from the body as shoulders contact the mat. Mae ukemi (forward fall): hands hit first at shoulder width, elbows bent to absorb, chin tucked. Rolling ukemi: roll diagonally across the back — right shoulder to left hip — and come up to standing.",
+    defense:"Never post with a straight arm to stop a fall — this is how wrists and elbows break. The mat should be slapped, not pushed.",
+    mistake:"Breaking the fall with hands only. The hand-only break fall concentrates all impact in the wrist. The arm slap distributes it across the full forearm and shoulder.",
+    drill:"Ukemi sequence: 5 reps each of all four break falls at the start of every session — from kneeling first, then standing. Non-negotiable. Drill these until they happen before your brain processes the fall."
+  },
+  {
+    id:"kesa_gatame", cat:"position",
+    name:"Kesa-Gatame (Scarf Hold)",
+    tagline:"Judo's classic side control. Devastatingly heavy when executed correctly — the 'Hundred Kilos' name is literal.",
+    tags:["Judo","Katame-Waza","Pin","Osaekomi"],
+    objective:"Create maximum weight distribution on uke's chest and upper body. Your hips control theirs; your weight makes breathing difficult.",
+    mechanics:"From the side: sit beside uke with your hip against their shoulder. Wrap your right arm around their neck and right shoulder, gripping their gi collar or controlling their head. Control their right arm with your left arm — trap it between your upper arm and your side. Spread your legs wide for base. Most of your weight sits through your hip into their chest. Do NOT kneel — sit with your weight loaded down through your side.",
+    defense:"Bridging and rolling toward the holder. Hip escape away to create space and reguard.",
+    mistake:"Kneeling beside them instead of sitting with weight loaded. Kneeling creates no downward pressure — uke can turn toward you and escape. Sit with your full weight into their chest.",
+    drill:"Kesa gatame weight drill: hold for 60 seconds against a resisting partner. They must feel your weight — if they can breathe comfortably, your position isn't heavy enough."
+  },
+  {
+    id:"hadaka_jime_judo", cat:"submission",
+    name:"Hadaka-Jime (Rear Naked Choke — Judo)",
+    tagline:"Known in BJJ as the RNC. The same mechanics, the same priority: seatbelt first, choke second.",
+    tags:["Judo","Shime-Waza","Rear Choke","Carotid"],
+    objective:"Compress both carotid arteries simultaneously. This stops blood flow to the brain — unconsciousness follows in 3-5 seconds at full application.",
+    mechanics:"From behind: wrap the choking arm under uke's chin so your bicep is against one carotid and your forearm is against the other. Grip your own bicep or shoulder with the free hand. Squeeze and arch simultaneously — do not just squeeze. The arch drives your elbow forward into the throat while the arms compress the sides. Note: Judo rules allow this from the rear; it is the ground version of what BJJ calls back control submission.",
+    defense:"Chin tuck before the arm seats. Hand-fight the choking forearm from the wrist, not the bicep. Turn into the attacker to face them and kill the back position.",
+    mistake:"Squeezing only with the bicep. A bicep-only choke compresses only one side and is far easier to resist. The two-sided carotid compression with the arch is what makes it effective.",
+    drill:"Choke grip sequence: establish seatbelt grip, then thread choking arm under chin, then apply free hand. Separate each step and drill the sequence 10 times before adding resistance."
+  },
+  {
+    id:"randori", cat:"position",
+    name:"Randori (Freestyle Practice)",
+    tagline:"Taking chaos. The emphasis of Judo over kata. The training method that separates knowing techniques from owning them.",
+    tags:["Judo","Training Method","Freestyle","Live Practice"],
+    objective:"Apply techniques against a resisting partner who is also trying to apply techniques against you. The goal is to develop instinct, timing, and adaptability — not to win at all costs.",
+    mechanics:"Jigoro Kano's foundational insight: techniques must be tested against resistance to become real skills. Kata (prearranged forms) teaches the shape of the technique. Randori teaches when and how to apply it. In randori, both tori and uke are always adapting — this is what develops competition-level timing. Principle: go hard enough to test the technique, not so hard that safety is compromised.",
+    defense:"The partner in randori is not the enemy — they are the tool. Protecting your partner during randori is part of the practice, not a limitation of it.",
+    mistake:"Treating randori as a competition. When randori becomes about winning, athletes stop experimenting and default to their strongest two techniques. This halts development. Use randori to test new techniques, not to confirm existing strengths.",
+    drill:"Randori with a constraint: 5-minute round where you can only throw from one of the 8 kuzushi directions. Forces you to set up the throw rather than relying on athleticism."
   }
 ];
 
