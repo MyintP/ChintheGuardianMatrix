@@ -407,9 +407,24 @@
     height:100%;
     overflow-y:auto;
     overflow-x:hidden;
-    padding:24px 32px 48px;
+    padding:20px 28px 40px;
     display:flex;
     flex-direction:column;
+  }
+
+  /* Map wrapper: take all remaining height in the flex column */
+  .map-wrap{
+    flex:1;
+    min-height:400px;
+    height:auto !important;
+    margin-top:0;
+    position:relative;
+  }
+  .flow-wrap{
+    flex:1;
+    min-height:400px;
+    height:auto !important;
+    margin-top:0;
   }
 
   /* ────────────────────────────────
@@ -562,20 +577,6 @@
   ──────────────────────────────── */
 
   .map-hint{font-size:11px;text-align:left;margin:0 0 8px 0;}
-
-  /* Map fills most of the right panel height */
-  .map-wrap{
-    flex:1;
-    min-height:480px;
-    height:auto;
-    margin-top:0;
-  }
-  .flow-wrap{
-    flex:1;
-    min-height:480px;
-    height:auto;
-    margin-top:0;
-  }
 
   /* Map nodes — desktop sizing */
   .map-node{width:104px;min-height:60px;font-size:11.5px;}
