@@ -422,8 +422,8 @@
   h1{font-size:22px;letter-spacing:0.02em;line-height:1;}
   .scorecard .value{font-size:26px;}
   .scorecard .label{font-size:10px;}
-  .tagline{font-size:11.5px;line-height:1.45;max-width:100%;margin-top:6px;color:var(--chalk-dim);}
-  .myanmar-slot{font-size:10px;margin-top:3px;margin-bottom:14px;}
+  .tagline{display:none;}
+  .myanmar-slot{display:none;}
 
   /* Section separator */
   .sidebar-divider{
@@ -431,33 +431,36 @@
     margin:14px 0;flex-shrink:0;
   }
 
-  /* ── Section nav: VERTICAL stack, not horizontal scroll ── */
+  /* ── Section nav: 2-column grid so all 8 buttons fit in viewport ── */
   .section-nav{
-    display:flex !important;
-    flex-direction:column !important;
-    gap:4px !important;
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:5px !important;
     overflow:visible !important;
     padding:0 !important;
     margin:0 0 12px 0 !important;
-    scrollbar-width:none;
   }
   .nav-btn{
     width:100% !important;
-    text-align:left !important;
-    padding:10px 14px !important;
-    font-size:11.5px !important;
-    letter-spacing:0.06em !important;
-    border-radius:8px !important;
+    text-align:center !important;
+    padding:9px 8px !important;
+    font-size:10.5px !important;
+    letter-spacing:0.05em !important;
+    border-radius:7px !important;
     flex-shrink:0 !important;
-    white-space:normal !important;
-    display:flex;
-    align-items:center;
-    gap:8px;
+    white-space:nowrap !important;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:block !important;
   }
   .nav-btn.active{
     background:var(--chalk) !important;
     color:var(--mat) !important;
     border-color:var(--chalk) !important;
+  }
+  /* Search and Quick Ref span full width */
+  #searchToggle, #quickRefToggle, #flagsToggle{
+    grid-column:span 1;
   }
 
   /* ── View toggle: two equal buttons side by side ── */
