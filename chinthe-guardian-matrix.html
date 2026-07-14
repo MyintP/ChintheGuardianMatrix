@@ -2252,7 +2252,18 @@ render = function(){
 };
 
 updateFlagsCount();
-render();
+// Defer initial render to let CSS flex layout settle before reading clientHeight
+// This ensures map canvas captures correct dimensions
+requestAnimationFrame(function(){
+  requestAnimationFrame(function(){
+    render();
+  });
+});
+
+// Re-render on resize to recompute map dimensions
+window.addEventListener('resize', function(){
+  if(viewMode==='flow') renderFlow(); else renderMap();
+});
 
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').catch(()=>{});
