@@ -298,6 +298,38 @@ footer{
   .hero-heading{font-size:clamp(52px,15vw,90px);}
   .modules-grid{grid-template-columns:1fr;}
 }
+
+/* ── DESKTOP IMPROVEMENTS ── */
+@media(min-width:960px){
+  .nav-inner{padding:16px 40px;}
+  .nav-wordmark{font-size:22px;}
+  .nav-link{font-size:12px;padding:8px 16px;}
+
+  .hero{padding:140px 40px 100px;}
+  .hero-inner{max-width:none;}
+  .hero-heading{font-size:clamp(80px,9vw,160px);}
+  .hero-sub{font-size:clamp(17px,1.6vw,22px);max-width:580px;margin-bottom:48px;}
+  .hero-badges{margin-top:72px;}
+
+  .section{max-width:none;padding:100px 40px;}
+  .section-title{font-size:clamp(42px,5vw,68px);}
+  .modules-grid{grid-template-columns:repeat(2,1fr);gap:20px;}
+
+  .pillars-inner{max-width:none;padding:100px 40px;}
+  .pillars-grid{grid-template-columns:repeat(4,1fr);gap:48px;}
+
+  .philosophy{padding:80px 40px;}
+  .philosophy-quote{font-size:clamp(32px,4.5vw,64px);}
+
+  footer{padding:52px 40px;}
+}
+
+@media(min-width:1400px){
+  .hero{padding:160px 80px 120px;}
+  .section,.pillars-inner{padding:120px 80px;}
+  .hero-heading{font-size:clamp(100px,9vw,180px);}
+  .modules-grid{grid-template-columns:repeat(4,1fr);}
+}
 </style>
 </head>
 <body>
