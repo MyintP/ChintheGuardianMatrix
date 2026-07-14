@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Guardian Matrix — CHINTHE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --mat:#0D0D0D;
+    --mat-elev:#171717;
+    --mat-elev-2:#222222;
+    --chalk:#F5F3EC;
+    --chalk-dim:#A29E93;
+    --jade:#0F3B2E;
+    --jade-bright:#3FA383;
+    --gold:#D4AF37;
+    --gold-dim:#2A2210;
+    --victory:#E8C468;
+    --victory-dim:#2E2410;
+    --danger:#B5462F;
+    --danger-dim:#2A1610;
+    --line:rgba(245,243,236,0.10);
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--mat);
+    color:var(--chalk);
+    font-family:'IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 18px;}
+
+  header{
+    position:sticky;top:0;z-index:20;
+    background:linear-gradient(180deg, var(--mat) 80%, rgba(13,13,13,0));
+    padding:16px 0 10px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.2em;
+    color:var(--jade-bright);text-transform:uppercase;margin-bottom:2px;
+  }
+  .header-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  h1{
+    font-family:'Bebas Neue','Oswald',sans-serif;font-weight:400;
+    font-size:clamp(20px, 6vw, 28px);letter-spacing:0.03em;margin:0;
+    text-transform:uppercase;line-height:1;
+  }
+  h1 span{color:var(--victory);}
+  .tagline{font-size:11.5px;color:var(--chalk-dim);margin-top:6px;line-height:1.4;max-width:70%;}
+  .myanmar-slot{font-family:'Noto Sans Myanmar',sans-serif;font-size:11px;color:var(--chalk-dim);margin-top:2px;}
+  .scorecard{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;font-family:'IBM Plex Mono',monospace;}
+  .scorecard .label{font-size:10px;color:var(--chalk-dim);letter-spacing:0.08em;text-transform:uppercase;}
+  .scorecard .value{font-size:24px;font-weight:600;color:var(--gold);line-height:1.2;}
+  .scorecard .value.win{color:var(--victory);}
+  .scorecard .value.loss{color:var(--danger);}
+
+  .section-nav{display:flex;gap:8px;overflow-x:auto;margin-top:14px;scrollbar-width:none;padding-bottom:2px;}
+  .section-nav::-webkit-scrollbar{display:none;}
+  .nav-btn{
+    flex-shrink:0;background:var(--mat-elev);border:1px solid var(--line);color:var(--chalk-dim);
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;
+    padding:8px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  }
+  .nav-btn.active{background:var(--chalk);color:var(--mat);border-color:var(--chalk);font-weight:600;}
+
+  .search-panel{display:none;margin-top:12px;}
+  .search-panel.open{display:block;}
+  .search-panel input{
+    width:100%;background:var(--mat-elev);border:1px solid var(--line);border-radius:8px;
+    color:var(--chalk);font-family:'IBM Plex Sans',sans-serif;font-size:14px;padding:11px 14px;outline:none;
+  }
+  .search-panel input:focus{border-color:var(--jade-bright);}
+  .search-results{margin-top:8px;display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto;}
+  .search-result{
+    display:flex;justify-content:space-between;align-items:center;background:var(--mat-elev);
+    border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:13.5px;
+  }
+  .search-result:active{background:var(--mat-elev-2);}
+  .search-empty{color:var(--chalk-dim);font-size:12.5px;padding:8px 2px;}
+
+  .chain{display:flex;gap:0;overflow-x:auto;padding:12px 0 4px 0;scrollbar-width:none;}
+  .chain::-webkit-scrollbar{display:none;}
+  .chain-item{display:flex;align-items:center;flex-shrink:0;}
+  .chain-node{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;padding:5px 10px;border-radius:999px;
+    border:1px solid var(--line);color:var(--chalk-dim);background:var(--mat-elev);white-space:nowrap;cursor:pointer;
+  }
+  .chain-node.current{color:var(--mat);background:var(--chalk);border-color:var(--chalk);font-weight:600;}
+  .chain-link{width:14px;height:1px;background:var(--line);flex-shrink:0;}
+
+  main{padding-top:10px;}
+
+  /* Radial map */
+  .map-hint{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--chalk-dim);
+    text-align:center;margin:8px 0 4px 0;letter-spacing:0.04em;text-transform:uppercase;
+  }
+  .map-wrap{position:relative;width:100%;height:420px;margin-top:6px;}
+  .map-svg{position:absolute;inset:0;width:100%;height:100%;}
+  .map-svg line{stroke:var(--line);stroke-width:1.5;}
+  .map-node{
+    position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;
+    text-align:center;border-radius:14px;padding:6px 9px;font-family:'IBM Plex Sans',sans-serif;
+    font-size:10.5px;line-height:1.25;cursor:pointer;border:1px solid var(--line);
+    background:var(--mat-elev);color:var(--chalk);width:82px;min-height:52px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.4);transition:transform .12s ease;
+  }
+  .map-node:active{transform:translate(-50%,-50%) scale(0.94);}
+  .map-node .pts{display:block;margin-top:3px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;opacity:0.8;}
+  .map-node.type-entry{border-left:3px solid var(--chalk-dim);}
+  .map-node.type-position{border-left:3px solid var(--jade-bright);}
+  .map-node.type-submission{border-left:3px solid var(--victory);}
+  .map-node.type-counter{border-left:3px solid var(--gold);}
+  .map-node.type-threat{border-left:3px solid var(--danger);}
+  .map-node.center{
+    width:126px;min-height:74px;font-family:'Bebas Neue','Oswald',sans-serif;font-size:15px;
+    letter-spacing:0.02em;text-transform:uppercase;background:var(--chalk);color:var(--mat);
+    border-color:var(--chalk);z-index:2;box-shadow:0 4px 16px rgba(0,0,0,0.55);cursor:default;
+  }
+  .back-btn{
+    display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line);
+    color:var(--chalk-dim);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;
+    text-transform:uppercase;padding:7px 14px;border-radius:999px;cursor:pointer;margin:10px auto 0 auto;
+  }
+  .back-row{display:flex;justify-content:center;}
+
+  /* Detail panel */
+  .detail-card{
+    background:var(--mat-elev);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;margin-top:18px;position:relative;overflow:hidden;
+  }
+  .detail-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;}
+  .detail-card.type-entry::before{background:var(--chalk-dim);}
+  .detail-card.type-position::before{background:var(--jade-bright);}
+  .detail-card.type-submission::before{background:var(--victory);}
+  .detail-card.type-counter::before{background:var(--gold);}
+  .detail-card.type-threat::before{background:var(--danger);}
+  .badges{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;}
+  .badge{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.06em;
+    padding:4px 9px;border-radius:5px;text-transform:uppercase;
+  }
+  .badge.tag-entry{background:var(--mat-elev-2);color:var(--chalk-dim);}
+  .badge.tag-position{background:var(--jade);color:var(--jade-bright);}
+  .badge.tag-submission{background:var(--victory-dim);color:var(--victory);}
+  .badge.tag-counter{background:var(--mat-elev-2);color:var(--gold);}
+  .badge.tag-threat{background:var(--danger-dim);color:var(--danger);}
+  .badge.pts-pos{background:var(--jade);color:var(--jade-bright);}
+  .badge.pts-neg{background:var(--danger-dim);color:var(--danger);}
+  .badge.pts-win{background:var(--victory);color:var(--mat);}
+  .badge.pts-loss{background:var(--danger-dim);color:var(--danger);}
+  .node-title{
+    font-family:'Bebas Neue','Oswald',sans-serif;font-weight:400;font-size:26px;text-transform:uppercase;
+    letter-spacing:0.02em;margin:0 0 10px 0;line-height:1.1;
+  }
+  .node-section{margin-top:12px;}
+  .node-section .label{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--chalk-dim);
+    letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;
+  }
+  .node-section p{margin:0;font-size:14.5px;line-height:1.55;color:var(--chalk);}
+  .node-section.dim p{color:var(--chalk-dim);}
+  .node-section.mistake p{color:var(--danger);}
+  .empty-note{text-align:center;color:var(--chalk-dim);font-size:12.5px;margin-top:10px;}
+
+  .legend{
+    display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:26px;padding-top:16px;
+    border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--chalk-dim);
+  }
+  .legend-item{display:flex;align-items:center;gap:6px;}
+  .dot{width:8px;height:8px;border-radius:2px;}
+  .dot.entry{background:var(--chalk-dim);}
+  .dot.position{background:var(--jade-bright);}
+  .dot.submission{background:var(--victory);}
+  .dot.counter{background:var(--gold);}
+  .dot.threat{background:var(--danger);}
+
+  .export-row{display:flex;justify-content:center;margin-top:14px;}
+  .export-btn{
+    background:none;border:1px solid var(--gold);color:var(--gold);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+    padding:9px 20px;border-radius:999px;cursor:pointer;
+  }
+  .export-btn:active{background:var(--gold-dim);}
+
+  .modal-overlay{
+    position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.75);
+    display:flex;align-items:flex-end;justify-content:center;
+    padding:0;
+  }
+  .modal{
+    background:var(--mat-elev);border:1px solid var(--line);border-radius:16px 16px 0 0;
+    width:100%;max-width:920px;padding:20px 18px 36px 18px;
+    max-height:80vh;display:flex;flex-direction:column;gap:12px;
+  }
+  .modal-header{display:flex;justify-content:space-between;align-items:center;}
+  .modal-title{
+    font-family:'Bebas Neue','Oswald',sans-serif;font-size:20px;letter-spacing:0.02em;text-transform:uppercase;
+  }
+  .modal-close{
+    background:none;border:none;color:var(--chalk-dim);font-size:18px;cursor:pointer;padding:4px;
+  }
+  .modal-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--chalk-dim);letter-spacing:0.04em;}
+  .modal-text{
+    flex:1;min-height:180px;max-height:40vh;
+    background:var(--mat);border:1px solid var(--line);border-radius:8px;
+    color:var(--chalk-dim);font-family:'IBM Plex Mono',monospace;font-size:11px;
+    line-height:1.6;padding:12px;resize:none;outline:none;overflow-y:auto;
+  }
+  .modal-actions{display:flex;gap:10px;}
+  .modal-action-btn{
+    flex:1;padding:11px;border-radius:8px;cursor:pointer;
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;
+    border:1px solid var(--line);background:var(--mat-elev-2);color:var(--chalk-dim);
+  }
+  .modal-action-btn.primary{background:var(--chalk);color:var(--mat);border-color:var(--chalk);}
+  .modal-action-btn:active{opacity:0.8;}
+  .modal-feedback{
+    text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;
+  }
+
+  .match-bar{
+    display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;
+  }
+  .match-group{display:flex;gap:6px;flex:1;min-width:140px;}
+  .match-group-label{
+    font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--chalk-dim);
+    letter-spacing:0.1em;text-transform:uppercase;width:100%;margin-bottom:3px;
+  }
+  .phase-btn, .state-btn{
+    flex:1;background:var(--mat-elev);border:1px solid var(--line);color:var(--chalk-dim);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.04em;text-transform:uppercase;
+    padding:7px 6px;border-radius:6px;cursor:pointer;text-align:center;
+  }
+  .phase-btn.active{background:var(--jade);color:var(--jade-bright);border-color:var(--jade-bright);font-weight:600;}
+  .state-btn.active.leading{background:var(--jade);color:var(--jade-bright);border-color:var(--jade-bright);font-weight:600;}
+  .state-btn.active.even{background:var(--mat-elev-2);color:var(--chalk);border-color:var(--chalk-dim);font-weight:600;}
+  .state-btn.active.trailing{background:var(--danger-dim);color:var(--danger);border-color:var(--danger);font-weight:600;}
+
+  .guidance-box{
+    background:var(--mat-elev-2);border:1px solid var(--jade-bright);border-radius:8px;
+    padding:12px 14px;margin-bottom:14px;
+  }
+  .guidance-box .label{
+    font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--jade-bright);
+    letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;
+  }
+  .guidance-box p{margin:0;font-size:13.5px;line-height:1.5;color:var(--chalk);}
+  .guidance-box.urgent{border-color:var(--danger);}
+  .guidance-box.urgent .label{color:var(--danger);}
+
+  .quickref-list{display:flex;flex-direction:column;gap:8px;}
+  .quickref-item{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--mat-elev-2);border:1px solid var(--line);border-radius:10px;
+    padding:15px 16px;cursor:pointer;
+  }
+  .quickref-item:active{background:var(--mat);}
+  .quickref-item .qr-title{
+    font-family:'Bebas Neue','Oswald',sans-serif;font-size:17px;letter-spacing:0.02em;text-transform:uppercase;
+  }
+  .quickref-item .qr-sub{
+    font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--chalk-dim);
+    letter-spacing:0.04em;margin-top:2px;text-transform:none;
+  }
+
+  .view-toggle{display:flex;gap:8px;margin-top:10px;}
+  .view-btn{
+    flex:1;background:var(--mat-elev);border:1px solid var(--line);color:var(--chalk-dim);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
+    padding:8px 10px;border-radius:8px;cursor:pointer;
+  }
+  .view-btn.active{background:var(--chalk);color:var(--mat);border-color:var(--chalk);font-weight:600;}
+
+  .flow-wrap{
+    position:relative;width:100%;height:420px;margin-top:6px;
+    overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+    background:var(--mat-elev);border:1px solid var(--line);border-radius:var(--radius);
+  }
+  .flow-svg{position:absolute;top:0;left:0;height:100%;}
+  .flow-svg line{stroke:var(--line);stroke-width:1.5;}
+  .flow-svg line.spine{stroke:var(--jade-bright);stroke-width:2;}
+  #flowNodes{position:relative;height:100%;}
+  .flow-node{
+    position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;
+    text-align:center;border-radius:12px;padding:6px 9px;font-family:'IBM Plex Sans',sans-serif;
+    font-size:10px;line-height:1.2;cursor:pointer;border:1px solid var(--line);
+    background:var(--mat-elev-2);color:var(--chalk-dim);width:96px;min-height:48px;
+  }
+  .flow-node.spine{
+    background:var(--jade);color:var(--jade-bright);border-color:var(--jade-bright);
+    font-weight:600;font-size:11px;z-index:2;
+  }
+  .flow-node.spine.current{
+    background:var(--chalk);color:var(--mat);border-color:var(--chalk);
+  }
+  .flow-node.alt{opacity:0.6;font-size:9.5px;width:86px;min-height:42px;}
+  .flow-node.alt:active{opacity:1;}
+  .flow-node.next{border-left:3px solid var(--gold);color:var(--chalk);}
+  .flow-node .pts{display:block;margin-top:2px;font-family:'IBM Plex Mono',monospace;font-size:8px;opacity:0.8;}
+
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+  .flag-btn{
+    background:none;border:1px solid var(--danger);color:var(--danger);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+    padding:9px 20px;border-radius:999px;cursor:pointer;
+  }
+  .flag-btn:active{background:var(--danger-dim);}
+  .flag-type-row{display:flex;gap:6px;flex-wrap:wrap;}
+  .flag-type-btn{
+    flex:1;min-width:80px;background:var(--mat-elev-2);border:1px solid var(--line);color:var(--chalk-dim);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.04em;text-transform:uppercase;
+    padding:8px 6px;border-radius:6px;cursor:pointer;
+  }
+  .flag-type-btn.active{background:var(--danger-dim);color:var(--danger);border-color:var(--danger);font-weight:600;}
+  #flagsCount{color:var(--danger);font-weight:600;}
+  .flag-list-item{
+    background:var(--mat-elev-2);border:1px solid var(--line);border-left:3px solid var(--danger);
+    border-radius:8px;padding:12px 14px;
+  }
+  .flag-list-item .fl-title{font-family:'Bebas Neue','Oswald',sans-serif;font-size:15px;text-transform:uppercase;}
+  .flag-list-item .fl-meta{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--chalk-dim);margin:2px 0 6px 0;text-transform:uppercase;}
+  .flag-list-item .fl-note{font-size:13px;line-height:1.5;color:var(--chalk);}
+  .flag-list-item .fl-delete{
+    margin-top:8px;background:none;border:none;color:var(--chalk-dim);font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;text-decoration:underline;cursor:pointer;padding:0;
+  }
+
+  .qr-context{
+    font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--jade-bright);
+    margin-top:2px;letter-spacing:0.02em;
+  }
+
+  footer.brand-footer{
+    text-align:center;margin-top:30px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;
+    color:var(--chalk-dim);letter-spacing:0.12em;text-transform:uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Chinthe</div>
+    <div class="header-row">
+      <h1>Guardian Matrix<span>.</span></h1>
+      <div class="scorecard">
+        <div class="label">Net score</div>
+        <div class="value" id="scoreValue">0</div>
+      </div>
+    </div>
+    <div class="tagline">Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the modern grappler.</div>
+    <div class="myanmar-slot">[ Myanmar wordmark — awaiting exact text ]</div>
+
+    <nav class="section-nav" id="sectionNav">
+      <button class="nav-btn" data-jump="hub">Hub</button>
+      <button class="nav-btn" data-jump="start">Standing</button>
+      <button class="nav-btn" data-jump="pass">Top Game</button>
+      <button class="nav-btn" data-jump="guard_bottom">Bottom Game</button>
+      <button class="nav-btn" data-jump="def_start">Defence</button>
+      <button class="nav-btn" id="searchToggle">⌕ Search</button>
+      <button class="nav-btn" id="quickRefToggle">⚡ Quick Ref</button>
+      <button class="nav-btn" id="flagsToggle">🚩 Flags <span id="flagsCount"></span></button>
+    </nav>
+
+    <div class="view-toggle">
+      <button class="view-btn active" id="viewMapBtn">◎ Map</button>
+      <button class="view-btn" id="viewFlowBtn">⇥ Flow</button>
+    </div>
+
+    <div class="match-bar">
+      <div class="match-group">
+        <div class="match-group-label">Phase</div>
+        <button class="phase-btn" data-phase="1">1 · No Points</button>
+        <button class="phase-btn" data-phase="2">2 · Points Live</button>
+      </div>
+      <div class="match-group">
+        <div class="match-group-label">Scoreboard</div>
+        <button class="state-btn" data-state="trailing">Trailing</button>
+        <button class="state-btn" data-state="even">Even</button>
+        <button class="state-btn" data-state="leading">Leading</button>
+      </div>
+    </div>
+
+    <div class="search-panel" id="searchPanel">
+      <input type="text" id="searchInput" placeholder="Search moves, positions, chokes…" autocomplete="off">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="chain" id="chainTrail"></div>
+  </header>
+
+  <main>
+    <div class="map-hint" id="mapHint">Tap a node to expand it</div>
+    <div class="map-wrap" id="mapWrap">
+      <svg class="map-svg" id="mapSvg"></svg>
+      <div id="mapNodes"></div>
+    </div>
+    <div class="flow-wrap" id="flowWrap" style="display:none;">
+      <svg class="flow-svg" id="flowSvg"></svg>
+      <div id="flowNodes"></div>
+    </div>
+    <div class="back-row" id="backRow" style="display:none;">
+      <button class="back-btn" id="backBtn">‹ Back</button>
+    </div>
+
+    <div id="detailCard"></div>
+    <div class="action-row">
+      <div class="export-row" id="exportRow" style="display:none;">
+        <button class="export-btn" id="exportBtn">↗ Export this chain</button>
+      </div>
+      <div class="flag-row" id="flagRow" style="display:none;">
+        <button class="flag-btn" id="flagBtn">🚩 Flag this node</button>
+      </div>
+    </div>
+
+    <!-- Flag modal -->
+    <div class="modal-overlay" id="flagModal" style="display:none;">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Flag: <span id="flagNodeTitle"></span></div>
+          <button class="modal-close" id="flagModalClose">✕</button>
+        </div>
+        <div class="modal-sub">What's wrong, missing, or off about this node?</div>
+        <textarea class="modal-text" id="flagInput" placeholder="e.g. 'The grip he showed was different — near hand on collar, not sleeve.'" style="color:var(--chalk);min-height:100px;"></textarea>
+        <div class="flag-type-row">
+          <button class="flag-type-btn active" data-flagtype="wrong">Wrong</button>
+          <button class="flag-type-btn" data-flagtype="missing">Missing</button>
+          <button class="flag-type-btn" data-flagtype="confusing">Confusing</button>
+          <button class="flag-type-btn" data-flagtype="good">Actually great</button>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-action-btn primary" id="flagSubmit">Save flag</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flags list modal -->
+    <div class="modal-overlay" id="flagsListModal" style="display:none;">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">All Flags</div>
+          <button class="modal-close" id="flagsListClose">✕</button>
+        </div>
+        <div class="modal-sub" id="flagsListSub"></div>
+        <div class="quickref-list" id="flagsListBody" style="max-height:45vh;overflow-y:auto;"></div>
+        <div class="modal-actions">
+          <button class="modal-action-btn primary" id="flagsCopyBtn">Copy all as text</button>
+          <button class="modal-action-btn" id="flagsClearBtn">Clear all</button>
+        </div>
+        <div class="modal-feedback" id="flagsCopyFeedback" style="display:none;">✓ Copied</div>
+      </div>
+    </div>
+
+    <!-- Export modal -->
+    <div class="modal-overlay" id="exportModal" style="display:none;">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Chain Export</div>
+          <button class="modal-close" id="modalClose">✕</button>
+        </div>
+        <div class="modal-sub" id="modalSub"></div>
+        <textarea class="modal-text" id="exportText" readonly></textarea>
+        <div class="modal-actions">
+          <button class="modal-action-btn primary" id="copyBtn">Copy to clipboard</button>
+          <button class="modal-action-btn" id="downloadBtn">Download .md</button>
+        </div>
+        <div class="modal-feedback" id="copyFeedback" style="display:none;">✓ Copied</div>
+      </div>
+    </div>
+
+    <!-- Quick Reference modal -->
+    <div class="modal-overlay" id="quickRefModal" style="display:none;">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Quick Reference</div>
+          <button class="modal-close" id="quickRefClose">✕</button>
+        </div>
+        <div class="modal-sub">One tap to your core positions — no map navigation.</div>
+        <div class="quickref-list" id="quickRefList"></div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="dot entry"></span> Entry</div>
+      <div class="legend-item"><span class="dot position"></span> Position (points)</div>
+      <div class="legend-item"><span class="dot submission"></span> Submission (finish)</div>
+      <div class="legend-item"><span class="dot counter"></span> If defended</div>
+      <div class="legend-item"><span class="dot threat"></span> Threat (against you)</div>
+    </div>
+
+    <footer class="brand-footer">Chinthe — Guardian Matrix — Alpha</footer>
+  </main>
+</div>
+
+<script>
+// type: entry | position | submission | counter | threat
+// points: number, "WIN", "LOSS", or null
+const NODES = {
+  hub: {
+    title: "Guardian Matrix", type: "entry", points: null,
+    mechanics: "Your full competition decision map. Tap any branch to expand it — tap Back or a breadcrumb to return.",
+    children: ["start","pass","guard_bottom","def_start"]
+  },
+  start: {
+    title: "Neutral / Standing", type: "position", points: 0,
+    objective: "Establish the tempo of the exchange — decide whether you're initiating or reacting, and act on it immediately rather than circling.",
+    mechanics: "Match start or a reset after a stall-out. First half of the match: no points, submissions only. Second half: points go live and passivity is penalized.",
+    commonMistake: "Circling and hand-fighting without committing to an entry — wastes the neutral position, where you have the most initiative available.",
+    drill: "Entry commitment drill: 30-second rounds, must commit to a shot or throw attempt at least once every 5 seconds — no stalling.",
+    children: ["td_wrestling","td_judo","guard_pull","def_takedown_threat"]
+  },
+  td_wrestling: {
+    title: "Wrestling Shot", type: "entry", points: null,
+    objective: "Commit fully to the level change before the opponent can sprawl — hesitation is what gets shots stuffed.",
+    mechanics: "Level change, penetration step, drive through the hips. Finish past the legs — don't settle for dumping them to guard.",
+    commonMistake: "Shooting from too far away or not fully changing levels — a half-committed shot is the easiest one to sprawl.",
+    drill: "Penetration step drill: 20 reps focusing on hip-to-heel drive and head position, partner stationary, then live at 50%.",
+    children: ["td_clean","td_standard","td_stuffed"]
+  },
+  td_judo: {
+    title: "Judo Throw Entry", type: "entry", points: null,
+    objective: "Win the grip fight before attempting the throw — most failed throws are grip failures, not technique failures.",
+    mechanics: "Grip fight to kuzushi (off-balance), commit to the throw — o-soto-gari, seoi-nage, or your preferred entry.",
+    commonMistake: "Attacking the throw before establishing a dominant grip — telegraphs the attempt and gives the opponent time to counter or defend.",
+    drill: "Grip fighting isolation: 2-minute rounds, no throws allowed, win the grip battle only.",
+    children: ["td_clean","td_standard","turtle_from_throw"]
+  },
+  guard_pull: {
+    title: "Guard Pull", type: "position", points: -1,
+    objective: "If you pull guard, pull with immediate intent — have the sweep or submission attempt already in motion before you hit the floor.",
+    mechanics: "Penalized in the scoring half unless it follows a live, committed attack. Use sparingly and only with intent.",
+    commonMistake: "Pulling guard to stall rather than to attack — costs a point and signals passivity to the referee.",
+    drill: "Guard pull to immediate attack: 10 reps, must be attacking a sweep or submission within 2 seconds of hitting the mat.",
+    children: ["guard_bottom"]
+  },
+  td_clean: {
+    title: "Clean Takedown", type: "position", points: 4,
+    objective: "Convert the shot into a scoring position with zero recovery window for the opponent.",
+    mechanics: "Ends outside the guard with 75%+ of the opponent's back pinned to the mat, no submission threat, held 3 seconds.",
+    commonMistake: "Finishing the takedown at the knees instead of driving through — leaves the pass still to be won separately.",
+    drill: "10 reps: shot to crossbody pin, partner starts resisting the moment your hand touches the leg.",
+    children: ["pass"]
+  },
+  td_standard: {
+    title: "Standard Takedown", type: "position", points: 2,
+    objective: "Bank the 2 points cleanly and immediately start the pass — don't pause to celebrate the takedown.",
+    mechanics: "Ends in guard or half guard, opponent's hips down and held 3 seconds.",
+    commonMistake: "Stalling on top after the takedown instead of attacking the pass — gives the opponent time to recover and invites a stalemate.",
+    drill: "Takedown-to-pass chain: 10 reps shooting to a standard finish, pass attempt begins the moment the 3-second count ends.",
+    children: ["pass","guard_bottom"]
+  },
+  td_stuffed: {
+    title: "Shot Stuffed → Front Headlock", type: "entry", points: null,
+    objective: "Treat a stuffed shot as a position gained, not a position lost — the front headlock is the entry point for your two highest-value attacks.",
+    mechanics: "Sprawl or underhook defends the shot; you end up with head-and-arm control in front-headlock range.",
+    commonMistake: "Disengaging and resetting to neutral after the sprawl instead of immediately establishing head-and-arm control.",
+    drill: "Sprawl-and-control drill: partner shots are stuffed, 10 reps — measure time from sprawl to front headlock grip established.",
+    children: ["guillotine","backtake_headlock"]
+  },
+  turtle_from_throw: {
+    title: "Opponent Turtles", type: "entry", points: null,
+    objective: "Stay connected and on the hip — don't let them stand back up out of turtle before the seatbelt is established.",
+    mechanics: "Throw is defended by turning away or down — opponent ends in turtle.",
+    commonMistake: "Pausing on top of the turtle to decide what to do — they will stand up in that window.",
+    drill: "Throw-to-turtle-to-back chain: 10 reps, throw attempt → turtle position → seatbelt locked, no pauses between phases.",
+    children: ["backtake_turtle"]
+  },
+  guard_bottom: {
+    title: "Bottom Guard — Select Guard Type", type: "entry", points: null,
+    objective: "Choose the guard that best matches your gripping situation and the opponent's passing posture — the wrong guard costs more energy than the right guard earns.",
+    mechanics: "Five primary no-gi guard types. Closed guard: posture control and submissions. Half guard: underhook battle. Butterfly: hooks and elevation. Single Leg X: one-leg control platform. X Guard: full elevation. Your wrestling base plays best from butterfly and half guard, where underhook battles mirror your natural game.",
+    commonMistake: "Defaulting to closed guard in every scramble — closed guard is safe but low-return in no-gi; butterfly and half guard offer more back-take opportunities for a wrestling base.",
+    drill: "Guard type switching: partner starts passing, identify the guard type available from the scramble and call it before establishing. 10 reps.",
+    children: ["guard_closed","guard_half","guard_butterfly","guard_slx","guard_x","def_guard_threat"]
+  },
+  guard_closed: {
+    title: "Closed Guard", type: "position", points: 0,
+    objective: "Keep their posture broken at all times — a broken posture makes submissions and sweeps live simultaneously.",
+    mechanics: "Legs locked around their waist, feet crossed. Primary tools: posture break (pull their head down with a collar tie or arm drag), grip fight for wrist control, choose between sweep or submission based on their posture response.",
+    commonMistake: "Holding closed guard passively without attacking — passive closed guard in no-gi invites a stacking pass and a referee's passivity warning.",
+    drill: "Closed guard posture control: maintain broken posture for 30 seconds while partner attempts to posture up. 5 reps — if they posture, the rep resets.",
+    children: ["cg_armbar","cg_triangle","cg_guillotine_entry","cg_kimura","cg_hip_bump","cg_scissor"]
+  },
+  cg_armbar: {
+    title: "Armbar (Closed Guard)", type: "submission", points: "WIN",
+    objective: "Use their postured-up response against them — the armbar from guard is most live when they try to push up and post.",
+    mechanics: "Control the wrist, pull it across your centerline, hip escape 90 degrees to create the angle, swing the outside leg over their face, lock the thighs, lift the hips and extend.",
+    commonMistake: "Attempting the armbar without hip-escaping to 90 degrees first — a square armbar from guard is easy to posture out of.",
+    drill: "Hip-escape-to-armbar: from closed guard, partner postures, hip escape to 90 degrees before swinging the leg. Measure whether angle is achieved before the swing. 10 reps.",
+    defense: "Stacking and posturing before the hip escape completes; hitchhiker grip.",
+    children: ["armbar_defended"]
+  },
+  cg_triangle: {
+    title: "Triangle (Closed Guard)", type: "submission", points: "WIN",
+    objective: "Push one arm across and pull the head down simultaneously — both actions must happen at the same time, not sequentially.",
+    mechanics: "Control one wrist, push it across their centerline (outside your leg), pull the head down with the other arm simultaneously, open the guard and swing the outside leg over the neck, lock figure-four with your legs — outside ankle behind the inside knee. Squeeze knees, pull head down, push hips up.",
+    commonMistake: "Pushing the arm across without simultaneously breaking posture — they posture before the leg gets over.",
+    drill: "Triangle entry timing: from closed guard, execute push-pull simultaneously, partner resists at 50%. 10 reps measuring simultaneous action.",
+    defense: "Posturing before the leg locks; stacking and rotating the trapped arm out.",
+    children: ["triangle_defended"]
+  },
+  cg_guillotine_entry: {
+    title: "Guillotine Setup (Closed Guard)", type: "entry", points: null,
+    objective: "Take the guillotine when their head drops inside the guard — the closed guard adds hip pressure that multiplies the choking effect.",
+    mechanics: "When their head drops inside the guard: wrap the choking arm under the chin, close the guard and squeeze while pulling up and extending the hips. The guard pressure replaces the need for a figure-four finish — the hip extension does the work.",
+    commonMistake: "Going for the guillotine with the head outside the guard — a head-outside guillotine from guard loses the hip-pressure advantage.",
+    drill: "Closed guard guillotine entry: partner drops posture inside guard, wrap and close within 1 second. 10 reps.",
+    children: ["guillotine"]
+  },
+  cg_kimura: {
+    title: "Kimura (Closed Guard)", type: "submission", points: "WIN",
+    objective: "Use the kimura as both a submission and a positional control tool — the grip itself controls their entire upper body before the finish.",
+    mechanics: "When they post their far hand on the mat: catch the wrist with your near hand, rotate your far arm over the top and grab your own wrist (figure-four lock). Pull the wrist toward their shoulder blade while lifting the elbow. The closed guard prevents their escape while you rotate the arm.",
+    commonMistake: "Letting them posture before the figure-four is locked — a kimura without the lock is easy to defend.",
+    drill: "Kimura grip drill: from closed guard, establish the figure-four within 3 seconds of a partner posting their hand. 10 reps.",
+    defense: "Clasping their own hands to prevent the figure-four; rolling toward the trapped arm to relieve shoulder pressure.",
+    children: ["backtake_from_stack","armbar_defended"]
+  },
+  cg_hip_bump: {
+    title: "Hip Bump Sweep", type: "position", points: 2,
+    objective: "Time the sweep to the exact moment they're posting a hand to posture — a hand on the mat is a hand not blocking the sweep.",
+    mechanics: "Open the guard, post one foot on the mat, grip behind their neck or shoulder. Drive your hip explosively up and toward their posting arm, swinging your leg through to end in mount. No wind-up — the movement is the commitment.",
+    commonMistake: "Attempting the hip bump from closed guard without opening it first — the closed guard prevents the hip lift the sweep requires.",
+    drill: "Hip bump timing: from open guard, partner posts their hand, execute the hip bump within half a second. 10 reps.",
+    children: ["mount","cg_kimura"]
+  },
+  cg_scissor: {
+    title: "Scissor Sweep", type: "position", points: 2,
+    objective: "The scissor works best on opponents trying to stand or pull their hips back — use their forward posture against them.",
+    mechanics: "From open guard: one shin across their hip (horizontal), other leg hooks behind their knee (vertical). Grip their sleeve or wrist and their collar or head. Simultaneously pull the sleeve toward the mat and scissor both legs — horizontal leg pushes the hip, vertical leg sweeps the knee.",
+    commonMistake: "Using the scissor against a deeply postured opponent instead of one sitting relatively upright — it requires their weight to be forward.",
+    drill: "Scissor sweep mechanics: partner in upright passing posture, both legs action is simultaneous. 10 reps each side.",
+    children: ["pass_complete","mount"]
+  },
+  guard_half: {
+    title: "Half Guard (bottom)", type: "position", points: 0,
+    objective: "The underhook is the entire game — with it you have a back take, a sweep, and a stand-up. Without it you have nothing.",
+    mechanics: "One of their legs is trapped between both of yours. Immediate priorities: deny their cross-face, fight for the near-side underhook, hip escape to your side. Never be flat on your back in half guard.",
+    commonMistake: "Being flat on your back in half guard — flat half guard gives them the cross-face, which leads to the whizzer, which shuts everything down.",
+    drill: "Half guard base: from flat half guard, hip escape to your side within 2 seconds. 10 reps against a partner actively trying to flatten you.",
+    children: ["hg_underhook","hg_dogfight","hg_back_take","def_guard_threat"]
+  },
+  hg_underhook: {
+    title: "Underhook Battle (Half Guard)", type: "entry", points: null,
+    objective: "Win the underhook race — it determines which direction the entire half guard resolves.",
+    mechanics: "From your side in half guard: drive the near arm under their armpit before they can establish the whizzer over it. Once the underhook is in, bump their weight off you and either take the back or sit up to the dog fight.",
+    commonMistake: "Reaching for the underhook before hip-escaping to your side — reaching from flat allows them to easily whizzer the arm down.",
+    drill: "Underhook race: both players in half guard, race to establish underhook OR whizzer from start position. First grip wins. 15 reps.",
+    children: ["hg_dogfight","hg_old_school","hg_back_take"]
+  },
+  hg_dogfight: {
+    title: "Dog Fight (Half Guard)", type: "position", points: 0,
+    objective: "Commit to the back take or the sweep within 2 seconds — the dog fight is a decision point, not a resting position.",
+    mechanics: "Both athletes on all fours, half guard still active. Underhook gives you initiative: take the back (step behind and insert hooks) or dump them forward (sweep). They're trying to re-flatten you or take your back. Make the call quickly.",
+    commonMistake: "Staying in the dog fight too long — indecision lets the passer re-establish chest-to-chest pressure and start flattening you.",
+    drill: "Dog fight decision: reach dog fight, go live — commit to back take or forward sweep within 2 seconds. 10 reps.",
+    children: ["hg_back_take","hg_old_school","pass_smash"]
+  },
+  hg_old_school: {
+    title: "Old School Sweep (Half Guard)", type: "position", points: 2,
+    objective: "Use the underhook to block their weight transfer and roll them — when they're base-heavy over you, the old school catches them.",
+    mechanics: "From underhook in dog fight: block their near leg with your trapped leg, use the underhook to pull their shoulder toward you and roll them over the trapped leg. Come up in top position.",
+    commonMistake: "Attempting the sweep before their weight commits forward — a balanced opponent absorbs the roll and dumps you onto your back.",
+    drill: "Old school timing: from dog fight, partner commits weight forward on signal, execute within half a second. 10 reps.",
+    children: ["pass_complete","mount"]
+  },
+  hg_back_take: {
+    title: "Back Take (from Half Guard)", type: "position", points: 4,
+    objective: "The underhook in half guard is the most direct no-gi back take available after the front headlock — use it every time it's live.",
+    mechanics: "From underhook in dog fight: step the inside foot behind their hip (outside step), drive the underhook shoulder through toward their back, follow with the outside leg and establish hooks. Seatbelt goes on as you come behind them.",
+    commonMistake: "Reaching for the back with the hands before the inside foot steps — no footwork means no angle, and they can simply face you down.",
+    drill: "Half guard back take: from underhook in dog fight, step-and-follow to hooks in. 10 reps measuring whether both hooks are established before the seatbelt.",
+    children: ["rnc"]
+  },
+  guard_butterfly: {
+    title: "Butterfly Guard", type: "position", points: 0,
+    objective: "Stay upright and active — butterfly guard is dead the moment you lean back. Sit tall, threaten underhooks, force them to choose between the sweep and the back take.",
+    mechanics: "Seated, both hooks inside their legs (insteps under their thighs). Grips: double underhooks (back take threat), one underhook one overhook (sweep), or wrist control. Every frame and grip must threaten something — passive butterfly is just sitting on the floor.",
+    commonMistake: "Leaning back with butterfly hooks — leaning back removes your ability to elevate, kills the sweep threat, and eliminates the back take threat simultaneously.",
+    drill: "Butterfly posture: maintain upright posture with active hooks for 2 minutes against a standing or kneeling partner. Never lean back.",
+    children: ["bg_elevate","bg_arm_drag","bg_x_entry","def_guard_threat"]
+  },
+  bg_elevate: {
+    title: "Butterfly Elevator Sweep", type: "position", points: 2,
+    objective: "Lift at the exact moment they commit their weight to one side — off-balance opponents are swept, balanced ones aren't.",
+    mechanics: "From butterfly with an underhook: wait for their weight to shift over one hip. Drive the hook on that side up into their inner thigh while pulling their upper body down with the underhook. The lift and the pull happen simultaneously — not sequentially. End in mount or top-half.",
+    commonMistake: "Lifting when they're square and balanced — a square opponent absorbs the hook and the attempt telegraphs your intent.",
+    drill: "Elevator timing: partner shifts weight randomly, lift only when they're one-sided. 10 reps, must be correctly timed.",
+    children: ["mount","pass_complete"]
+  },
+  bg_arm_drag: {
+    title: "Arm Drag (Butterfly)", type: "entry", points: null,
+    objective: "The arm drag from butterfly is one of the most reliable no-gi back takes — the hooks create positional control that makes the drag stick.",
+    mechanics: "From butterfly: control their wrist with your near hand, far hand grips behind their tricep. Pull the wrist across your centerline while bumping the arm-dragged side with your butterfly hook. Their arm crosses their body, exposing the back — step around and establish hooks.",
+    commonMistake: "Dragging the arm without simultaneously bumping with the butterfly hook — the drag alone without the hook is easy to resist.",
+    drill: "Arm drag to back: arm drag with simultaneous hook bump, finish at seatbelt. 10 reps.",
+    children: ["backtake_headlock","rnc"]
+  },
+  bg_x_entry: {
+    title: "Entry to Single Leg X", type: "entry", points: null,
+    objective: "Use the butterfly hook already inside to transition to single leg X when they stand or base back — the entry is nearly automatic.",
+    mechanics: "When they stand or base back: slide one butterfly hook to their ankle (becomes the X hook), other hand grabs their ankle or heel, sit back and establish SLX with full leg control.",
+    commonMistake: "Reaching for the heel before hip-escaping to perpendicular — the SLX requires you on your back perpendicular to their leg, not seated.",
+    drill: "Butterfly-to-SLX: partner bases back on signal, complete SLX entry within 1 second. 10 reps.",
+    children: ["guard_slx"]
+  },
+  guard_slx: {
+    title: "Single Leg X (SLX)", type: "position", points: 0,
+    objective: "Control the heel and the hip simultaneously — without both, the SLX is just a leg in your lap.",
+    mechanics: "One hook under their knee (X hook / inside hook), outside hand controls the heel, inside hand frames on their hip or controls the ankle. Perpendicular to their leg. Active platform for sweeps, back takes, and leg entanglement entries.",
+    commonMistake: "Holding SLX without heel control — without the heel they have full mobility and the guard collapses under any pressure.",
+    drill: "SLX control: establish SLX, partner attempts to step over and clear, maintain heel and hip control for 30 seconds. 5 reps.",
+    children: ["slx_sweep","slx_back_take","leg_entanglement","guard_x"]
+  },
+  slx_sweep: {
+    title: "SLX Sweep", type: "position", points: 2,
+    objective: "Elevate and rotate the controlled leg to off-balance rather than pulling straight back — a straight pull lets them hop over.",
+    mechanics: "From SLX: drive the X hook up into their inner thigh to break their base on that side, simultaneously rotate the leg outward. Come up to top position as they go down.",
+    commonMistake: "Pulling the controlled leg toward you without the rotational component — they step over the straight pull and maintain standing base.",
+    drill: "SLX sweep: drive the hook up and rotate simultaneously, partner at 50% resistance. 10 reps.",
+    children: ["pass_complete","mount"]
+  },
+  slx_back_take: {
+    title: "Back Take (from SLX)", type: "position", points: 4,
+    objective: "Use the leg control to spin behind rather than sweeping — when they base back against the sweep, the back take opens.",
+    mechanics: "From SLX, when they post the far leg to defend the sweep: release the X hook, spin under them and behind, establish hooks as they step over. Heel control stays live throughout the spin.",
+    commonMistake: "Releasing heel control before the spin is complete — losing the heel lets them step away and disengage entirely.",
+    drill: "SLX back take spin: partner resists the sweep and posts the far leg, complete the spin to hooks-in. 10 reps.",
+    children: ["rnc"]
+  },
+  guard_x: {
+    title: "X Guard", type: "position", points: 0,
+    objective: "Elevate their base completely off the mat — X guard only works when their weight is on your hooks, not on their own feet.",
+    mechanics: "Both hooks inside both legs: one hook under their far knee (crossed X hook), one hook under their near knee. Hands grip their ankles. Extend your legs to elevate them entirely. They should be floating on your hooks with no floor contact.",
+    commonMistake: "Establishing X guard without fully elevating — X guard on a grounded opponent has no mechanical advantage and collapses under their base.",
+    drill: "X guard elevation: establish X, elevate partner completely off the mat and hold 3 seconds. 10 reps.",
+    children: ["xg_back_sweep","xg_front_sweep","xg_stand_up"]
+  },
+  xg_back_sweep: {
+    title: "Back Dump Sweep (X Guard)", type: "position", points: 2,
+    objective: "Dump them backward while elevated — no base means no resistance.",
+    mechanics: "From full X elevation: extend both hooks forward while pulling the ankle grips toward you. They fall backward. Come up over them to mount or follow to top position.",
+    commonMistake: "Attempting the dump before full elevation — they post a foot and stay upright.",
+    drill: "X guard back dump: elevation first, dump second. 10 reps measuring complete elevation before committing.",
+    children: ["mount","pass_complete"]
+  },
+  xg_front_sweep: {
+    title: "Front Trip Sweep (X Guard)", type: "position", points: 2,
+    objective: "Redirect their base forward when they try to step out — the front trip uses their own momentum against them.",
+    mechanics: "From X, when they try to step out by bringing one foot forward: angle your X hooks to redirect that stepping leg across their base while pushing their hips forward. They trip over their own step.",
+    commonMistake: "Forcing the front sweep when they haven't stepped — the front trip requires their momentum in the forward direction.",
+    drill: "Front trip reaction: from X, partner steps forward on signal, execute within half a second. 10 reps.",
+    children: ["pass_complete","mount"]
+  },
+  xg_stand_up: {
+    title: "Stand Up (from X Guard)", type: "position", points: 0,
+    objective: "Convert X guard control into a takedown attempt — you have their leg and full elevation, don't just reset to neutral.",
+    mechanics: "From X with elevation: as they posture or back away, follow them up by coming to a knee then standing — maintain ankle grip throughout. From standing with ankle control, enter a single-leg finish.",
+    commonMistake: "Standing up and releasing ankle control — you go from full leg control to neutral standing with no advantage.",
+    drill: "X guard to single leg: from X elevation, stand up maintaining the ankle grip, finish the single leg. 10 reps.",
+    children: ["td_wrestling","td_clean","start"]
+  },
+  sweep: {
+    title: "Sweep", type: "position", points: 2,
+    objective: "Finish past their guard for 4 points whenever the angle is there — don't settle for a standard sweep if the clean finish is live.",
+    mechanics: "Facing each other, change bottom to top, establish 3 seconds. Ending past the guard with 75%+ back pinned scores 4 instead of 2.",
+    commonMistake: "Sweeping directly into the opponent's guard instead of driving through to a dominant pin — scores 2 instead of 4 and leaves the pass still to do.",
+    drill: "Sweep-to-pin: 10 reps from a chosen sweep, measure whether you finish in guard, half guard, or past the guard — aim for outside-the-guard finishes.",
+    children: ["pass","pass_complete"]
+  },
+  pass: {
+    title: "Passing Game", type: "entry", points: null,
+    objective: "Select the passing system that matches the guard they're playing — your wrestling base gives you the highest return on pressure-passing systems.",
+    mechanics: "Read the guard type first. Are they playing butterfly or open guard (hooks active)? Half guard (underhook battle)? Full closed guard (posture management)? Each guard type has a highest-EV passing entry. Don't fight their guard on their terms.",
+    commonMistake: "Defaulting to the same pass regardless of guard type — a good guard player anticipates a predictable passer and has the counter pre-loaded.",
+    drill: "Guard recognition drill: partner cycles through 4 guard types, name the correct passing system before committing. 10 reps.",
+    children: ["pass_over_under","pass_knee_slice","pass_torreando","pass_body_lock","pass_leg_drag","pass_double_under","pass_headquarters","pass_smash"]
+  },
+  pass_over_under: {
+    title: "Over-Under Pass", type: "entry", points: null,
+    objective: "Use wrestling-base hip drive to kill both legs simultaneously — once the hips are flat with the over-under, the pass is mechanical.",
+    mechanics: "Near-side arm goes over their near leg (hooking the hip), far-side arm goes under their far leg (lifting the knee). Chest pressure kills the near leg, elbow drives the far knee to the mat. Drive hips forward to flatten them, then walk toward the over-arm side to clear both legs.",
+    commonMistake: "Dropping your level too low on the approach — low posture kills hip drive, which is the engine of this pass.",
+    drill: "Over-under breakdown: establish over-under from knees, flatten partner with hip drive, walk to clear. No submission until pass is complete. 10 reps.",
+    defense: "Hip escape toward the under-side to prevent being flattened; re-guard from the over side; rolling to turtle.",
+    children: ["pass_complete"]
+  },
+  pass_knee_slice: {
+    title: "Knee Slice / Knee Cut", type: "entry", points: null,
+    objective: "Cut the knee through before they can re-frame — the knee slice is decided in the first second; hesitation lets them replace guard.",
+    mechanics: "From headquarters or combat base: lead knee drives down and diagonally through the seam between their legs. Chest stays heavy to pin the near-side leg. Far hand pushes the far knee away, near hand controls the head or collar. Slice the knee diagonally to the mat and follow the hip to side control.",
+    commonMistake: "Cutting the knee straight down instead of diagonally — a vertical cut is blocked by their near leg; the diagonal finds the seam.",
+    drill: "Knee slice timing: from HQ, cut on a visual cue (partner signals), 10 reps measuring whether you complete the cut before they re-frame.",
+    defense: "Re-framing the near knee against your cutting knee; rolling to turtle; shin-on-shin recovery.",
+    children: ["pass_complete"]
+  },
+  pass_torreando: {
+    title: "Torreando / Bullfighter Pass", type: "entry", points: null,
+    objective: "Control both ankles before they can sit up and re-frame — the torreando is a distance-management pass, not a pressure pass.",
+    mechanics: "From standing: grip both ankles or shins, lift and redirect the legs to one side by rotating their hips, simultaneously step around to the opposite side. Pass direction is always perpendicular to the leg redirect — they go left, you go right. Maintain downward pressure throughout.",
+    commonMistake: "Pushing the legs straight back instead of rotating them to the side — a straight push lets them sit up and re-guard immediately.",
+    drill: "Torreando redirect: partner plays seated open guard, redirect their legs 10 times alternating sides, confirm perpendicular exit position each time.",
+    defense: "Sitting up and framing before the redirect; inverting under the pass; following you to maintain guard.",
+    children: ["pass_complete"]
+  },
+  pass_body_lock: {
+    title: "Body Lock Pass", type: "entry", points: null,
+    objective: "Convert your wrestling clinch strength directly into a guard pass — the body lock eliminates guard framing entirely by controlling the torso.",
+    mechanics: "From standing clinch or a partially broken guard: wrap both arms around their torso, connect hands behind their back (gable grip). Drive chest through their guard while rotating their hips — the rotation strips the legs without needing to clear them individually. Walk around to the hip as they flatten.",
+    commonMistake: "Attempting the body lock before the guard is broken or half-broken — a tight closed guard holds the lock out.",
+    drill: "Body lock rotation: establish grip from half guard or open guard, complete the hip rotation to flat position. 10 reps.",
+    defense: "Maintaining tight closed guard before the lock is established; switching to half guard to disrupt the rotation.",
+    children: ["pass_complete"]
+  },
+  pass_leg_drag: {
+    title: "Leg Drag", type: "entry", points: null,
+    objective: "Pin one leg across your body to create an angle where their guard is structurally broken — one leg dragged nullifies both legs as a guard tool.",
+    mechanics: "Grip the near-side ankle or heel, drag it across your body to your far hip — their leg ends up across your hip line. Pin that leg with your hip while posting on their far hip. Your body is now perpendicular to theirs. Walk to side control.",
+    commonMistake: "Dragging the leg without controlling the far hip — they can follow the drag by rolling and re-guarding from the other side.",
+    drill: "Leg drag pin: establish the drag, partner tries to roll and recover guard, maintain the pinned-leg position for 5 seconds. 10 reps.",
+    defense: "Rolling with the drag direction to invert and re-guard; sitting up before the leg is pinned.",
+    children: ["pass_complete"]
+  },
+  pass_double_under: {
+    title: "Double Under / Stack Pass", type: "entry", points: null,
+    objective: "Neutralize their guard completely by stacking their hips over their head — a fully stacked opponent has zero hip mobility.",
+    mechanics: "Both arms go under both legs (scoop the thighs), grip together, drive your shoulder into their hamstrings and walk forward to stack their hips over their shoulders. Once stacked, rotate their hips to one side and walk around to clear the legs. Maintain head pressure throughout.",
+    commonMistake: "Stacking without controlling the head direction — they roll over their shoulder to escape.",
+    drill: "Stack and rotate: establish double under, stack to shoulder level, rotate hips 90 degrees to complete the pass. 10 reps.",
+    defense: "Sitting up before both underhooks are in; posting on the head to prevent the stack; rolling out before the rotation.",
+    children: ["pass_complete"]
+  },
+  pass_headquarters: {
+    title: "Headquarters (HQ) Position", type: "entry", points: null,
+    objective: "Use HQ as a reading position, not a scoring position — commit to a passing system within 2–3 seconds.",
+    mechanics: "One knee up (combat base) between or outside their legs, other knee down. Near-side arm frames on their near knee, far arm controls their far hip or ankle. Stable passing platform — read their guard and choose the system without committing too early.",
+    commonMistake: "Staying in HQ too long without committing — they re-frame and you end up burning energy in a neutral hold.",
+    drill: "HQ to pass: establish HQ, name the passing system before committing, 10 reps with partner playing different guard types.",
+    defense: "Shin-on-shin frames to block the knee slice; inverting to attack from below; recovering full guard.",
+    children: ["pass_knee_slice","pass_leg_drag","pass_complete"]
+  },
+  pass_smash: {
+    title: "Smash Pass (Half Guard)", type: "entry", points: null,
+    objective: "Win the cross-face and whizzer battle before they establish the underhook — the smash pass is determined in the first 3 seconds.",
+    mechanics: "From inside their half guard: cross-face to turn their head away from the trapped leg, establish the whizzer (over-hook) on their far arm to deny the underhook, walk hips toward their head to flatten completely, then free the trapped leg with a hip pop.",
+    commonMistake: "Allowing them to establish the underhook before the cross-face is set — an underhook from half guard beats the smash pass immediately.",
+    drill: "Smash pass race: enter half guard, race to establish cross-face before they establish underhook. Who gets their control first determines the rep. 10 reps.",
+    defense: "Establishing the underhook before the cross-face; hip escaping away to re-full guard; rolling to knees.",
+    children: ["pass_complete"]
+  },
+  pass_complete: {
+    title: "Guard Pass — Scored", type: "position", points: 3,
+    objective: "The pass is scored — don't pause, immediately continue to hunt the back or mount before they recover.",
+    mechanics: "Legs cleared, 3-second stabilization holds. The pass is on the board. Back take is worth 4 points, mount is worth 2 — don't sit in side control.",
+    commonMistake: "Celebrating the pass and sitting in side control — the pass is scored but the clock is still running. Continue attacking.",
+    drill: "Pass-and-continue: complete any pass, immediately pursue back take or mount on the same rep. No stopping at side control. 10 reps.",
+    children: ["mount","backtake_pass","knee_belly","leg_entanglement"]
+  },
+  knee_belly: {
+    title: "Knee on Belly", type: "position", points: 2,
+    objective: "Use knee-on-belly as a live decision point, not a resting spot — bank the 2 points, then immediately re-threaten the back or mount.",
+    mechanics: "Knee planted mid-stomach, held 3 seconds. Use as a bridge — re-attack the pass or the back rather than sitting in it.",
+    commonMistake: "Sitting in knee-on-belly too long without re-attacking — gives the opponent time to frame, recover guard, or stand up.",
+    drill: "Pass-to-knee-belly-to-back flow: 10 reps, 3-second hold, then continue directly into a back-take attempt on the same rep.",
+    children: ["mount","backtake_pass"]
+  },
+  mount: {
+    title: "Mount", type: "position", points: 2,
+    objective: "Treat mount as a launch point for the back, not a static hold — advance whenever it's live rather than defaulting to a lower-value submission.",
+    mechanics: "Both knees down, hips controlled. Lower point value than back control — don't fight for this over an available back take.",
+    commonMistake: "Staying flat and square, which makes it easy for the opponent to bridge and roll — stay heavy and offset your hips toward the side you're attacking.",
+    drill: "Mount retention drill: partner bridges and rolls at 50%, 10 reps re-basing without losing the position, then continue into an attack.",
+    children: ["armbar_mount","triangle_mount","backtake_mount_scramble"]
+  },
+  backtake_pass: {
+    title: "Back Take (off the pass)", type: "position", points: 4,
+    objective: "Convert the pass into the highest-value position on the scoreboard before the opponent squares back up.",
+    mechanics: "Opponent turtles or gives an underhook mid-pass — secure the seatbelt and insert hooks or a body triangle.",
+    commonMistake: "Settling for one hook instead of finishing the seatbelt — a single hook is escapable and doesn't yet score.",
+    drill: "Seatbelt-and-hooks isolation: partner starts turtled, 10 reps to a fully locked body triangle or two hooks.",
+    children: ["rnc"]
+  },
+  backtake_turtle: {
+    title: "Back Take (off turtle)", type: "position", points: 4,
+    objective: "Finish the seatbelt before the opponent can stand up out of turtle or roll through to guard.",
+    mechanics: "Seatbelt grip — far-side underhook, near-side over the shoulder — then roll them or leg-weave around the far hip.",
+    commonMistake: "Grabbing for hooks before the seatbelt is locked — the seatbelt is what makes the hooks stick; hooks first without it get stripped.",
+    drill: "Turtle breakdown drill: partner turtles on command, 10 reps to a locked seatbelt within 5 seconds.",
+    children: ["rnc"]
+  },
+  backtake_headlock: {
+    title: "Back Take (off front headlock)", type: "position", points: 4,
+    objective: "Use the front headlock you already hold as a launch point for the back rather than resetting to a choke-only decision.",
+    mechanics: "Snap the near arm across, spin behind, insert hooks. The most repeatable entry for a wrestling base — you live in this position already.",
+    commonMistake: "Trying to force the guillotine from bad position instead of banking the back take — loses the higher-value, higher-percentage option.",
+    drill: "Sprawl-to-back flow: partner shoots, you sprawl to front headlock, 10 reps finishing at hooks-in, not at the choke.",
+    children: ["rnc"]
+  },
+  backtake_mount_scramble: {
+    title: "Back Take (mount scramble)", type: "position", points: 4,
+    objective: "Read the direction of their escape early enough to ride it rather than chase it.",
+    mechanics: "Opponent turns away to escape mount — ride the turn straight to the back instead of chasing the mount.",
+    commonMistake: "Fighting to stay square in mount as they turn, instead of flowing with the turn — costs the back take and often the mount too.",
+    drill: "Mount-to-back read drill: partner escapes in a random direction, 10 reps identifying and riding the turn within the first half-second.",
+    children: ["rnc"]
+  },
+  rnc: {
+    title: "Rear Naked Choke", type: "submission", points: "WIN",
+    objective: "Finish before the opponent can strip the choking arm or turn to face you.",
+    mechanics: "Seatbelt first. Thread the choking arm under the chin so the bicep seals one carotid, grip the far shoulder or bicep, cup the back of the head with the other hand — pull the elbows together and arch, don't just squeeze.",
+    commonMistake: "Squeezing the bicep instead of pulling the elbows together and arching — bicep-only pressure rarely finishes at range.",
+    drill: "Seatbelt-to-choke isolation, 3x5 reps, partner defends at 50% intensity — focus on grip sequence speed, not strength.",
+    defense: "Chin tuck, hand-fighting the choking arm before it seats, spinning to face you, or a hip escape to recover half guard.",
+    children: ["rnc_defended"]
+  },
+  rnc_defended: {
+    title: "If Defended", type: "counter", points: null,
+    mechanics: "Chain into the next option — never reset to neutral from here.",
+    children: ["bow_arrow","armbar_back","mount_from_spin"]
+  },
+  bow_arrow: {
+    title: "Bow-and-Arrow Choke", type: "submission", points: "WIN",
+    objective: "Use the opponent's own choke defense against them — the grip that stops the RNC is usually the grip that opens this choke.",
+    mechanics: "Off the same seatbelt — their own hand-fighting against the RNC often opens the far-side grip needed here.",
+    commonMistake: "Abandoning back control to reset for this choke instead of flowing directly from the RNC attempt — the transition should cost zero time.",
+    drill: "RNC-to-bow-and-arrow chain: 10 reps starting from a defended RNC grip, no reset between attempts.",
+    children: []
+  },
+  armbar_back: {
+    title: "Armbar (from the back)", type: "submission", points: "WIN",
+    objective: "Capture the exposed arm the moment the chin-tuck defense presents it, without losing back points already banked.",
+    mechanics: "Their chin-tuck defense traps one arm across your body — swim your leg over, control the wrist, extend.",
+    commonMistake: "Chasing the arm with the hands before the leg is over — telegraphs the attack and lets them stack out.",
+    drill: "Leg-over isolation: partner defends the choke with a strong chin tuck, 10 reps to a locked armbar from the back.",
+    defense: "Hitchhiker grip (clasped hands), stacking to break your hip angle.",
+    children: ["armbar_defended"]
+  },
+  mount_from_spin: {
+    title: "Mount (off their spin-in)", type: "position", points: 2,
+    objective: "Bank the position change cleanly — points and a live submission platform — rather than fighting a losing battle to stay on the back.",
+    mechanics: "They spin to face you to kill the choke — ride the spin into mount rather than fighting to stay on the back.",
+    commonMistake: "Continuing to hunt the choke past the point it's realistically available — costs both the choke and a clean transition to mount.",
+    drill: "Back-to-mount transition drill: partner spins to face you at random intervals, 10 reps landing in stable mount.",
+    children: ["armbar_mount","triangle_mount"]
+  },
+  armbar_mount: {
+    title: "Armbar (from mount)", type: "submission", points: "WIN",
+    objective: "Isolate the arm and commit to the leg-swing before the opponent can post or frame against the cross-face.",
+    mechanics: "Isolate the arm with an S-grip or cross-face, swing your leg over their face, hip up and extend.",
+    commonMistake: "Swinging the leg over before the arm is truly isolated — lets them stack or pull the arm back, losing the position for nothing.",
+    drill: "Mount isolation drill: partner resists the cross-face, 10 reps to a controlled S-grip before attempting the leg swing.",
+    defense: "Hitchhiker grip, stacking you to break the angle.",
+    children: ["armbar_defended"]
+  },
+  armbar_defended: {
+    title: "If Defended", type: "counter", points: null,
+    mechanics: "Their defensive grip usually gifts you the next attack — don't reset.",
+    children: ["triangle_from_armbar","backtake_from_stack"]
+  },
+  triangle_from_armbar: {
+    title: "Triangle (chained off armbar)", type: "submission", points: "WIN",
+    objective: "Take the second leg entry the instant the hitchhiker grip closes, using the same motion as the failed armbar.",
+    mechanics: "Their clasp/hitchhiker defense sets up the second leg entry as the same motion — no reset needed.",
+    commonMistake: "Resetting to a fresh triangle attempt instead of flowing directly off the failed armbar — costs the tempo that makes this transition work.",
+    drill: "Armbar-to-triangle chain: 10 reps starting from a defended armbar, no reset allowed between the two attempts.",
+    children: ["triangle_defended"]
+  },
+  backtake_from_stack: {
+    title: "Back Take (off their stack)", type: "position", points: 4,
+    objective: "Follow their momentum into the back rather than fighting the stack — the stack itself usually does the positioning work for you.",
+    mechanics: "Follow the stack instead of resisting it — they frequently expose the back in the act of standing up out of it.",
+    commonMistake: "Bracing against the stack instead of rolling with it — wastes energy and often ends in a scramble instead of a clean back take.",
+    drill: "Stack-and-follow drill: partner stacks you out of an armbar, 10 reps flowing directly to hooks instead of resetting.",
+    children: ["rnc"]
+  },
+  triangle_mount: {
+    title: "Triangle (from mount)", type: "submission", points: "WIN",
+    objective: "Chain directly off a defended mount armbar rather than resetting to hunt a fresh triangle.",
+    mechanics: "Same chain logic as the guard triangle, entered off a defended mount armbar.",
+    commonMistake: "Trying to muscle the leg over a fully postured opponent — wait for the same defensive reaction that killed the armbar, it usually opens the entry.",
+    drill: "Mount armbar-to-triangle chain: 10 reps starting from a defended armbar attempt, no reset between the two.",
+    defense: "Posture and stack, or stuffing the leg before it locks.",
+    children: ["triangle_defended"]
+  },
+  triangle_defended: {
+    title: "If Defended", type: "counter", points: null,
+    mechanics: "A successful stack/posture defense usually costs them the back.",
+    children: ["backtake_from_stack","armbar_from_triangle"]
+  },
+  armbar_from_triangle: {
+    title: "Armbar (chained off triangle)", type: "submission", points: "WIN",
+    objective: "Extend the already-isolated arm the instant they free the neck, without needing to re-establish grips.",
+    mechanics: "If they free the neck before the arm, the arm is already isolated — extend into the armbar directly.",
+    commonMistake: "Releasing arm control while fighting to keep the triangle locked — the arm is often the easier finish once the neck is lost.",
+    drill: "Triangle-to-armbar chain: 10 reps starting from a postured-out triangle, partner frees the neck but not the arm, finish the armbar.",
+    children: []
+  },
+  guillotine: {
+    title: "Guillotine", type: "submission", points: "WIN",
+    objective: "Convert a stuffed shot into either a fast finish or a guaranteed positional gain — never a wasted exchange.",
+    mechanics: "Arm-in for control and a much higher conversion rate into your next attack if it doesn't finish. High-elbow (no arm in) finishes faster but is more escapable and more counterable. Default to arm-in until the grip is clean.",
+    commonMistake: "Committing fully to a high-elbow finish on a bad grip instead of controlling arm-in until the choke is clean.",
+    drill: "Front headlock decision drill: partner resists, call out arm-in vs. high-elbow before committing, 10 reps each.",
+    defense: "Posting or hand-fighting to create space; a lift-and-drive to break the grip.",
+    children: ["guillotine_defended"]
+  },
+  guillotine_defended: {
+    title: "If Defended", type: "counter", points: null,
+    mechanics: "A stuffed guillotine should never be a dead end for a wrestler.",
+    children: ["armbar_from_guillotine","triangle_from_guillotine","backtake_from_guillotine"]
+  },
+  armbar_from_guillotine: {
+    title: "Armbar (off failed guillotine)", type: "submission", points: "WIN",
+    objective: "Recognize the arm is already isolated the moment the guillotine posture-out happens, and extend immediately.",
+    mechanics: "The trapped arm is frequently already across their neck/shoulder line — transition directly rather than resetting.",
+    commonMistake: "Letting go of the arm entirely once the choke fails — the control you already have is most of the armbar; don't give it back.",
+    drill: "Failed-guillotine-to-armbar chain: 10 reps, partner postures out of the choke, finish the armbar off the same grip without a reset.",
+    children: []
+  },
+  triangle_from_guillotine: {
+    title: "Triangle (off failed guillotine)", type: "submission", points: "WIN",
+    objective: "Use the leg entry that's already available off the failed choke instead of disengaging to start over.",
+    mechanics: "Same logic as the armbar transition — the leg entry is often already available from the choke position.",
+    commonMistake: "Standing back up to reset guard after a failed guillotine instead of checking whether the leg entry for a triangle is already live.",
+    drill: "Failed-guillotine-to-triangle chain: 10 reps, partner postures out, check and finish the triangle before resetting.",
+    children: []
+  },
+  backtake_from_guillotine: {
+    title: "Back Take (off failed guillotine)", type: "position", points: 4,
+    objective: "Ride the opponent's escape direction off a failed choke straight into the back rather than letting the exchange go neutral.",
+    mechanics: "If they posture or turn away to escape, ride that turn straight to the back.",
+    commonMistake: "Standing up with them or disengaging when they posture out, instead of stepping around to the back on the same motion.",
+    drill: "Failed-guillotine-to-back drill: 10 reps, partner postures or turns to escape, finish at hooks-in.",
+    children: ["rnc"]
+  },
+  leg_entanglement: {
+    title: "Leg Entanglement", type: "entry", points: null,
+    objective: "Recognize the entanglement early — the grip battle decides everything here, and the first person with inside position usually wins it.",
+    mechanics: "Ashi-garami family — byproduct of scrambles, failed passes, and bottom guard attacks. The position you land in dictates the attack available. Inside position (ashi-garami or saddle) is always preferred over outside.",
+    commonMistake: "Engaging with outside position when inside is available — outside heel hook is the lower-percentage attack and the more dangerous entry for your own knee if the scramble reverses.",
+    drill: "Entanglement entry drill: from a failed pass or guard scramble, identify your position — inside, outside, saddle, or 50/50 — before committing to an attack. 10 reps naming the position first.",
+    children: ["leg_ashi_inside","leg_ashi_outside","leg_saddle","leg_fifty_fifty","def_leg_safe","def_leg_threat"]
+  },
+  leg_ashi_inside: {
+    title: "Inside Ashi-Garami", type: "position", points: 0,
+    objective: "Control the hip before attacking the foot — a loose ashi-garami with no hip control is escapable; hip-locked ashi with a clean heel cup is not.",
+    mechanics: "Your inside leg is between their legs, knee driving across their hip. Far hand controls the heel (cup from below), near hand controls the toe (rotate away from their hip). Hip angle perpendicular to theirs is mandatory before the finish.",
+    commonMistake: "Attacking the heel before establishing perpendicular hip angle — lets them step over and reverse the position entirely.",
+    drill: "Hip angle drill: establish ashi-garami, partner tries to step over and clear, maintain perpendicular for 30 seconds. 10 reps before adding the finish.",
+    defense: "Chasing the hip to deny perpendicular angle; stepping over the near leg to invert and reverse; heel hook counter from the top.",
+    children: ["leg_inside_heel_hook","leg_straight_ankle","leg_kneebar","leg_upgrade_saddle"]
+  },
+  leg_ashi_outside: {
+    title: "Outside Ashi / Backstep", type: "position", points: 0,
+    objective: "Use outside ashi as a transitional entry to the saddle, not a primary finishing platform — the outside heel hook is the lower-percentage option here.",
+    mechanics: "Your outside leg is hooked behind their knee from the outside. Outside heel hook entry: cup the heel from outside, rotate toward their hip (opposite direction from inside). More commonly used as a pass-through to the saddle by backstepping.",
+    commonMistake: "Hunting the outside heel hook without a hip-control grip — lets them roll through and take your knee with them.",
+    drill: "Backstep-to-saddle drill: enter outside ashi, backstep through to saddle position, 10 reps without losing the heel cup.",
+    defense: "Rolling in the direction of the heel hook (with the rotation, not against it) to relieve pressure; stepping out and clearing the hook.",
+    children: ["leg_outside_heel_hook","leg_upgrade_saddle"]
+  },
+  leg_saddle: {
+    title: "Saddle / 411 / Honey Hole", type: "position", points: 0,
+    objective: "This is the most powerful leg entanglement position — once established with hip control, the inside heel hook from here has the highest finish rate of any leg lock entry.",
+    mechanics: "Both legs control one of theirs: inside leg drives across their hip (ashi-garami component), outside leg hooks behind their knee (outside ashi component). Their leg is fully trapped between yours. Inside heel cup: cup from below, rotate the heel away from their hip toward you.",
+    commonMistake: "Failing to break them down flat before attacking — if they're sitting up or on their side they can frame and create space to pull the heel.",
+    drill: "Saddle break-down drill: establish saddle, partner sits up and frames, break them to flat before attempting heel cup. 10 reps.",
+    defense: "Hip chase to re-establish their leg between yours; inversion to relieve the heel cup; toehold counter on your near leg.",
+    children: ["leg_inside_heel_hook","leg_kneebar"]
+  },
+  leg_fifty_fifty: {
+    title: "50/50", type: "position", points: 0,
+    objective: "Use 50/50 as a control position to hunt the heel hook or a transition out — passive 50/50 is a stalemate that bleeds clock.",
+    mechanics: "Both athletes have inside ashi-garami on each other simultaneously. Symmetrical position. Priority: establish inside heel cup first, break their posture flat, finish or transition before they can reciprocate.",
+    commonMistake: "Sitting in 50/50 without actively attacking — equal position with no initiative is a points drain if you're behind on the scoreboard.",
+    drill: "50/50 initiative drill: enter 50/50, race to establish heel cup first against a resisting partner, 10 reps — time to first clean grip.",
+    defense: "Reciprocal inside heel hook (the same attack, they just get there first); hip escape to break the symmetry.",
+    children: ["leg_inside_heel_hook","leg_straight_ankle"]
+  },
+  leg_inside_heel_hook: {
+    title: "Inside Heel Hook", type: "submission", points: "WIN",
+    objective: "Rotate the heel before they can chase the hip — the window between a clean heel cup and a finished heel hook is very short at competition pace.",
+    mechanics: "Heel cup established (cup from below, palm against the back of the heel). Rotation: pull the heel toward you and rotate it away from their hip (internal tibial rotation). Elbow drives into the back of their knee as a fulcrum. Squeeze knees together to lock the hip. Finish with a short, controlled rotation — it's not a crank, it's a rotation.",
+    commonMistake: "Cranking straight rather than rotating — a straight pull is a straight ankle lock, not a heel hook. The damage in a heel hook is rotational; the tap comes fast and without much warning.",
+    drill: "Heel cup grip drill: 20 reps establishing the correct palm-to-heel cup from ashi-garami, no finish — groove the grip before the rotation.",
+    defense: "Tap early. This is the submission where the damage (ACL, LCL, popliteal) happens in fractions of a second before significant pain registers. There is no halfway — either you're out or you tap.",
+    children: ["leg_defended"]
+  },
+  leg_outside_heel_hook: {
+    title: "Outside Heel Hook", type: "submission", points: "WIN",
+    objective: "Establish a locked hip-control grip before rotating — the outside heel hook without hip control is the most common cause of non-consensual leg injury in grappling.",
+    mechanics: "From outside ashi: cup the heel from the outside (palm against the outside of the heel), rotation is toward their hip (external tibial rotation). Hip control is critical — your near-side knee must be tight to their hip throughout.",
+    commonMistake: "Rotating without hip control — the outside heel hook with a loose hip gap puts enormous torque on the knee without a controlled release point if they scramble.",
+    drill: "Outside cup and control drill: establish outside ashi, grip the heel correctly, confirm hip control is locked before any rotation — 10 reps, finish is not the drill objective.",
+    defense: "Tap early — same warning as inside heel hook. External rotation damage is equally fast and equally under-telegraphed by pain.",
+    children: ["leg_defended"]
+  },
+  leg_straight_ankle: {
+    title: "Straight Ankle Lock", type: "submission", points: "WIN",
+    objective: "Use the straight ankle lock as a setup for the heel hook — most experienced opponents will try to roll out of it, which typically exposes the heel for the upgrade.",
+    mechanics: "From ashi-garami or 50/50: forearm blade across the Achilles tendon, lock the grip (Kimura grip or gable grip), extend the hips while keeping the ankle hyperextended — extension, not rotation. Legal at all levels, lower finish rate at elite no-gi, but highly useful as a threat that opens the heel hook.",
+    commonMistake: "Over-committing to the straight ankle when the opponent is already rolling — instead of fighting the roll, follow it and upgrade to the inside heel hook as they expose the heel.",
+    drill: "Ankle-to-heel-hook transition: establish straight ankle lock, partner rolls to relieve it, finish the inside heel hook off their own escape. 10 reps.",
+    defense: "Rolling (with the direction of extension, not against it); hip escape to create space and pull the foot out.",
+    children: ["leg_defended","leg_inside_heel_hook"]
+  },
+  leg_kneebar: {
+    title: "Kneebar", type: "submission", points: "WIN",
+    objective: "Enter the kneebar from a position where your body weight can replace grip strength — kneebars finished by squeezing alone rarely work at competition level.",
+    mechanics: "Control the leg with both arms (hug the thigh), place the crook of your armpit over their kneecap as the fulcrum, extend the hips to hyperextend their knee. Legal in ADCC (no-gi, all levels). Restricted in IBJJF below brown belt.",
+    commonMistake: "Attacking the kneebar without securing the foot first — if the foot is free they can rotate and relieve the pressure before the lock seats.",
+    drill: "Kneebar entry drill: from ashi-garami, transition to kneebar grip, confirm foot is secured under your armpit before extending. 10 reps.",
+    defense: "Rotating with the hyperextension (somersault escape); pulling the knee toward the chest to relieve the angle. Tap early — kneebar damage to the popliteal ligament is also fast.",
+    children: ["leg_defended"]
+  },
+  leg_upgrade_saddle: {
+    title: "Upgrade to Saddle", type: "entry", points: null,
+    objective: "Whenever inside or outside ashi-garami is live, check whether the saddle is available before committing to a lower-percentage attack from a weaker position.",
+    mechanics: "From inside ashi: drive the outside leg over their thigh and hook behind their knee to complete the saddle. From outside ashi: backstep to complete the inside component. The saddle gives you both inside and outside hip control simultaneously.",
+    commonMistake: "Settling for a finish from basic ashi-garami when the saddle is one motion away — the saddle's finish rate is substantially higher.",
+    drill: "Position upgrade drill: enter basic ashi-garami, upgrade to saddle without losing heel contact, 10 reps.",
+    children: ["leg_saddle"]
+  },
+  leg_defended: {
+    title: "If Defended", type: "counter", points: null,
+    objective: "Maintain positional control — a failed leg lock attempt that loses the entanglement is a worse outcome than not attacking at all.",
+    mechanics: "They've survived the submission attempt. Reassess position: are you still in the same entanglement, have they created scramble space, or have they cleared entirely?",
+    commonMistake: "Releasing all hip control after a failed attempt — the position is usually still partially live and abandoning it gives them a free scramble.",
+    drill: "Failed-finish recovery drill: attempt the submission, partner defends, re-establish hip control before they can clear. 10 reps.",
+    children: ["leg_ashi_inside","leg_saddle","def_leg_safe","def_leg_threat"]
+  },
+
+  def_start: {
+    title: "Opponent Has Initiative", type: "entry", points: null,
+    mechanics: "Five ways a roll goes bad. Work the survival order for whichever threat you're facing — concede as little as possible, then convert back to offense the moment it's neutralized.",
+    children: ["def_takedown_threat","def_guard_threat","def_back_threat","def_leg_threat","def_mount_conceded"]
+  },
+  def_takedown_threat: {
+    title: "Opponent Shoots On You", type: "entry", points: null,
+    objective: "Sprawl before the hips are committed — reacting after they've already penetrated to your hips is too late.",
+    mechanics: "Sprawl the hips back, drop weight through their shoulders, cross-face and circle to a front headlock. Don't let your hips get sucked forward into the shot.",
+    commonMistake: "Pushing down on the head or shoulders with the hands before the hips are back — slows the sprawl and lets them drive underneath.",
+    drill: "Sprawl timing drill: partner cues a shot from different positions and distances, 15 reps focusing on hip-back speed, not hand placement.",
+    children: ["def_sprawl_success","def_takedown_conceded"]
+  },
+  def_sprawl_success: {
+    title: "Sprawl Successful", type: "position", points: 0,
+    objective: "Convert the sprawl immediately into a front headlock with active control — don't let them recover their base and reset.",
+    mechanics: "You've stopped the shot and now control head-and-arm position. This is the same front headlock your own guillotine and back-take entries come from.",
+    commonMistake: "Staying heavy on top without establishing a grip — they will recover their knees and stand back up in that window.",
+    drill: "Sprawl-to-front-headlock drill: 10 reps, measure time from sprawl to locked head-and-arm control — target under 2 seconds.",
+    children: ["td_stuffed"]
+  },
+  def_takedown_conceded: {
+    title: "Takedown Conceded", type: "threat", points: -2,
+    objective: "Limit the damage to the takedown score only — don't allow the position to cascade into a pass or a back take on the same exchange.",
+    mechanics: "They've landed the shot — −2 for a standard finish, −4 if it's clean (75%+ of your back pinned outside guard). Priority now: don't let it convert into an immediate pass.",
+    commonMistake: "Giving up the back or a submission attempt immediately after the takedown because of panic — take a breath, establish a frame first.",
+    drill: "Takedown-recovery drill: partner finishes a shot, you recover full guard within 5 seconds, 10 reps.",
+    children: ["guard_bottom"]
+  },
+  def_guard_threat: {
+    title: "Opponent Passing Your Guard", type: "entry", points: null,
+    objective: "Frame before they clear your legs, not after — early framing costs them the pass; late framing costs you energy and often position.",
+    mechanics: "Frame early — forearm across the hip or bicep line before they clear your legs. Priority order: recover guard, or build back to your feet, before you accept the pass.",
+    commonMistake: "Waiting until they've already cleared the legs to start framing — the frame is a preventative tool, not a recovery tool.",
+    drill: "Early frame drill: partner starts passing from standing, establish forearm-to-hip frame before their knee clears your leg, 10 reps.",
+    children: ["def_guard_recovered","def_stood_up","def_pass_conceded"]
+  },
+  def_guard_recovered: {
+    title: "Guard Recovered", type: "position", points: 0,
+    objective: "Re-establish active guard immediately — don't just recover the position and wait.",
+    mechanics: "Hip escape and frame reset your guard. No points conceded.",
+    commonMistake: "Recovering guard and then stalling instead of immediately threatening a sweep or submission — gives them initiative back.",
+    drill: "Guard recovery to attack: 10 reps, recover guard from a half-cleared pass, then immediately enter a sweep attempt on the same rep.",
+    children: ["guard_bottom"]
+  },
+  def_stood_up: {
+    title: "Base Built — Back to Feet", type: "position", points: 0,
+    objective: "Reset the exchange entirely — standing neutralizes their top game advantage and returns you to where your wrestling and judo base is strongest.",
+    mechanics: "Post, frame, and climb back to your feet rather than continuing to fight for guard on the ground. Resets the exchange entirely.",
+    commonMistake: "Standing up without first establishing a solid base — getting back down immediately wastes the effort and costs position.",
+    drill: "Stand-up drill: from under a pressure passer, post-frame-post sequence to feet, 10 reps against 50% resistance.",
+    children: ["start"]
+  },
+  def_pass_conceded: {
+    title: "Pass Conceded", type: "threat", points: -3,
+    objective: "Contain the damage to 3 points — bridge immediately for an underhook or a half-guard recovery rather than conceding to flat side control.",
+    mechanics: "They've cleared your legs and stabilized. Immediate priority: don't let the pass convert into back exposure or a pin that feeds a submission — frame to keep half guard or an underhook.",
+    commonMistake: "Going flat on your back after the pass — flat side control is the most stable position for the passer and the hardest to escape.",
+    drill: "Side-control recovery drill: partner holds stable side control, recover half-guard underhook within 10 seconds, 10 reps.",
+    children: ["def_half_recovered","def_mount_conceded","def_backtake_conceded"]
+  },
+  def_half_recovered: {
+    title: "Half Guard Recovered", type: "position", points: 0,
+    objective: "Use half guard as a fighting position, not a waiting position — the underhook is the key that opens both the sweep and the stand-up.",
+    mechanics: "You've stopped the bleeding at half guard. Deny the whizzer, fight for the underhook, and look to come back to a dominant frame or a sweep.",
+    commonMistake: "Fighting for the underhook passively while letting them establish the whizzer — the whizzer kills both the sweep and the stand-up simultaneously.",
+    drill: "Underhook battle drill: half guard, fight for the underhook for 30 seconds against an active opponent — first to establish it wins the rep.",
+    children: ["sweep"]
+  },
+  def_mount_conceded: {
+    title: "Mount Conceded", type: "threat", points: -2,
+    objective: "Escape before they settle into a high mount — the lower their hips, the harder the escape.",
+    mechanics: "They've established mount. Priority: elbow-knee escape or a controlled bridge-and-roll before they isolate an arm. No panic-bucking.",
+    commonMistake: "Bridging explosively without a posted elbow — a raw bridge without frames gets absorbed and costs energy without moving the opponent.",
+    drill: "Mount escape timing drill: partner mounts fresh, execute elbow-knee shrimp or bridge-and-roll within 5 seconds, 10 reps.",
+    children: ["def_mount_escaped","def_armbar_threat_mount","def_backtake_conceded"]
+  },
+  def_mount_escaped: {
+    title: "Mount Escaped", type: "position", points: 0,
+    objective: "Land in active guard, not flat on your back — the escape is wasted if you end up in the same vulnerability without the mount label on it.",
+    mechanics: "Bridge-and-roll or elbow-knee shrimp back to guard.",
+    commonMistake: "Escaping mount only to concede flat side control immediately — come out of the escape fighting for guard, not just lying flat.",
+    drill: "Mount escape to guard drill: 10 reps, escape finishes in closed or half guard with active frames — not flat side control.",
+    children: ["guard_bottom"]
+  },
+  def_armbar_threat_mount: {
+    title: "They Attack Armbar From Mount", type: "threat", points: null,
+    objective: "Clasp before the leg swings — if you wait until the leg is over your face, the hitchhiker grip is your last line and it buys very little time.",
+    mechanics: "Clasp your own hands immediately (hitchhiker grip), tuck the elbow, and either stack them or roll into their guard — the same hitchhiker-and-stack sequence that beats your own armbar attempts, now applied to yourself.",
+    commonMistake: "Trying to pull the arm out with raw strength instead of stacking — strength-only defense fails quickly against a tight armbar.",
+    drill: "Hitchhiker survival drill: partner attacks mount armbar at 50%, escape using only the stack-and-roll — no arm pulling, 10 reps.",
+    children: ["def_armbar_survived","def_submitted_armbar"]
+  },
+  def_armbar_survived: {
+    title: "Armbar Survived", type: "position", points: 0,
+    objective: "Convert the stack or roll-through into an active position rather than collapsing into another bad spot.",
+    mechanics: "You've stacked or rolled through — likely into their guard or a scramble. Reset to neutral bottom.",
+    commonMistake: "Collapsing into their guard after the stack and giving them a fresh submission attempt immediately — stay posted and build base first.",
+    drill: "Armbar survival to base drill: stack out of the armbar, establish a solid base before they can re-attack, 10 reps.",
+    children: ["guard_bottom"]
+  },
+  def_submitted_armbar: {
+    title: "Armbar Finished", type: "submission", points: "LOSS",
+    mechanics: "Tap early, tap often. No point total matters once a joint lock is fully extended.",
+    children: []
+  },
+  def_back_threat: {
+    title: "Opponent Has Seatbelt / Hooks In", type: "entry", points: null,
+    objective: "Deny the second hook before it's set — one hook is controllable, two hooks with a seatbelt is the match's most dangerous position.",
+    mechanics: "The position that decides matches. Priority order: deny the second hook or the choking-arm grip, hand-fight that arm down and away from your chin, then turn into them to face off and kill the position entirely. One hand manages the choke arm, the other manages the hip — never both hands on the same problem.",
+    commonMistake: "Using both hands to fight the choke arm while ignoring the second hook — lets them lock a body triangle which is far harder to manage.",
+    drill: "Hook denial drill: partner establishes seatbelt with one hook, you deny the second hook for 30 seconds, 10 reps.",
+    children: ["def_back_neutralized","def_backtake_conceded"]
+  },
+  def_backtake_conceded: {
+    title: "Back Taken — Points Conceded", type: "threat", points: -4,
+    objective: "Survive the choke threat first, then work to face them — the position is already scored against you, so don't rush the escape and give them a better angle.",
+    mechanics: "They've secured back control with hooks or a body triangle — the most dangerous position in the sport to be on the wrong side of. The survival sequence starts now.",
+    commonMistake: "Frantically trying to roll or stand up immediately — movement without a plan accelerates their choke, not your escape.",
+    drill: "Back-control survival drill: partner holds full back control, survive without tapping for 2 minutes — measure what works before adding escapes.",
+    children: ["def_back_neutralized","def_choke_threat"]
+  },
+  def_back_neutralized: {
+    title: "Position Neutralized", type: "position", points: 0,
+    objective: "Come out of the escape with an active guard and a grip fight, not another neutral bottom.",
+    mechanics: "You've turned to face them, stripped a hook, or otherwise killed the position. No further points conceded from here.",
+    commonMistake: "Celebrating the escape and disengaging — the opponent is in top position and will re-attack immediately.",
+    drill: "Back escape to guard drill: escape from back control into active closed guard, 10 reps — partner attempts to re-establish the back on the same rep.",
+    children: ["guard_bottom"]
+  },
+  def_choke_threat: {
+    title: "They Attack the Choke", type: "threat", points: null,
+    objective: "Buy time with the chin tuck while your hands deal with the wrist — the chin buys seconds, the wrist peel ends the threat.",
+    mechanics: "Chin tucked hard, both hands on the choking arm and forearm — peel from the wrist, not the bicep. If you can't peel it, turn your chin into the crook of their elbow rather than away from it.",
+    commonMistake: "Pulling on the bicep instead of the wrist — bicep pressure only delays a well-set choke, it doesn't break the position.",
+    drill: "Choke defense drill: partner attacks RNC at 50%, defend using chin-tuck and wrist peel only, 10 reps — no using both hands on the bicep.",
+    children: ["def_choke_survived","def_submitted_choke"]
+  },
+  def_choke_survived: {
+    title: "Choke Survived", type: "position", points: 0,
+    objective: "Use the space from the stripped choke to immediately attack a hook — surviving the choke without stripping a hook just resets the same problem.",
+    mechanics: "You've bought the space to turn in or strip a hook. Reset toward neutral.",
+    commonMistake: "Stopping at the choke defense and not immediately working to turn and face — lets them re-set the choke grip with fresher leverage.",
+    drill: "Choke survival to turn drill: survive the choke attempt, then turn to face within 5 seconds, 10 reps.",
+    children: ["guard_bottom"]
+  },
+  def_submitted_choke: {
+    title: "Choke Finished", type: "submission", points: "LOSS",
+    mechanics: "Tap before you're unconscious — there's no benefit to riding it out.",
+    children: []
+  },
+  def_leg_threat: {
+    title: "Opponent Attacking the Leg", type: "threat", points: null,
+    objective: "Chase the hip before they achieve the perpendicular angle — the moment they're perpendicular to you, the lock is mechanically live regardless of grip.",
+    mechanics: "Priority order: chase the hip and deny the perpendicular angle, hand-fight their grip off your foot or ankle before it's finished, and if fully caught, tap well before the last quarter-turn — heel hooks damage fast and don't telegraph pain the way a straight ankle lock does.",
+    commonMistake: "Trying to pull the leg out straight instead of chasing the hip — pulling straight into a heel hook applies the rotation yourself.",
+    drill: "Hip-chase drill: partner enters ashi-garami, you chase the hip to deny perpendicular position, 10 reps — no escapes from full position, prevention only.",
+    children: ["def_leg_survived","def_submitted_leg"]
+  },
+  def_leg_survived: {
+    title: "Escaped / Neutralized", type: "position", points: 0,
+    objective: "Come out of the leg entanglement in a dominant top position if possible — a cleared entanglement often puts you above their legs.",
+    mechanics: "You've cleared the entanglement or reversed the grip battle. Reset to neutral.",
+    commonMistake: "Scrambling out of the leg entanglement directly back into another entanglement — read the scramble exit and make a deliberate positional choice.",
+    drill: "Entanglement exit drill: partner initiates ashi-garami entry, exit cleanly to a named position — top, standing, or guard, 10 reps.",
+    children: ["guard_bottom"]
+  },
+  def_submitted_leg: {
+    title: "Leg Lock Finished", type: "submission", points: "LOSS",
+    mechanics: "The full leg-lock system — attack and defense both — is a separate future build. Tap early here; this is the position with the least warning before real damage.",
+    children: []
+  },
+  def_leg_safe: {
+    title: "Passed Through Safely", type: "position", points: 0,
+    objective: "Capitalize on the positional advantage the safe pass gives you — don't slow down mid-scramble.",
+    mechanics: "You cleared the entanglement without conceding grip or position — carried on into the scramble.",
+    commonMistake: "Pausing after passing through to assess instead of continuing the scramble — the opponent is already reacting to your position.",
+    drill: "Entanglement pass-through drill: pass through the leg entanglement and immediately establish mount or back control, 10 reps — no pausing at the clear.",
+    children: ["mount","backtake_pass"]
+  }
+};
+
+// ---- State ----
+let path = ["hub"];
+let matchPhase = 1;      // 1 = no points, submissions only. 2 = points live.
+let matchState = "even"; // "leading" | "even" | "trailing"
+let viewMode = "map";    // "map" | "flow"
+
+const QUICK_REF_IDS = ["rnc","guillotine","armbar_mount","triangle_from_armbar","backtake_pass","def_back_threat","def_guard_threat","mount"];
+
+// Reverse-lookup: which nodes point to a given node as a child (used by search context tags)
+const PARENTS = {};
+Object.keys(NODES).forEach(id=>{
+  (NODES[id].children||[]).forEach(cid=>{
+    if (!PARENTS[cid]) PARENTS[cid] = [];
+    PARENTS[cid].push(id);
+  });
+});
+
+const FLAGS_KEY = "guardian_matrix_flags";
+function loadFlags(){
+  try { return JSON.parse(localStorage.getItem(FLAGS_KEY)) || []; }
+  catch(e){ return []; }
+}
+function saveFlags(flags){
+  try { localStorage.setItem(FLAGS_KEY, JSON.stringify(flags)); } catch(e){}
+}
+
+function typeLabel(t){
+  return {entry:"Entry", position:"Position", submission:"Submission", counter:"If defended", threat:"Threat"}[t] || t;
+}
+function pointsLabel(points){
+  if (points === null || points === undefined) return "";
+  if (points === "WIN") return "Finish";
+  if (points === "LOSS") return "Tapped";
+  if (points < 0) return `${points} pt`;
+  return `+${points} pt${points===1?"":"s"}`;
+}
+function pointsBadge(points){
+  if (points === null || points === undefined) return "";
+  if (points === "WIN") return `<span class="badge pts-win">Finish</span>`;
+  if (points === "LOSS") return `<span class="badge pts-loss">Tapped</span>`;
+  if (points < 0) return `<span class="badge pts-neg">${points} pt</span>`;
+  return `<span class="badge pts-pos">+${points} pt${points===1?"":"s"}</span>`;
+}
+function computeScore(){
+  let total = 0, win = false, loss = false;
+  path.forEach(id=>{
+    const n = NODES[id];
+    if (typeof n.points === "number") total += n.points;
+    if (n.points === "WIN") win = true;
+    if (n.points === "LOSS") loss = true;
+  });
+  return {total, win, loss};
+}
+
+function goNode(id){
+  path.push(id);
+  render();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function jumpTo(id){
+  path = [id];
+  document.getElementById("searchPanel").classList.remove("open");
+  render();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function goBack(){
+  if (path.length > 1) path.pop();
+  render();
+}
+
+function renderMap(){
+  const centerId = path[path.length-1];
+  const node = NODES[centerId];
+  const wrap = document.getElementById("mapWrap");
+  const svg = document.getElementById("mapSvg");
+  const nodesEl = document.getElementById("mapNodes");
+  svg.innerHTML = "";
+  nodesEl.innerHTML = "";
+
+  const w = wrap.clientWidth || 320;
+  const h = wrap.clientHeight || 420;
+  const cx = w/2, cy = h/2;
+
+  // center node
+  const centerDiv = document.createElement("div");
+  centerDiv.className = "map-node center";
+  centerDiv.style.left = cx+"px";
+  centerDiv.style.top = cy+"px";
+  centerDiv.textContent = node.title;
+  nodesEl.appendChild(centerDiv);
+
+  const children = node.children || [];
+  const n = children.length;
+  if (n === 0){
+    document.getElementById("backRow").style.display = path.length>1 ? "flex" : "none";
+    return;
+  }
+  const radius = Math.max(85, Math.min(w/2 - 55, 175));
+  children.forEach((cid, i)=>{
+    const angle = -Math.PI/2 + i * (2*Math.PI/n);
+    const x = cx + radius*Math.cos(angle);
+    const y = cy + radius*Math.sin(angle);
+
+    const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+    line.setAttribute("x1", cx); line.setAttribute("y1", cy);
+    line.setAttribute("x2", x); line.setAttribute("y2", y);
+    svg.appendChild(line);
+
+    const cn = NODES[cid];
+    const div = document.createElement("div");
+    div.className = "map-node type-" + cn.type;
+    div.style.left = x+"px";
+    div.style.top = y+"px";
+    const ptsLbl = pointsLabel(cn.points);
+    div.innerHTML = cn.title + (ptsLbl ? `<span class="pts">${ptsLbl}</span>` : "");
+    div.onclick = ()=>goNode(cid);
+    nodesEl.appendChild(div);
+  });
+
+  document.getElementById("backRow").style.display = path.length>1 ? "flex" : "none";
+}
+
+function computeGuidance(node){
+  // Only meaningful for decision-bearing node types
+  if (!["position","submission","threat"].includes(node.type)) return null;
+
+  // Terminal loss nodes: always the same message, regardless of match state
+  if (node.points === "LOSS"){
+    return { text: "Tap early — no scoreboard situation, phase, or lead is worth a joint injury or blacking out.", urgent: true };
+  }
+
+  const p1 = matchPhase === 1;
+
+  if (node.type === "submission"){ // WIN nodes
+    if (p1) return { text: "No points live yet — pursue this fully. A failed attempt costs nothing on the scoreboard right now.", urgent:false };
+    if (matchState === "leading") return { text: "You're leading with points live — only commit if the entry is clean. A scrambled failed attempt can hand back the position you're protecting.", urgent:false };
+    if (matchState === "trailing") return { text: "You're trailing with points live — this is exactly the commitment level you need. Staying safe doesn't close the gap.", urgent:true };
+    return { text: "Score is even and points are live — a clean entry is worth the risk. Don't force it from a bad grip just because the clock is running.", urgent:false };
+  }
+
+  if (node.type === "position" && typeof node.points === "number" && node.points > 0){
+    if (p1) return { text: "No points live yet — treat this purely as a platform for the submission chain, not as a scoring event.", urgent:false };
+    if (matchState === "leading") return { text: "Bank these points, then weigh settling into control against chasing the higher-risk submission chain below.", urgent:false };
+    if (matchState === "trailing") return { text: "These points help, but they won't close the gap alone — use this as a bridge into the submission chain rather than stalling here.", urgent:false };
+    return { text: "Bank the points, then decide based on how clean your entry into the next attack looks.", urgent:false };
+  }
+
+  if (node.type === "threat"){
+    if (p1) return { text: "No points at stake yet, but a submission conceded here still ends the match immediately — treat this with full urgency regardless of phase.", urgent:true };
+    if (matchState === "leading") return { text: "You have a lead to protect — prioritize clean survival over an escape that risks a scramble costing you the position and the lead together.", urgent:true };
+    if (matchState === "trailing") return { text: "You're already behind — a little extra risk in the escape is more acceptable here than it would be protecting a lead.", urgent:false };
+    return { text: "Work the standard survival priority order — no reason to take on extra risk while the score is even.", urgent:true };
+  }
+
+  return null;
+}
+
+function renderFlow(){
+  const svg = document.getElementById("flowSvg");
+  const nodesEl = document.getElementById("flowNodes");
+  const wrap = document.getElementById("flowWrap");
+  svg.innerHTML = "";
+  nodesEl.innerHTML = "";
+
+  const colW = 128;
+  const rowH = 56;
+  const h = wrap.clientHeight || 420;
+  const centerY = h/2;
+  const startX = 74;
+
+  // total columns = path length + 1 (for the "next options" column after the current node)
+  const lastNode = NODES[path[path.length-1]];
+  const nextOptions = lastNode.children || [];
+  const totalCols = path.length + (nextOptions.length ? 1 : 0);
+  const totalWidth = Math.max(wrap.clientWidth || 320, startX*2 + (totalCols-1)*colW + 120);
+  svg.setAttribute("width", totalWidth);
+  svg.setAttribute("height", h);
+  nodesEl.style.width = totalWidth+"px";
+
+  function drawLine(x1,y1,x2,y2,spine){
+    const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+    line.setAttribute("x1",x1); line.setAttribute("y1",y1);
+    line.setAttribute("x2",x2); line.setAttribute("y2",y2);
+    if (spine) line.setAttribute("class","spine");
+    svg.appendChild(line);
+  }
+  function placeNode(x,y,cls,title,pts,onclick){
+    const div = document.createElement("div");
+    div.className = "flow-node " + cls;
+    div.style.left = x+"px"; div.style.top = y+"px";
+    const ptsLbl = pointsLabel(pts);
+    div.innerHTML = title + (ptsLbl && cls!=="alt" ? `<span class="pts">${ptsLbl}</span>` : "");
+    if (onclick) div.onclick = onclick;
+    nodesEl.appendChild(div);
+  }
+
+  // Spine: the path itself, left to right
+  path.forEach((id, i)=>{
+    const x = startX + i*colW;
+    const n = NODES[id];
+    const isCurrent = i === path.length-1;
+    placeNode(x, centerY, "spine" + (isCurrent?" current":""), n.title, n.points,
+      isCurrent ? null : ()=>{ path = path.slice(0, i+1); render(); });
+
+    if (i > 0){
+      drawLine(startX+(i-1)*colW, centerY, x, centerY, true);
+    }
+
+    // Alternatives at this step: siblings from the previous node that weren't taken
+    if (i > 0){
+      const parent = NODES[path[i-1]];
+      const alts = (parent.children||[]).filter(cid=>cid!==id);
+      const px = startX + (i-1)*colW;
+      alts.forEach((aid, j)=>{
+        const side = j % 2 === 0 ? 1 : -1;
+        const rank = Math.floor(j/2) + 1;
+        const ay = centerY + side * rank * rowH * 0.62;
+        const an = NODES[aid];
+        drawLine(px, centerY, x, ay, false);
+        placeNode(x, ay, "alt", an.title, an.points, ()=>{
+          path = path.slice(0, i).concat([aid]);
+          render();
+        });
+      });
+    }
+  });
+
+  // Next options column — forward choices from the current node
+  if (nextOptions.length){
+    const x = startX + path.length*colW;
+    const lastX = startX + (path.length-1)*colW;
+    nextOptions.forEach((cid, j)=>{
+      const spread = (nextOptions.length-1)/2;
+      const y = centerY + (j - spread) * rowH * 0.75;
+      const cn = NODES[cid];
+      drawLine(lastX, centerY, x, y, false);
+      placeNode(x, y, "next", cn.title, cn.points, ()=>goNode(cid));
+    });
+  }
+
+  document.getElementById("backRow").style.display = path.length>1 ? "flex" : "none";
+}
+
+function renderDetail(){
+  const centerId = path[path.length-1];
+  const node = NODES[centerId];
+  const card = document.getElementById("detailCard");
+  const section = (label, text, cls="") => text ? `
+      <div class="node-section ${cls}">
+        <div class="label">${label}</div>
+        <p>${text}</p>
+      </div>` : "";
+  const guidance = computeGuidance(node);
+  const guidanceHtml = guidance ? `
+    <div class="guidance-box${guidance.urgent ? ' urgent' : ''}">
+      <div class="label">Match Guidance — Phase ${matchPhase}, ${matchState}</div>
+      <p>${guidance.text}</p>
+    </div>` : "";
+
+  card.innerHTML = `
+    <div class="detail-card type-${node.type}">
+      <div class="badges">
+        <span class="badge tag-${node.type}">${typeLabel(node.type)}</span>
+        ${pointsBadge(node.points)}
+      </div>
+      <h2 class="node-title">${node.title}</h2>
+      ${guidanceHtml}
+      ${section("Objective", node.objective)}
+      ${section("Mechanics", node.mechanics)}
+      ${section("Opponent Reactions", node.defense, "dim")}
+      ${section("Common Mistake", node.commonMistake, "mistake")}
+      ${section("Drill", node.drill)}
+      ${(!node.children || node.children.length===0) ? `<div class="empty-note">End of chain — no further branches mapped yet.</div>` : ""}
+    </div>
+  `;
+}
+
+function render(){
+  document.querySelectorAll(".nav-btn[data-jump]").forEach(btn=>{
+    btn.classList.toggle("active", path[path.length-1] === btn.dataset.jump && path.length===1);
+  });
+
+  const {total, win, loss} = computeScore();
+  const scoreEl = document.getElementById("scoreValue");
+  scoreEl.textContent = win ? "TAP" : loss ? "TAPPED" : (total>=0 ? "+"+total : total);
+  scoreEl.className = "value" + (win ? " win" : loss ? " loss" : "");
+
+  const trail = document.getElementById("chainTrail");
+  trail.innerHTML = "";
+  path.forEach((pid, i)=>{
+    const n = NODES[pid];
+    const item = document.createElement("div");
+    item.className = "chain-item";
+    const btn = document.createElement("div");
+    btn.className = "chain-node" + (i===path.length-1 ? " current" : "");
+    btn.textContent = n.title;
+    btn.onclick = ()=>{ path = path.slice(0, i+1); render(); window.scrollTo({top:0, behavior:"smooth"}); };
+    item.appendChild(btn);
+    trail.appendChild(item);
+    if (i < path.length-1){
+      const link = document.createElement("div");
+      link.className = "chain-link";
+      trail.appendChild(link);
+    }
+  });
+
+  if (viewMode === "flow") renderFlow(); else renderMap();
+  renderDetail();
+}
+
+document.querySelectorAll(".nav-btn[data-jump]").forEach(btn=>{
+  btn.onclick = ()=>jumpTo(btn.dataset.jump);
+});
+document.getElementById("backBtn").onclick = goBack;
+
+// ---- Match phase / scoreboard state ----
+function setPhase(p){
+  matchPhase = p;
+  document.querySelectorAll(".phase-btn").forEach(b=>b.classList.toggle("active", Number(b.dataset.phase)===p));
+  renderDetail();
+}
+function setMatchState(s){
+  matchState = s;
+  document.querySelectorAll(".state-btn").forEach(b=>{
+    b.classList.remove("active","leading","even","trailing");
+    if (b.dataset.state===s) b.classList.add("active", s);
+  });
+  renderDetail();
+}
+document.querySelectorAll(".phase-btn").forEach(b=> b.onclick = ()=>setPhase(Number(b.dataset.phase)) );
+document.querySelectorAll(".state-btn").forEach(b=> b.onclick = ()=>setMatchState(b.dataset.state) );
+setPhase(matchPhase);
+setMatchState(matchState);
+
+// ---- Quick Reference ----
+function renderQuickRef(){
+  const list = document.getElementById("quickRefList");
+  list.innerHTML = "";
+  QUICK_REF_IDS.forEach(id=>{
+    const n = NODES[id];
+    const row = document.createElement("div");
+    row.className = "quickref-item";
+    row.innerHTML = `
+      <div>
+        <div class="qr-title">${n.title}</div>
+        <div class="qr-sub">${typeLabel(n.type)}</div>
+      </div>
+      ${pointsBadge(n.points)}
+    `;
+    row.onclick = ()=>{
+      document.getElementById("quickRefModal").style.display = "none";
+      jumpTo(id);
+    };
+    list.appendChild(row);
+  });
+}
+document.getElementById("quickRefToggle").onclick = ()=>{
+  renderQuickRef();
+  document.getElementById("quickRefModal").style.display = "flex";
+};
+document.getElementById("quickRefClose").onclick = ()=>{
+  document.getElementById("quickRefModal").style.display = "none";
+};
+document.getElementById("quickRefModal").onclick = (e)=>{
+  if (e.target === document.getElementById("quickRefModal"))
+    document.getElementById("quickRefModal").style.display = "none";
+};
+
+const searchToggle = document.getElementById("searchToggle");
+const searchPanel = document.getElementById("searchPanel");
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+searchToggle.onclick = ()=>{
+  searchPanel.classList.toggle("open");
+  if (searchPanel.classList.contains("open")) searchInput.focus();
+};
+searchInput.addEventListener("input", ()=>{
+  const q = searchInput.value.trim().toLowerCase();
+  searchResults.innerHTML = "";
+  if (!q) return;
+  const matches = Object.entries(NODES).filter(([id, n]) => id!=="hub" && n.title.toLowerCase().includes(q)).slice(0, 8);
+  if (matches.length === 0){
+    searchResults.innerHTML = `<div class="search-empty">No matches.</div>`;
+    return;
+  }
+  matches.forEach(([id, n])=>{
+    const row = document.createElement("div");
+    row.className = "search-result";
+    const parents = (PARENTS[id]||[]).filter(p=>p!=="hub");
+    let ctx = "";
+    if (parents.length === 1){
+      ctx = `<div class="qr-context">via ${NODES[parents[0]].title}</div>`;
+    } else if (parents.length > 1){
+      ctx = `<div class="qr-context">via ${NODES[parents[0]].title} +${parents.length-1} more chain${parents.length>2?'s':''}</div>`;
+    }
+    row.innerHTML = `<div><span>${n.title}</span>${ctx}</div>${pointsBadge(n.points)}`;
+    row.onclick = ()=>{ searchInput.value=""; searchResults.innerHTML=""; jumpTo(id); };
+    searchResults.appendChild(row);
+  });
+});
+
+window.addEventListener("resize", ()=>{ if (viewMode==="flow") renderFlow(); else renderMap(); });
+
+// ---- View mode toggle ----
+document.getElementById("viewMapBtn").onclick = ()=>{
+  viewMode = "map";
+  document.getElementById("viewMapBtn").classList.add("active");
+  document.getElementById("viewFlowBtn").classList.remove("active");
+  document.getElementById("mapWrap").style.display = "";
+  document.getElementById("flowWrap").style.display = "none";
+  document.getElementById("mapHint").textContent = "Tap a node to expand it";
+  renderMap();
+};
+document.getElementById("viewFlowBtn").onclick = ()=>{
+  viewMode = "flow";
+  document.getElementById("viewFlowBtn").classList.add("active");
+  document.getElementById("viewMapBtn").classList.remove("active");
+  document.getElementById("mapWrap").style.display = "none";
+  document.getElementById("flowWrap").style.display = "";
+  document.getElementById("mapHint").textContent = "Scroll to see the full chain — dimmed nodes are the branches you didn't take";
+  renderFlow();
+};
+// ---- Export ----
+function buildExportText(){
+  const {total, win, loss} = computeScore();
+  const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  const scoreLabel = win ? 'FINISH — TAP' : loss ? 'TAPPED' : (total>=0?'+':'')+total+' pts';
+  const filtered = path.filter(id=>id!=='hub');
+
+  let md = `# Guardian Matrix — Chain Notes\n`;
+  md += `**CHINTHE / Guardian Matrix** — exported ${date}\n`;
+  md += `**Chain score:** ${scoreLabel}\n`;
+  md += `**Match context at export:** Phase ${matchPhase} (${matchPhase===1?'no points live':'points live'}), scoreboard: ${matchState}\n\n`;
+  md += `---\n\n`;
+
+  filtered.forEach((id, i)=>{
+    const n = NODES[id];
+    const pts = n.points==='WIN' ? ' — FINISH' : n.points==='LOSS' ? ' — TAPPED' :
+                typeof n.points==='number' && n.points!==0 ? ` (${n.points>0?'+':''}${n.points} pts)` : '';
+    md += `## Step ${i+1}: ${n.title}${pts}\n`;
+    md += `**Type:** ${typeLabel(n.type)}\n\n`;
+    if(n.objective)     md += `**Objective:** ${n.objective}\n\n`;
+    if(n.mechanics)     md += `**Mechanics:** ${n.mechanics}\n\n`;
+    if(n.defense)       md += `**Opponent Reactions:** ${n.defense}\n\n`;
+    if(n.commonMistake) md += `**Common Mistake:** ${n.commonMistake}\n\n`;
+    if(n.drill)         md += `**Drill:** ${n.drill}\n\n`;
+    md += `---\n\n`;
+  });
+
+  md += `*Exported from CHINTHE Guardian Matrix — Alpha*\n`;
+  return md;
+}
+
+function showExportModal(){
+  const text = buildExportText();
+  const {total, win, loss} = computeScore();
+  const filtered = path.filter(id=>id!=='hub');
+  document.getElementById('modalSub').textContent =
+    `${filtered.length} step${filtered.length===1?'':'s'} · ${win?'FINISH':loss?'TAPPED':(total>=0?'+':'')+total+' pts'}`;
+  document.getElementById('exportText').value = text;
+  document.getElementById('copyFeedback').style.display='none';
+  document.getElementById('exportModal').style.display='flex';
+}
+
+document.getElementById('exportBtn').onclick = showExportModal;
+
+document.getElementById('modalClose').onclick = ()=>{
+  document.getElementById('exportModal').style.display='none';
+};
+document.getElementById('exportModal').onclick = (e)=>{
+  if(e.target===document.getElementById('exportModal'))
+    document.getElementById('exportModal').style.display='none';
+};
+
+document.getElementById('copyBtn').onclick = ()=>{
+  const text = document.getElementById('exportText').value;
+  navigator.clipboard.writeText(text).then(()=>{
+    const fb = document.getElementById('copyFeedback');
+    fb.style.display='block';
+    setTimeout(()=>{ fb.style.display='none'; }, 2000);
+  }).catch(()=>{
+    document.getElementById('exportText').select();
+    document.execCommand('copy');
+  });
+};
+
+document.getElementById('downloadBtn').onclick = ()=>{
+  const text = document.getElementById('exportText').value;
+  const date = new Date().toISOString().slice(0,10);
+  const blob = new Blob([text], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `guardian-matrix-chain-${date}.md`;
+  a.click();
+};
+
+// ---- Flags (feedback) ----
+let currentFlagType = "wrong";
+document.querySelectorAll(".flag-type-btn").forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll(".flag-type-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    currentFlagType = b.dataset.flagtype;
+  };
+});
+
+function updateFlagsCount(){
+  const n = loadFlags().length;
+  document.getElementById("flagsCount").textContent = n > 0 ? `(${n})` : "";
+}
+
+document.getElementById("flagBtn").onclick = ()=>{
+  const id = path[path.length-1];
+  document.getElementById("flagNodeTitle").textContent = NODES[id].title;
+  document.getElementById("flagInput").value = "";
+  currentFlagType = "wrong";
+  document.querySelectorAll(".flag-type-btn").forEach(x=>x.classList.toggle("active", x.dataset.flagtype==="wrong"));
+  document.getElementById("flagModal").style.display = "flex";
+};
+document.getElementById("flagModalClose").onclick = ()=>{ document.getElementById("flagModal").style.display="none"; };
+document.getElementById("flagModal").onclick = (e)=>{
+  if (e.target===document.getElementById("flagModal")) document.getElementById("flagModal").style.display="none";
+};
+document.getElementById("flagSubmit").onclick = ()=>{
+  const id = path[path.length-1];
+  const note = document.getElementById("flagInput").value.trim();
+  if (!note) return;
+  const flags = loadFlags();
+  flags.unshift({
+    id, title: NODES[id].title, type: currentFlagType, note,
+    timestamp: new Date().toISOString()
+  });
+  saveFlags(flags);
+  updateFlagsCount();
+  document.getElementById("flagModal").style.display = "none";
+};
+
+function renderFlagsList(){
+  const flags = loadFlags();
+  document.getElementById("flagsListSub").textContent =
+    flags.length ? `${flags.length} flag${flags.length===1?'':'s'} logged on this device.` : "No flags yet.";
+  const body = document.getElementById("flagsListBody");
+  body.innerHTML = "";
+  flags.forEach((f, i)=>{
+    const item = document.createElement("div");
+    item.className = "flag-list-item";
+    const date = new Date(f.timestamp).toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+    item.innerHTML = `
+      <div class="fl-title">${f.title}</div>
+      <div class="fl-meta">${f.type.toUpperCase()} · ${date}</div>
+      <div class="fl-note">${f.note}</div>
+      <button class="fl-delete" data-idx="${i}">Delete</button>
+    `;
+    item.querySelector(".fl-delete").onclick = ()=>{
+      const all = loadFlags();
+      all.splice(i,1);
+      saveFlags(all);
+      updateFlagsCount();
+      renderFlagsList();
+    };
+    body.appendChild(item);
+  });
+}
+
+document.getElementById("flagsToggle").onclick = ()=>{
+  renderFlagsList();
+  document.getElementById("flagsListModal").style.display = "flex";
+};
+document.getElementById("flagsListClose").onclick = ()=>{ document.getElementById("flagsListModal").style.display="none"; };
+document.getElementById("flagsListModal").onclick = (e)=>{
+  if (e.target===document.getElementById("flagsListModal")) document.getElementById("flagsListModal").style.display="none";
+};
+document.getElementById("flagsCopyBtn").onclick = ()=>{
+  const flags = loadFlags();
+  const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  let text = `# Guardian Matrix — Flagged Feedback\nExported ${date}\n\n`;
+  flags.forEach(f=>{
+    const d = new Date(f.timestamp).toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+    text += `## ${f.title}\n**Type:** ${f.type} · **Date:** ${d}\n${f.note}\n\n---\n\n`;
+  });
+  navigator.clipboard.writeText(text).then(()=>{
+    const fb = document.getElementById("flagsCopyFeedback");
+    fb.style.display = "block";
+    setTimeout(()=>{ fb.style.display="none"; }, 2000);
+  });
+};
+document.getElementById("flagsClearBtn").onclick = ()=>{
+  if (!confirm("Clear all flags on this device? This can't be undone.")) return;
+  saveFlags([]);
+  updateFlagsCount();
+  renderFlagsList();
+};
+
+// Show export/flag rows based on current path
+function updateExportVisibility(){
+  const filtered = path.filter(id=>id!=='hub');
+  document.getElementById('exportRow').style.display = filtered.length>1 ? 'flex' : 'none';
+  document.getElementById('flagRow').style.display = filtered.length>=1 ? 'flex' : 'none';
+}
+
+const _render = render;
+render = function(){
+  _render();
+  updateExportVisibility();
+};
+
+updateFlagsCount();
+render();
+</script>
+</body>
+</html>
