@@ -8,87 +8,19 @@
 <title>CHINTHE — Guardian System</title>
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="chinthe.css">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0D000D;
-  --surface:#111315;
-  --surface-2:#1B1E22;
-  --surface-3:#222222;
-  --jade:#0F3B2E;
-  --jade-bright:#3FA383;
-  --gold:#D4AF37;
-  --gold-dim:#2A2210;
-  --stone:#F5F3EC;
-  --stone-dim:#A29E93;
-  --crimson:#8D2323;
-  --steel:#5C7A85;
-  --line:rgba(245,243,236,0.08);
-  --radius:10px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{
-  background:var(--bg);
-  color:var(--stone);
-  font-family:'Inter',sans-serif;
-  -webkit-font-smoothing:antialiased;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(13,0,13,0.88);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--line);
-}
-.nav-inner{
-  max-width:1100px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 20px;
-}
-.nav-brand{
-  display:flex;align-items:center;gap:10px;text-decoration:none;
-}
-.nav-lion{
-  width:28px;height:28px;
-  background:linear-gradient(135deg,var(--gold),#E8C468);
-  border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;
-}
-.nav-wordmark{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:20px;letter-spacing:0.12em;color:var(--stone);
-}
-.nav-links{
-  display:flex;align-items:center;gap:4px;
-}
-.nav-link{
-  font-family:'IBM Plex Mono',monospace;font-size:11px;
-  letter-spacing:0.06em;text-transform:uppercase;
-  color:var(--stone-dim);text-decoration:none;
-  padding:7px 12px;border-radius:6px;transition:color .15s,background .15s;
-}
-.nav-link:hover{color:var(--stone);background:var(--surface-2);}
-.nav-link.active{color:var(--gold);}
-.nav-cta{
-  font-family:'IBM Plex Mono',monospace;font-size:11px;
-  letter-spacing:0.06em;text-transform:uppercase;
-  background:var(--gold);color:var(--bg);
-  padding:8px 16px;border-radius:999px;text-decoration:none;
-  font-weight:600;transition:opacity .15s;
-}
-.nav-cta:hover{opacity:0.88;}
+/* ── Tokens, reset, nav → chinthe.css ── */
+html { scroll-behavior: smooth; }
+body { overflow-x: hidden; }
 
 /* ── HERO ── */
 .hero{
-  min-height:100vh;
+  min-height:calc(100vh - var(--nav-h));
   display:flex;flex-direction:column;justify-content:center;
   position:relative;overflow:hidden;
-  padding:120px 20px 80px;
+  padding:80px 20px 60px;
 }
 .hero-glow{
   position:absolute;top:-20%;left:50%;transform:translateX(-50%);
@@ -301,11 +233,7 @@ footer{
 
 /* ── DESKTOP IMPROVEMENTS ── */
 @media(min-width:960px){
-  .nav-inner{padding:16px 40px;}
-  .nav-wordmark{font-size:22px;}
-  .nav-link{font-size:12px;padding:8px 16px;}
-
-  .hero{padding:140px 40px 100px;}
+  .hero{padding:100px 40px 80px;}
   .hero-inner{max-width:none;}
   .hero-heading{font-size:clamp(80px,9vw,160px);}
   .hero-sub{font-size:clamp(17px,1.6vw,22px);max-width:580px;margin-bottom:48px;}
@@ -325,7 +253,7 @@ footer{
 }
 
 @media(min-width:1400px){
-  .hero{padding:160px 80px 120px;}
+  .hero{padding:120px 80px 100px;}
   .section,.pillars-inner{padding:120px 80px;}
   .hero-heading{font-size:clamp(100px,9vw,180px);}
   .modules-grid{grid-template-columns:repeat(4,1fr);}
@@ -334,20 +262,20 @@ footer{
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a class="nav-brand" href="index.html">
-      <div class="nav-lion">⊕</div>
-      <span class="nav-wordmark">CHINTHE</span>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-brand" href="index.html">
+      <div class="site-nav-lion">⊕</div>
+      <span class="site-nav-wordmark">CHINTHE</span>
     </a>
-    <div class="nav-links">
-      <a class="nav-link active" href="index.html">Home</a>
-      <a class="nav-link" href="chinthe-guardian-matrix.html">Guardian Matrix</a>
-      <a class="nav-link" href="knowledge.html">Knowledge</a>
-      <a class="nav-link" href="principles.html">Principles</a>
-      <a class="nav-link" href="journal.html">Journal</a>
+    <div class="site-nav-links">
+      <a class="site-nav-link active" href="index.html">Home</a>
+      <a class="site-nav-link" href="chinthe-guardian-matrix.html">Matrix</a>
+      <a class="site-nav-link" href="knowledge.html">Knowledge</a>
+      <a class="site-nav-link" href="principles.html">Principles</a>
+      <a class="site-nav-link" href="journal.html">Journal</a>
     </div>
-    <a class="nav-cta" href="chinthe-guardian-matrix.html">Open Matrix →</a>
+    <a class="site-nav-cta" href="chinthe-guardian-matrix.html">Open Matrix →</a>
   </div>
 </nav>
 
