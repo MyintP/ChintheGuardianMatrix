@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0D000D">
+<title>Knowledge Base — CHINTHE</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D000D;--surface:#111315;--surface-2:#1B1E22;--surface-3:#222222;
+  --jade:#0F3B2E;--jade-bright:#3FA383;--gold:#D4AF37;--gold-dim:#2A2210;
+  --stone:#F5F3EC;--stone-dim:#A29E93;--crimson:#8D2323;--steel:#5C7A85;
+  --line:rgba(245,243,236,0.08);--radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:80px;}
+
+nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-lion{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),#E8C468);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.nav-wordmark{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.12em;color:var(--stone);}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-link{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--stone-dim);text-decoration:none;padding:7px 12px;border-radius:6px;transition:color .15s,background .15s;}
+.nav-link:hover{color:var(--stone);background:var(--surface-2);}
+.nav-link.active{color:var(--gold);}
+
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px;}
+.page-header{padding:48px 0 32px;}
+.page-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--jade-bright);text-transform:uppercase;margin-bottom:10px;}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,8vw,72px);text-transform:uppercase;letter-spacing:0.02em;line-height:1;margin-bottom:10px;}
+.page-sub{font-size:14px;color:var(--stone-dim);line-height:1.6;max-width:520px;}
+
+/* Controls */
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--line);}
+.search-box{
+  flex:1;min-width:200px;
+  background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  color:var(--stone);font-family:'Inter',sans-serif;font-size:14px;
+  padding:10px 14px;outline:none;
+}
+.search-box:focus{border-color:var(--jade-bright);}
+.search-box::placeholder{color:var(--stone-dim);}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;}
+.filter-btn{
+  background:var(--surface);border:1px solid var(--line);color:var(--stone-dim);
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.07em;text-transform:uppercase;
+  padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;
+}
+.filter-btn.active{background:var(--stone);color:var(--bg);border-color:var(--stone);font-weight:600;}
+.filter-btn.cat-submission.active{background:var(--gold);color:var(--bg);border-color:var(--gold);}
+.filter-btn.cat-position.active{background:var(--jade-bright);color:var(--bg);border-color:var(--jade-bright);}
+.filter-btn.cat-pass.active{background:var(--steel);color:var(--stone);border-color:var(--steel);}
+.filter-btn.cat-sweep.active{background:#6B5CE7;color:var(--stone);border-color:#6B5CE7;}
+.filter-btn.cat-takedown.active{background:var(--crimson);color:var(--stone);border-color:var(--crimson);}
+.filter-btn.cat-defence.active{background:#B5462F;color:var(--stone);border-color:#B5462F;}
+
+/* Results count */
+.results-meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--stone-dim);letter-spacing:0.06em;margin-bottom:20px;}
+
+/* Grid */
+.knowledge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
+
+/* Cards */
+.tech-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  cursor:pointer;overflow:hidden;transition:border-color .2s,transform .15s;
+  position:relative;
+}
+.tech-card:hover{border-color:rgba(245,243,236,0.18);transform:translateY(-2px);}
+.tech-card-accent{height:2px;width:100%;}
+.cat-submission .tech-card-accent{background:var(--gold);}
+.cat-position .tech-card-accent{background:var(--jade-bright);}
+.cat-pass .tech-card-accent{background:var(--steel);}
+.cat-sweep .tech-card-accent{background:#6B5CE7;}
+.cat-takedown .tech-card-accent{background:var(--crimson);}
+.cat-defence .tech-card-accent{background:#B5462F;}
+
+.tech-card-body{padding:18px 20px 20px;}
+.tech-card-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.tech-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;
+  letter-spacing:0.06em;text-transform:uppercase;
+  padding:3px 8px;border-radius:5px;
+}
+.cat-submission .tech-badge{background:var(--gold-dim);color:var(--gold);}
+.cat-position .tech-badge{background:var(--jade);color:var(--jade-bright);}
+.cat-pass .tech-badge{background:rgba(92,122,133,0.15);color:var(--steel);}
+.cat-sweep .tech-badge{background:rgba(107,92,231,0.15);color:#6B5CE7;}
+.cat-takedown .tech-badge{background:rgba(141,35,35,0.18);color:var(--crimson);}
+.cat-defence .tech-badge{background:rgba(181,70,47,0.15);color:#B5462F;}
+
+.tech-card-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.02em;text-transform:uppercase;line-height:1;margin-bottom:6px;}
+.tech-card-tagline{font-size:13px;color:var(--stone-dim);line-height:1.4;margin-bottom:12px;}
+.tech-card-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);border-radius:4px;padding:2px 7px;}
+
+/* Expanded detail */
+.tech-detail{display:none;padding:16px 20px 20px;border-top:1px solid var(--line);}
+.tech-detail.open{display:block;}
+.detail-section{margin-bottom:14px;}
+.detail-label{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;}
+.detail-text{font-size:13.5px;line-height:1.6;color:var(--stone);}
+.detail-text.mistake{color:#E86868;}
+.close-btn{
+  margin-top:16px;background:none;border:1px solid var(--line);color:var(--stone-dim);
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:7px 14px;border-radius:6px;cursor:pointer;
+}
+
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .knowledge-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">
+      <div class="nav-lion">⊕</div>
+      <span class="nav-wordmark">CHINTHE</span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="chinthe-guardian-matrix.html">Guardian Matrix</a>
+      <a class="nav-link active" href="knowledge.html">Knowledge</a>
+      <a class="nav-link" href="journal.html">Journal</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">CHINTHE Knowledge Base</div>
+    <h1 class="page-title">Technique<br>Database</h1>
+    <p class="page-sub">Competition-focused mechanics for every position. Tap any card to expand full detail — objective, mechanics, common mistakes, drill, and defense counters.</p>
+  </div>
+
+  <div class="controls">
+    <input class="search-box" type="text" id="searchInput" placeholder="Search techniques, positions, submissions…" autocomplete="off">
+    <div class="filter-row" id="filterRow">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn cat-submission" data-cat="submission">Submissions</button>
+      <button class="filter-btn cat-position" data-cat="position">Positions</button>
+      <button class="filter-btn cat-pass" data-cat="pass">Passes</button>
+      <button class="filter-btn cat-sweep" data-cat="sweep">Sweeps</button>
+      <button class="filter-btn cat-takedown" data-cat="takedown">Takedowns</button>
+      <button class="filter-btn cat-defence" data-cat="defence">Defence</button>
+    </div>
+  </div>
+
+  <div class="results-meta" id="resultsMeta"></div>
+  <div class="knowledge-grid" id="grid"></div>
+</div>
+
+<script>
+const DB = [
+  // ── SUBMISSIONS ──────────────────────────────────────────────────
+  {
+    id:"rnc", cat:"submission",
+    name:"Rear Naked Choke",
+    tagline:"The highest-percentage finish in modern no-gi. Your default finishing target from back control.",
+    tags:["Back Control","No-Gi","ADCC Primary"],
+    objective:"Establish the seatbelt before threading the choke — the seatbelt is the position that makes the finish available.",
+    mechanics:"Seatbelt first: far-side hand deep under the armpit, near-side over the shoulder. Thread the choking arm under the chin — bicep seals one carotid. Grip the far shoulder or bicep with the choking hand. Cup the back of the head with the free hand. Pull elbows together and arch — don't just squeeze the bicep.",
+    defense:"Hand-fighting the choking arm before it seats. Chin tuck. Spinning into you to kill back exposure. Hip escape to recover half guard.",
+    mistake:"Squeezing the bicep instead of pulling the elbows together and arching. Bicep-only pressure rarely finishes at competition pace.",
+    drill:"Seatbelt-to-choke isolation: 3×5 reps, partner defends at 50%. Measure grip-sequence speed, not strength. The grip should seat before the partner can hand-fight."
+  },
+  {
+    id:"armbar", cat:"submission",
+    name:"Armbar (Juji-Gatame)",
+    tagline:"Your second-highest-percentage finish. Lives in the same chain as the triangle — they feed each other.",
+    tags:["Mount","Back","Guard","Juji-Gatame"],
+    objective:"Isolate the arm before committing to the leg swing. A premature swing is the most common way to lose this submission.",
+    mechanics:"Control the wrist and create perpendicular hip angle. Swing the outside leg over the face, lock the thighs, lift the hips and extend — extension not rotation. From mount: S-grip to isolate, swing the leg over, hip up. From guard: hip escape to 90 degrees first, then swing. From back: trapped arm is already across the body — swim the leg over.",
+    defense:"Hitchhiker grip (clasped hands, thumb up). Stacking to break your hip angle. Straightening the captured arm to slip the pressure.",
+    mistake:"Swinging the leg before the arm is fully isolated. Also: hip-escaping to 90 degrees from guard AFTER the swing instead of before.",
+    drill:"Hip-escape-to-armbar from guard: hip escape to 90 degrees before any leg movement. 10 reps, partner resists the angle."
+  },
+  {
+    id:"triangle", cat:"submission",
+    name:"Triangle Choke",
+    tagline:"Chain it off a failed armbar — don't hunt it standalone. The defensive grip that kills the armbar usually opens this.",
+    tags:["Guard","Mount","Chain Submission"],
+    objective:"Push one arm across and pull the head down simultaneously. Both actions at the same time — sequential movement telegraphs the entry.",
+    mechanics:"Push the arm across their centerline (outside your leg) while pulling the head down. Open guard and swing the outside leg over the neck. Lock figure-four: outside ankle behind inside knee. Squeeze knees, pull head down, push hips up. Adjust for the tap — rotate toward the trapped arm if needed.",
+    defense:"Posturing before the leg locks. Stacking and rotating the trapped arm out.",
+    mistake:"Pushing the arm across without simultaneously breaking posture. They posture before the leg gets over — the two actions are one motion.",
+    drill:"Triangle entry timing: simultaneous push-pull from closed guard, partner at 50%. 10 reps. If either action happens first, reset."
+  },
+  {
+    id:"guillotine", cat:"submission",
+    name:"Guillotine",
+    tagline:"Your highest-value scramble weapon. Lives at the front headlock — where wrestling base puts you constantly.",
+    tags:["Front Headlock","Scramble","No-Gi"],
+    objective:"Treat the guillotine as an entry to a decision tree, not a standalone bet. Even a failed attempt should convert.",
+    mechanics:"Two variants. Arm-in: their arm is trapped inside your choking arm — weaker choke, higher control, converts to takedown or back take when defended. High-elbow (no arm in): stronger finish, faster tap, more escapable. Default to arm-in unless the grip is already clean and deep. Mechanics: arm under the chin, elbow high, grip wrist or forearm, squeeze elbow toward hip while pulling up and back.",
+    defense:"Hand-fighting or posting to create space. Lift-and-drive counter (lifts to break grip).",
+    mistake:"Committing to high-elbow on a bad grip. A loose high-elbow guillotine is worse than no guillotine — it costs energy and position.",
+    drill:"Front headlock decision drill: call 'arm-in' or 'high-elbow' before committing. 10 reps each. Never commit without calling it first."
+  },
+  {
+    id:"heel_hook_inside", cat:"submission",
+    name:"Inside Heel Hook",
+    tagline:"Statistically running neck-and-neck with the RNC as most common ADCC finish. Not optional to understand.",
+    tags:["Leg Lock","Ashi-Garami","Saddle"],
+    objective:"Rotate before they can chase the hip. The window between a seated heel cup and a finished heel hook is very short at competition pace.",
+    mechanics:"From ashi-garami or saddle: cup the heel from below (palm against the back of the heel). Rotation: pull heel toward you and rotate it away from their hip (internal tibial rotation). Elbow drives into the back of the knee as a fulcrum. Squeeze knees together to lock the hip. Short, controlled rotation — this is not a crank, it's a rotation. The damage is rotational and arrives before significant pain.",
+    defense:"TAP EARLY. Heel hook damage (ACL, LCL, popliteal) occurs in fractions of a second before pain registers. There is no halfway.",
+    mistake:"Cranking straight rather than rotating. A straight pull is a straight ankle lock. The damage in a heel hook is rotational.",
+    drill:"Heel cup grip drill: 20 reps establishing the correct palm-to-heel cup from ashi-garami. No finish — groove the grip before any rotation."
+  },
+  {
+    id:"heel_hook_outside", cat:"submission",
+    name:"Outside Heel Hook",
+    tagline:"Higher torque, stricter hip control requirement. Do not rotate without locked hip control.",
+    tags:["Leg Lock","Outside Ashi","High Risk"],
+    objective:"Hip control is not optional for this submission. Without it you are applying torque to the opponent's knee without a controlled release point.",
+    mechanics:"From outside ashi: cup heel from the outside (palm against outside of heel). Rotation is toward their hip (external tibial rotation — opposite direction from inside). Near-side knee must stay tight to their hip throughout. Hip control grip mandatory before any rotation begins.",
+    defense:"Tap early — same urgency as inside heel hook. External rotation damage is equally fast and equally under-telegraphed by pain.",
+    mistake:"Rotating without hip control. This is the most common source of non-consensual leg injury in grappling.",
+    drill:"Outside cup and control: establish outside ashi, grip the heel, confirm hip control is locked. 10 reps. Rotation is not the drill objective."
+  },
+  {
+    id:"ankle_lock", cat:"submission",
+    name:"Straight Ankle Lock",
+    tagline:"Use it as a setup for the heel hook. Experienced opponents roll out — and the roll exposes the heel.",
+    tags:["Leg Lock","Legal All Levels","Setup"],
+    objective:"Apply as a threat that forces the response you want — most experienced opponents roll, which opens the inside heel hook.",
+    mechanics:"Forearm blade across the Achilles tendon, lock the grip (gable or kimura grip), extend the hips while keeping the ankle hyperextended. Extension, not rotation. Legal at all ADCC levels.",
+    defense:"Rolling with the direction of extension. Hip escape to pull the foot out.",
+    mistake:"Over-committing to the finish when they're already rolling. Follow the roll and upgrade to inside heel hook instead of fighting the escape.",
+    drill:"Ankle-to-heel-hook transition: straight ankle lock, partner rolls, finish the inside heel hook off their escape. 10 reps."
+  },
+  {
+    id:"kneebar", cat:"submission",
+    name:"Kneebar",
+    tagline:"Body weight replaces grip strength. Enter from a position where your weight can do the work.",
+    tags:["Leg Lock","ADCC Legal","Ashi"],
+    objective:"Secure the foot before extending. A free foot allows rotation that relieves the lock before it seats.",
+    mechanics:"Control the leg with both arms (hug the thigh). Place the crook of your armpit over their kneecap as the fulcrum. Extend the hips to hyperextend their knee. The foot must be secured under your armpit — not held in your hands.",
+    defense:"Somersault escape (rotating with the hyperextension). Pulling the knee toward the chest. Tap early — popliteal damage is fast.",
+    mistake:"Attacking the kneebar without securing the foot first. A free foot kills the mechanical advantage immediately.",
+    drill:"Kneebar entry: from ashi-garami, transition to kneebar grip, confirm foot is secured under armpit before extending. 10 reps."
+  },
+  {
+    id:"bow_arrow", cat:"submission",
+    name:"Bow-and-Arrow Choke",
+    tagline:"Chain it directly off a defended RNC. The grip that stops the naked choke is usually what opens this.",
+    tags:["Back Control","Chain Submission","No-Gi Variant"],
+    objective:"Flow directly from the RNC attempt. Their hand-fighting against the RNC often opens the far-side grip needed here.",
+    mechanics:"Off the same seatbelt from back control. When they hand-fight the choking arm: reach across and grip the far collar-equivalent (in no-gi: far arm or shoulder), extend your hips and drive the knee into their back. Pull the collar grip toward you while driving the knee through.",
+    defense:"Not releasing the chin-tuck defense that beat the RNC. Turning into you.",
+    mistake:"Abandoning back control to reset for this choke instead of flowing directly from the failed RNC grip.",
+    drill:"RNC-to-bow chain: 10 reps from a defended RNC. No reset between attempts — the transition should cost zero time."
+  },
+  {
+    id:"kimura", cat:"submission",
+    name:"Kimura",
+    tagline:"Use it as both a submission and a positional control tool. The grip controls before the finish.",
+    tags:["Guard","Top Half","Control"],
+    objective:"The kimura grip is a control position, not just a submission. Use the grip to restrict movement even if the finish isn't immediately available.",
+    mechanics:"When they post far hand on the mat: near hand catches the wrist, far arm goes over the top (figure-four lock) — grab your own wrist. Pull the wrist toward their shoulder blade while lifting the elbow. The guard or top position prevents escape while you rotate.",
+    defense:"Clasping their own hands to prevent the figure-four. Rolling toward the trapped arm.",
+    mistake:"Letting them posture before the figure-four is locked. A kimura without the lock is a grip fight you're losing.",
+    drill:"Kimura grip from closed guard: establish figure-four within 3 seconds of partner posting their hand. 10 reps."
+  },
+  {
+    id:"omoplata", cat:"submission",
+    name:"Omoplata",
+    tagline:"The backup when the triangle leg can't cross. Forces the same shoulder rotation through hip mechanics.",
+    tags:["Guard","Shoulder Lock","Sweep Setup"],
+    objective:"Use it as a sweep threat if the finish isn't available. An omoplata that forces a roll still scores 2 points.",
+    mechanics:"From guard: swing outside leg over their shoulder and under their arm (not their head). Sit up and rotate — your hip creates the shoulder lock. Grip around their waist or the back of their belt to prevent rolling. Extend hips forward to finish.",
+    defense:"Rolling through and reversing. Stacking before the sit-up.",
+    mistake:"Trying to finish without sitting up. The hip extension does the work — staying flat makes it escapable.",
+    drill:"Omoplata leg placement: from guard, partner at 50%, groove the leg path over the shoulder 10 reps before adding the sit-up."
+  },
+  // ── POSITIONS ──────────────────────────────────────────────────
+  {
+    id:"back_control", cat:"position",
+    name:"Back Control",
+    tagline:"4 points. The highest-value position and your best finishing platform — simultaneously. All chains should funnel here.",
+    tags:["4 Points","Highest Value","ADCC Primary"],
+    objective:"Treat back control as the destination, not a step. From here: hunt the RNC first, transition to bow-and-arrow if defended, armbar if the chin tuck exposes the arm.",
+    mechanics:"Seatbelt (far underhook + near over-the-shoulder). Two hooks or body triangle. Body triangle: lace the feet behind their hip, lock the near-side ankle behind the far-side knee — more stable, frees one arm. Two hooks: both heels inside their thighs, knees squeezed in.",
+    defense:"Deny second hook before it's set. Hand-fight the choking arm down before it seats. One hand on choke arm, one on hip — never both on the same problem.",
+    mistake:"Using both hands to fight the choke arm while ignoring the second hook. They lock a body triangle in that window.",
+    drill:"Seatbelt-to-hooks isolation: partner turtled, 10 reps to fully locked body triangle or two hooks. Speed target: under 4 seconds."
+  },
+  {
+    id:"mount", cat:"position",
+    name:"Mount",
+    tagline:"2 points. Launch point for back control, not a static hold. If the back is available, take it instead.",
+    tags:["2 Points","Submission Platform"],
+    objective:"Mount is worth less than back control. Always be reading for the back take — when they turn to escape, ride the turn.",
+    mechanics:"Both knees down, hips heavy. Stay offset — never square. Heavy hip prevents the bridge; being square makes bridging trivial. Attack with armbar (S-grip isolation, leg over face, hip up) or drive them to a triangle if the armbar is defended.",
+    defense:"Elbow-knee escape (shrimp) before mount is established deep. Bridge and roll — needs a posted elbow, not a raw buck.",
+    mistake:"Staying flat and square, which makes bridging easy. Or: fighting to stay in mount when they turn — ride the turn to the back instead.",
+    drill:"Mount retention: partner bridges and rolls at 50%, 10 reps re-basing without losing position, then immediately attack."
+  },
+  {
+    id:"guard_closed", cat:"position",
+    name:"Closed Guard",
+    tagline:"Control through broken posture. A broken posture makes sweeps and submissions live simultaneously.",
+    tags:["Guard","Posture Control","Bottom Game"],
+    objective:"Never hold closed guard passively. Every second in closed guard without active posture control or an attack is a point going to their activity score.",
+    mechanics:"Legs locked, feet crossed. Keep posture broken: pull head down with collar tie or arm drag. Primary attacks in order: armbar (when they post), triangle (simultaneous push-pull), hip bump sweep (when they post a hand), guillotine (when head drops inside).",
+    defense:"Passive guard invites the stack pass and passivity penalty. Always have an active threat — something has to be working.",
+    mistake:"Holding closed guard without attacking. Passive closed guard in no-gi is not a safe position — it's a slow loss.",
+    drill:"Posture control drill: maintain broken posture for 30 seconds while partner attempts to posture up. If they posture, the rep resets."
+  },
+  {
+    id:"half_guard_bottom", cat:"position",
+    name:"Half Guard (Bottom)",
+    tagline:"The underhook is the entire game. With it you have a back take, a sweep, and a stand-up. Without it you have nothing.",
+    tags:["Guard","Bottom Game","Underhook Battle"],
+    objective:"The single objective is the underhook. Everything else — the back take, the old-school sweep, the stand-up — flows from it.",
+    mechanics:"One of their legs trapped between both of yours. Priorities: deny their cross-face, fight for the near-side underhook, hip escape to your side. Never be flat on your back. From the underhook: dog fight position → back take or old-school sweep.",
+    defense:"They will try the smash pass: cross-face to turn your head, whizzer to prevent your underhook. The race is underhook vs. whizzer.",
+    mistake:"Being flat on your back in half guard. Flat half guard gives them the cross-face — the chain from there leads directly to a passed guard.",
+    drill:"Half guard hip escape: from flat half guard, reach your side within 2 seconds. 10 reps against a partner actively trying to flatten you."
+  },
+  {
+    id:"butterfly", cat:"position",
+    name:"Butterfly Guard",
+    tagline:"Stay upright and active — butterfly guard is dead the moment you lean back.",
+    tags:["Guard","Bottom Game","Hooks"],
+    objective:"Force them to choose between the sweep and the back take at all times. If neither is threatened, butterfly guard is just sitting on the floor.",
+    mechanics:"Seated, both hooks inside their legs (insteps under thighs). Grips: double underhooks (back take), one under one over (sweep), wrist control (drag). Every frame must threaten something. Back take off arm drag: control wrist, drag across centerline while bumping with hook, step around.",
+    defense:"Leaning back removes the sweep threat and back take threat simultaneously. Never lean back.",
+    mistake:"Leaning back with butterfly hooks. This is the single most common technical error in butterfly guard — it kills every weapon at once.",
+    drill:"Butterfly posture: maintain upright with active hooks for 2 minutes against standing/kneeling partner. Never lean back."
+  },
+  {
+    id:"slx", cat:"position",
+    name:"Single Leg X (SLX)",
+    tagline:"Control heel and hip simultaneously. Without both, SLX is just a leg in your lap.",
+    tags:["Guard","Leg Control","Bottom Game"],
+    objective:"Perpendicular to their leg with heel and hip both controlled — that's the mechanical requirement. Missing either makes this escapable.",
+    mechanics:"One hook under their knee (X hook), outside hand on the heel, inside hand frames on their hip. Body perpendicular to their leg. From here: SLX sweep (drive hook up and rotate), back take (when they post the far leg to defend the sweep).",
+    defense:"Stepping over the near leg. Clearing the heel grip. The position collapses without the heel.",
+    mistake:"Holding SLX without heel control. Without the heel they have full mobility and the guard is empty.",
+    drill:"SLX control: establish SLX, partner steps over and clears, maintain heel and hip control for 30 seconds. 5 reps."
+  },
+  {
+    id:"x_guard", cat:"position",
+    name:"X Guard",
+    tagline:"Elevate completely. X guard on a grounded opponent has no mechanical advantage.",
+    tags:["Guard","Elevation","Bottom Game"],
+    objective:"Their weight must be fully on your hooks — not on their own feet. If they're still touching the floor, the guard isn't live.",
+    mechanics:"Both hooks inside both legs. One hook under far knee (crossed X), one under near knee. Hands grip their ankles. Extend legs to elevate completely. From full elevation: back dump (extend both hooks forward, pull ankles back), front trip (redirect their step), stand-up to single leg.",
+    defense:"Stepping out before elevation is established. Posting a foot when they feel the hooks going in.",
+    mistake:"Establishing X guard without fully elevating. The position has zero mechanical advantage on a grounded opponent.",
+    drill:"X guard elevation: establish X, elevate partner completely off the mat, hold 3 seconds. 10 reps."
+  },
+  {
+    id:"ashi_inside", cat:"position",
+    name:"Inside Ashi-Garami",
+    tagline:"The inside position is everything in leg entanglements. Hip angle perpendicular before any finish.",
+    tags:["Leg Entanglement","Inside Position","Heel Hook Platform"],
+    objective:"Control the hip before attacking the foot. Loose ashi without hip control is escapable; hip-locked ashi with clean heel cup is not.",
+    mechanics:"Inside leg between their legs, knee driving across their hip. Far hand cups heel from below, near hand controls toe (rotate away from hip). Perpendicular hip angle mandatory. From here: inside heel hook, straight ankle lock, kneebar, or upgrade to saddle.",
+    defense:"Hip chase to deny perpendicular angle. Stepping over the near leg to invert.",
+    mistake:"Attacking before perpendicular hip angle — lets them step over and reverse the position.",
+    drill:"Hip angle drill: establish ashi, partner tries to step over, maintain perpendicular for 30 seconds. 10 reps before adding any finish."
+  },
+  {
+    id:"saddle", cat:"position",
+    name:"Saddle / 411 / Honey Hole",
+    tagline:"The most powerful leg entanglement. Highest finish rate of any leg lock entry.",
+    tags:["Leg Entanglement","High Control","Inside Heel Platform"],
+    objective:"Break them flat before attacking. A seated opponent can frame and create space to pull the heel.",
+    mechanics:"Both legs control one of theirs: inside leg drives across their hip (ashi component), outside leg hooks behind their knee (outside ashi component). Their leg fully trapped between yours. Inside heel cup: palm from below, rotate heel away from their hip toward you.",
+    defense:"Hip chase to re-establish their leg between yours. Inversion to relieve the heel cup. Toehold counter on your near leg.",
+    mistake:"Failing to break them down flat before attacking. If they're sitting up, the heel can be pulled.",
+    drill:"Saddle breakdown: establish saddle, partner sits up and frames, break them to flat before attempting heel cup. 10 reps."
+  },
+  // ── PASSES ──────────────────────────────────────────────────
+  {
+    id:"over_under", cat:"pass",
+    name:"Over-Under Pass",
+    tagline:"Wrestling-base hip drive kills both legs simultaneously. The engine of this pass is the hips, not the hands.",
+    tags:["Pressure Pass","Wrestling Base","No-Gi"],
+    objective:"Use your wrestling hip drive — this pass was made for a wrestler's base. The arms set the position; the hips do the work.",
+    mechanics:"Near arm over their near leg (hooking the hip). Far arm under their far leg (lifting the knee). Chest pressure kills the near leg. Elbow drives the far knee to the mat. Drive hips forward to flatten, then walk toward the over-arm side to clear both legs.",
+    defense:"Hip escape toward the under-side to prevent flattening. Re-guard from the over side. Rolling to turtle.",
+    mistake:"Dropping your level too low on the approach. Low posture kills the hip drive that drives this pass.",
+    drill:"Over-under breakdown: establish from knees, flatten with hip drive, walk to clear. No submission until pass complete. 10 reps."
+  },
+  {
+    id:"knee_slice", cat:"pass",
+    name:"Knee Slice / Knee Cut",
+    tagline:"Cut the knee through before they can re-frame. Decided in the first second — hesitation kills it.",
+    tags:["Pressure Pass","Diagonal","From HQ"],
+    objective:"The diagonal direction is everything. Vertical fails; diagonal finds the seam.",
+    mechanics:"From headquarters or combat base: lead knee drives down and diagonally through the seam between their legs. Chest heavy to pin the near-side leg. Far hand pushes far knee away, near hand controls head or collar. Slice knee diagonally to the mat, follow the hip to side control.",
+    defense:"Re-framing the near knee against your cutting knee. Rolling to turtle.",
+    mistake:"Cutting the knee straight down instead of diagonally. Vertical cut is blocked by the near leg; diagonal finds the seam.",
+    drill:"Knee slice timing: from HQ, cut on visual cue, 10 reps measuring whether cut completes before re-frame."
+  },
+  {
+    id:"torreando", cat:"pass",
+    name:"Torreando / Bullfighter Pass",
+    tagline:"Distance management, not pressure. Pass direction is always perpendicular to the leg redirect.",
+    tags:["Distance Pass","From Standing","Open Guard"],
+    objective:"Redirect the legs before they can sit up. The redirect and the step must happen together.",
+    mechanics:"From standing: grip both ankles or shins. Lift and redirect legs to one side (rotating their hips). Simultaneously step around to the opposite side — pass direction perpendicular to redirect. Maintain downward pressure throughout.",
+    defense:"Sitting up and framing before the redirect. Inverting under the pass.",
+    mistake:"Pushing legs straight back instead of rotating them sideways. A straight push lets them sit up immediately.",
+    drill:"Torreando redirect: partner plays seated open guard, redirect legs 10 times alternating sides. Confirm perpendicular exit each time."
+  },
+  {
+    id:"body_lock", cat:"pass",
+    name:"Body Lock Pass",
+    tagline:"Convert your wrestling clinch directly into a guard pass. Eliminates guard framing by controlling the torso.",
+    tags:["Wrestling Clinch","Pressure Pass","Half Guard"],
+    objective:"The guard must be at least partially broken before the lock goes on. Tight closed guard holds it out.",
+    mechanics:"Both arms around their torso, connect hands behind their back (gable grip). Drive chest through guard while rotating their hips — rotation strips legs without clearing them individually. Walk around to the hip as they flatten.",
+    defense:"Maintaining tight closed guard before the lock is established. Switching to half guard to disrupt rotation.",
+    mistake:"Attempting body lock before guard is broken. A full closed guard holds the arms out completely.",
+    drill:"Body lock rotation: from half guard or open guard, establish grip, complete hip rotation to flat. 10 reps."
+  },
+  {
+    id:"leg_drag", cat:"pass",
+    name:"Leg Drag",
+    tagline:"One leg dragged nullifies both as a guard tool. Control the far hip or they roll and re-guard.",
+    tags:["Pressure Pass","Hip Control","From Side"],
+    objective:"Pin the dragged leg with your hip — the far hip control is what prevents the roll-through counter.",
+    mechanics:"Grip near ankle or heel, drag across your body to your far hip. Pin that leg with your hip while posting on their far hip. Body now perpendicular to theirs. Walk to side control.",
+    defense:"Rolling with the drag direction to invert and re-guard. Sitting up before the leg is pinned.",
+    mistake:"Dragging the leg without controlling the far hip. They roll through and re-guard from the other side.",
+    drill:"Leg drag pin: establish drag, partner rolls to recover, maintain pinned-leg position for 5 seconds. 10 reps."
+  },
+  {
+    id:"smash_pass", cat:"pass",
+    name:"Smash Pass (Half Guard)",
+    tagline:"Cross-face vs. underhook — a race decided in 3 seconds.",
+    tags:["Half Guard","Cross-Face","Pressure Pass"],
+    objective:"Win the cross-face race. The underhook beats the smash pass immediately — don't let it establish.",
+    mechanics:"From inside their half guard: cross-face to turn their head away from the trapped leg. Establish the whizzer (over-hook) on their far arm to deny the underhook. Walk hips toward their head to flatten completely. Free the trapped leg with a hip pop.",
+    defense:"Underhook before the cross-face. Hip escaping away to re-full guard. Rolling to knees.",
+    mistake:"Allowing the underhook before the cross-face is set. An underhook from half guard immediately reverses the dynamic.",
+    drill:"Smash pass race: enter half guard, race to establish cross-face before they establish underhook. 10 reps."
+  },
+  {
+    id:"double_under", cat:"pass",
+    name:"Double Under / Stack Pass",
+    tagline:"Neutralise guard completely by stacking their hips over their head. Zero hip mobility = zero guard.",
+    tags:["Stack Pass","From Guard","No Hips"],
+    objective:"Control the head direction during the stack. Without it they roll over their shoulder and escape.",
+    mechanics:"Both arms under both legs (scoop the thighs). Grip together, drive shoulder into hamstrings, walk forward to stack hips over shoulders. Rotate hips to one side and walk around to clear the legs. Head pressure maintained throughout.",
+    defense:"Sitting up before both underhooks are in. Posting on the head to prevent the stack. Rolling out before the rotation.",
+    mistake:"Stacking without controlling head direction. They roll over their shoulder to escape.",
+    drill:"Stack and rotate: establish double under, stack to shoulder level, rotate hips 90 degrees. 10 reps."
+  },
+  // ── SWEEPS ──────────────────────────────────────────────────
+  {
+    id:"hip_bump", cat:"sweep",
+    name:"Hip Bump Sweep",
+    tagline:"Time it to the moment they're posting a hand. A hand on the mat is a hand not blocking the sweep.",
+    tags:["Closed Guard","2 Points","Setup for Kimura"],
+    objective:"Open the guard before driving — closed guard prevents the hip lift the sweep requires.",
+    mechanics:"Open the guard. Post one foot on the mat, grip behind their neck or shoulder. Drive hip explosively up and toward their posting arm, swinging the leg through to end in mount. No wind-up — the movement IS the commitment.",
+    defense:"Posting the other hand to block. Stepping back to base.",
+    mistake:"Attempting hip bump from closed guard without opening first. The closed legs prevent the hip lift.",
+    drill:"Hip bump timing: from open guard, partner posts their hand, execute within half a second. 10 reps."
+  },
+  {
+    id:"scissor", cat:"sweep",
+    name:"Scissor Sweep",
+    tagline:"Works on opponents trying to stand or pull hips back — use their forward posture against them.",
+    tags:["Open Guard","2 Points","Upright Passer"],
+    objective:"Both legs act simultaneously. One pushes the hip, one sweeps the knee — sequential movement fails.",
+    mechanics:"One shin across their hip (horizontal). Other leg hooks behind their knee (vertical). Grip sleeve/wrist and collar/head. Simultaneously pull the sleeve toward the mat and scissor — horizontal pushes hip, vertical sweeps knee.",
+    defense:"Sitting deep to prevent the shin placement. Stepping out of the leg being hooked.",
+    mistake:"Using the scissor against a deeply postured opponent. It requires forward weight — not a pass-breaking tool.",
+    drill:"Scissor sweep mechanics: partner in upright posture, both legs act simultaneously. 10 reps each side."
+  },
+  {
+    id:"butterfly_sweep", cat:"sweep",
+    name:"Butterfly Elevator Sweep",
+    tagline:"Lift at the exact moment they commit weight to one side. Square and balanced opponents absorb it.",
+    tags:["Butterfly Guard","2 Points","Timing Sweep"],
+    objective:"Wait for the weight shift. Attempting against a square opponent telegraphs intent and fails.",
+    mechanics:"From butterfly with underhook: wait for weight to shift to one hip. Drive hook on that side up into inner thigh while pulling upper body down with the underhook. Lift and pull simultaneously — not sequentially. End in mount or top half.",
+    defense:"Staying square and balanced. Sprawling back to flatten the hooks.",
+    mistake:"Lifting when they're square and balanced. A square opponent absorbs the hook.",
+    drill:"Elevator timing: partner shifts weight randomly, lift only when they're one-sided. 10 reps, must be correctly timed."
+  },
+  {
+    id:"old_school", cat:"sweep",
+    name:"Old School Sweep (Half Guard)",
+    tagline:"Use the underhook to block their weight transfer and roll them. Works when they're base-heavy over you.",
+    tags:["Half Guard","2 Points","Underhook Required"],
+    objective:"Their weight must commit forward before the roll. A balanced opponent absorbs it.",
+    mechanics:"From underhook in dog fight: block their near leg with your trapped leg. Use underhook to pull their shoulder toward you and roll them over the trapped leg. Come up in top position.",
+    defense:"Staying balanced and not committing weight forward. Widening base.",
+    mistake:"Attempting sweep before their weight commits forward. Balance absorbs the roll.",
+    drill:"Old school timing: from dog fight, partner commits weight forward on signal, execute within half a second. 10 reps."
+  },
+  {
+    id:"slx_sweep", cat:"sweep",
+    name:"SLX Sweep",
+    tagline:"Elevate and rotate — don't pull straight back. A straight pull lets them hop over.",
+    tags:["Single Leg X","2 Points","Rotational"],
+    objective:"The rotational component is mandatory. Drive the hook up AND rotate the leg outward simultaneously.",
+    mechanics:"From SLX: drive X hook up into inner thigh to break base on that side. Simultaneously rotate the leg outward. Come up to top position as they fall.",
+    defense:"Hopping over a straight pull. Posting the far leg.",
+    mistake:"Pulling the leg toward you without the rotational component. They step over the pull.",
+    drill:"SLX sweep: drive hook up and rotate simultaneously, partner at 50%. 10 reps."
+  },
+  {
+    id:"xg_sweep", cat:"sweep",
+    name:"X Guard Back Dump",
+    tagline:"Dump them backward while elevated. No base means no resistance.",
+    tags:["X Guard","2 Points","Full Elevation Required"],
+    objective:"Full elevation before the dump. Attempting against a grounded opponent fails.",
+    mechanics:"From full X elevation: extend both hooks forward while pulling ankle grips toward you. They fall backward. Come up over them to mount or follow to top position.",
+    defense:"Posting a foot. Not allowing full elevation.",
+    mistake:"Attempting dump before full elevation. They post a foot and stay upright.",
+    drill:"X guard back dump: elevation first, dump second. 10 reps measuring complete elevation before committing."
+  },
+  // ── TAKEDOWNS ──────────────────────────────────────────────────
+  {
+    id:"wrestling_shot", cat:"takedown",
+    name:"Wrestling Shot",
+    tagline:"Commit fully to the level change before the opponent can sprawl. Hesitation is what gets shots stuffed.",
+    tags:["ADCC Primary","2-4 Points","Doubles/Singles"],
+    objective:"Finish past the legs, not into guard. Driving through to a dominant pin doubles the score from 2 to 4.",
+    mechanics:"Level change, penetration step, drive through the hips. Head position: outside their hip, not in their chest. Finish past the legs — drive to far-side crossbody or hip-heist to the back. Don't dump them to guard.",
+    defense:"Sprawl (hips back, weight down through their shoulders). Cross-face to front headlock.",
+    mistake:"Shooting from too far away or not fully changing levels. A half-committed shot is the easiest one to sprawl.",
+    drill:"Penetration step drill: 20 reps focusing on hip-to-heel drive and head position. Partner stationary, then live at 50%."
+  },
+  {
+    id:"judo_throw", cat:"takedown",
+    name:"Judo Throw Entry",
+    tagline:"Win the grip fight before attempting the throw. Most failed throws are grip failures, not technique failures.",
+    tags:["Judo","Kuzushi","2-4 Points"],
+    objective:"Kuzushi (off-balance) before the throw. A balanced opponent cannot be thrown — the off-balance is the technique.",
+    mechanics:"Grip fight to kuzushi. Drive into the throw from a broken balance position. Primary entries: o-soto-gari (leg reap), seoi-nage (shoulder throw), uchi-mata (inner thigh). Each requires the same grip-fight-to-kuzushi sequence.",
+    defense:"Grip fighting — denying the kuzushi grip. Stepping around the entry to create angle.",
+    mistake:"Attacking the throw before establishing a dominant grip. Telegraphs the attempt and gives time to defend.",
+    drill:"Grip fighting isolation: 2-minute rounds, no throws allowed, win the grip battle only."
+  },
+  {
+    id:"clean_takedown", cat:"takedown",
+    name:"Clean Takedown",
+    tagline:"4 points when you drive through to 75%+ back pinned outside guard. Don't settle for 2 when 4 is available.",
+    tags:["4 Points","ADCC Maximum","Wrestling/Judo"],
+    objective:"Drive through the legs — not just to the legs. The clean finish requires past the guard and 75%+ back pinned.",
+    mechanics:"Any takedown that ends outside the guard with 75%+ of the opponent's back pinned to the mat. No submission threat from their position. Held 3 seconds. The key difference from standard takedown: you've driven past the legs completely, not dumped them to guard.",
+    defense:"Pulling guard before the 3-second count. Rolling to turtle.",
+    mistake:"Finishing the takedown at the knees instead of driving through. Scores 2 instead of 4 and leaves the pass still to be won.",
+    drill:"10 reps: shot to crossbody pin, partner starts resisting the moment your hand touches the leg."
+  },
+  {
+    id:"front_headlock_td", cat:"takedown",
+    name:"Front Headlock Control",
+    tagline:"Your most repeatable takedown platform given a wrestling base. You live here already.",
+    tags:["Wrestling Base","Back Take Entry","Guillotine Entry"],
+    objective:"Treat the front headlock as a position — not just a choke entry. From here: guillotine, back take, or snap down to takedown.",
+    mechanics:"Head and arm control from a failed shot or sprawl. Near arm around their head (under the chin), far arm through their armpit. Snap down to drop them to the mat, or switch hips behind them to take the back.",
+    defense:"Hip pop to break the grip. Shooting through to a leg.",
+    mistake:"Trying to only finish the guillotine from here. The back take is higher value and more reliable from this position.",
+    drill:"Front headlock to back: sprawl to front headlock, 10 reps finishing at hooks-in rather than at the choke."
+  },
+  // ── DEFENCE ──────────────────────────────────────────────────
+  {
+    id:"sprawl", cat:"defence",
+    name:"Sprawl Defence",
+    tagline:"Hips back before hands down. Reacting after they've penetrated to your hips is too late.",
+    tags:["Takedown Defence","Wrestling","Priority"],
+    objective:"Hips back first — pushing down on their head without moving the hips slows the sprawl and lets them drive under.",
+    mechanics:"Hips back explosively, weight down through their shoulders. Cross-face to turn their head. Circle to front headlock. Don't let hips get sucked forward — the forward hip is what the shot is hunting.",
+    defense:"They will hip pop to break the grip. Continue circling to maintain head and arm control.",
+    mistake:"Pushing down on the head or shoulders before the hips are back. This delays the sprawl and is the most common sprawl failure.",
+    drill:"Sprawl timing: partner cues shots from different positions and distances. 15 reps focusing on hip-back speed, not hand placement."
+  },
+  {
+    id:"guard_recovery", cat:"defence",
+    name:"Guard Recovery",
+    tagline:"Frame before they clear your legs — not after. Early framing is preventative; late framing is damage control.",
+    tags:["Bottom Game","Defence","Framing"],
+    objective:"Frame the hip before they clear your legs. A frame at the hip prevents the pass; a frame at the shoulder after the pass is recovery from a worse position.",
+    mechanics:"Forearm across the hip or bicep line before they clear your legs. Priority: recover guard (hip escape and frame) or build back to your feet. If the guard can't be recovered, build to half guard rather than accepting flat side control.",
+    defense:"They will apply cross-face and chest pressure to flatten you. Stay on your side — flat is bad.",
+    mistake:"Waiting until they've cleared the legs to start framing. By then you're in damage control, not prevention.",
+    drill:"Early frame: partner starts passing from standing, establish forearm-to-hip frame before their knee clears. 10 reps."
+  },
+  {
+    id:"back_survival", cat:"defence",
+    name:"Back Control Survival",
+    tagline:"Two hands on the same problem is the primary mistake. One on the choke arm, one on the hip.",
+    tags:["Back Defence","Choke Survival","Seatbelt Escape"],
+    objective:"Deny the second hook before it's established. One hook is manageable. Two hooks with a seatbelt is the match's most dangerous position.",
+    mechanics:"Priority: deny second hook. Hand-fight the choking arm down and away from the chin — peel from the wrist, not the bicep. One hand manages the choke arm, one manages the hip. Turn the chin into the crook of their elbow (not away from it) to survive longer. To escape: create wrist control on the choking arm, turn into them.",
+    defense:"They will chain to bow-and-arrow or armbar when you hand-fight the RNC. Address one threat at a time.",
+    mistake:"Both hands fighting the choke arm while ignoring the second hook. They lock the body triangle in that window and the position becomes far more dangerous.",
+    drill:"Hook denial: partner establishes seatbelt with one hook, you deny the second for 30 seconds. 10 reps."
+  },
+  {
+    id:"choke_survival", cat:"defence",
+    name:"Choke Defence",
+    tagline:"Chin tuck buys time. Wrist peel ends the threat. Bicep pulling does neither.",
+    tags:["RNC Defence","Choke","Survival"],
+    objective:"Peel from the wrist — not the bicep. Bicep pressure only delays a well-set choke.",
+    mechanics:"Chin tucked hard. Both hands on the choking arm and forearm — peel from the wrist. If you can't peel it, turn your chin into the crook of their elbow rather than away from it. Work to turn into them once the immediate danger passes.",
+    defense:"They will chain to bow-and-arrow if you hand-fight the RNC successfully. Have a plan for the transition.",
+    mistake:"Pulling on the bicep. Bicep pressure slows a loose choke but cannot break a properly set RNC.",
+    drill:"Choke defence: partner attacks RNC at 50%. Defend using chin-tuck and wrist peel only. No bicep pulling. 10 reps."
+  },
+  {
+    id:"leg_escape", cat:"defence",
+    name:"Leg Lock Escape",
+    tagline:"Chase the hip before they achieve perpendicular angle. The moment they're perpendicular, the lock is mechanically live.",
+    tags:["Heel Hook Defence","Leg Lock","Tap Early"],
+    objective:"Prevention over survival. Chase the hip to deny perpendicular — by the time it's set, options are very limited.",
+    mechanics:"Priority: chase the hip and deny the perpendicular angle. Hand-fight their grip off your foot before it's finished. If fully caught in a heel hook — tap well before the last quarter-turn. Heel hooks damage fast and don't telegraph pain the way a straight ankle lock does.",
+    defense:"They will reposition if you chase the hip successfully. Force the repositioning — don't accept the angle.",
+    mistake:"Pulling the leg out straight instead of chasing the hip. Pulling straight into a heel hook applies the rotation yourself.",
+    drill:"Hip-chase drill: partner enters ashi-garami, you chase the hip to deny perpendicular. 10 reps — no escapes from full position, prevention only."
+  },
+  {
+    id:"mount_escape", cat:"defence",
+    name:"Mount Escape",
+    tagline:"Elbow-knee before they settle deep. The lower their hips, the harder the escape.",
+    tags:["Mount Defence","Escape","Bottom Game"],
+    objective:"Escape before mount is deep. Time the escape early — a deep tight mount with a weight advantage is very difficult to escape cleanly.",
+    mechanics:"Elbow-knee shrimp: create space with frames, shrimp your hips out, push their knee with your elbow, reguard. Bridge and roll: post one elbow on the mat (not a raw bridge), trap their arm and leg on the same side, bridge explosively toward that side. Land in their guard, not flat side control.",
+    defense:"They will attempt to post their arm as you bridge. Trap the arm before the bridge.",
+    mistake:"Bridging explosively without a posted elbow. A raw bridge gets absorbed and costs energy without moving the opponent.",
+    drill:"Mount escape timing: partner mounts fresh, execute elbow-knee shrimp or bridge-and-roll within 5 seconds. 10 reps."
+  }
+];
+
+let activeCat = "all";
+let searchQ = "";
+
+function renderCards(){
+  const grid = document.getElementById("grid");
+  const meta = document.getElementById("resultsMeta");
+  const filtered = DB.filter(t=>{
+    const catMatch = activeCat==="all" || t.cat===activeCat;
+    const q = searchQ.toLowerCase();
+    const textMatch = !q ||
+      t.name.toLowerCase().includes(q) ||
+      t.tagline.toLowerCase().includes(q) ||
+      (t.tags||[]).some(tg=>tg.toLowerCase().includes(q)) ||
+      (t.mechanics||"").toLowerCase().includes(q) ||
+      (t.objective||"").toLowerCase().includes(q);
+    return catMatch && textMatch;
+  });
+  meta.textContent = `${filtered.length} technique${filtered.length!==1?"s":""}`;
+  grid.innerHTML = "";
+  filtered.forEach(t=>{
+    const card = document.createElement("div");
+    card.className = `tech-card cat-${t.cat}`;
+    card.innerHTML = `
+      <div class="tech-card-accent"></div>
+      <div class="tech-card-body">
+        <div class="tech-card-meta">
+          <span class="tech-badge">${t.cat.charAt(0).toUpperCase()+t.cat.slice(1)}</span>
+        </div>
+        <div class="tech-card-name">${t.name}</div>
+        <div class="tech-card-tagline">${t.tagline}</div>
+        <div class="tech-card-tags">${(t.tags||[]).map(tg=>`<span class="tag">${tg}</span>`).join("")}</div>
+      </div>
+      <div class="tech-detail" id="detail-${t.id}">
+        ${t.objective?`<div class="detail-section"><div class="detail-label">Objective</div><div class="detail-text">${t.objective}</div></div>`:""}
+        ${t.mechanics?`<div class="detail-section"><div class="detail-label">Mechanics</div><div class="detail-text">${t.mechanics}</div></div>`:""}
+        ${t.defense?`<div class="detail-section"><div class="detail-label">Opponent Reactions</div><div class="detail-text" style="color:var(--stone-dim)">${t.defense}</div></div>`:""}
+        ${t.mistake?`<div class="detail-section"><div class="detail-label">Common Mistake</div><div class="detail-text mistake">${t.mistake}</div></div>`:""}
+        ${t.drill?`<div class="detail-section"><div class="detail-label">Drill</div><div class="detail-text">${t.drill}</div></div>`:""}
+        <button class="close-btn" onclick="event.stopPropagation();closeCard('${t.id}')">✕ Close</button>
+      </div>
+    `;
+    card.querySelector(".tech-card-body").onclick = ()=>toggleCard(t.id);
+    grid.appendChild(card);
+  });
+}
+
+function toggleCard(id){
+  const detail = document.getElementById(`detail-${id}`);
+  if(!detail) return;
+  const isOpen = detail.classList.contains("open");
+  document.querySelectorAll(".tech-detail.open").forEach(d=>d.classList.remove("open"));
+  if(!isOpen) detail.classList.add("open");
+}
+function closeCard(id){
+  const d = document.getElementById(`detail-${id}`);
+  if(d) d.classList.remove("open");
+}
+
+document.querySelectorAll(".filter-btn").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    activeCat = btn.dataset.cat;
+    renderCards();
+  };
+});
+document.getElementById("searchInput").addEventListener("input",e=>{
+  searchQ = e.target.value;
+  renderCards();
+});
+
+renderCards();
+</script>
+</body>
+</html>

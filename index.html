@@ -2,10 +2,454 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=chinthe-guardian-matrix.html">
-<title>Chinthe — Guardian Matrix</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0D000D">
+<meta name="description" content="CHINTHE — The Guardian System. Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the Modern Grappler.">
+<title>CHINTHE — Guardian System</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D000D;
+  --surface:#111315;
+  --surface-2:#1B1E22;
+  --surface-3:#222222;
+  --jade:#0F3B2E;
+  --jade-bright:#3FA383;
+  --gold:#D4AF37;
+  --gold-dim:#2A2210;
+  --stone:#F5F3EC;
+  --stone-dim:#A29E93;
+  --crimson:#8D2323;
+  --steel:#5C7A85;
+  --line:rgba(245,243,236,0.08);
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--stone);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(13,0,13,0.88);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;
+}
+.nav-brand{
+  display:flex;align-items:center;gap:10px;text-decoration:none;
+}
+.nav-lion{
+  width:28px;height:28px;
+  background:linear-gradient(135deg,var(--gold),#E8C468);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;
+}
+.nav-wordmark{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:20px;letter-spacing:0.12em;color:var(--stone);
+}
+.nav-links{
+  display:flex;align-items:center;gap:4px;
+}
+.nav-link{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--stone-dim);text-decoration:none;
+  padding:7px 12px;border-radius:6px;transition:color .15s,background .15s;
+}
+.nav-link:hover{color:var(--stone);background:var(--surface-2);}
+.nav-link.active{color:var(--gold);}
+.nav-cta{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  letter-spacing:0.06em;text-transform:uppercase;
+  background:var(--gold);color:var(--bg);
+  padding:8px 16px;border-radius:999px;text-decoration:none;
+  font-weight:600;transition:opacity .15s;
+}
+.nav-cta:hover{opacity:0.88;}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+  padding:120px 20px 80px;
+}
+.hero-glow{
+  position:absolute;top:-20%;left:50%;transform:translateX(-50%);
+  width:900px;height:900px;
+  background:radial-gradient(ellipse at center,rgba(15,59,46,0.28) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);
+  pointer-events:none;
+}
+.hero-inner{max-width:1100px;margin:0 auto;position:relative;}
+.hero-eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  letter-spacing:0.2em;color:var(--jade-bright);
+  text-transform:uppercase;margin-bottom:20px;
+}
+.hero-heading{
+  font-family:'Bebas Neue',sans-serif;font-weight:400;
+  font-size:clamp(64px,10vw,130px);line-height:0.92;
+  text-transform:uppercase;letter-spacing:0.01em;
+  margin-bottom:28px;
+}
+.hero-heading em{color:var(--gold);font-style:normal;}
+.hero-sub{
+  font-size:clamp(16px,2vw,20px);color:var(--stone-dim);
+  line-height:1.5;max-width:520px;margin-bottom:40px;
+}
+.hero-myanmar{
+  font-family:'Noto Sans Myanmar',sans-serif;
+  font-size:14px;color:var(--jade-bright);
+  margin-bottom:44px;letter-spacing:0.04em;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--gold);color:var(--bg);
+  font-family:'IBM Plex Mono',monospace;font-size:12px;
+  letter-spacing:0.08em;text-transform:uppercase;font-weight:600;
+  padding:14px 28px;border-radius:999px;text-decoration:none;
+  transition:opacity .15s;
+}
+.btn-primary:hover{opacity:0.88;}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:none;color:var(--stone);
+  border:1px solid var(--line);
+  font-family:'IBM Plex Mono',monospace;font-size:12px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  padding:14px 28px;border-radius:999px;text-decoration:none;
+  transition:border-color .15s,color .15s;
+}
+.btn-secondary:hover{border-color:var(--stone-dim);color:var(--stone);}
+
+.hero-badges{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:56px;
+  padding-top:28px;border-top:1px solid var(--line);
+}
+.hero-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--stone-dim);
+  border:1px solid var(--line);
+  padding:5px 12px;border-radius:999px;
+}
+
+/* ── MODULES ── */
+.section{max-width:1100px;margin:0 auto;padding:80px 20px;}
+.section-label{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:0.2em;color:var(--jade-bright);
+  text-transform:uppercase;margin-bottom:14px;
+}
+.section-title{
+  font-family:'Bebas Neue',sans-serif;font-weight:400;
+  font-size:clamp(36px,6vw,56px);text-transform:uppercase;
+  letter-spacing:0.02em;line-height:1;margin-bottom:10px;
+}
+.section-sub{font-size:15px;color:var(--stone-dim);line-height:1.6;max-width:480px;margin-bottom:52px;}
+
+.modules-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:16px;
+}
+.module-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:28px;
+  text-decoration:none;
+  color:var(--stone);
+  display:flex;flex-direction:column;gap:16px;
+  position:relative;overflow:hidden;
+  transition:border-color .2s,transform .15s;
+}
+.module-card:hover{border-color:rgba(245,243,236,0.18);transform:translateY(-2px);}
+.module-card.coming{opacity:0.48;pointer-events:none;}
+.module-accent{
+  position:absolute;top:0;left:0;right:0;height:2px;
+}
+.module-accent.jade{background:var(--jade-bright);}
+.module-accent.gold{background:var(--gold);}
+.module-accent.steel{background:var(--steel);}
+.module-accent.crimson{background:var(--crimson);}
+.module-icon{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+}
+.module-icon.jade{background:var(--jade);}
+.module-icon.gold{background:var(--gold-dim);}
+.module-icon.steel{background:rgba(92,122,133,0.15);}
+.module-icon.crimson{background:rgba(141,35,35,0.15);}
+.module-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);
+  margin-bottom:4px;
+}
+.module-name{
+  font-family:'Bebas Neue',sans-serif;font-weight:400;
+  font-size:24px;letter-spacing:0.03em;text-transform:uppercase;
+  line-height:1;
+}
+.module-desc{font-size:13.5px;color:var(--stone-dim);line-height:1.55;}
+.module-meta{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:0.06em;text-transform:uppercase;color:var(--stone-dim);
+  display:flex;align-items:center;gap:6px;margin-top:auto;
+}
+.module-meta-dot{width:6px;height:6px;border-radius:50%;}
+.module-meta-dot.live{background:#3FA383;}
+.module-meta-dot.soon{background:var(--stone-dim);}
+
+/* ── PILLARS ── */
+.pillars{
+  border-top:1px solid var(--line);
+  margin-top:20px;
+}
+.pillars-inner{max-width:1100px;margin:0 auto;padding:80px 20px;}
+.pillars-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:40px;margin-top:52px;
+}
+.pillar-num{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:var(--gold);letter-spacing:0.1em;margin-bottom:10px;
+}
+.pillar-name{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  letter-spacing:0.03em;text-transform:uppercase;
+  margin-bottom:10px;color:var(--stone);
+}
+.pillar-desc{font-size:13.5px;color:var(--stone-dim);line-height:1.6;}
+
+/* ── PHILOSOPHY STRIP ── */
+.philosophy{
+  background:var(--jade);
+  border-top:1px solid rgba(63,163,131,0.2);
+  border-bottom:1px solid rgba(63,163,131,0.2);
+  padding:60px 20px;text-align:center;
+  margin:0;
+}
+.philosophy-quote{
+  font-family:'Bebas Neue',sans-serif;font-weight:400;
+  font-size:clamp(28px,5vw,52px);
+  text-transform:uppercase;letter-spacing:0.02em;
+  color:var(--stone);line-height:1.1;
+  max-width:800px;margin:0 auto 16px;
+}
+.philosophy-attr{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:rgba(245,243,236,0.5);letter-spacing:0.12em;text-transform:uppercase;
+}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--line);
+  padding:40px 20px;
+}
+.footer-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;
+}
+.footer-brand{
+  font-family:'Bebas Neue',sans-serif;font-size:18px;
+  letter-spacing:0.12em;color:var(--stone);
+}
+.footer-myanmar{
+  font-family:'Noto Sans Myanmar',sans-serif;
+  font-size:13px;color:var(--stone-dim);
+}
+.footer-tagline{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);
+}
+
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .hero-heading{font-size:clamp(52px,15vw,90px);}
+  .modules-grid{grid-template-columns:1fr;}
+}
+</style>
 </head>
 <body>
-<p>Loading <a href="chinthe-guardian-matrix.html">Guardian Matrix</a>…</p>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">
+      <div class="nav-lion">⊕</div>
+      <span class="nav-wordmark">CHINTHE</span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link active" href="index.html">Home</a>
+      <a class="nav-link" href="chinthe-guardian-matrix.html">Guardian Matrix</a>
+      <a class="nav-link" href="knowledge.html">Knowledge</a>
+      <a class="nav-link" href="journal.html">Journal</a>
+    </div>
+    <a class="nav-cta" href="chinthe-guardian-matrix.html">Open Matrix →</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">CHINTHE — Guardian System · Alpha</div>
+    <h1 class="hero-heading">
+      Discipline.<br>Respect.<br><em>Legacy.</em>
+    </h1>
+    <p class="hero-sub">Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the Modern Grappler.</p>
+    <div class="hero-myanmar">ငြိမ်သော — The Guardian</div>
+    <div class="hero-actions">
+      <a class="btn-primary" href="chinthe-guardian-matrix.html">Open Guardian Matrix →</a>
+      <a class="btn-secondary" href="knowledge.html">Browse Knowledge Base</a>
+    </div>
+    <div class="hero-badges">
+      <span class="hero-badge">ADCC Ruleset</span>
+      <span class="hero-badge">No-Gi</span>
+      <span class="hero-badge">Blue Belt+</span>
+      <span class="hero-badge">Offline Capable</span>
+      <span class="hero-badge">Alpha Build</span>
+    </div>
+  </div>
+</section>
+
+<div class="section">
+  <div class="section-label">The System</div>
+  <h2 class="section-title">Everything answers<br>one question.</h2>
+  <p class="section-sub">Given my current state, what is the highest expected-value decision? The CHINTHE Guardian System is built around that question.</p>
+  <div class="modules-grid">
+    <a class="module-card" href="chinthe-guardian-matrix.html">
+      <div class="module-accent jade"></div>
+      <div class="module-icon jade">◎</div>
+      <div>
+        <div class="module-tag">Competition</div>
+        <div class="module-name">Guardian Matrix</div>
+      </div>
+      <p class="module-desc">The live competition decision engine. Navigate your full game from standing to leg locks — real-time match-context guidance based on phase and scoreboard state.</p>
+      <div class="module-meta">
+        <span class="module-meta-dot live"></span>
+        Live &nbsp;·&nbsp; ADCC Ruleset &nbsp;·&nbsp; 80+ Nodes
+      </div>
+    </a>
+    <a class="module-card" href="knowledge.html">
+      <div class="module-accent gold"></div>
+      <div class="module-icon gold">◈</div>
+      <div>
+        <div class="module-tag">Study</div>
+        <div class="module-name">Knowledge Base</div>
+      </div>
+      <p class="module-desc">The complete technique database. Submissions, positions, passes, sweeps, and takedowns — every entry with competition-sharp mechanics, common mistakes, and drills.</p>
+      <div class="module-meta">
+        <span class="module-meta-dot live"></span>
+        Live &nbsp;·&nbsp; 60 Techniques &nbsp;·&nbsp; Searchable
+      </div>
+    </a>
+    <a class="module-card" href="journal.html">
+      <div class="module-accent steel"></div>
+      <div class="module-icon steel">◷</div>
+      <div>
+        <div class="module-tag">Review</div>
+        <div class="module-name">Training Journal</div>
+      </div>
+      <p class="module-desc">Session logging for competitive grapplers. Track what worked, what failed, which techniques need drilling, and build a weekly review cycle.</p>
+      <div class="module-meta">
+        <span class="module-meta-dot live"></span>
+        Live &nbsp;·&nbsp; Stored on Device
+      </div>
+    </a>
+    <div class="module-card coming">
+      <div class="module-accent crimson"></div>
+      <div class="module-icon crimson">◉</div>
+      <div>
+        <div class="module-tag">Coaching</div>
+        <div class="module-name">Guardian Coach</div>
+      </div>
+      <p class="module-desc">Athlete profiles, session review, opponent scouting, and game-plan builder. For coaches working with competitive teams.</p>
+      <div class="module-meta">
+        <span class="module-meta-dot soon"></span>
+        Coming Soon
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="philosophy">
+  <p class="philosophy-quote">"Build with athletes, not for athletes."</p>
+  <p class="philosophy-attr">CHINTHE Core Principle</p>
+</div>
+
+<div class="pillars">
+  <div class="pillars-inner">
+    <div class="section-label">Core Philosophy</div>
+    <h2 class="section-title">Four Principles</h2>
+    <div class="pillars-grid">
+      <div>
+        <div class="pillar-num">01</div>
+        <div class="pillar-name">Discipline</div>
+        <p class="pillar-desc">We train the mind as much as the body. Every decision on the mat follows a system — not instinct, not habit, a trained response to a known state.</p>
+      </div>
+      <div>
+        <div class="pillar-num">02</div>
+        <div class="pillar-name">Respect</div>
+        <p class="pillar-desc">For our art, our partners, and our roots. The Chinthe guardian stands watch because it understands what it's protecting.</p>
+      </div>
+      <div>
+        <div class="pillar-num">03</div>
+        <div class="pillar-name">Perseverance</div>
+        <p class="pillar-desc">Through every challenge, we grow. The system is designed to improve with every session — feedback drives evolution, not opinion.</p>
+      </div>
+      <div>
+        <div class="pillar-num">04</div>
+        <div class="pillar-name">Legacy</div>
+        <p class="pillar-desc">We represent more than ourselves. Rooted in Myanmar, competing worldwide — the guardian lion travels far from home but never loses its purpose.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">CHINTHE JIU-JITSU</div>
+      <div class="footer-myanmar">ငြိမ်သော</div>
+    </div>
+    <div class="footer-tagline">Rooted in Myanmar · Built for the World · Alpha</div>
+  </div>
+</footer>
+
+<script>
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+</script>
 </body>
 </html>

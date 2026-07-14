@@ -4,8 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Guardian Matrix — CHINTHE</title>
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
+<style>
+.site-nav{background:rgba(13,0,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(245,243,236,0.06);padding:10px 18px;display:flex;align-items:center;gap:8px;}
+.site-nav-brand{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.12em;color:#F5F3EC;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.site-nav-lion{width:22px;height:22px;background:linear-gradient(135deg,#D4AF37,#E8C468);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.site-nav-links{display:flex;gap:2px;margin-left:6px;}
+.site-nav-link{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:rgba(245,243,236,0.5);text-decoration:none;padding:5px 10px;border-radius:5px;}
+.site-nav-link:hover{color:#F5F3EC;background:rgba(245,243,236,0.06);}
+.site-nav-link.active{color:#D4AF37;}
+</style>
 <style>
   :root{
     --mat:#0D0D0D;
@@ -346,6 +356,17 @@
 </style>
 </head>
 <body>
+<nav class="site-nav">
+  <a class="site-nav-brand" href="index.html">
+    <div class="site-nav-lion">⊕</div>CHINTHE
+  </a>
+  <div class="site-nav-links">
+    <a class="site-nav-link" href="index.html">Home</a>
+    <a class="site-nav-link active" href="chinthe-guardian-matrix.html">Matrix</a>
+    <a class="site-nav-link" href="knowledge.html">Knowledge</a>
+    <a class="site-nav-link" href="journal.html">Journal</a>
+  </div>
+</nav>
 <div class="wrap">
   <header>
     <div class="eyebrow">Chinthe</div>
@@ -1928,6 +1949,10 @@ render = function(){
 
 updateFlagsCount();
 render();
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
 </script>
 </body>
 </html>
