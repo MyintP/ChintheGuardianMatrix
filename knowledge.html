@@ -158,6 +158,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
       <a class="nav-link" href="index.html">Home</a>
       <a class="nav-link" href="chinthe-guardian-matrix.html">Guardian Matrix</a>
       <a class="nav-link active" href="knowledge.html">Knowledge</a>
+      <a class="nav-link" href="principles.html">Principles</a>
       <a class="nav-link" href="journal.html">Journal</a>
     </div>
   </div>
@@ -667,6 +668,166 @@ const DB = [
     defense:"They will attempt to post their arm as you bridge. Trap the arm before the bridge.",
     mistake:"Bridging explosively without a posted elbow. A raw bridge gets absorbed and costs energy without moving the opponent.",
     drill:"Mount escape timing: partner mounts fresh, execute elbow-knee shrimp or bridge-and-roll within 5 seconds. 10 reps."
+  },
+
+  // ── POSITIONS (expanded from Kesting Roadmap) ──────────────────
+  {
+    id:"side_control", cat:"position",
+    name:"Side Control (Side Mount)",
+    tagline:"The 'Hundred Kilos' position. Your weight is a weapon here — use it actively, not as a static hold.",
+    tags:["Pinning Position","Transition Hub","Side Mount"],
+    objective:"Don't stay in side control — use it as a launch point. The goal is Mount or Back. Staying in side control gives your opponent time to frame, recover, and escape.",
+    mechanics:"Control upper body with grips. Block the near hip with a knee or hand to prevent guard recovery. Two primary paths forward: swing the far leg over to Mount, or transition through Knee-on-Belly. North-South variation: rotate toward their head, nullifying guard recovery and opening a different submission set. Scarf hold (Kesa Gatame) variation: leg over their far arm, your hip into their chest — extremely heavy position.",
+    defense:"Bottom player's options: lateral hip escape to guard, rolling to Turtle, Granby roll sweep. Escape early — before they consolidate weight.",
+    mistake:"Sitting your weight into your own legs instead of your opponent. If they can breathe easily, your side control isn't working. Drop your shoulder into their chin, load your hip onto their belly.",
+    drill:"Side control weight drill: hold for 30 seconds against a resisting partner — they must feel your weight, not your arms. 5 reps then immediately attack."
+  },
+  {
+    id:"north_south", cat:"position",
+    name:"North-South Position",
+    tagline:"A variant of side control that eliminates guard recovery. Face their feet, load your chest onto their face.",
+    tags:["Side Control Variant","Pinning","Kimura Entry"],
+    objective:"When your opponent is defending side control by framing into your hips, rotating to north-south removes those frames entirely — you're now out of reach of their strongest defensive tools.",
+    mechanics:"From side control: step around toward their head, keeping chest pressure. Your hips face their feet, your head is between their legs. Maintain chest pressure — if you give space they can roll to Turtle. From here: kimura (catch far arm, apply figure-four), north-south choke (no-gi: forearm across throat, hip pressure), or transition back to side control for a submission.",
+    defense:"They can bridge and roll toward you (toward north) to recover guard. Keep chest heavy to limit this.",
+    mistake:"Lifting your hips to reposition — this gives them the space to recover. Drag your chest across the mat; never create vertical space.",
+    drill:"North-south rotation: from side control, rotate to north-south maintaining continuous chest contact. 10 reps each direction."
+  },
+  {
+    id:"turtle_top", cat:"position",
+    name:"Turtle (Top)",
+    tagline:"Stay connected, make them carry your weight, and get the seatbelt before they stand up.",
+    tags:["Turtle Attack","Back Take Entry","4 Points"],
+    objective:"Get the seatbelt before they stand or roll to guard. A turtled opponent is one transition away from back control — don't waste the position by hesitating.",
+    mechanics:"From the side: establish seatbelt (far underhook + near over-shoulder), then leg-weave around their far hip and insert hooks. From front-headlock position (after sprawl): snap the near arm across, spin behind, insert hooks. Clock choke (gi only) from head-to-head turtle: drive their far arm under their body, walk around their head.",
+    defense:"They will attempt to stand up, roll toward you to get guard, or roll away to reverse. Answer each: stay connected on the stand-up, block the roll with your hip, and ride the reverse into the back.",
+    mistake:"Pausing on top of the turtle to decide what to do. In that window they stand up. Have the back-take sequence ready before they turtle — execute immediately on contact.",
+    drill:"Turtle-to-back sequence: partner turtles on command, 10 reps to locked seatbelt within 3 seconds from side position."
+  },
+  {
+    id:"turtle_bottom", cat:"defence",
+    name:"Turtle (Bottom)",
+    tagline:"A transitional position, not a resting position. Defend, stay dynamic, and immediately work to recover guard or return to feet.",
+    tags:["Turtle Defence","Transitional","Wrestling Recovery"],
+    objective:"Turtle is a temporary emergency stop. The goal is immediate transition — to guard, to feet, or to a reversal. Staying in turtle bleeds energy and gives the top player time to establish control.",
+    mechanics:"Protect the neck first — chin down, shoulder up on the side they're attacking from. Deny the seatbelt by framing their wrist away. Options from here: hip escape toward them to recover guard, stand-up (frame on their knee, step through), granby roll to reverse the position, or roll them over your back if they over-commit weight forward.",
+    defense:"Top player will try to establish seatbelt. Block the choking arm before it seats — your window to deny it is the first 2 seconds.",
+    mistake:"Staying static in turtle. A static turtle is comfortable for the top player — they settle, establish grips, and take the back at leisure. Keep moving.",
+    drill:"Turtle escape to guard: partner on top in head-to-head position, 10 reps recovering guard within 5 seconds via hip escape."
+  },
+  {
+    id:"knee_on_belly", cat:"position",
+    name:"Knee on Belly",
+    tagline:"A miserable position for your opponent. Use the discomfort to create openings — don't sit in it.",
+    tags:["2 Points","Transitional","Submission Platform"],
+    objective:"Bank the 2 points, create discomfort, and immediately pursue the attack that discomfort opens. When they push your knee, they've exposed their arm. When they frame their hands, they've opened their neck.",
+    mechanics:"Knee planted mid-stomach (or solar plexus for maximum discomfort). Other foot floats and adjusts to their movements. Most of your bodyweight through the knee — not through your feet. From here: near-side armbar (when they push the knee), far-side spin armbar (when they reach across), collar choke (when their hands push too long), or slide knee across to Mount.",
+    defense:"Frame against the knee before it settles — push it toward their feet. If it's already seated, turn toward them and push the knee toward your hips.",
+    mistake:"Putting too much weight on your floating foot. If they can move, you've lost the discomfort effect. All weight through the planted knee.",
+    drill:"Knee-on-belly to back chain: 3-second hold, then pursue back take on same rep. 10 reps — don't settle in the position."
+  },
+  {
+    id:"guard_bottom_closed_detail", cat:"position",
+    name:"Closed Guard — Top Player's Game",
+    tagline:"Three-stage process: posture, open the guard, pass. Each stage is a separate battle. Win each one.",
+    tags:["Guard Passing","Top Game","3 Stages"],
+    objective:"Establish posture before any pass attempt. A collapsed posture in closed guard puts you immediately in submission danger — you cannot pass from there.",
+    mechanics:"Stage 1 — Posture: sit up straight, post your hands on their hips or chest, break their grip on your head or collar. Stage 2 — Open the guard: elbow to the inside of their thigh, stand up or knee-slide to break the guard lock. Stage 3 — Pass: over-under, leg drag, or toreando depending on how they frame their legs after the guard opens.",
+    defense:"They will attack submissions whenever you lose posture. Don't pass until posture is solid — attempting a pass with broken posture gets you triangled.",
+    mistake:"Rushing the pass before the guard is open. You cannot pass a closed guard — it must be opened first. Treat these as three separate technical problems.",
+    drill:"Guard break drill: from closed guard top, establish posture and open the guard within 10 seconds. No pass until the guard is fully open. 10 reps."
+  },
+
+  // ── TAKEDOWNS (expanded from Kesting + Galibert) ───────────────
+  {
+    id:"o_soto_gari", cat:"takedown",
+    name:"O-Soto-Gari (Major Outer Reap)",
+    tagline:"The most effective foot throw in Judo for wrestling-base grapplers. Works with or without a gi.",
+    tags:["Judo","Foot Throw","Outside Reap"],
+    objective:"Attack when their weight is loaded on the near leg. A balanced opponent absorbs it; a weight-forward opponent falls with minimal effort.",
+    mechanics:"Grip: near collar and far sleeve (gi) or head/neck and tricep (no-gi). Kuzushi: pull them forward-right (for right-sided throw) to load their right leg. Entry: step deep with your left foot outside their right, bring your right leg in a reaping arc, driving their right leg out from under them. Simultaneously drive your chest through theirs. Finish face-down with your weight loading their upper back.",
+    defense:"Stepping back to avoid the reap. Dropping level to change their balance. Counter-throw to the opposite side.",
+    mistake:"Reaping before achieving kuzushi. An upright, balanced opponent blocks the reap with leg strength. The leg reap is 10% of the technique; the off-balance is 90%.",
+    drill:"O-soto-gari entry: establish kuzushi, execute the reap on signal. Partner resists at 30% — focus on timing the reap to the moment of maximum imbalance. 15 reps each side."
+  },
+  {
+    id:"seoi_nage", cat:"takedown",
+    name:"Seoi-Nage (Shoulder Throw)",
+    tagline:"The highest-percentage throw in Judo competition history. Works at every level — from beginner to world champion.",
+    tags:["Judo","Shoulder Throw","Two-on-One"],
+    objective:"Load their weight on your hip below their center of gravity and rotate. Their gravity does the rest.",
+    mechanics:"Entry: deep step in, feet shoulder-width, knees bent. Position your hip bone just below their center of gravity (hip level). Near arm drives under their near armpit, far arm controls their sleeve or wrist. Rotate explosively, pulling the far arm down while loading their weight over your hip. Head inside, drive through.",
+    defense:"Stepping around the entry. Dropping their weight to low base (difficult to throw from low base). Grip fighting to deny the entry grip.",
+    mistake:"Standing up during the throw — straightening your knees lifts your hip and loses the fulcrum. Stay low and rotate, don't stand and pull.",
+    drill:"Seoi-nage entry and rotation: uchi-komi (entry only, no finish) 20 reps at full speed. Focus on hip position relative to their center of gravity — hip must be below it before the rotation."
+  },
+  {
+    id:"single_leg_wrestling", cat:"takedown",
+    name:"Single Leg Takedown",
+    tagline:"Your most versatile takedown from any distance. More entries than any other shot.",
+    tags:["Wrestling","Single Leg","Finishes"],
+    objective:"Control the leg you've captured through to a finish — don't just grab the leg and hope.",
+    mechanics:"Entry: penetration step to inside of their near leg, wrap both arms around their thigh (high single) or grab the ankle (low single). Head position: outside their hip (not in their chest — inside head gets pancaked). Finishes: lift and trip (drive forward and sweep their posting foot), run the pipe (step around while turning them), or elevate and dump. From a failed shot: transition to front headlock via a hip pop if they sprawl.",
+    defense:"Sprawl (hips back, weight on their shoulders). Guillotine from front headlock position. Whizzer (overhook on the arm completing the takedown).",
+    mistake:"Head inside the hip (inside head). An inside head position allows them to whizzer down and kill the takedown. Head outside the hip — always.",
+    drill:"Single leg entry: penetration step to leg capture, head outside, 20 reps. Then add the finish: 10 reps each finish variation."
+  },
+
+  // ── PRINCIPLES-BASED ENTRIES (from Galibert + Chess books) ──────
+  {
+    id:"kuzushi_application", cat:"position",
+    name:"Kuzushi in Passing",
+    tagline:"Guard passes are kuzushi applied on the ground. Remove their base before clearing their legs.",
+    tags:["Passing Principle","Balance Breaking","Kuzushi"],
+    objective:"Break your opponent's base before attempting to clear their legs. A framed, balanced opponent can hold guard against almost any passing pressure. Remove the base first.",
+    mechanics:"From headquarters: load your weight onto both their knees (they absorb it — no movement). At the moment of maximum loading, instantly shift your direction 90 degrees sideways. This angle change amplifies force dramatically — from zero effective force to maximum — because they've committed their resistance to the original direction. Their guard collapses in the new direction.",
+    defense:"They will try to hip escape the moment they feel the weight shift. Execute the direction change faster than they can move.",
+    mistake:"Maintaining a single direction of pressure throughout the pass. Static pressure telegraphs. Dynamic direction changes are the actual technique.",
+    drill:"Angle-change pass drill: load weight onto knees, on a signal from your partner, instantly redirect 90 degrees. Partner tries to hip escape the redirect. 10 reps each direction."
+  },
+  {
+    id:"chain_attacks", cat:"position",
+    name:"The Attack Chain",
+    tagline:"Every attack should have a pre-decided continuation. A stuffed attack never resets to neutral — it converts to the next position.",
+    tags:["Strategy","Chain Submissions","Decision Engine"],
+    objective:"Before every attack, decide: if defended, what comes next? The answer should already be loading as the first attack lands. This transforms isolated attempts into chains that are impossible to completely defend.",
+    mechanics:"Build chains around the defensive responses: Armbar defended (clasp) → triangle. Triangle defended (posture-up) → armbar on the freed arm or back take off the stack. Guillotine defended (posture-out) → armbar, triangle, or back take depending on escape direction. RNC defended (hand-fight) → bow-and-arrow or armbar from back. Each defended attack gifts the next attack — you are never stuck.",
+    defense:"They are trying to do the same to you. The athlete who runs out of chain first loses the exchange.",
+    mistake:"Treating each submission attempt as a standalone event. An isolated armbar that fails is nothing. An armbar that transitions into a triangle that transitions into a back take is a sequence they cannot fully survive.",
+    drill:"Chain drill: armbar → triangle → back take from mount. 10 reps, no resets between attacks — each transition must flow directly from the defence received."
+  },
+  {
+    id:"action_reaction_entries", cat:"takedown",
+    name:"Set-Up and Reaction Entries",
+    tagline:"Make your opponent react in a predictable way. Your attack is the reaction, not the initial push.",
+    tags:["Set-Ups","Action-Reaction","Timing"],
+    objective:"Create the conditions for your attack rather than waiting for them to appear. Force a predictable reaction, then attack the reaction — not the original position.",
+    mechanics:"Push them backward → they push forward → throw forward. Grip their sleeve and pull → they pull back → arm drag to back. Fake the armbar → they clasp hands → triangle. Fake the sweep → they post their hand → kimura. The set-up is the primary attack. The technique is secondary — it's just the exploitation of a reaction you manufactured.",
+    defense:"Opponent will eventually stop reacting predictably. Vary your set-ups and reactions so they can't anticipate the chain. If they stop reacting, the set-up itself becomes a technique.",
+    mistake:"Relying on the same set-up every time. An experienced opponent will recognize the pattern and counter-attack your set-up rather than react to it.",
+    drill:"Reaction entry drill: push-reaction-throw, pull-reaction-armbar, fake-reaction-triangle. 10 reps each. Partner responds honestly — if they don't react, abort the set-up and try a different angle."
+  },
+  {
+    id:"hip_movement", cat:"position",
+    name:"Hip Movement (Shrimping and Bridging)",
+    tagline:"Hip movement is the key to the entire art. Technique without hip movement is just a position; technique with it is grappling.",
+    tags:["Fundamentals","Shrimping","Hip Escape","Bridging"],
+    objective:"Every escape, every pass defence, every guard transition runs through hip movement. Before drilling any specific technique, drill shrimping and bridging until they are reflexive.",
+    mechanics:"Lateral hip movement (shrimping): on your side, push with the bottom foot, drive the hip away, land on the elbow. Repeat continuously. This creates the space that every guard technique and escape needs. Forward/backward hip movement (bridging): from your back, plant both feet, drive your hips explosively upward and toward one side. Every bridge-and-roll escape uses this. Sprawling (used standing): drive hips back and down, weight through opponent's shoulders.",
+    defense:"Opponents will try to flatten you and shut down your hip movement. Stay on your side — the moment you go flat on your back, hip movement becomes exponentially harder.",
+    mistake:"Using arms to create space instead of hips. Pushing someone's torso with your arms exhausts you. Driving your hip away from them with your leg creates the same space with a fraction of the effort.",
+    drill:"Shrimping laps: shrimp down the mat and back, 5 laps. Then bridge-and-roll: from your back, bridge explosively toward each side 20 reps. Do these before every technique session."
+  },
+  {
+    id:"fluid_efficiency", cat:"position",
+    name:"Fluid Technique — Efficiency Over Power",
+    tagline:"Scrawny beats strong when technique is precise. The window between a sloppy technique and a perfect one is the entire submission.",
+    tags:["Efficiency","Fluid BJJ","Pravec","Technique Precision"],
+    objective:"Every technique has one detail that makes it work — one grip position, one angle, one timing point. Find that detail and drill it until it's automatic. Without it, you are muscling. With it, you are grappling.",
+    mechanics:"From Karel Pravec's Fluid BJJ (foreword by John Danaher): the key to defeating larger, stronger, younger opponents is not conditioning or attributes — it is the precision of the technique. One grip in the wrong place, one angle off by 20 degrees, one timing beat too early, and the submission fails regardless of strength. The same movement executed precisely succeeds against anyone.",
+    defense:"Attributes can compensate for poor technique up to a level. At the level of blue belt and above, attribute-based grappling hits a ceiling. Technique-based grappling has no ceiling.",
+    mistake:"Substituting effort for precision. When a technique doesn't work, the solution is almost never to try harder — it is to find the one detail that's wrong and fix it.",
+    drill:"Slow-motion drilling: execute any submission at 20% speed, partner gives zero resistance. Focus entirely on position: grip placement, angle, fulcrum position. If it works at 20%, it works at 100%."
   }
 ];
 

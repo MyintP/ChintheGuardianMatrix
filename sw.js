@@ -1,10 +1,11 @@
-const CACHE = "chinthe-v1";
+const CACHE = "chinthe-v2";
 const SHELL = [
   "./",
   "./index.html",
   "./chinthe-guardian-matrix.html",
   "./knowledge.html",
   "./journal.html",
+  "./principles.html",
   "./manifest.json"
 ];
 
