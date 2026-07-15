@@ -13,7 +13,7 @@
 /* ══════════════════════════════════════════════════════
    GUARDIAN MATRIX — Page-specific styles
    Tokens, resets, and nav come from chinthe.css
-   This file: Matrix layout, sidebar, map canvas, nodes,
+   This file: Matrix layout, sidebar, skill-tree canvas, nodes,
    detail cards, modals, flow view, controls.
    ONE cascade order. Zero !important.
 ══════════════════════════════════════════════════════ */
@@ -120,25 +120,6 @@ h1 span { color: var(--victory); }
 }
 .nav-btn.active { background: var(--chalk); color: var(--mat); border-color: var(--chalk); font-weight: 600; }
 
-/* ── View toggle ── */
-.view-toggle { display: flex; gap: 6px; margin-top: 8px; }
-.view-btn {
-  flex: 1;
-  background: var(--mat-elev);
-  border: 1px solid var(--line);
-  color: var(--chalk-dim);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 8px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: center;
-  transition: background 0.15s, color 0.15s;
-}
-.view-btn.active { background: var(--chalk); color: var(--mat); border-color: var(--chalk); font-weight: 600; }
-
 /* ── Match bar: phase + scoreboard ── */
 .match-bar { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 .match-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 120px; }
@@ -223,81 +204,132 @@ h1 span { color: var(--victory); }
 /* ── Main canvas ── */
 main { padding: 12px 16px 60px; }
 
-/* ── Map ── */
-.map-hint {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--chalk-dim);
-  text-align: center;
-  margin: 6px 0;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.map-wrap { position: relative; width: 100%; height: 400px; margin-top: 4px; }
-.map-svg  { position: absolute; inset: 0; width: 100%; height: 100%; }
-.map-svg line { stroke: var(--line); stroke-width: 1.5; }
-
-.map-node {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  display: flex; align-items: center; justify-content: center;
-  text-align: center;
-  border-radius: 12px;
-  padding: 6px 8px;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 10px;
-  line-height: 1.25;
-  cursor: pointer;
+/* ── Skill Tree ──
+   A persistent, pannable/zoomable dendrogram (Diablo/Arc Raiders style).
+   Node positions are computed once (buildTreeLayout) and never move —
+   navigation only restyles states and re-centers the viewport. ── */
+.tree-wrap {
+  position: relative;
+  width: 100%;
+  height: 460px;
+  margin-top: 4px;
+  background:
+    radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0) 0 0/22px 22px,
+    var(--mat-elev);
   border: 1px solid var(--line);
-  background: var(--mat-elev);
-  color: var(--chalk);
-  width: 78px;
-  min-height: 48px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  transition: transform 0.12s ease, box-shadow 0.12s;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
-.map-node:hover { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55); }
-.map-node:active { transform: translate(-50%, -50%) scale(0.93); }
-.map-node .pts  { display: block; margin-top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 8px; opacity: 0.8; }
-.map-node.type-entry      { border-left: 3px solid var(--chalk-dim); }
-.map-node.type-position   { border-left: 3px solid var(--jade-bright); }
-.map-node.type-submission { border-left: 3px solid var(--victory); }
-.map-node.type-counter    { border-left: 3px solid var(--gold); }
-.map-node.type-threat     { border-left: 3px solid var(--danger); }
-.map-node.center {
-  width: 120px; min-height: 68px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 14px; letter-spacing: 0.02em; text-transform: uppercase;
-  background: var(--chalk); color: var(--mat);
-  border-color: var(--chalk); z-index: 2;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
-  cursor: default;
+.tree-toolbar {
+  position: absolute; top: 10px; right: 10px; z-index: 6;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.tree-tool-btn {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: rgba(23, 23, 23, 0.85); border: 1px solid var(--line);
+  color: var(--chalk); font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.15s, color 0.15s;
+}
+.tree-tool-btn:hover { border-color: var(--gold); color: var(--gold); }
+.tree-hint {
+  position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%);
+  z-index: 6; font-family: 'IBM Plex Mono', monospace; font-size: 9px;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--chalk-dim);
+  background: rgba(13, 13, 13, 0.7); padding: 5px 10px; border-radius: 999px;
+  pointer-events: none; opacity: 1; transition: opacity 0.4s;
+  white-space: nowrap; max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis;
+}
+.tree-hint.faded { opacity: 0; }
+.tree-viewport {
+  position: absolute; inset: 0; overflow: hidden;
+  cursor: grab; touch-action: none;
+}
+.tree-viewport.grabbing { cursor: grabbing; }
+.tree-canvas {
+  position: absolute; top: 0; left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.tree-edges { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
+.tree-edge {
+  fill: none; stroke: var(--line); stroke-width: 2;
+  transition: stroke 0.3s, stroke-width 0.3s, filter 0.3s;
+}
+.tree-edge.lit {
+  stroke: var(--gold); stroke-width: 3;
+  filter: drop-shadow(0 0 4px rgba(212, 160, 23, 0.65));
+}
+.tree-edge.tree-edge-jump { stroke-dasharray: 5 5; }
+.tree-nodes { position: absolute; top: 0; left: 0; }
+
+.tree-node {
+  position: absolute; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  width: 104px; padding: 0; background: none; border: none; cursor: pointer;
+  font-family: inherit;
+}
+.tree-node-badge {
+  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; background: var(--mat-elev-2);
+  border: 2px solid var(--line); color: var(--chalk-dim);
+  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s, color 0.25s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+.tree-node-label {
+  font-size: 9.5px; line-height: 1.2; text-align: center; color: var(--chalk-dim);
+  max-width: 104px; background: rgba(13, 13, 13, 0.55); border-radius: 6px;
+  padding: 2px 5px; transition: color 0.25s;
+}
+.tree-node-pts {
+  display: block; margin-top: 1px; font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px; opacity: 0.85;
 }
 
-/* ── Flow view ── */
-.flow-wrap {
-  position: relative; width: 100%; height: 400px; margin-top: 4px;
-  overflow-x: auto; overflow-y: auto; -webkit-overflow-scrolling: touch;
-  background: var(--mat-elev); border: 1px solid var(--line); border-radius: var(--radius);
+/* Type accent on the badge ring — matches the legend dots below */
+.tree-node.type-entry      .tree-node-badge { border-color: var(--chalk-dim); }
+.tree-node.type-position   .tree-node-badge { border-color: var(--jade-bright); }
+.tree-node.type-submission .tree-node-badge { border-color: var(--victory); }
+.tree-node.type-counter    .tree-node-badge { border-color: var(--gold); }
+.tree-node.type-threat     .tree-node-badge { border-color: var(--danger); }
+
+.tree-node:not(.state-current):hover .tree-node-badge { border-color: var(--gold); }
+
+/* State: outside your current path/frontier — dim and desaturated, still jumpable */
+.tree-node.state-locked .tree-node-badge { opacity: 0.38; filter: grayscale(65%); box-shadow: none; }
+.tree-node.state-locked .tree-node-label { opacity: 0.5; }
+
+/* State: a direct next option from here — pulses to invite a tap */
+.tree-node.state-available .tree-node-badge {
+  color: var(--chalk); background: var(--mat-elev-2);
+  animation: tree-pulse 1.8s ease-in-out infinite;
 }
-.flow-svg { position: absolute; top: 0; left: 0; height: 100%; }
-.flow-svg line { stroke: var(--line); stroke-width: 1.5; }
-.flow-svg line.spine { stroke: var(--jade-bright); stroke-width: 2; }
-#flowNodes { position: relative; height: 100%; }
-.flow-node {
-  position: absolute; transform: translate(-50%, -50%);
-  display: flex; align-items: center; justify-content: center;
-  text-align: center; border-radius: 10px; padding: 6px 8px;
-  font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; line-height: 1.2;
-  cursor: pointer; border: 1px solid var(--line);
-  background: var(--mat-elev-2); color: var(--chalk-dim); width: 88px; min-height: 44px;
+.tree-node.state-available .tree-node-label { color: var(--chalk); }
+
+/* State: already on your chain */
+.tree-node.state-visited .tree-node-badge {
+  background: var(--jade); color: var(--jade-bright); border-color: var(--jade-bright);
+  box-shadow: 0 0 10px rgba(63, 163, 131, 0.35);
 }
-.flow-node.spine { background: var(--jade); color: var(--jade-bright); border-color: var(--jade-bright); font-weight: 600; font-size: 11px; z-index: 2; }
-.flow-node.spine.current { background: var(--chalk); color: var(--mat); border-color: var(--chalk); }
-.flow-node.alt  { opacity: 0.6; font-size: 9px; width: 80px; min-height: 40px; }
-.flow-node.alt:hover { opacity: 1; }
-.flow-node.next { border-left: 3px solid var(--gold); color: var(--chalk); }
-.flow-node .pts { display: block; margin-top: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 8px; opacity: 0.8; }
+.tree-node.state-visited .tree-node-label { color: var(--chalk); }
+
+/* State: where you are right now */
+.tree-node.state-current .tree-node-badge {
+  background: var(--gold); color: var(--mat); border-color: var(--gold);
+  transform: scale(1.18);
+  box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.22), 0 0 18px rgba(212, 160, 23, 0.6);
+}
+.tree-node.state-current .tree-node-label { color: var(--gold); font-weight: 600; }
+
+@keyframes tree-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.35); }
+  50%      { box-shadow: 0 0 0 6px rgba(212, 160, 23, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tree-node.state-available .tree-node-badge { animation: none; }
+}
 
 /* ── Back button ── */
 .back-btn {
@@ -544,10 +576,6 @@ footer.brand-footer {
     text-overflow: ellipsis;
   }
 
-  /* View toggle */
-  .view-toggle   { margin-top: 0; margin-bottom: 10px; }
-  .view-btn      { font-size: 11px; padding: 9px 12px; }
-
   /* Match bar: stacked groups, each group uses CSS grid */
   .match-bar {
     flex-direction: column;
@@ -605,24 +633,13 @@ footer.brand-footer {
     flex-direction: column;
   }
 
-  /* Map fills remaining height in the flex column */
-  .map-wrap {
-    flex: 1;
-    min-height: calc(100vh - var(--nav-h) - 200px);
-    height: auto;
-    margin-top: 0;
-    position: relative;
-  }
-  .flow-wrap {
+  /* Tree canvas fills remaining height in the flex column */
+  .tree-wrap {
     flex: 1;
     min-height: calc(100vh - var(--nav-h) - 200px);
     height: auto;
     margin-top: 0;
   }
-
-  /* Larger map nodes */
-  .map-node       { width: 100px; min-height: 58px; font-size: 11px; }
-  .map-node.center{ width: 138px; min-height: 82px; font-size: 14px; }
 
   /* Detail card */
   .detail-card  { padding: 22px 26px; margin-top: 18px; }
@@ -642,16 +659,12 @@ footer.brand-footer {
   header { padding: 24px 20px 48px; }
   main   { padding: 24px 40px 48px; }
   h1     { font-size: 24px; }
-  .map-node        { width: 110px; min-height: 62px; font-size: 11.5px; }
-  .map-node.center { width: 148px; min-height: 88px; font-size: 15px; }
   .nav-btn         { font-size: 11px; padding: 10px 10px; }
 }
 
 @media (min-width: 1600px) {
   .wrap  { grid-template-columns: 340px 1fr; }
   main   { padding: 28px 56px 56px; }
-  .map-node        { width: 118px; min-height: 66px; }
-  .map-node.center { width: 158px; min-height: 94px; font-size: 16px; }
 }
 </style>
 
@@ -696,11 +709,6 @@ footer.brand-footer {
       <button class="nav-btn" id="flagsToggle">🚩 Flags <span id="flagsCount"></span></button>
     </nav>
 
-    <div class="view-toggle">
-      <button class="view-btn active" id="viewMapBtn">◎ Map</button>
-      <button class="view-btn" id="viewFlowBtn">⇥ Flow</button>
-    </div>
-
     <div class="match-bar">
       <div class="match-group phase-group">
         <div class="match-group-label">Phase</div>
@@ -724,14 +732,19 @@ footer.brand-footer {
   </header>
 
   <main>
-    <div class="map-hint" id="mapHint">Tap a node to expand it</div>
-    <div class="map-wrap" id="mapWrap">
-      <svg class="map-svg" id="mapSvg"></svg>
-      <div id="mapNodes"></div>
-    </div>
-    <div class="flow-wrap" id="flowWrap" style="display:none;">
-      <svg class="flow-svg" id="flowSvg"></svg>
-      <div id="flowNodes"></div>
+    <div class="tree-wrap" id="treeWrap">
+      <div class="tree-toolbar">
+        <button class="tree-tool-btn" id="treeZoomIn" type="button" aria-label="Zoom in">+</button>
+        <button class="tree-tool-btn" id="treeZoomOut" type="button" aria-label="Zoom out">−</button>
+        <button class="tree-tool-btn" id="treeRecenter" type="button" aria-label="Center on current node">◎</button>
+      </div>
+      <div class="tree-hint" id="treeHint">Drag to pan · Scroll or pinch to zoom · Tap a node to jump</div>
+      <div class="tree-viewport" id="treeViewport">
+        <div class="tree-canvas" id="treeCanvas">
+          <svg class="tree-edges" id="treeEdges"></svg>
+          <div class="tree-nodes" id="treeNodes"></div>
+        </div>
+      </div>
     </div>
     <div class="back-row" id="backRow" style="display:none;">
       <button class="back-btn" id="backBtn">‹ Back</button>
@@ -809,7 +822,7 @@ footer.brand-footer {
           <div class="modal-title">Quick Reference</div>
           <button class="modal-close" id="quickRefClose">✕</button>
         </div>
-        <div class="modal-sub">One tap to your core positions — no map navigation.</div>
+        <div class="modal-sub">One tap to your core positions — no tree navigation.</div>
         <div class="quickref-list" id="quickRefList"></div>
       </div>
     </div>
@@ -832,7 +845,7 @@ footer.brand-footer {
 const NODES = {
   hub: {
     title: "Guardian Matrix", type: "entry", points: null,
-    mechanics: "Your full competition decision map. Tap any branch to expand it — tap Back or a breadcrumb to return.",
+    mechanics: "Your full competition decision tree. Tap any node to expand it — tap Back, a breadcrumb, or drag/zoom the tree to navigate.",
     children: ["start","pass","guard_bottom","def_start"]
   },
   start: {
@@ -1650,8 +1663,6 @@ const NODES = {
 let path = ["hub"];
 let matchPhase = 1;      // 1 = no points, submissions only. 2 = points live.
 let matchState = "even"; // "leading" | "even" | "trailing"
-let viewMode = "map";    // "map" | "flow"
-
 const QUICK_REF_IDS = ["rnc","guillotine","armbar_mount","triangle_from_armbar","backtake_pass","def_back_threat","def_guard_threat","mount"];
 
 // Reverse-lookup: which nodes point to a given node as a child (used by search context tags)
@@ -1662,6 +1673,300 @@ Object.keys(NODES).forEach(id=>{
     PARENTS[cid].push(id);
   });
 });
+
+// ══════════════════════════════════════════════════════
+// SKILL TREE — persistent, pannable/zoomable dendrogram
+// Positions are computed once (buildTreeLayout) and DOM nodes/edges are
+// created once (buildTreeDOM). Navigation only restyles state classes and
+// re-centers the viewport — no rebuild, no flicker, unlike the old
+// re-centering radial map.
+// ══════════════════════════════════════════════════════
+const SVG_NS = "http://www.w3.org/2000/svg";
+let TREE = null;
+const nodeEls = {};
+const edgeEls = {};
+let primaryEdgeKeys = new Set();
+let panX = 0, panY = 0, zoom = 1;
+let dragState = null, pinchState = null, suppressClick = false, firstRender = true;
+const REDUCE_MOTION = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+function buildTreeLayout(){
+  const NODE_W = 132, TIER_H = 140, PAD_X = 90, PAD_Y = 80;
+  const tierOf = { hub: 0 };
+  const primaryChildrenOf = {};
+  const seen = new Set(["hub"]);
+  const queue = ["hub"];
+  // BFS from hub: each node's tier = shortest distance, its "primary" parent
+  // is whichever node reached it first. Shared children (a node with more
+  // than one real parent) render once at their shortest tier; a path that
+  // walks in via a different parent later draws a dashed jump connector
+  // instead of duplicating the node.
+  while (queue.length){
+    const id = queue.shift();
+    const kids = (NODES[id].children || []).filter(cid=>!seen.has(cid));
+    primaryChildrenOf[id] = kids;
+    kids.forEach(cid=>{
+      seen.add(cid);
+      tierOf[cid] = tierOf[id] + 1;
+      queue.push(cid);
+    });
+  }
+
+  // Classic tidy-tree x-assignment: leaves get sequential slots, each
+  // parent's x is the midpoint of its first/last child.
+  let nextSlot = 0;
+  const xOf = {};
+  function assignX(id){
+    const kids = primaryChildrenOf[id] || [];
+    if (!kids.length){ xOf[id] = nextSlot++; return xOf[id]; }
+    kids.forEach(assignX);
+    xOf[id] = (xOf[kids[0]] + xOf[kids[kids.length-1]]) / 2;
+    return xOf[id];
+  }
+  assignX("hub");
+
+  const posById = {};
+  let maxTier = 0;
+  Object.keys(tierOf).forEach(id=>{
+    maxTier = Math.max(maxTier, tierOf[id]);
+    posById[id] = { x: PAD_X + xOf[id]*NODE_W, y: PAD_Y + tierOf[id]*TIER_H };
+  });
+
+  const edges = [];
+  Object.keys(primaryChildrenOf).forEach(pid=>{
+    primaryChildrenOf[pid].forEach(cid=> edges.push({ from: pid, to: cid }));
+  });
+
+  TREE = {
+    posById, tierOf, primaryChildrenOf, edges,
+    width: PAD_X*2 + nextSlot*NODE_W,
+    height: PAD_Y*2 + maxTier*TIER_H
+  };
+  primaryEdgeKeys = new Set(edges.map(e=>e.from+"→"+e.to));
+}
+
+function edgeD(pa, pb){
+  const midY = (pa.y + pb.y) / 2;
+  return `M${pa.x},${pa.y} C${pa.x},${midY} ${pb.x},${midY} ${pb.x},${pb.y}`;
+}
+
+function nodeGlyph(n){
+  if (n.points === "WIN") return "✦";
+  if (n.points === "LOSS") return "✕";
+  return { entry:"◎", position:"◆", submission:"✦", counter:"↺", threat:"▲" }[n.type] || "◆";
+}
+
+function buildTreeDOM(){
+  const svg = document.getElementById("treeEdges");
+  const nodesEl = document.getElementById("treeNodes");
+  const canvas = document.getElementById("treeCanvas");
+  canvas.style.width = TREE.width + "px";
+  canvas.style.height = TREE.height + "px";
+  svg.setAttribute("width", TREE.width);
+  svg.setAttribute("height", TREE.height);
+  nodesEl.style.width = TREE.width + "px";
+  nodesEl.style.height = TREE.height + "px";
+
+  TREE.edges.forEach(({from, to})=>{
+    const p = document.createElementNS(SVG_NS, "path");
+    p.setAttribute("class", "tree-edge");
+    p.setAttribute("d", edgeD(TREE.posById[from], TREE.posById[to]));
+    svg.appendChild(p);
+    edgeEls[from+"→"+to] = p;
+  });
+
+  Object.keys(TREE.posById).forEach(id=>{
+    const n = NODES[id];
+    const pos = TREE.posById[id];
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "tree-node type-" + n.type;
+    btn.style.left = pos.x + "px";
+    btn.style.top = pos.y + "px";
+    btn.dataset.id = id;
+
+    const badge = document.createElement("span");
+    badge.className = "tree-node-badge";
+    badge.textContent = nodeGlyph(n);
+    btn.appendChild(badge);
+
+    const label = document.createElement("span");
+    label.className = "tree-node-label";
+    label.appendChild(document.createTextNode(n.title));
+    const ptsLbl = pointsLabel(n.points);
+    if (ptsLbl){
+      const pts = document.createElement("span");
+      pts.className = "tree-node-pts";
+      pts.textContent = ptsLbl;
+      label.appendChild(pts);
+    }
+    btn.appendChild(label);
+
+    nodesEl.appendChild(btn);
+    nodeEls[id] = btn;
+  });
+
+  // Delegated click: real <button>s already convert Enter/Space to a
+  // click, so this single listener covers mouse, touch, and keyboard.
+  nodesEl.addEventListener("click", e=>{
+    if (suppressClick) return;
+    const btn = e.target.closest(".tree-node");
+    if (!btn) return;
+    handleTreeNodeClick(btn.dataset.id);
+  });
+}
+
+function handleTreeNodeClick(id){
+  const idx = path.indexOf(id);
+  if (idx !== -1){
+    if (idx === path.length - 1) return; // tapping the current node — no-op
+    path = path.slice(0, idx + 1);       // tapping an ancestor — collapse back to it
+    render();
+    scrollCanvasTop();
+    return;
+  }
+  const current = NODES[path[path.length - 1]];
+  if ((current.children || []).includes(id)) goNode(id);
+  else jumpTo(id); // not adjacent to the current step — jump straight there, like search
+}
+
+function renderPathConnectors(){
+  const svg = document.getElementById("treeEdges");
+  svg.querySelectorAll(".tree-edge-jump").forEach(el=>el.remove());
+  for (let i=0; i<path.length-1; i++){
+    const key = path[i]+"→"+path[i+1];
+    if (primaryEdgeKeys.has(key)) continue; // already a static tree edge, just gets .lit toggled
+    const pa = TREE.posById[path[i]], pb = TREE.posById[path[i+1]];
+    if (!pa || !pb) continue;
+    const p = document.createElementNS(SVG_NS, "path");
+    p.setAttribute("class", "tree-edge tree-edge-jump lit");
+    p.setAttribute("d", edgeD(pa, pb));
+    svg.appendChild(p);
+  }
+}
+
+function renderTree(){
+  const currentId = path[path.length-1];
+  const pathSet = new Set(path);
+  const availableSet = new Set(NODES[currentId].children || []);
+
+  Object.keys(nodeEls).forEach(id=>{
+    const btn = nodeEls[id];
+    const state = id===currentId ? "current" : pathSet.has(id) ? "visited" : availableSet.has(id) ? "available" : "locked";
+    btn.classList.remove("state-current","state-visited","state-available","state-locked");
+    btn.classList.add("state-"+state);
+    btn.setAttribute("aria-current", id===currentId ? "step" : "false");
+  });
+
+  Object.values(edgeEls).forEach(el=>el.classList.remove("lit"));
+  for (let i=0; i<path.length-1; i++){
+    const el = edgeEls[path[i]+"→"+path[i+1]];
+    if (el) el.classList.add("lit");
+  }
+  renderPathConnectors();
+
+  document.getElementById("backRow").style.display = path.length>1 ? "flex" : "none";
+}
+
+// ---- Pan & zoom ----
+const treeViewport = document.getElementById("treeViewport");
+const treeCanvas = document.getElementById("treeCanvas");
+const treeHint = document.getElementById("treeHint");
+
+function clampZoom(z){ return Math.min(1.6, Math.max(0.32, z)); }
+function applyTransform(animate){
+  treeCanvas.style.transition = (animate && !REDUCE_MOTION) ? "transform 0.35s cubic-bezier(.2,.8,.2,1)" : "none";
+  treeCanvas.style.transform = `translate(${panX}px,${panY}px) scale(${zoom})`;
+}
+function dismissHint(){ treeHint.classList.add("faded"); }
+function defaultZoom(){
+  return treeViewport.clientWidth < 640 ? 0.82 : 1;
+}
+function centerOnCurrentNode(animate){
+  const pos = TREE.posById[path[path.length-1]];
+  if (!pos) return;
+  const vw = treeViewport.clientWidth || 320, vh = treeViewport.clientHeight || 400;
+  panX = vw/2 - pos.x*zoom;
+  panY = vh*0.32 - pos.y*zoom;
+  applyTransform(animate);
+}
+function zoomBy(factor, cx, cy){
+  const vw = treeViewport.clientWidth, vh = treeViewport.clientHeight;
+  const px = cx===undefined ? vw/2 : cx, py = cy===undefined ? vh/2 : cy;
+  const worldX = (px-panX)/zoom, worldY = (py-panY)/zoom;
+  zoom = clampZoom(zoom*factor);
+  panX = px - worldX*zoom;
+  panY = py - worldY*zoom;
+  applyTransform(true);
+  dismissHint();
+}
+
+treeViewport.addEventListener("pointerdown", e=>{
+  if (e.pointerType==="mouse" && e.button!==0) return;
+  dragState = { startX:e.clientX, startY:e.clientY, panX0:panX, panY0:panY, moved:false, pointerId:e.pointerId };
+  treeViewport.setPointerCapture(e.pointerId);
+  treeViewport.classList.add("grabbing");
+});
+treeViewport.addEventListener("pointermove", e=>{
+  if (!dragState || dragState.pointerId!==e.pointerId) return;
+  const dx = e.clientX-dragState.startX, dy = e.clientY-dragState.startY;
+  if (Math.abs(dx)>4 || Math.abs(dy)>4) dragState.moved = true;
+  if (!dragState.moved) return;
+  panX = dragState.panX0+dx; panY = dragState.panY0+dy;
+  applyTransform(false);
+});
+function endTreeDrag(e){
+  if (!dragState || (e.pointerId!==undefined && dragState.pointerId!==e.pointerId)) return;
+  if (dragState.moved){
+    suppressClick = true;
+    setTimeout(()=>{ suppressClick = false; }, 60);
+    dismissHint();
+  }
+  treeViewport.classList.remove("grabbing");
+  dragState = null;
+}
+treeViewport.addEventListener("pointerup", endTreeDrag);
+treeViewport.addEventListener("pointercancel", endTreeDrag);
+
+treeViewport.addEventListener("wheel", e=>{
+  e.preventDefault();
+  const rect = treeViewport.getBoundingClientRect();
+  zoomBy(Math.pow(1.0015, -e.deltaY), e.clientX-rect.left, e.clientY-rect.top);
+}, { passive:false });
+
+treeViewport.addEventListener("touchstart", e=>{
+  if (e.touches.length===2){
+    dragState = null;
+    const [a,b] = e.touches;
+    pinchState = {
+      dist: Math.hypot(a.clientX-b.clientX, a.clientY-b.clientY),
+      zoom0: zoom, panX0: panX, panY0: panY,
+      midX: (a.clientX+b.clientX)/2, midY: (a.clientY+b.clientY)/2
+    };
+  }
+}, { passive:true });
+treeViewport.addEventListener("touchmove", e=>{
+  if (!pinchState || e.touches.length!==2) return;
+  e.preventDefault();
+  const [a,b] = e.touches;
+  const dist = Math.hypot(a.clientX-b.clientX, a.clientY-b.clientY);
+  const rect = treeViewport.getBoundingClientRect();
+  const lx = pinchState.midX-rect.left, ly = pinchState.midY-rect.top;
+  const worldX = (lx-pinchState.panX0)/pinchState.zoom0, worldY = (ly-pinchState.panY0)/pinchState.zoom0;
+  zoom = clampZoom(pinchState.zoom0 * (dist/pinchState.dist));
+  panX = lx - worldX*zoom;
+  panY = ly - worldY*zoom;
+  applyTransform(false);
+  dismissHint();
+}, { passive:false });
+treeViewport.addEventListener("touchend", e=>{ if (e.touches.length<2) pinchState = null; });
+
+document.getElementById("treeZoomIn").onclick = ()=> zoomBy(1.25);
+document.getElementById("treeZoomOut").onclick = ()=> zoomBy(1/1.25);
+document.getElementById("treeRecenter").onclick = ()=>{ zoom = defaultZoom(); centerOnCurrentNode(true); dismissHint(); };
+
+buildTreeLayout();
+buildTreeDOM();
 
 const FLAGS_KEY = "guardian_matrix_flags";
 function loadFlags(){
@@ -1743,59 +2048,6 @@ function goBack(){
   render();
 }
 
-function renderMap(){
-  const centerId = path[path.length-1];
-  const node = NODES[centerId];
-  const wrap = document.getElementById("mapWrap");
-  const svg = document.getElementById("mapSvg");
-  const nodesEl = document.getElementById("mapNodes");
-  svg.innerHTML = "";
-  nodesEl.innerHTML = "";
-
-  const w = wrap.clientWidth || 320;
-  const h = wrap.clientHeight || 420;
-  const cx = w/2, cy = h/2;
-
-  // center node
-  const centerDiv = document.createElement("div");
-  centerDiv.className = "map-node center";
-  centerDiv.style.left = cx+"px";
-  centerDiv.style.top = cy+"px";
-  centerDiv.textContent = node.title;
-  nodesEl.appendChild(centerDiv);
-
-  const children = node.children || [];
-  const n = children.length;
-  if (n === 0){
-    document.getElementById("backRow").style.display = path.length>1 ? "flex" : "none";
-    return;
-  }
-  const radius = Math.max(85, Math.min(w/2 - 55, h/2 - 65, 175));
-  children.forEach((cid, i)=>{
-    const angle = -Math.PI/2 + i * (2*Math.PI/n);
-    const x = cx + radius*Math.cos(angle);
-    const y = cy + radius*Math.sin(angle);
-
-    const line = document.createElementNS("http://www.w3.org/2000/svg","line");
-    line.setAttribute("x1", cx); line.setAttribute("y1", cy);
-    line.setAttribute("x2", x); line.setAttribute("y2", y);
-    svg.appendChild(line);
-
-    const cn = NODES[cid];
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "map-node type-" + cn.type;
-    btn.style.left = x+"px";
-    btn.style.top = y+"px";
-    const ptsLbl = pointsLabel(cn.points);
-    btn.innerHTML = cn.title + (ptsLbl ? `<span class="pts">${ptsLbl}</span>` : "");
-    btn.onclick = ()=>goNode(cid);
-    nodesEl.appendChild(btn);
-  });
-
-  document.getElementById("backRow").style.display = path.length>1 ? "flex" : "none";
-}
-
 function computeGuidance(node){
   // Only meaningful for decision-bearing node types
   if (!["position","submission","threat"].includes(node.type)) return null;
@@ -1829,106 +2081,6 @@ function computeGuidance(node){
   }
 
   return null;
-}
-
-function renderFlow(){
-  const svg = document.getElementById("flowSvg");
-  const nodesEl = document.getElementById("flowNodes");
-  const wrap = document.getElementById("flowWrap");
-  svg.innerHTML = "";
-  nodesEl.innerHTML = "";
-
-  const colW = 128;
-  const rowSpacing = 72; // > tallest .flow-node (min-height 44 + wrapped titles) so stacked options never overlap
-  const startX = 74;
-
-  // total columns = path length + 1 (for the "next options" column after the current node)
-  const lastNode = NODES[path[path.length-1]];
-  const nextOptions = lastNode.children || [];
-  const totalCols = path.length + (nextOptions.length ? 1 : 0);
-  const totalWidth = Math.max(wrap.clientWidth || 320, startX*2 + (totalCols-1)*colW + 120);
-
-  // Tallest column decides the canvas height — grow it (and scroll) rather than overlap
-  let maxOffset = nextOptions.length ? ((nextOptions.length-1)/2) * rowSpacing : 0;
-  path.forEach((id, i)=>{
-    if (i > 0){
-      const altCount = ((NODES[path[i-1]].children||[]).length) - 1;
-      if (altCount > 0) maxOffset = Math.max(maxOffset, Math.ceil(altCount/2) * rowSpacing);
-    }
-  });
-  const h = Math.max(wrap.clientHeight || 420, Math.ceil(maxOffset*2) + 140);
-  const centerY = h/2;
-
-  svg.setAttribute("width", totalWidth);
-  svg.setAttribute("height", h);
-  svg.style.height = h+"px";
-  nodesEl.style.width = totalWidth+"px";
-  nodesEl.style.height = h+"px";
-
-  function drawLine(x1,y1,x2,y2,spine){
-    const line = document.createElementNS("http://www.w3.org/2000/svg","line");
-    line.setAttribute("x1",x1); line.setAttribute("y1",y1);
-    line.setAttribute("x2",x2); line.setAttribute("y2",y2);
-    if (spine) line.setAttribute("class","spine");
-    svg.appendChild(line);
-  }
-  function placeNode(x,y,cls,title,pts,onclick){
-    // Clickable nodes are real buttons so they're keyboard-operable
-    const div = document.createElement(onclick ? "button" : "div");
-    if (onclick) div.type = "button";
-    div.className = "flow-node " + cls;
-    div.style.left = x+"px"; div.style.top = y+"px";
-    const ptsLbl = pointsLabel(pts);
-    div.innerHTML = title + (ptsLbl && cls!=="alt" ? `<span class="pts">${ptsLbl}</span>` : "");
-    if (onclick) div.onclick = onclick;
-    nodesEl.appendChild(div);
-  }
-
-  // Spine: the path itself, left to right
-  path.forEach((id, i)=>{
-    const x = startX + i*colW;
-    const n = NODES[id];
-    const isCurrent = i === path.length-1;
-    placeNode(x, centerY, "spine" + (isCurrent?" current":""), n.title, n.points,
-      isCurrent ? null : ()=>{ path = path.slice(0, i+1); render(); });
-
-    if (i > 0){
-      drawLine(startX+(i-1)*colW, centerY, x, centerY, true);
-    }
-
-    // Alternatives at this step: siblings from the previous node that weren't taken
-    if (i > 0){
-      const parent = NODES[path[i-1]];
-      const alts = (parent.children||[]).filter(cid=>cid!==id);
-      const px = startX + (i-1)*colW;
-      alts.forEach((aid, j)=>{
-        const side = j % 2 === 0 ? 1 : -1;
-        const rank = Math.floor(j/2) + 1;
-        const ay = centerY + side * rank * rowSpacing;
-        const an = NODES[aid];
-        drawLine(px, centerY, x, ay, false);
-        placeNode(x, ay, "alt", an.title, an.points, ()=>{
-          path = path.slice(0, i).concat([aid]);
-          render();
-        });
-      });
-    }
-  });
-
-  // Next options column — forward choices from the current node
-  if (nextOptions.length){
-    const x = startX + path.length*colW;
-    const lastX = startX + (path.length-1)*colW;
-    nextOptions.forEach((cid, j)=>{
-      const spread = (nextOptions.length-1)/2;
-      const y = centerY + (j - spread) * rowSpacing;
-      const cn = NODES[cid];
-      drawLine(lastX, centerY, x, y, false);
-      placeNode(x, y, "next", cn.title, cn.points, ()=>goNode(cid));
-    });
-  }
-
-  document.getElementById("backRow").style.display = path.length>1 ? "flex" : "none";
 }
 
 function renderDetail(){
@@ -1992,7 +2144,7 @@ function render(){
     }
   });
 
-  if (viewMode === "flow") renderFlow(); else renderMap();
+  renderTree();
   renderDetail();
 }
 
@@ -2088,27 +2240,8 @@ searchInput.addEventListener("input", ()=>{
   });
 });
 
-window.addEventListener("resize", ()=>{ if (viewMode==="flow") renderFlow(); else renderMap(); });
+window.addEventListener("resize", ()=> centerOnCurrentNode(false));
 
-// ---- View mode toggle ----
-document.getElementById("viewMapBtn").onclick = ()=>{
-  viewMode = "map";
-  document.getElementById("viewMapBtn").classList.add("active");
-  document.getElementById("viewFlowBtn").classList.remove("active");
-  document.getElementById("mapWrap").style.display = "";
-  document.getElementById("flowWrap").style.display = "none";
-  document.getElementById("mapHint").textContent = "Tap a node to expand it";
-  renderMap();
-};
-document.getElementById("viewFlowBtn").onclick = ()=>{
-  viewMode = "flow";
-  document.getElementById("viewFlowBtn").classList.add("active");
-  document.getElementById("viewMapBtn").classList.remove("active");
-  document.getElementById("mapWrap").style.display = "none";
-  document.getElementById("flowWrap").style.display = "";
-  document.getElementById("mapHint").textContent = "Scroll to see the full chain — dimmed nodes are the branches you didn't take";
-  renderFlow();
-};
 // ---- Export ----
 function buildExportText(){
   const {total, win, loss} = computeScore();
@@ -2300,6 +2433,8 @@ const _render = render;
 render = function(){
   _render();
   updateExportVisibility();
+  centerOnCurrentNode(!firstRender);
+  firstRender = false;
 };
 
 // Escape closes any open overlay (modals, search panel)
@@ -2313,10 +2448,11 @@ document.addEventListener("keydown", e=>{
 });
 
 updateFlagsCount();
-// Defer initial render to let CSS flex layout settle before reading clientHeight
-// This ensures map canvas captures correct dimensions
+// Defer initial render to let CSS flex layout settle before reading the
+// tree viewport's size — needed for the default zoom level and centering.
 requestAnimationFrame(function(){
   requestAnimationFrame(function(){
+    zoom = defaultZoom();
     render();
   });
 });
