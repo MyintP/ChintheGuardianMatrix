@@ -335,7 +335,7 @@ footer{
       <p class="module-desc">The complete technique database. Submissions, positions, passes, sweeps, and takedowns — every entry with competition-sharp mechanics, common mistakes, and drills.</p>
       <div class="module-meta">
         <span class="module-meta-dot live"></span>
-        Live &nbsp;·&nbsp; 60 Techniques &nbsp;·&nbsp; Searchable
+        Live &nbsp;·&nbsp; <span id="techCount">Technique Database</span> &nbsp;·&nbsp; Searchable
       </div>
     </a>
     <a class="module-card" href="journal.html">
@@ -424,10 +424,18 @@ footer{
   </div>
 </footer>
 
+<script src="chinthe.js"></script>
 <script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').catch(()=>{});
-}
+// Derive the technique count from the Knowledge Base so the two can never diverge.
+// Counts the id:"…" keys of the DB entries in knowledge.html; falls back to the
+// generic label if the fetch fails (e.g. first visit while offline).
+fetch('knowledge.html')
+  .then(r => r.ok ? r.text() : Promise.reject())
+  .then(html => {
+    const count = (html.match(/\bid:"/g) || []).length;
+    if (count) document.getElementById('techCount').textContent = count + ' Techniques';
+  })
+  .catch(() => {});
 </script>
 </body>
 </html>

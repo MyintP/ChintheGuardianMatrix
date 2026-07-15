@@ -253,7 +253,13 @@ function renderTags(){
   techTags.forEach(t=>{
     const pill=document.createElement("span");
     pill.className="tag-pill";
-    pill.innerHTML=`${t}<button onclick="removeTag('${t}')">✕</button>`;
+    pill.appendChild(document.createTextNode(t));
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.setAttribute("aria-label","Remove "+t);
+    btn.textContent="✕";
+    btn.addEventListener("click",()=>removeTag(t));
+    pill.appendChild(btn);
     techWrap.insertBefore(pill, techInput);
   });
 }
@@ -339,32 +345,65 @@ function renderAll(){
   }
   list.innerHTML="";
   sessions.forEach(s=>{
-    const card=document.createElement("div");
-    card.className="session-card";
-    const badgeClass=`badge-${s.type}`;
+    const card=el("div","session-card");
     const typeLabel={drilling:"Drilling",sparring:"Sparring",competition:"Competition",conditioning:"Conditioning"}[s.type]||s.type;
-    card.innerHTML=`
-      <div class="session-header" onclick="toggleSession('${s.id}')">
-        <div>
-          <div class="session-date">${fmtDate(s.date)}</div>
-          <div class="session-title">${s.title}</div>
-          <div class="session-meta">${s.techniques.length?s.techniques.slice(0,3).join(" · ")+(s.techniques.length>3?" +"+(s.techniques.length-3)+" more":""):""}</div>
-        </div>
-        <span class="session-badge ${badgeClass}">${typeLabel}</span>
-      </div>
-      <div class="session-body" id="sb-${s.id}">
-        ${s.techniques.length?`<div class="session-field"><div class="session-field-label">Techniques</div><div class="session-tags">${s.techniques.map(t=>`<span class="session-tag">${t}</span>`).join("")}</div></div>`:""}
-        ${s.worked?`<div class="session-field"><div class="session-field-label">What Worked</div><div class="session-field-text">${s.worked}</div></div>`:""}
-        ${s.needs?`<div class="session-field"><div class="session-field-label">Needs Work</div><div class="session-field-text" style="color:#E86868">${s.needs}</div></div>`:""}
-        ${s.drill?`<div class="session-field"><div class="session-field-label">Next Drill Focus</div><div class="session-field-text">${s.drill}</div></div>`:""}
-        ${s.notes?`<div class="session-field"><div class="session-field-label">Notes</div><div class="session-field-text" style="color:var(--stone-dim)">${s.notes}</div></div>`:""}
-        <div class="session-actions">
-          <button class="btn-delete-session" onclick="deleteSession('${s.id}')">Delete session</button>
-        </div>
-      </div>
-    `;
+    const techniques=s.techniques||[];
+
+    // Header
+    const header=el("div","session-header");
+    header.addEventListener("click",()=>toggleSession(s.id));
+    const headLeft=el("div");
+    headLeft.appendChild(el("div","session-date",fmtDate(s.date)));
+    headLeft.appendChild(el("div","session-title",s.title));
+    const metaText=techniques.length
+      ? techniques.slice(0,3).join(" · ")+(techniques.length>3?" +"+(techniques.length-3)+" more":"")
+      : "";
+    headLeft.appendChild(el("div","session-meta",metaText));
+    header.appendChild(headLeft);
+    header.appendChild(el("span",`session-badge badge-${s.type}`,typeLabel));
+    card.appendChild(header);
+
+    // Body
+    const body=el("div","session-body");
+    body.id=`sb-${s.id}`;
+    const field=(label,text,color)=>{
+      const f=el("div","session-field");
+      f.appendChild(el("div","session-field-label",label));
+      const txt=el("div","session-field-text",text);
+      if(color)txt.style.color=color;
+      f.appendChild(txt);
+      body.appendChild(f);
+    };
+    if(techniques.length){
+      const f=el("div","session-field");
+      f.appendChild(el("div","session-field-label","Techniques"));
+      const tags=el("div","session-tags");
+      techniques.forEach(t=>tags.appendChild(el("span","session-tag",t)));
+      f.appendChild(tags);
+      body.appendChild(f);
+    }
+    if(s.worked)field("What Worked",s.worked);
+    if(s.needs)field("Needs Work",s.needs,"#E86868");
+    if(s.drill)field("Next Drill Focus",s.drill);
+    if(s.notes)field("Notes",s.notes,"var(--stone-dim)");
+    const actions=el("div","session-actions");
+    const delBtn=el("button","btn-delete-session","Delete session");
+    delBtn.type="button";
+    delBtn.addEventListener("click",()=>deleteSession(s.id));
+    actions.appendChild(delBtn);
+    body.appendChild(actions);
+    card.appendChild(body);
+
     list.appendChild(card);
   });
+}
+
+// Small DOM helper — builds an element with optional class and textContent
+function el(tag,className,text){
+  const node=document.createElement(tag);
+  if(className)node.className=className;
+  if(text!==undefined&&text!==null&&text!=="")node.textContent=text;
+  return node;
 }
 
 function toggleSession(id){
@@ -397,5 +436,6 @@ function exportAll(){
 
 renderAll();
 </script>
+<script src="chinthe.js"></script>
 </body>
 </html>

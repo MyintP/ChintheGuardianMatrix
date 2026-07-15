@@ -29,6 +29,7 @@
   --crimson:     #8D2323;
   --steel:       #5C7A85;
   --danger:      #B5462F;
+  --danger-dim:  #2A1610;
 
   /* Utility */
   --line:        rgba(245, 243, 236, 0.08);
@@ -188,6 +189,51 @@ a {
   transition: opacity 0.15s;
 }
 .site-nav-cta:hover { opacity: 0.88; }
+
+/* Mobile menu toggle — injected by chinthe.js, hidden at md+ */
+.site-nav-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+}
+.site-nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--stone);
+  border-radius: 1px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.site-nav.menu-open .site-nav-toggle span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.site-nav.menu-open .site-nav-toggle span:nth-child(2) { opacity: 0; }
+.site-nav.menu-open .site-nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* Mobile dropdown panel */
+.site-nav.menu-open .site-nav-links {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  position: absolute;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  background: rgba(13, 0, 13, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  padding: 8px 12px 14px;
+}
+.site-nav.menu-open .site-nav-link {
+  font-size: 13px;
+  padding: 12px 14px;
+}
 
 /* ═══════════════════════════════════════════════════
    5. PAGE SHELL — for content pages (not Matrix)
@@ -383,6 +429,21 @@ a {
   .site-nav-inner  { padding: 0 40px; }
   .site-nav-links  { display: flex; }
   .site-nav-link   { font-size: 11.5px; padding: 8px 14px; }
+  .site-nav-toggle { display: none; }
+
+  /* Neutralize the mobile dropdown if the menu-open class lingers */
+  .site-nav.menu-open .site-nav-links {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: 2px;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 0;
+    padding: 0;
+  }
+  .site-nav.menu-open .site-nav-link { font-size: 11.5px; padding: 8px 14px; }
   .page-wrap       { padding: 0 40px; }
 
   .modal {

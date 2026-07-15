@@ -1,4 +1,4 @@
-const CACHE = "chinthe-v2";
+const CACHE = "chinthe-v3";
 const SHELL = [
   "./",
   "./index.html",
@@ -6,7 +6,11 @@ const SHELL = [
   "./knowledge.html",
   "./journal.html",
   "./principles.html",
-  "./manifest.json"
+  "./chinthe.css",
+  "./chinthe.js",
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
 self.addEventListener("install", e => {

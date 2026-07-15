@@ -2,11 +2,25 @@
 *.png
 *.jpeg
 *.jpg
+
+# PWA icons are the only images that belong in the repo
+!icon-192.png
+!icon-512.png
+
+# Ebooks and extracted text — never commit
+*.pdf
+*.epub
+*.mobi
+*.azw3
+*.txt
+t.slice(0
 CHINTHE_Brand_System_v0.1.md
 CHINTHE_Guardian_Matrix_Alpha.html
 CHINTHE_Guardian_Matrix_Field_Test.html
 CHINTHE_Guardian_Matrix_Project_Notes.md
 CHINTHE_Guardian_Matrix_v2.html
 grapple-chain*.html
+chinthe-guardian-matrix_2.html
+personal-combat-codex.html
 "Pasted text.txt"
 .codex/

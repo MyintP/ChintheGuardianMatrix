@@ -276,7 +276,7 @@ main { padding: 12px 16px 60px; }
 /* ── Flow view ── */
 .flow-wrap {
   position: relative; width: 100%; height: 400px; margin-top: 4px;
-  overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+  overflow-x: auto; overflow-y: auto; -webkit-overflow-scrolling: touch;
   background: var(--mat-elev); border: 1px solid var(--line); border-radius: var(--radius);
 }
 .flow-svg { position: absolute; top: 0; left: 0; height: 100%; }
@@ -1699,16 +1699,24 @@ function computeScore(){
   return {total, win, loss};
 }
 
+function scrollCanvasTop(){
+  // On desktop (≥900px) html/body are overflow:hidden and <main> is the real
+  // scroll container; on mobile the document scrolls. Scroll both — the
+  // inactive one is a harmless no-op.
+  const main = document.querySelector("main");
+  if (main) main.scrollTo({top:0, behavior:"smooth"});
+  window.scrollTo({top:0, behavior:"smooth"});
+}
 function goNode(id){
   path.push(id);
   render();
-  window.scrollTo({top:0, behavior:"smooth"});
+  scrollCanvasTop();
 }
 function jumpTo(id){
   path = [id];
   document.getElementById("searchPanel").classList.remove("open");
   render();
-  window.scrollTo({top:0, behavior:"smooth"});
+  scrollCanvasTop();
 }
 function goBack(){
   if (path.length > 1) path.pop();
@@ -1810,9 +1818,7 @@ function renderFlow(){
   nodesEl.innerHTML = "";
 
   const colW = 128;
-  const rowH = 56;
-  const h = wrap.clientHeight || 420;
-  const centerY = h/2;
+  const rowSpacing = 72; // > tallest .flow-node (min-height 44 + wrapped titles) so stacked options never overlap
   const startX = 74;
 
   // total columns = path length + 1 (for the "next options" column after the current node)
@@ -1820,9 +1826,23 @@ function renderFlow(){
   const nextOptions = lastNode.children || [];
   const totalCols = path.length + (nextOptions.length ? 1 : 0);
   const totalWidth = Math.max(wrap.clientWidth || 320, startX*2 + (totalCols-1)*colW + 120);
+
+  // Tallest column decides the canvas height — grow it (and scroll) rather than overlap
+  let maxOffset = nextOptions.length ? ((nextOptions.length-1)/2) * rowSpacing : 0;
+  path.forEach((id, i)=>{
+    if (i > 0){
+      const altCount = ((NODES[path[i-1]].children||[]).length) - 1;
+      if (altCount > 0) maxOffset = Math.max(maxOffset, Math.ceil(altCount/2) * rowSpacing);
+    }
+  });
+  const h = Math.max(wrap.clientHeight || 420, Math.ceil(maxOffset*2) + 140);
+  const centerY = h/2;
+
   svg.setAttribute("width", totalWidth);
   svg.setAttribute("height", h);
+  svg.style.height = h+"px";
   nodesEl.style.width = totalWidth+"px";
+  nodesEl.style.height = h+"px";
 
   function drawLine(x1,y1,x2,y2,spine){
     const line = document.createElementNS("http://www.w3.org/2000/svg","line");
@@ -1861,7 +1881,7 @@ function renderFlow(){
       alts.forEach((aid, j)=>{
         const side = j % 2 === 0 ? 1 : -1;
         const rank = Math.floor(j/2) + 1;
-        const ay = centerY + side * rank * rowH * 0.62;
+        const ay = centerY + side * rank * rowSpacing;
         const an = NODES[aid];
         drawLine(px, centerY, x, ay, false);
         placeNode(x, ay, "alt", an.title, an.points, ()=>{
@@ -1878,7 +1898,7 @@ function renderFlow(){
     const lastX = startX + (path.length-1)*colW;
     nextOptions.forEach((cid, j)=>{
       const spread = (nextOptions.length-1)/2;
-      const y = centerY + (j - spread) * rowH * 0.75;
+      const y = centerY + (j - spread) * rowSpacing;
       const cn = NODES[cid];
       drawLine(lastX, centerY, x, y, false);
       placeNode(x, y, "next", cn.title, cn.points, ()=>goNode(cid));
@@ -1941,7 +1961,7 @@ function render(){
     const btn = document.createElement("div");
     btn.className = "chain-node" + (i===path.length-1 ? " current" : "");
     btn.textContent = n.title;
-    btn.onclick = ()=>{ path = path.slice(0, i+1); render(); window.scrollTo({top:0, behavior:"smooth"}); };
+    btn.onclick = ()=>{ path = path.slice(0, i+1); render(); scrollCanvasTop(); };
     item.appendChild(btn);
     trail.appendChild(item);
     if (i < path.length-1){
@@ -2192,19 +2212,28 @@ function renderFlagsList(){
     const item = document.createElement("div");
     item.className = "flag-list-item";
     const date = new Date(f.timestamp).toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
-    item.innerHTML = `
-      <div class="fl-title">${f.title}</div>
-      <div class="fl-meta">${f.type.toUpperCase()} · ${date}</div>
-      <div class="fl-note">${f.note}</div>
-      <button class="fl-delete" data-idx="${i}">Delete</button>
-    `;
-    item.querySelector(".fl-delete").onclick = ()=>{
+    // Built with textContent — flag titles/notes are user input and must never hit innerHTML
+    const title = document.createElement("div");
+    title.className = "fl-title";
+    title.textContent = f.title;
+    const meta = document.createElement("div");
+    meta.className = "fl-meta";
+    meta.textContent = `${(f.type||"").toUpperCase()} · ${date}`;
+    const note = document.createElement("div");
+    note.className = "fl-note";
+    note.textContent = f.note;
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "fl-delete";
+    del.textContent = "Delete";
+    del.addEventListener("click", ()=>{
       const all = loadFlags();
       all.splice(i,1);
       saveFlags(all);
       updateFlagsCount();
       renderFlagsList();
-    };
+    });
+    item.append(title, meta, note, del);
     body.appendChild(item);
   });
 }
@@ -2260,14 +2289,9 @@ requestAnimationFrame(function(){
   });
 });
 
-// Re-render on resize to recompute map dimensions
-window.addEventListener('resize', function(){
-  if(viewMode==='flow') renderFlow(); else renderMap();
-});
-
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').catch(()=>{});
-}
+// Resize re-render is registered once above (near the search handler);
+// nav + service worker are handled by the shared chinthe.js.
 </script>
+<script src="chinthe.js"></script>
 </body>
 </html>

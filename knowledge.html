@@ -949,10 +949,16 @@ function renderCards(){
       t.tagline.toLowerCase().includes(q) ||
       (t.tags||[]).some(tg=>tg.toLowerCase().includes(q)) ||
       (t.mechanics||"").toLowerCase().includes(q) ||
-      (t.objective||"").toLowerCase().includes(q);
+      (t.objective||"").toLowerCase().includes(q) ||
+      (t.defense||"").toLowerCase().includes(q) ||
+      (t.mistake||"").toLowerCase().includes(q) ||
+      (t.drill||"").toLowerCase().includes(q);
     return catMatch && textMatch;
   });
   meta.textContent = `${filtered.length} technique${filtered.length!==1?"s":""}`;
+  // Remember which card is expanded so re-rendering (typing, filtering) doesn't collapse it
+  const openEl = document.querySelector(".tech-detail.open");
+  const openId = openEl ? openEl.id.replace("detail-","") : null;
   grid.innerHTML = "";
   filtered.forEach(t=>{
     const card = document.createElement("div");
@@ -979,6 +985,10 @@ function renderCards(){
     card.querySelector(".tech-card-body").onclick = ()=>toggleCard(t.id);
     grid.appendChild(card);
   });
+  if(openId){
+    const d = document.getElementById(`detail-${openId}`);
+    if(d) d.classList.add("open");
+  }
 }
 
 function toggleCard(id){
@@ -1008,5 +1018,6 @@ document.getElementById("searchInput").addEventListener("input",e=>{
 
 renderCards();
 </script>
+<script src="chinthe.js"></script>
 </body>
 </html>
