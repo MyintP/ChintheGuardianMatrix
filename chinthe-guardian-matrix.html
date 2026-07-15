@@ -1903,20 +1903,29 @@ function zoomBy(factor, cx, cy){
 
 treeViewport.addEventListener("pointerdown", e=>{
   if (e.pointerType==="mouse" && e.button!==0) return;
-  dragState = { startX:e.clientX, startY:e.clientY, panX0:panX, panY0:panY, moved:false, pointerId:e.pointerId };
-  treeViewport.setPointerCapture(e.pointerId);
-  treeViewport.classList.add("grabbing");
+  // Do NOT capture the pointer here: capturing on pointerdown makes the
+  // browser dispatch the synthesized `click` to the viewport instead of the
+  // node button, so taps never navigate. We only capture once a real drag
+  // starts (in pointermove, below).
+  dragState = { startX:e.clientX, startY:e.clientY, panX0:panX, panY0:panY, moved:false, pointerId:e.pointerId, captured:false };
 });
 treeViewport.addEventListener("pointermove", e=>{
   if (!dragState || dragState.pointerId!==e.pointerId) return;
   const dx = e.clientX-dragState.startX, dy = e.clientY-dragState.startY;
-  if (Math.abs(dx)>4 || Math.abs(dy)>4) dragState.moved = true;
+  if (!dragState.moved && (Math.abs(dx)>4 || Math.abs(dy)>4)){
+    dragState.moved = true;
+    // Now it's a genuine drag — capture so panning survives the pointer
+    // leaving the viewport, and a tap (which never reaches here) stays clickable.
+    try { treeViewport.setPointerCapture(e.pointerId); dragState.captured = true; } catch(_){}
+    treeViewport.classList.add("grabbing");
+  }
   if (!dragState.moved) return;
   panX = dragState.panX0+dx; panY = dragState.panY0+dy;
   applyTransform(false);
 });
 function endTreeDrag(e){
   if (!dragState || (e.pointerId!==undefined && dragState.pointerId!==e.pointerId)) return;
+  if (dragState.captured){ try { treeViewport.releasePointerCapture(dragState.pointerId); } catch(_){} }
   if (dragState.moved){
     suppressClick = true;
     setTimeout(()=>{ suppressClick = false; }, 60);
