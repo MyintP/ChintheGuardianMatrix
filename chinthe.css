@@ -19,15 +19,15 @@
   --surface-2:   #1B1E22;
   --surface-3:   #252A30;
 
-  /* Brand colours */
-  --jade:        #0F3B2E;
+  /* Brand colours — CHINTHE brand system (gold/forest/ivory) */
+  --jade:        #0E2B22;
   --jade-bright: #3FA383;
-  --gold:        #D4AF37;
+  --gold:        #D4A017;
   --gold-dim:    #2A2210;
-  --stone:       #F5F3EC;
+  --stone:       #F2EDE2;
   --stone-dim:   #A29E93;
   --crimson:     #8D2323;
-  --steel:       #5C7A85;
+  --steel:       #7A7A7A;
   --danger:      #B5462F;
   --danger-dim:  #2A1610;
 
@@ -41,8 +41,9 @@
   /* Nav */
   --nav-h: 54px;
 
-  /* Typography scale */
-  --font-display: 'Bebas Neue', 'Oswald', sans-serif;
+  /* Typography scale — Oswald headlines, Cinzel accents (brand system) */
+  --font-display: 'Oswald', sans-serif;
+  --font-serif:   'Cinzel', serif;
   --font-body:    'Inter', 'IBM Plex Sans', sans-serif;
   --font-mono:    'IBM Plex Mono', monospace;
   --font-myanmar: 'Noto Sans Myanmar', sans-serif;
@@ -143,12 +144,9 @@ a {
 .site-nav-lion {
   width: 28px;
   height: 28px;
-  background: linear-gradient(135deg, var(--gold), #E8C468);
   border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
+  display: block;
+  object-fit: cover;
   flex-shrink: 0;
 }
 

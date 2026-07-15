@@ -3,9 +3,10 @@
 *.jpeg
 *.jpg
 
-# PWA icons are the only images that belong in the repo
+# Brand images that belong in the repo
 !icon-192.png
 !icon-512.png
+!chinthe-lion.png
 
 # Ebooks and extracted text — never commit
 *.pdf

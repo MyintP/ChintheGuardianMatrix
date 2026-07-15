@@ -6,14 +6,15 @@
 <meta name="theme-color" content="#0D000D">
 <title>Principles — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="chinthe-lion.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="chinthe.css">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Cinzel:wght@400;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0D000D;--surface:#111315;--surface-2:#1B1E22;--surface-3:#222222;
-  --jade:#0F3B2E;--jade-bright:#3FA383;--gold:#D4AF37;--gold-dim:#2A2210;
-  --stone:#F5F3EC;--stone-dim:#A29E93;--crimson:#8D2323;--steel:#5C7A85;
+  --jade:#0E2B22;--jade-bright:#3FA383;--gold:#D4A017;--gold-dim:#2A2210;
+  --stone:#F2EDE2;--stone-dim:#A29E93;--crimson:#8D2323;--steel:#7A7A7A;
   --line:rgba(245,243,236,0.08);--radius:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -29,7 +30,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 }
 .hero-glow{position:absolute;top:-40%;left:30%;width:700px;height:700px;background:radial-gradient(ellipse,rgba(15,59,46,0.22) 0%,transparent 70%);pointer-events:none;}
 .page-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--jade-bright);text-transform:uppercase;margin-bottom:12px;}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,7vw,96px);text-transform:uppercase;letter-spacing:0.02em;line-height:0.95;margin-bottom:20px;}
+.page-title{font-family:'Oswald',sans-serif;font-size:clamp(48px,7vw,96px);text-transform:uppercase;letter-spacing:0.02em;line-height:0.95;margin-bottom:20px;}
 .page-title em{color:var(--gold);font-style:normal;}
 .page-intro{font-size:15px;color:var(--stone-dim);line-height:1.65;max-width:680px;margin-bottom:32px;}
 .source-strip{display:flex;gap:8px;flex-wrap:wrap;}
@@ -37,13 +38,13 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 
 /* ── PHILOSOPHY QUOTE ── */
 .philosophy-bar{background:var(--jade);padding:28px 40px;border-bottom:1px solid rgba(63,163,131,0.2);}
-.philosophy-bar blockquote{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3vw,40px);text-transform:uppercase;letter-spacing:0.02em;color:var(--stone);margin-bottom:8px;}
+.philosophy-bar blockquote{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(18px,2.5vw,32px);text-transform:uppercase;letter-spacing:0.04em;color:var(--stone);margin-bottom:8px;}
 .philosophy-bar cite{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(245,243,236,0.55);letter-spacing:0.1em;text-transform:uppercase;}
 
 /* ── SECTIONS ── */
 .section{padding:60px 40px;}
 .section-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--jade-bright);text-transform:uppercase;margin-bottom:10px;}
-.section-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,4vw,52px);text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px;}
+.section-heading{font-family:'Oswald',sans-serif;font-size:clamp(32px,4vw,52px);text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px;}
 .section-sub{font-size:14px;color:var(--stone-dim);line-height:1.6;max-width:600px;margin-bottom:44px;}
 
 /* ── PRINCIPLE CARDS ── */
@@ -72,7 +73,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 
 .principle-header{padding:20px 22px 16px;}
 .principle-num{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--stone-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;}
-.principle-name{font-family:'Bebas Neue',sans-serif;font-size:26px;text-transform:uppercase;letter-spacing:0.02em;line-height:1;margin-bottom:8px;}
+.principle-name{font-family:'Oswald',sans-serif;font-size:26px;text-transform:uppercase;letter-spacing:0.02em;line-height:1;margin-bottom:8px;}
 .principle-tagline{font-size:13px;color:var(--stone-dim);line-height:1.5;}
 .principle-body{
   display:none;padding:0 22px 22px;border-top:1px solid var(--line);
@@ -95,7 +96,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 /* ── CHESS SECTION ── */
 .chess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:8px;}
 .chess-card{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:18px 20px;}
-.chess-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.02em;text-transform:uppercase;margin-bottom:6px;color:var(--stone);}
+.chess-title{font-family:'Oswald',sans-serif;font-size:20px;letter-spacing:0.02em;text-transform:uppercase;margin-bottom:6px;color:var(--stone);}
 .chess-chess{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8E44AD;letter-spacing:0.08em;margin-bottom:8px;text-transform:uppercase;}
 .chess-text{font-size:13px;line-height:1.6;color:var(--stone-dim);}
 
@@ -118,7 +119,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 /* ── GRIPS SECTION ── */
 .grips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px;}
 .grip-card{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:16px 18px;}
-.grip-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.02em;text-transform:uppercase;margin-bottom:5px;}
+.grip-name{font-family:'Oswald',sans-serif;font-size:18px;letter-spacing:0.02em;text-transform:uppercase;margin-bottom:5px;}
 .grip-use{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:7px;}
 .grip-desc{font-size:13px;line-height:1.55;color:var(--stone-dim);}
 
@@ -151,7 +152,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 <nav class="site-nav">
   <div class="site-nav-inner">
     <a class="site-nav-brand" href="index.html">
-      <div class="site-nav-lion">⊕</div>
+      <img class="site-nav-lion" src="chinthe-lion.png" alt="" width="28" height="28">
       <span class="site-nav-wordmark">CHINTHE</span>
     </a>
     <div class="site-nav-links">
