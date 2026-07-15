@@ -1691,7 +1691,13 @@ let dragState = null, pinchState = null, suppressClick = false, firstRender = tr
 const REDUCE_MOTION = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
 
 function buildTreeLayout(){
-  const NODE_W = 132, TIER_H = 140, PAD_X = 90, PAD_Y = 80;
+  // Radial constellation layout (PoE-style): hub at the center, each BFS
+  // tier on a ring. The old top-down dendrogram put every leaf in its own
+  // column — an 8100px-wide ribbon where the hub's branches sat 6600px
+  // apart and the viewport was almost always empty. Rings pack the same
+  // graph into a roughly square canvas that pans/zooms sensibly.
+  const RING_GAP = 200, MIN_ARC = 150, FIRST_RING = 260, PAD = 170;
+
   const tierOf = { hub: 0 };
   const primaryChildrenOf = {};
   const seen = new Set(["hub"]);
@@ -1712,24 +1718,43 @@ function buildTreeLayout(){
     });
   }
 
-  // Classic tidy-tree x-assignment: leaves get sequential slots, each
-  // parent's x is the midpoint of its first/last child.
+  // Angular slots: leaves get sequential slots around the full circle
+  // (DFS order keeps subtrees contiguous), parents sit at the midpoint of
+  // their first/last child — the radial analogue of a tidy tree.
   let nextSlot = 0;
-  const xOf = {};
-  function assignX(id){
+  const slotOf = {};
+  (function assignSlot(id){
     const kids = primaryChildrenOf[id] || [];
-    if (!kids.length){ xOf[id] = nextSlot++; return xOf[id]; }
-    kids.forEach(assignX);
-    xOf[id] = (xOf[kids[0]] + xOf[kids[kids.length-1]]) / 2;
-    return xOf[id];
-  }
-  assignX("hub");
+    if (!kids.length){ slotOf[id] = nextSlot++; return; }
+    kids.forEach(assignSlot);
+    slotOf[id] = (slotOf[kids[0]] + slotOf[kids[kids.length-1]]) / 2;
+  })("hub");
+  const totalSlots = Math.max(nextSlot, 1);
+  const angleOf = {};
+  Object.keys(slotOf).forEach(id=>{
+    angleOf[id] = (slotOf[id]/totalSlots) * Math.PI*2 - Math.PI/2; // start at 12 o'clock
+  });
 
+  // Ring radii: grow outward, and expand any ring whose closest two nodes
+  // would sit nearer than MIN_ARC px along the arc.
+  const maxTier = Math.max(...Object.keys(tierOf).map(id=>tierOf[id]));
+  const ringR = [0];
+  for (let t=1; t<=maxTier; t++){
+    let r = t===1 ? FIRST_RING : ringR[t-1] + RING_GAP;
+    const angles = Object.keys(tierOf).filter(id=>tierOf[id]===t).map(id=>angleOf[id]).sort((a,b)=>a-b);
+    if (angles.length > 1){
+      let minGap = angles[0] + Math.PI*2 - angles[angles.length-1]; // wraparound gap
+      for (let i=1; i<angles.length; i++) minGap = Math.min(minGap, angles[i]-angles[i-1]);
+      if (minGap > 1e-4) r = Math.max(r, MIN_ARC/minGap);
+    }
+    ringR[t] = r;
+  }
+
+  const C = (ringR[maxTier] || FIRST_RING) + PAD;
   const posById = {};
-  let maxTier = 0;
   Object.keys(tierOf).forEach(id=>{
-    maxTier = Math.max(maxTier, tierOf[id]);
-    posById[id] = { x: PAD_X + xOf[id]*NODE_W, y: PAD_Y + tierOf[id]*TIER_H };
+    const r = ringR[tierOf[id]];
+    posById[id] = { x: C + r*Math.cos(angleOf[id]), y: C + r*Math.sin(angleOf[id]) };
   });
 
   const edges = [];
@@ -1737,17 +1762,13 @@ function buildTreeLayout(){
     primaryChildrenOf[pid].forEach(cid=> edges.push({ from: pid, to: cid }));
   });
 
-  TREE = {
-    posById, tierOf, primaryChildrenOf, edges,
-    width: PAD_X*2 + nextSlot*NODE_W,
-    height: PAD_Y*2 + maxTier*TIER_H
-  };
+  TREE = { posById, tierOf, primaryChildrenOf, edges, width: C*2, height: C*2 };
   primaryEdgeKeys = new Set(edges.map(e=>e.from+"→"+e.to));
 }
 
 function edgeD(pa, pb){
-  const midY = (pa.y + pb.y) / 2;
-  return `M${pa.x},${pa.y} C${pa.x},${midY} ${pb.x},${midY} ${pb.x},${pb.y}`;
+  // Straight spokes read cleanly on a radial web
+  return `M${pa.x},${pa.y} L${pb.x},${pb.y}`;
 }
 
 function nodeGlyph(n){
@@ -1873,22 +1894,39 @@ const treeViewport = document.getElementById("treeViewport");
 const treeCanvas = document.getElementById("treeCanvas");
 const treeHint = document.getElementById("treeHint");
 
-function clampZoom(z){ return Math.min(1.6, Math.max(0.32, z)); }
+function clampZoom(z){ return Math.min(1.6, Math.max(0.08, z)); }
 function applyTransform(animate){
   treeCanvas.style.transition = (animate && !REDUCE_MOTION) ? "transform 0.35s cubic-bezier(.2,.8,.2,1)" : "none";
   treeCanvas.style.transform = `translate(${panX}px,${panY}px) scale(${zoom})`;
 }
 function dismissHint(){ treeHint.classList.add("faded"); }
-function defaultZoom(){
-  return treeViewport.clientWidth < 640 ? 0.82 : 1;
+function bboxOf(ids, pad){
+  let x0=Infinity, y0=Infinity, x1=-Infinity, y1=-Infinity;
+  ids.forEach(id=>{
+    const p = TREE.posById[id];
+    if (!p) return;
+    x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y);
+    x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y);
+  });
+  return { x0: x0-pad, y0: y0-pad, x1: x1+pad, y1: y1+pad };
 }
-function centerOnCurrentNode(animate){
-  const pos = TREE.posById[path[path.length-1]];
-  if (!pos) return;
+function fitBox(b, animate, maxZoom){
   const vw = treeViewport.clientWidth || 320, vh = treeViewport.clientHeight || 400;
-  panX = vw/2 - pos.x*zoom;
-  panY = vh*0.32 - pos.y*zoom;
+  const bw = Math.max(b.x1-b.x0, 1), bh = Math.max(b.y1-b.y0, 1);
+  zoom = clampZoom(Math.min(vw/bw, vh/bh, maxZoom || 1));
+  panX = vw/2 - (b.x0+b.x1)/2 * zoom;
+  panY = vh/2 - (b.y0+b.y1)/2 * zoom;
   applyTransform(animate);
+}
+// Frame the current node together with its options (children), its primary
+// parent, and the step we came from — every navigation lands on a view
+// where all your choices are on screen.
+function centerOnCurrentNode(animate){
+  const cur = path[path.length-1];
+  const ids = [cur, ...(NODES[cur].children || [])];
+  (PARENTS[cur] || []).forEach(p=>{ if (primaryEdgeKeys.has(p+"→"+cur)) ids.push(p); });
+  if (path.length > 1) ids.push(path[path.length-2]);
+  fitBox(bboxOf(ids, 115), animate, 1);
 }
 function zoomBy(factor, cx, cy){
   const vw = treeViewport.clientWidth, vh = treeViewport.clientHeight;
@@ -1972,7 +2010,7 @@ treeViewport.addEventListener("touchend", e=>{ if (e.touches.length<2) pinchStat
 
 document.getElementById("treeZoomIn").onclick = ()=> zoomBy(1.25);
 document.getElementById("treeZoomOut").onclick = ()=> zoomBy(1/1.25);
-document.getElementById("treeRecenter").onclick = ()=>{ zoom = defaultZoom(); centerOnCurrentNode(true); dismissHint(); };
+document.getElementById("treeRecenter").onclick = ()=>{ centerOnCurrentNode(true); dismissHint(); };
 
 buildTreeLayout();
 buildTreeDOM();
@@ -2458,10 +2496,9 @@ document.addEventListener("keydown", e=>{
 
 updateFlagsCount();
 // Defer initial render to let CSS flex layout settle before reading the
-// tree viewport's size — needed for the default zoom level and centering.
+// tree viewport's size — needed for the fit-to-context framing.
 requestAnimationFrame(function(){
   requestAnimationFrame(function(){
-    zoom = defaultZoom();
     render();
   });
 });
