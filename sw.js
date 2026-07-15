@@ -1,4 +1,4 @@
-const CACHE = "chinthe-v3";
+const CACHE = "chinthe-v4";
 const SHELL = [
   "./",
   "./index.html",
@@ -15,7 +15,8 @@ const SHELL = [
 
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())
+    // cache:"reload" bypasses the HTTP cache so a new SW version never precaches stale files
+    caches.open(CACHE).then(c => c.addAll(SHELL.map(u => new Request(u, {cache: "reload"})))).then(() => self.skipWaiting())
   );
 });
 

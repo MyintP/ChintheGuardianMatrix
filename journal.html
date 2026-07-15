@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0D000D">
 <title>Training Journal — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
@@ -349,9 +349,21 @@ function renderAll(){
     const typeLabel={drilling:"Drilling",sparring:"Sparring",competition:"Competition",conditioning:"Conditioning"}[s.type]||s.type;
     const techniques=s.techniques||[];
 
-    // Header
+    // Header — keyboard-operable expander
     const header=el("div","session-header");
-    header.addEventListener("click",()=>toggleSession(s.id));
+    header.setAttribute("role","button");
+    header.tabIndex=0;
+    header.setAttribute("aria-controls",`sb-${s.id}`);
+    header.setAttribute("aria-expanded","false");
+    const activate=()=>{
+      toggleSession(s.id);
+      const b=document.getElementById(`sb-${s.id}`);
+      header.setAttribute("aria-expanded",b&&b.classList.contains("open")?"true":"false");
+    };
+    header.addEventListener("click",activate);
+    header.addEventListener("keydown",e=>{
+      if(e.key==="Enter"||e.key===" "){e.preventDefault();activate();}
+    });
     const headLeft=el("div");
     headLeft.appendChild(el("div","session-date",fmtDate(s.date)));
     headLeft.appendChild(el("div","session-title",s.title));

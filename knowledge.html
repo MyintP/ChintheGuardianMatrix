@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0D000D">
 <title>Knowledge Base — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
@@ -982,13 +982,28 @@ function renderCards(){
         <button class="close-btn" onclick="event.stopPropagation();closeCard('${t.id}')">✕ Close</button>
       </div>
     `;
-    card.querySelector(".tech-card-body").onclick = ()=>toggleCard(t.id);
+    const body = card.querySelector(".tech-card-body");
+    body.setAttribute("role","button");
+    body.tabIndex = 0;
+    body.setAttribute("aria-controls",`detail-${t.id}`);
+    body.onclick = ()=>toggleCard(t.id);
+    body.onkeydown = e=>{
+      if(e.key==="Enter"||e.key===" "){e.preventDefault();toggleCard(t.id);}
+    };
     grid.appendChild(card);
   });
   if(openId){
     const d = document.getElementById(`detail-${openId}`);
     if(d) d.classList.add("open");
   }
+  syncExpanded();
+}
+
+function syncExpanded(){
+  document.querySelectorAll(".tech-card-body[aria-controls]").forEach(b=>{
+    const d = document.getElementById(b.getAttribute("aria-controls"));
+    b.setAttribute("aria-expanded", d && d.classList.contains("open") ? "true" : "false");
+  });
 }
 
 function toggleCard(id){
@@ -997,10 +1012,12 @@ function toggleCard(id){
   const isOpen = detail.classList.contains("open");
   document.querySelectorAll(".tech-detail.open").forEach(d=>d.classList.remove("open"));
   if(!isOpen) detail.classList.add("open");
+  syncExpanded();
 }
 function closeCard(id){
   const d = document.getElementById(`detail-${id}`);
   if(d) d.classList.remove("open");
+  syncExpanded();
 }
 
 document.querySelectorAll(".filter-btn").forEach(btn=>{

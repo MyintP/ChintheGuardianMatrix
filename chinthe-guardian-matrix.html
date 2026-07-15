@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guardian Matrix — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1699,6 +1699,16 @@ function computeScore(){
   return {total, win, loss};
 }
 
+// Make a non-button element keyboard-operable like a button
+function makeActionable(el, fn){
+  el.setAttribute("role","button");
+  el.tabIndex = 0;
+  el.onclick = fn;
+  el.onkeydown = e=>{
+    if (e.key === "Enter" || e.key === " "){ e.preventDefault(); fn(); }
+  };
+}
+
 function scrollCanvasTop(){
   // On desktop (≥900px) html/body are overflow:hidden and <main> is the real
   // scroll container; on mobile the document scrolls. Scroll both — the
@@ -1762,14 +1772,15 @@ function renderMap(){
     svg.appendChild(line);
 
     const cn = NODES[cid];
-    const div = document.createElement("div");
-    div.className = "map-node type-" + cn.type;
-    div.style.left = x+"px";
-    div.style.top = y+"px";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "map-node type-" + cn.type;
+    btn.style.left = x+"px";
+    btn.style.top = y+"px";
     const ptsLbl = pointsLabel(cn.points);
-    div.innerHTML = cn.title + (ptsLbl ? `<span class="pts">${ptsLbl}</span>` : "");
-    div.onclick = ()=>goNode(cid);
-    nodesEl.appendChild(div);
+    btn.innerHTML = cn.title + (ptsLbl ? `<span class="pts">${ptsLbl}</span>` : "");
+    btn.onclick = ()=>goNode(cid);
+    nodesEl.appendChild(btn);
   });
 
   document.getElementById("backRow").style.display = path.length>1 ? "flex" : "none";
@@ -1852,7 +1863,9 @@ function renderFlow(){
     svg.appendChild(line);
   }
   function placeNode(x,y,cls,title,pts,onclick){
-    const div = document.createElement("div");
+    // Clickable nodes are real buttons so they're keyboard-operable
+    const div = document.createElement(onclick ? "button" : "div");
+    if (onclick) div.type = "button";
     div.className = "flow-node " + cls;
     div.style.left = x+"px"; div.style.top = y+"px";
     const ptsLbl = pointsLabel(pts);
@@ -1958,7 +1971,8 @@ function render(){
     const n = NODES[pid];
     const item = document.createElement("div");
     item.className = "chain-item";
-    const btn = document.createElement("div");
+    const btn = document.createElement("button");
+    btn.type = "button";
     btn.className = "chain-node" + (i===path.length-1 ? " current" : "");
     btn.textContent = n.title;
     btn.onclick = ()=>{ path = path.slice(0, i+1); render(); scrollCanvasTop(); };
@@ -2014,10 +2028,10 @@ function renderQuickRef(){
       </div>
       ${pointsBadge(n.points)}
     `;
-    row.onclick = ()=>{
+    makeActionable(row, ()=>{
       document.getElementById("quickRefModal").style.display = "none";
       jumpTo(id);
-    };
+    });
     list.appendChild(row);
   });
 }
@@ -2061,7 +2075,7 @@ searchInput.addEventListener("input", ()=>{
       ctx = `<div class="qr-context">via ${NODES[parents[0]].title} +${parents.length-1} more chain${parents.length>2?'s':''}</div>`;
     }
     row.innerHTML = `<div><span>${n.title}</span>${ctx}</div>${pointsBadge(n.points)}`;
-    row.onclick = ()=>{ searchInput.value=""; searchResults.innerHTML=""; jumpTo(id); };
+    makeActionable(row, ()=>{ searchInput.value=""; searchResults.innerHTML=""; jumpTo(id); });
     searchResults.appendChild(row);
   });
 });
@@ -2279,6 +2293,16 @@ render = function(){
   _render();
   updateExportVisibility();
 };
+
+// Escape closes any open overlay (modals, search panel)
+document.addEventListener("keydown", e=>{
+  if (e.key !== "Escape") return;
+  ["flagModal","flagsListModal","exportModal","quickRefModal"].forEach(id=>{
+    const m = document.getElementById(id);
+    if (m && m.style.display === "flex") m.style.display = "none";
+  });
+  searchPanel.classList.remove("open");
+});
 
 updateFlagsCount();
 // Defer initial render to let CSS flex layout settle before reading clientHeight

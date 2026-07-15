@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0D000D">
 <title>Principles — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
@@ -489,7 +489,7 @@ function renderPrinciples(){
     const exHtml = (p.examples||[]).map(e=>`<div class="principle-example"><strong>${e.title}</strong>${e.text}</div>`).join("");
     card.innerHTML = `
       <div class="principle-accent ${p.accent}"></div>
-      <div class="principle-header" onclick="togglePrinciple('${p.id}')">
+      <div class="principle-header" role="button" tabindex="0" aria-expanded="false" aria-controls="pb-${p.id}" onclick="togglePrinciple('${p.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePrinciple('${p.id}')}">
         <div class="principle-num">Principle ${p.num}</div>
         <div class="principle-name">${p.name}</div>
         <div class="principle-tagline">${p.tagline}</div>
@@ -514,6 +514,10 @@ function togglePrinciple(id){
   const open = body.classList.contains("open");
   document.querySelectorAll(".principle-body.open").forEach(b=>b.classList.remove("open"));
   if(!open) body.classList.add("open");
+  document.querySelectorAll(".principle-header[aria-controls]").forEach(h=>{
+    const b = document.getElementById(h.getAttribute("aria-controls"));
+    h.setAttribute("aria-expanded", b && b.classList.contains("open") ? "true" : "false");
+  });
 }
 
 renderPrinciples();
