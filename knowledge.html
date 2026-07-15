@@ -50,6 +50,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .filter-btn.cat-sweep.active{background:#6B5CE7;color:var(--stone);border-color:#6B5CE7;}
 .filter-btn.cat-takedown.active{background:var(--crimson);color:var(--stone);border-color:var(--crimson);}
 .filter-btn.cat-defence.active{background:#B5462F;color:var(--stone);border-color:#B5462F;}
+.filter-btn.cat-concept.active{background:#8E44AD;color:var(--stone);border-color:#8E44AD;}
 
 /* Results count */
 .results-meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--stone-dim);letter-spacing:0.06em;margin-bottom:20px;}
@@ -71,6 +72,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .cat-sweep .tech-card-accent{background:#6B5CE7;}
 .cat-takedown .tech-card-accent{background:var(--crimson);}
 .cat-defence .tech-card-accent{background:#B5462F;}
+.cat-concept .tech-card-accent{background:#8E44AD;}
 
 .tech-card-body{padding:18px 20px 20px;}
 .tech-card-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
@@ -85,6 +87,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .cat-sweep .tech-badge{background:rgba(107,92,231,0.15);color:#6B5CE7;}
 .cat-takedown .tech-badge{background:rgba(141,35,35,0.18);color:var(--crimson);}
 .cat-defence .tech-badge{background:rgba(181,70,47,0.15);color:#B5462F;}
+.cat-concept .tech-badge{background:rgba(142,68,173,0.15);color:#B07CC6;}
 
 .tech-card-name{font-family:'Oswald',sans-serif;font-size:22px;letter-spacing:0.02em;text-transform:uppercase;line-height:1;margin-bottom:6px;}
 .tech-card-tagline{font-size:13px;color:var(--stone-dim);line-height:1.4;margin-bottom:12px;}
@@ -174,6 +177,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
       <button class="filter-btn cat-sweep" data-cat="sweep">Sweeps</button>
       <button class="filter-btn cat-takedown" data-cat="takedown">Takedowns</button>
       <button class="filter-btn cat-defence" data-cat="defence">Defence</button>
+      <button class="filter-btn cat-concept" data-cat="concept">Concepts</button>
     </div>
   </div>
 
@@ -186,14 +190,14 @@ const DB = [
   // ── SUBMISSIONS ──────────────────────────────────────────────────
   {
     id:"rnc", cat:"submission",
-    name:"Rear Naked Choke",
+    name:"Rear Naked Choke (Hadaka-Jime)",
     tagline:"The highest-percentage finish in modern no-gi. Your default finishing target from back control.",
-    tags:["Back Control","No-Gi","ADCC Primary"],
-    objective:"Establish the seatbelt before threading the choke — the seatbelt is the position that makes the finish available.",
-    mechanics:"Seatbelt first: far-side hand deep under the armpit, near-side over the shoulder. Thread the choking arm under the chin — bicep seals one carotid. Grip the far shoulder or bicep with the choking hand. Cup the back of the head with the free hand. Pull elbows together and arch — don't just squeeze the bicep.",
-    defense:"Hand-fighting the choking arm before it seats. Chin tuck. Spinning into you to kill back exposure. Hip escape to recover half guard.",
-    mistake:"Squeezing the bicep instead of pulling the elbows together and arching. Bicep-only pressure rarely finishes at competition pace.",
-    drill:"Seatbelt-to-choke isolation: 3×5 reps, partner defends at 50%. Measure grip-sequence speed, not strength. The grip should seat before the partner can hand-fight."
+    tags:["Back Control","No-Gi","ADCC Primary","Judo: Hadaka-Jime"],
+    objective:"Establish the seatbelt before threading the choke — the seatbelt is the position that makes the finish available. Full application compresses both carotids; unconsciousness follows in 3–5 seconds.",
+    mechanics:"Seatbelt first: far-side hand deep under the armpit, near-side over the shoulder. Thread the choking arm under the chin — bicep seals one carotid, forearm the other. Grip the far shoulder or bicep with the choking hand. Cup the back of the head with the free hand. Pull elbows together and arch — the arch drives your elbow forward while the arms compress both carotids from the sides. Two-sided compression is what finishes, not the bicep squeeze.",
+    defense:"Hand-fighting the choking forearm from the wrist (not the bicep) before it seats. Chin tuck. Spinning into you to kill back exposure. Hip escape to recover half guard.",
+    mistake:"Squeezing the bicep instead of pulling the elbows together and arching. Bicep-only pressure compresses one side only and rarely finishes at competition pace.",
+    drill:"Seatbelt-to-choke isolation: 3×5 reps, partner defends at 50%. Separate each grip step — seatbelt, thread, free hand — and measure grip-sequence speed, not strength. The grip should seat before the partner can hand-fight."
   },
   {
     id:"armbar", cat:"submission",
@@ -736,23 +740,23 @@ const DB = [
     id:"o_soto_gari", cat:"takedown",
     name:"O-Soto-Gari (Major Outer Reap)",
     tagline:"The most effective foot throw in Judo for wrestling-base grapplers. Works with or without a gi.",
-    tags:["Judo","Foot Throw","Outside Reap"],
-    objective:"Attack when their weight is loaded on the near leg. A balanced opponent absorbs it; a weight-forward opponent falls with minimal effort.",
-    mechanics:"Grip: near collar and far sleeve (gi) or head/neck and tricep (no-gi). Kuzushi: pull them forward-right (for right-sided throw) to load their right leg. Entry: step deep with your left foot outside their right, bring your right leg in a reaping arc, driving their right leg out from under them. Simultaneously drive your chest through theirs. Finish face-down with your weight loading their upper back.",
-    defense:"Stepping back to avoid the reap. Dropping level to change their balance. Counter-throw to the opposite side.",
-    mistake:"Reaping before achieving kuzushi. An upright, balanced opponent blocks the reap with leg strength. The leg reap is 10% of the technique; the off-balance is 90%.",
-    drill:"O-soto-gari entry: establish kuzushi, execute the reap on signal. Partner resists at 30% — focus on timing the reap to the moment of maximum imbalance. 15 reps each side."
+    tags:["Judo","Ashi-Waza","Foot Throw","Outside Reap"],
+    objective:"Break balance until almost all of their weight loads the near leg, then reap that exact leg. A balanced opponent absorbs it; a weight-loaded opponent falls with minimal effort.",
+    mechanics:"Grip: near collar and far sleeve (gi) or head/neck and tricep (no-gi). Kuzushi: pull them forward-right (for right-sided throw) to load their right leg. Entry: step deep with your left foot outside their right, bring your right leg in a large diagonal reaping arc — drive your thigh through and past their right thigh, backward-diagonal. Simultaneously drive your chest through theirs and pull down and back with your grip. Finish face-down with your weight loading their upper back.",
+    defense:"Stepping back to avoid the reap. Distributing weight to prevent single-leg loading. Dropping level to change their balance. Counter-throw to the opposite side.",
+    mistake:"Reaping before achieving kuzushi. An upright, balanced opponent blocks the reap with leg strength. The kuzushi is not the setup — it IS the technique; the reap is only the finish.",
+    drill:"Kuzushi-then-reap: establish kuzushi, execute the reap on signal. If they're still two-legged, abort and re-establish the off-balance. Partner resists at 30% — time the reap to the moment of maximum imbalance. 15 reps each side."
   },
   {
     id:"seoi_nage", cat:"takedown",
     name:"Seoi-Nage (Shoulder Throw)",
     tagline:"The highest-percentage throw in Judo competition history. Works at every level — from beginner to world champion.",
-    tags:["Judo","Shoulder Throw","Two-on-One"],
-    objective:"Load their weight on your hip below their center of gravity and rotate. Their gravity does the rest.",
-    mechanics:"Entry: deep step in, feet shoulder-width, knees bent. Position your hip bone just below their center of gravity (hip level). Near arm drives under their near armpit, far arm controls their sleeve or wrist. Rotate explosively, pulling the far arm down while loading their weight over your hip. Head inside, drive through.",
-    defense:"Stepping around the entry. Dropping their weight to low base (difficult to throw from low base). Grip fighting to deny the entry grip.",
-    mistake:"Standing up during the throw — straightening your knees lifts your hip and loses the fulcrum. Stay low and rotate, don't stand and pull.",
-    drill:"Seoi-nage entry and rotation: uchi-komi (entry only, no finish) 20 reps at full speed. Focus on hip position relative to their center of gravity — hip must be below it before the rotation."
+    tags:["Judo","Te-Waza","Shoulder Throw","Ippon & Morote"],
+    objective:"Load their weight over your shoulder with their balance broken forward and rotate — your arm is the axle, their body is the wheel. Their gravity does the rest.",
+    mechanics:"Kuzushi: pull the sleeve and push the lapel forward to break balance. Entry (tai sabaki): deep step in, pivot so your back faces them, feet shoulder-width, knees bent, hip just below their center of gravity. Ippon variant: release the lapel and drive that arm under their armpit, elbow pointing down. Morote variant: keep the lapel grip, bent elbow tucked under their armpit. Either way: pull the sleeve down as you rotate, folding forward from the waist — not lifting with the legs.",
+    defense:"Stepping around the entry before the pivot completes. Dropping to a low base (difficult to throw from low base). Grip fighting to deny the entry grip. Grabbing the belt or hips to prevent rotation.",
+    mistake:"Standing up during the throw — straightening the knees lifts your hip and loses the fulcrum — or arching backward on the entry, which lets them regain balance. Stay low, back flat, fold forward.",
+    drill:"Uchi-komi (entry only, no finish): 20 reps at full speed. Focus on entry angle, arm position under the armpit, and hip below their center of gravity before the rotation. No throw until the mechanics feel automatic."
   },
   {
     id:"single_leg_wrestling", cat:"takedown",
@@ -779,7 +783,7 @@ const DB = [
     drill:"Angle-change pass drill: load weight onto knees, on a signal from your partner, instantly redirect 90 degrees. Partner tries to hip escape the redirect. 10 reps each direction."
   },
   {
-    id:"chain_attacks", cat:"position",
+    id:"chain_attacks", cat:"concept",
     name:"The Attack Chain",
     tagline:"Every attack should have a pre-decided continuation. A stuffed attack never resets to neutral — it converts to the next position.",
     tags:["Strategy","Chain Submissions","Decision Engine"],
@@ -812,7 +816,7 @@ const DB = [
     drill:"Shrimping laps: shrimp down the mat and back, 5 laps. Then bridge-and-roll: from your back, bridge explosively toward each side 20 reps. Do these before every technique session."
   },
   {
-    id:"fluid_efficiency", cat:"position",
+    id:"fluid_efficiency", cat:"concept",
     name:"Fluid Technique — Efficiency Over Power",
     tagline:"Scrawny beats strong when technique is precise. The window between a sloppy technique and a perfect one is the entire submission.",
     tags:["Efficiency","Fluid BJJ","Pravec","Technique Precision"],
@@ -824,17 +828,6 @@ const DB = [
   },
 
   // ── JUDO THROWING TECHNIQUES (Diaz — Judo For Beginners) ────────
-  {
-    id:"ippon_seoinage", cat:"takedown",
-    name:"Ippon Seoi-Nage (One-Arm Shoulder Throw)",
-    tagline:"The first throw most Judo students learn. One of the highest-percentage throws in competition at every level.",
-    tags:["Judo","Te-Waza","Hand Throw","Shoulder"],
-    objective:"Load uke's weight over your shoulder with their balance broken forward. The throw rotates over your shoulder — your arm is the axle, their body is the wheel.",
-    mechanics:"Kuzushi: pull uke's sleeve with your left hand and push their lapel forward-right to break balance. Entry (tai sabaki): step your right foot forward, pivot left so your back faces uke. Let go of the lapel and insert your right arm under their armpit with elbow pointing down. Maintain sleeve grip with your left hand. Lower your right shoulder, bend forward from the waist — NOT at the knees. Pull the sleeve down as you rotate forward, throwing uke over your right shoulder.",
-    defense:"Stepping around the entry before the pivot completes. Dropping into a low base. Grabbing their belt or hips to prevent rotation.",
-    mistake:"Arching your back backward on the entry step. A backward arch means uke regains balance and you have no throwing force. Back must stay flat and body must fold forward to complete the throw.",
-    drill:"Uchi-komi (entry only, no throw): 20 reps at full speed. Focus on: entry angle, arm position under armpit, forward bend of the upper body. No throw until the mechanics feel automatic."
-  },
   {
     id:"tai_otoshi", cat:"takedown",
     name:"Tai-Otoshi (Body Drop)",
@@ -880,18 +873,7 @@ const DB = [
     drill:"Leg thread and sweep isolation: thread the leg between partner's feet and sweep the inner thigh with no throw. 15 reps, focusing purely on the sweep path — upward and through, not sideways."
   },
   {
-    id:"osoto_gari_judo", cat:"takedown",
-    name:"O-Soto-Gari (Large Outer Reap)",
-    tagline:"Load their right leg, step deep past it, reap diagonally backward. The reap is the finish, kuzushi is the technique.",
-    tags:["Judo","Ashi-Waza","Leg Reap","Kuzushi-First"],
-    objective:"Break balance forward-right until almost all of uke's weight is on their right leg. Then reap that leg diagonally backward. Without the kuzushi, the reap does nothing.",
-    mechanics:"Kuzushi: push uke backward-right to load their right leg. Step your left foot deep outside their right foot. Bring your right leg in a large diagonal reaping arc — drive your thigh through and past their right thigh in a backward-diagonal direction. Simultaneously drive your chest through theirs and pull down and back with your grip. The reap and chest drive happen together.",
-    defense:"Stepping back before the reap connects. Distributing weight to prevent single-leg loading. Counter to the opposite side.",
-    mistake:"Reaping before the kuzushi is established. Against a balanced opponent, the reap requires overpowering leg strength. Against a broken-balance opponent, it's effortless. The kuzushi is not the setup — it IS the technique.",
-    drill:"Kuzushi-then-reap: push uke until you feel their weight commit to the right leg, then reap. If they're still two-legged, abort and re-establish kuzushi. 15 reps."
-  },
-  {
-    id:"ukemi", cat:"position",
+    id:"ukemi", cat:"concept",
     name:"Ukemi (Break Falls)",
     tagline:"Learn to fall before you learn to throw. Ukemi is not a warm-up drill — it is the foundational safety system of all grappling.",
     tags:["Judo","Fundamentals","Safety","Break Fall"],
@@ -913,18 +895,7 @@ const DB = [
     drill:"Kesa gatame weight drill: hold for 60 seconds against a resisting partner. They must feel your weight — if they can breathe comfortably, your position isn't heavy enough."
   },
   {
-    id:"hadaka_jime_judo", cat:"submission",
-    name:"Hadaka-Jime (Rear Naked Choke — Judo)",
-    tagline:"Known in BJJ as the RNC. The same mechanics, the same priority: seatbelt first, choke second.",
-    tags:["Judo","Shime-Waza","Rear Choke","Carotid"],
-    objective:"Compress both carotid arteries simultaneously. This stops blood flow to the brain — unconsciousness follows in 3-5 seconds at full application.",
-    mechanics:"From behind: wrap the choking arm under uke's chin so your bicep is against one carotid and your forearm is against the other. Grip your own bicep or shoulder with the free hand. Squeeze and arch simultaneously — do not just squeeze. The arch drives your elbow forward into the throat while the arms compress the sides. Note: Judo rules allow this from the rear; it is the ground version of what BJJ calls back control submission.",
-    defense:"Chin tuck before the arm seats. Hand-fight the choking forearm from the wrist, not the bicep. Turn into the attacker to face them and kill the back position.",
-    mistake:"Squeezing only with the bicep. A bicep-only choke compresses only one side and is far easier to resist. The two-sided carotid compression with the arch is what makes it effective.",
-    drill:"Choke grip sequence: establish seatbelt grip, then thread choking arm under chin, then apply free hand. Separate each step and drill the sequence 10 times before adding resistance."
-  },
-  {
-    id:"randori", cat:"position",
+    id:"randori", cat:"concept",
     name:"Randori (Freestyle Practice)",
     tagline:"Taking chaos. The emphasis of Judo over kata. The training method that separates knowing techniques from owning them.",
     tags:["Judo","Training Method","Freestyle","Live Practice"],

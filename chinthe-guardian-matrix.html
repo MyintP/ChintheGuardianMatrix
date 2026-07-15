@@ -683,7 +683,7 @@ footer.brand-footer {
       </div>
     </div>
     <div class="tagline">Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the modern grappler.</div>
-    <div class="myanmar-slot">[ Myanmar wordmark — awaiting exact text ]</div>
+    <div class="myanmar-slot">ခြင်္သေ့ — The Guardian Lion</div>
 
     <nav class="section-nav" id="sectionNav">
       <button class="nav-btn" data-jump="hub">Hub</button>
@@ -999,7 +999,7 @@ const NODES = {
     children: ["pass_complete","mount"]
   },
   hg_back_take: {
-    title: "Back Take (from Half Guard)", type: "position", points: 4,
+    title: "Back Take (from Half Guard)", type: "position", points: 3,
     objective: "The underhook in half guard is the most direct no-gi back take available after the front headlock — use it every time it's live.",
     mechanics: "From underhook in dog fight: step the inside foot behind their hip (outside step), drive the underhook shoulder through toward their back, follow with the outside leg and establish hooks. Seatbelt goes on as you come behind them.",
     commonMistake: "Reaching for the back with the hands before the inside foot steps — no footwork means no angle, and they can simply face you down.",
@@ -1055,7 +1055,7 @@ const NODES = {
     children: ["pass_complete","mount"]
   },
   slx_back_take: {
-    title: "Back Take (from SLX)", type: "position", points: 4,
+    title: "Back Take (from SLX)", type: "position", points: 3,
     objective: "Use the leg control to spin behind rather than sweeping — when they base back against the sweep, the back take opens.",
     mechanics: "From SLX, when they post the far leg to defend the sweep: release the X hook, spin under them and behind, establish hooks as they step over. Heel control stays live throughout the spin.",
     commonMistake: "Releasing heel control before the spin is complete — losing the heel lets them step away and disengage entirely.",
@@ -1185,7 +1185,7 @@ const NODES = {
   pass_complete: {
     title: "Guard Pass — Scored", type: "position", points: 3,
     objective: "The pass is scored — don't pause, immediately continue to hunt the back or mount before they recover.",
-    mechanics: "Legs cleared, 3-second stabilization holds. The pass is on the board. Back take is worth 4 points, mount is worth 2 — don't sit in side control.",
+    mechanics: "Legs cleared, 3-second stabilization holds. The pass is on the board. Back control with hooks is worth 3 points, mount is worth 2 — don't sit in side control.",
     commonMistake: "Celebrating the pass and sitting in side control — the pass is scored but the clock is still running. Continue attacking.",
     drill: "Pass-and-continue: complete any pass, immediately pursue back take or mount on the same rep. No stopping at side control. 10 reps.",
     children: ["mount","backtake_pass","knee_belly","leg_entanglement"]
@@ -1207,7 +1207,7 @@ const NODES = {
     children: ["armbar_mount","triangle_mount","backtake_mount_scramble"]
   },
   backtake_pass: {
-    title: "Back Take (off the pass)", type: "position", points: 4,
+    title: "Back Take (off the pass)", type: "position", points: 3,
     objective: "Convert the pass into the highest-value position on the scoreboard before the opponent squares back up.",
     mechanics: "Opponent turtles or gives an underhook mid-pass — secure the seatbelt and insert hooks or a body triangle.",
     commonMistake: "Settling for one hook instead of finishing the seatbelt — a single hook is escapable and doesn't yet score.",
@@ -1215,7 +1215,7 @@ const NODES = {
     children: ["rnc"]
   },
   backtake_turtle: {
-    title: "Back Take (off turtle)", type: "position", points: 4,
+    title: "Back Take (off turtle)", type: "position", points: 3,
     objective: "Finish the seatbelt before the opponent can stand up out of turtle or roll through to guard.",
     mechanics: "Seatbelt grip — far-side underhook, near-side over the shoulder — then roll them or leg-weave around the far hip.",
     commonMistake: "Grabbing for hooks before the seatbelt is locked — the seatbelt is what makes the hooks stick; hooks first without it get stripped.",
@@ -1223,7 +1223,7 @@ const NODES = {
     children: ["rnc"]
   },
   backtake_headlock: {
-    title: "Back Take (off front headlock)", type: "position", points: 4,
+    title: "Back Take (off front headlock)", type: "position", points: 3,
     objective: "Use the front headlock you already hold as a launch point for the back rather than resetting to a choke-only decision.",
     mechanics: "Snap the near arm across, spin behind, insert hooks. The most repeatable entry for a wrestling base — you live in this position already.",
     commonMistake: "Trying to force the guillotine from bad position instead of banking the back take — loses the higher-value, higher-percentage option.",
@@ -1231,7 +1231,7 @@ const NODES = {
     children: ["rnc"]
   },
   backtake_mount_scramble: {
-    title: "Back Take (mount scramble)", type: "position", points: 4,
+    title: "Back Take (mount scramble)", type: "position", points: 3,
     objective: "Read the direction of their escape early enough to ride it rather than chase it.",
     mechanics: "Opponent turns away to escape mount — ride the turn straight to the back instead of chasing the mount.",
     commonMistake: "Fighting to stay square in mount as they turn, instead of flowing with the turn — costs the back take and often the mount too.",
@@ -1300,7 +1300,7 @@ const NODES = {
     children: ["triangle_defended"]
   },
   backtake_from_stack: {
-    title: "Back Take (off their stack)", type: "position", points: 4,
+    title: "Back Take (off their stack)", type: "position", points: 3,
     objective: "Follow their momentum into the back rather than fighting the stack — the stack itself usually does the positioning work for you.",
     mechanics: "Follow the stack instead of resisting it — they frequently expose the back in the act of standing up out of it.",
     commonMistake: "Bracing against the stack instead of rolling with it — wastes energy and often ends in a scramble instead of a clean back take.",
@@ -1360,7 +1360,7 @@ const NODES = {
     children: []
   },
   backtake_from_guillotine: {
-    title: "Back Take (off failed guillotine)", type: "position", points: 4,
+    title: "Back Take (off failed guillotine)", type: "position", points: 3,
     objective: "Ride the opponent's escape direction off a failed choke straight into the back rather than letting the exchange go neutral.",
     mechanics: "If they posture or turn away to escape, ride that turn straight to the back.",
     commonMistake: "Standing up with them or disengaging when they posture out, instead of stepping around to the back on the same motion.",
@@ -1579,7 +1579,7 @@ const NODES = {
     children: ["def_back_neutralized","def_backtake_conceded"]
   },
   def_backtake_conceded: {
-    title: "Back Taken — Points Conceded", type: "threat", points: -4,
+    title: "Back Taken — Points Conceded", type: "threat", points: -3,
     objective: "Survive the choke threat first, then work to face them — the position is already scored against you, so don't rush the escape and give them a better angle.",
     mechanics: "They've secured back control with hooks or a body triangle — the most dangerous position in the sport to be on the wrong side of. The survival sequence starts now.",
     commonMistake: "Frantically trying to roll or stand up immediately — movement without a plan accelerates their choke, not your escape.",
@@ -1693,11 +1693,20 @@ function computeScore(){
   let total = 0, win = false, loss = false;
   path.forEach(id=>{
     const n = NODES[id];
-    if (typeof n.points === "number") total += n.points;
+    // Phase 1 = first half of the match: no points are live (submissions still end it)
+    if (typeof n.points === "number" && matchPhase !== 1) total += n.points;
     if (n.points === "WIN") win = true;
     if (n.points === "LOSS") loss = true;
   });
   return {total, win, loss};
+}
+
+function renderScore(){
+  const {total, win, loss} = computeScore();
+  const scoreEl = document.getElementById("scoreValue");
+  scoreEl.textContent = win ? "TAP" : loss ? "TAPPED"
+    : (matchPhase === 1 ? "—" : (total>=0 ? "+"+total : total));
+  scoreEl.className = "value" + (win ? " win" : loss ? " loss" : "");
 }
 
 // Make a non-button element keyboard-operable like a button
@@ -1961,10 +1970,7 @@ function render(){
     btn.classList.toggle("active", path[path.length-1] === btn.dataset.jump && path.length===1);
   });
 
-  const {total, win, loss} = computeScore();
-  const scoreEl = document.getElementById("scoreValue");
-  scoreEl.textContent = win ? "TAP" : loss ? "TAPPED" : (total>=0 ? "+"+total : total);
-  scoreEl.className = "value" + (win ? " win" : loss ? " loss" : "");
+  renderScore();
 
   const trail = document.getElementById("chainTrail");
   trail.innerHTML = "";
@@ -1999,6 +2005,7 @@ document.getElementById("backBtn").onclick = goBack;
 function setPhase(p){
   matchPhase = p;
   document.querySelectorAll(".phase-btn").forEach(b=>b.classList.toggle("active", Number(b.dataset.phase)===p));
+  renderScore();
   renderDetail();
 }
 function setMatchState(s){
