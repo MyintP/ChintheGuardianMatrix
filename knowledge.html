@@ -92,15 +92,14 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 /* Expanded detail */
 .tech-detail{display:none;padding:16px 20px 20px;border-top:1px solid var(--line);}
 .tech-detail.open{display:block;}
+/* Separates the disclosure block from the Close button below it. Spacing
+   lives on the block, not the button — button appearance stays owned
+   entirely by the .btn hierarchy in chinthe.css. */
+.tech-detail .disc{margin-bottom:16px;}
 .detail-section{margin-bottom:14px;}
 .detail-label{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;}
 .detail-text{font-size:13.5px;line-height:1.6;color:var(--stone);}
 .detail-text.mistake{color:#E86868;}
-.close-btn{
-  margin-top:16px;background:none;border:1px solid var(--line);color:var(--stone-dim);
-  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
-  padding:7px 14px;border-radius:6px;cursor:pointer;
-}
 
 @media(max-width:640px){
   .nav-links{display:none;}
@@ -942,7 +941,7 @@ function renderCards(){
       </div>
       <div class="tech-detail" id="detail-${t.id}">
         ${discBlock(t)}
-        <button class="close-btn" onclick="event.stopPropagation();closeCard('${t.id}')">✕ Close</button>
+        <button class="btn btn-secondary" onclick="event.stopPropagation();closeCard('${t.id}')">✕ Close</button>
       </div>
     `;
     const body = card.querySelector(".tech-card-body");

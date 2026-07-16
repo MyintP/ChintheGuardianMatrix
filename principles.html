@@ -86,7 +86,6 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   font-size:13px;line-height:1.5;color:var(--stone-dim);
 }
 .principle-example strong{color:var(--stone);display:block;font-size:12px;margin-bottom:2px;}
-.principle-close{margin-top:14px;background:none;border:1px solid var(--line);color:var(--stone-dim);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;padding:7px 14px;border-radius:6px;cursor:pointer;}
 
 /* ── CHESS SECTION ── */
 .chess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:8px;}
@@ -498,7 +497,7 @@ function renderPrinciples(){
         ${p.applications?`<div class="principle-section"><div class="principle-section-label">Application</div><div class="principle-section-text jade">${p.applications}</div></div>`:""}
         ${p.mat?`<div class="principle-section"><div class="principle-section-label">On the Mat</div><div class="principle-section-text">${p.mat}</div></div>`:""}
         ${exHtml?`<div class="principle-section"><div class="principle-section-label">Examples</div><div class="principle-examples">${exHtml}</div></div>`:""}
-        <button class="principle-close" onclick="event.stopPropagation();togglePrinciple('${p.id}')">✕ Close</button>
+        <button class="btn btn-secondary" onclick="event.stopPropagation();togglePrinciple('${p.id}')">✕ Close</button>
       </div>
     `;
     grid.appendChild(card);

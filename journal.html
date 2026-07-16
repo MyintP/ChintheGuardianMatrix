@@ -55,15 +55,11 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
 
 /* Submit row */
 .submit-row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;}
-.btn-save{background:var(--gold);color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;padding:11px 24px;border-radius:999px;border:none;cursor:pointer;}
-.btn-save:active{opacity:0.85;}
-.btn-clear{background:none;color:var(--stone-dim);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:11px 18px;border-radius:999px;border:1px solid var(--line);cursor:pointer;}
 .save-feedback{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;display:none;align-self:center;}
 
 /* Sessions list */
 .sessions-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .sessions-title{font-family:'Oswald',sans-serif;font-size:22px;letter-spacing:0.03em;text-transform:uppercase;}
-.btn-export-all{background:none;color:var(--stone-dim);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:1px solid var(--line);cursor:pointer;}
 .sessions-list{display:flex;flex-direction:column;gap:12px;}
 .session-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
 .session-header{padding:16px 18px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;cursor:pointer;}
@@ -84,7 +80,6 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
 .session-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
 .session-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);border-radius:4px;padding:2px 7px;}
 .session-actions{display:flex;gap:8px;margin-top:14px;}
-.btn-delete-session{background:none;color:var(--stone-dim);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;border:none;cursor:pointer;text-decoration:underline;padding:0;}
 
 .empty-state{text-align:center;padding:60px 20px;color:var(--stone-dim);}
 .empty-icon{font-size:40px;margin-bottom:16px;}
@@ -205,14 +200,14 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
     </div>
     <div class="submit-row">
       <span class="save-feedback" id="saveFeedback">✓ Saved</span>
-      <button class="btn-clear" onclick="clearForm()">Clear</button>
-      <button class="btn-save" onclick="saveSession()">Save Session</button>
+      <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+      <button class="btn btn-primary" onclick="saveSession()">Save Session</button>
     </div>
   </div>
 
   <div class="sessions-header">
     <div class="sessions-title">Session History</div>
-    <button class="btn-export-all" onclick="exportAll()">↗ Export All</button>
+    <button class="btn btn-ghost" onclick="exportAll()">↗ Export All</button>
   </div>
   <div class="sessions-list" id="sessionsList"></div>
 </div>
@@ -397,7 +392,7 @@ function renderAll(){
     if(s.drill)field("Next Drill Focus",s.drill);
     if(s.notes)field("Notes",s.notes,"var(--stone-dim)");
     const actions=el("div","session-actions");
-    const delBtn=el("button","btn-delete-session","Delete session");
+    const delBtn=el("button","btn btn-danger","Delete session");
     delBtn.type="button";
     delBtn.addEventListener("click",()=>deleteSession(s.id));
     actions.appendChild(delBtn);
