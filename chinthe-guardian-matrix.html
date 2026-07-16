@@ -86,11 +86,14 @@ h1 span { color: var(--victory); }
 .tagline  { font-size: 11px; color: var(--chalk-dim); line-height: 1.4; }
 .myanmar-slot { font-family: 'Noto Sans Myanmar', sans-serif; font-size: 10px; color: var(--chalk-dim); margin-top: 2px; }
 
-.scorecard { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; font-family: 'IBM Plex Mono', monospace; }
-.scorecard .label { font-size: 9px; color: var(--chalk-dim); letter-spacing: 0.08em; text-transform: uppercase; }
-.scorecard .value { font-size: 22px; font-weight: 600; color: var(--gold); line-height: 1.2; }
-.scorecard .value.win  { color: var(--victory); }
-.scorecard .value.loss { color: var(--danger); }
+/* ── Progress card (mastery) ── */
+.progress-card { margin-top: 12px; }
+.progress-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.progress-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--chalk-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+.progress-figures { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--chalk); letter-spacing: 0.02em; }
+.progress-figures span { color: var(--gold); font-weight: 600; }
+.progress-bar { height: 6px; border-radius: 999px; background: var(--mat-elev-2); overflow: hidden; }
+.progress-bar-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, #C9A23A, #3FA383); transition: width 0.4s ease; }
 
 /* ── Section nav: horizontal scroll on mobile ── */
 .section-nav {
@@ -119,37 +122,6 @@ h1 span { color: var(--victory); }
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 .nav-btn.active { background: var(--chalk); color: var(--mat); border-color: var(--chalk); font-weight: 600; }
-
-/* ── Match bar: phase + scoreboard ── */
-.match-bar { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-.match-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 120px; }
-.match-group-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  color: var(--chalk-dim);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.phase-btn, .state-btn {
-  flex: 1;
-  background: var(--mat-elev);
-  border: 1px solid var(--line);
-  color: var(--chalk-dim);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 8px 6px;
-  border-radius: 6px;
-  cursor: pointer;
-  text-align: center;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-}
-.phase-btn.active { background: var(--jade); color: var(--jade-bright); border-color: var(--jade-bright); font-weight: 600; }
-.state-btn.active.leading  { background: var(--jade); color: var(--jade-bright); border-color: var(--jade-bright); font-weight: 600; }
-.state-btn.active.even     { background: var(--mat-elev-2); color: var(--chalk); border-color: var(--chalk-dim); font-weight: 600; }
-.state-btn.active.trailing { background: var(--danger-dim); color: var(--danger); border-color: var(--danger); font-weight: 600; }
 
 /* ── Search panel ── */
 .search-panel { display: none; margin-top: 10px; }
@@ -271,6 +243,7 @@ main { padding: 12px 16px 60px; }
   font-family: inherit;
 }
 .tree-node-badge {
+  position: relative;
   width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 16px; background: var(--mat-elev-2);
@@ -288,48 +261,35 @@ main { padding: 12px 16px 60px; }
   font-size: 8px; opacity: 0.85;
 }
 
-/* Type accent on the badge ring — matches the legend dots below */
-.tree-node.type-entry      .tree-node-badge { border-color: var(--chalk-dim); }
-.tree-node.type-position   .tree-node-badge { border-color: var(--jade-bright); }
-.tree-node.type-submission .tree-node-badge { border-color: var(--victory); }
-.tree-node.type-counter    .tree-node-badge { border-color: var(--gold); }
-.tree-node.type-threat     .tree-node-badge { border-color: var(--danger); }
+/* ── Mastery: the badge fill IS your progress on that node ──
+   New (hollow) → Learning (amber) → Drilling (gold) → Got it (jade + ✓).
+   The whole constellation reads as a heatmap of your game. */
+.tree-node.m-new      .tree-node-badge { background: var(--mat-elev-2); border-color: var(--line); color: var(--chalk-dim); opacity: 0.72; }
+.tree-node.m-learning .tree-node-badge { background: rgba(232,196,104,0.16); border-color: var(--victory); color: var(--victory); }
+.tree-node.m-drilling .tree-node-badge { background: rgba(212,160,23,0.34); border-color: var(--gold); color: var(--chalk); }
+.tree-node.m-got      .tree-node-badge { background: var(--jade-bright); border-color: var(--jade-bright); color: #0C1A14; }
+.tree-node.m-got      .tree-node-label { color: var(--chalk); }
+.tree-node.m-new      .tree-node-label { opacity: 0.78; }
 
-.tree-node:not(.state-current):hover .tree-node-badge { border-color: var(--gold); }
-
-/* State: outside your current path/frontier — dim and desaturated, still jumpable */
-.tree-node.state-locked .tree-node-badge { opacity: 0.38; filter: grayscale(65%); box-shadow: none; }
-.tree-node.state-locked .tree-node-label { opacity: 0.5; }
-
-/* State: a direct next option from here — pulses to invite a tap */
-.tree-node.state-available .tree-node-badge {
-  color: var(--chalk); background: var(--mat-elev-2);
-  animation: tree-pulse 1.8s ease-in-out infinite;
+/* Got-it check pip */
+.tree-node.m-got .tree-node-badge::after {
+  content: "✓"; position: absolute; right: -4px; bottom: -4px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--jade-bright); color: #0C1A14;
+  font-size: 10px; font-weight: 700; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--mat);
 }
-.tree-node.state-available .tree-node-label { color: var(--chalk); }
 
-/* State: already on your chain */
-.tree-node.state-visited .tree-node-badge {
-  background: var(--jade); color: var(--jade-bright); border-color: var(--jade-bright);
-  box-shadow: 0 0 10px rgba(63, 163, 131, 0.35);
-}
-.tree-node.state-visited .tree-node-label { color: var(--chalk); }
+.tree-node:hover:not(.state-current) .tree-node-badge { border-color: var(--gold); }
 
-/* State: where you are right now */
+/* Focus: where you're reading right now — a gold ring layered over the
+   mastery fill (so you see BOTH what you know and where you are). */
 .tree-node.state-current .tree-node-badge {
-  background: var(--gold); color: var(--mat); border-color: var(--gold);
-  transform: scale(1.18);
-  box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.22), 0 0 18px rgba(212, 160, 23, 0.6);
+  transform: scale(1.16);
+  box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.28), 0 0 16px rgba(212, 160, 23, 0.55);
 }
 .tree-node.state-current .tree-node-label { color: var(--gold); font-weight: 600; }
-
-@keyframes tree-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.35); }
-  50%      { box-shadow: 0 0 0 6px rgba(212, 160, 23, 0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .tree-node.state-available .tree-node-badge { animation: none; }
-}
 
 /* ── Back button ── */
 .back-btn {
@@ -388,18 +348,26 @@ main { padding: 12px 16px 60px; }
 .node-section.mistake p { color: var(--danger); }
 .empty-note { text-align: center; color: var(--chalk-dim); font-size: 12px; margin-top: 10px; }
 
-/* ── Guidance box ── */
-.guidance-box {
-  background: var(--mat-elev-2); border: 1px solid var(--jade-bright);
-  border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;
+/* ── Mastery marker (in the detail card) ── */
+.mastery-box {
+  background: var(--mat-elev-2); border: 1px solid var(--line);
+  border-radius: 10px; padding: 12px 14px; margin-bottom: 16px;
 }
-.guidance-box .label {
+.mastery-box .label {
   font-family: 'IBM Plex Mono', monospace; font-size: 9px;
-  color: var(--jade-bright); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px;
+  color: var(--chalk-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 9px;
 }
-.guidance-box p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--chalk); }
-.guidance-box.urgent { border-color: var(--danger); }
-.guidance-box.urgent .label { color: var(--danger); }
+.mastery-btns { display: flex; gap: 6px; }
+.mastery-btn {
+  flex: 1; padding: 9px 6px; border-radius: 7px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.03em; text-transform: uppercase;
+  background: var(--mat-elev); border: 1px solid var(--line); color: var(--chalk-dim);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.mastery-btn:hover { border-color: var(--chalk-dim); color: var(--chalk); }
+.mastery-btn.active.lvl-learning { background: rgba(232,196,104,0.16); border-color: var(--victory); color: var(--victory); font-weight: 600; }
+.mastery-btn.active.lvl-drilling { background: rgba(212,160,23,0.28); border-color: var(--gold); color: var(--gold); font-weight: 600; }
+.mastery-btn.active.lvl-got      { background: var(--jade); border-color: var(--jade-bright); color: var(--jade-bright); font-weight: 600; }
 
 /* ── Quick ref list ── */
 .quickref-list { display: flex; flex-direction: column; gap: 8px; }
@@ -488,17 +456,19 @@ main { padding: 12px 16px 60px; }
 
 /* ── Legend ── */
 .legend {
-  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center;
   margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line);
   font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--chalk-dim);
 }
+.legend-heading { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--chalk-dim); opacity: 0.7; }
+.legend-heading:not(:first-child) { margin-left: 8px; }
 .legend-item { display: flex; align-items: center; gap: 6px; }
-.dot { width: 8px; height: 8px; border-radius: 2px; }
-.dot.entry      { background: var(--chalk-dim); }
-.dot.position   { background: var(--jade-bright); }
-.dot.submission { background: var(--victory); }
-.dot.counter    { background: var(--gold); }
-.dot.threat     { background: var(--danger); }
+.dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid transparent; }
+.dot.m-new      { background: var(--mat-elev-2); border-color: var(--line); }
+.dot.m-learning { background: rgba(232,196,104,0.2); border-color: var(--victory); }
+.dot.m-drilling { background: rgba(212,160,23,0.5); border-color: var(--gold); }
+.dot.m-got      { background: var(--jade-bright); border-color: var(--jade-bright); }
+.glyph-key { color: var(--chalk-dim); font-size: 12px; width: 12px; text-align: center; }
 
 /* ── Brand footer ── */
 footer.brand-footer {
@@ -550,9 +520,9 @@ footer.brand-footer {
   h1             { font-size: 22px; }
   .tagline       { display: none; } /* not needed in app chrome */
   .myanmar-slot  { display: none; }
-  .scorecard .value { font-size: 24px; }
   .header-row    { margin-bottom: 8px; }
   .eyebrow       { font-size: 10px; margin-bottom: 3px; }
+  .progress-card { margin-top: 4px; margin-bottom: 4px; }
 
   /* Sidebar nav: 2-column pill grid */
   .section-nav {
@@ -574,36 +544,6 @@ footer.brand-footer {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  /* Match bar: stacked groups, each group uses CSS grid */
-  .match-bar {
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 0;
-    margin-bottom: 12px;
-    flex-wrap: nowrap;
-  }
-  .match-group { flex: none; width: 100%; min-width: 0; }
-
-  .match-group.phase-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5px;
-  }
-  .match-group.phase-group .match-group-label { grid-column: 1 / -1; }
-
-  .match-group.state-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 5px;
-  }
-  .match-group.state-group .match-group-label { grid-column: 1 / -1; }
-
-  .phase-btn, .state-btn {
-    padding: 9px 6px;
-    font-size: 10.5px;
-    border-radius: 7px;
   }
 
   /* Search */
@@ -645,7 +585,6 @@ footer.brand-footer {
   .detail-card  { padding: 22px 26px; margin-top: 18px; }
   .node-title   { font-size: 26px; }
   .node-section p { font-size: 14px; line-height: 1.6; }
-  .guidance-box p { font-size: 13.5px; }
 
   /* Legend */
   .legend { justify-content: flex-start; }
@@ -690,13 +629,17 @@ footer.brand-footer {
     <div class="eyebrow">Chinthe</div>
     <div class="header-row">
       <h1>Guardian Matrix<span>.</span></h1>
-      <div class="scorecard">
-        <div class="label">Net score</div>
-        <div class="value" id="scoreValue">0</div>
-      </div>
     </div>
-    <div class="tagline">Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the modern grappler.</div>
+    <div class="tagline">Your map of the whole game. Study a node, mark what you're learning, watch your game fill in.</div>
     <div class="myanmar-slot">ခြင်္သေ့ — The Guardian Lion</div>
+
+    <div class="progress-card">
+      <div class="progress-top">
+        <span class="progress-label">Your game</span>
+        <span class="progress-figures"><span id="masteryMapped">0</span> mapped · <span id="masteryGot">0</span> got it</span>
+      </div>
+      <div class="progress-bar"><div class="progress-bar-fill" id="masteryBar"></div></div>
+    </div>
 
     <nav class="section-nav" id="sectionNav">
       <button class="nav-btn" data-jump="hub">Hub</button>
@@ -708,20 +651,6 @@ footer.brand-footer {
       <button class="nav-btn" id="quickRefToggle">⚡ Quick Ref</button>
       <button class="nav-btn" id="flagsToggle">🚩 Flags <span id="flagsCount"></span></button>
     </nav>
-
-    <div class="match-bar">
-      <div class="match-group phase-group">
-        <div class="match-group-label">Phase</div>
-        <button class="phase-btn" data-phase="1">1 · No Points</button>
-        <button class="phase-btn" data-phase="2">2 · Points Live</button>
-      </div>
-      <div class="match-group state-group">
-        <div class="match-group-label">Scoreboard</div>
-        <button class="state-btn" data-state="trailing">Trailing</button>
-        <button class="state-btn" data-state="even">Even</button>
-        <button class="state-btn" data-state="leading">Leading</button>
-      </div>
-    </div>
 
     <div class="search-panel" id="searchPanel">
       <input type="text" id="searchInput" placeholder="Search moves, positions, chokes…" autocomplete="off">
@@ -828,11 +757,16 @@ footer.brand-footer {
     </div>
 
     <div class="legend">
-      <div class="legend-item"><span class="dot entry"></span> Entry</div>
-      <div class="legend-item"><span class="dot position"></span> Position (points)</div>
-      <div class="legend-item"><span class="dot submission"></span> Submission (finish)</div>
-      <div class="legend-item"><span class="dot counter"></span> If defended</div>
-      <div class="legend-item"><span class="dot threat"></span> Threat (against you)</div>
+      <span class="legend-heading">Your progress</span>
+      <div class="legend-item"><span class="dot m-new"></span> New</div>
+      <div class="legend-item"><span class="dot m-learning"></span> Learning</div>
+      <div class="legend-item"><span class="dot m-drilling"></span> Drilling</div>
+      <div class="legend-item"><span class="dot m-got"></span> Got it</div>
+      <span class="legend-heading">Node type</span>
+      <div class="legend-item"><span class="glyph-key">◎</span> Area</div>
+      <div class="legend-item"><span class="glyph-key">◆</span> Position</div>
+      <div class="legend-item"><span class="glyph-key">✦</span> Submission</div>
+      <div class="legend-item"><span class="glyph-key">▲</span> Threat</div>
     </div>
 
     <footer class="brand-footer">Chinthe — Guardian Matrix — Alpha</footer>
@@ -1661,9 +1595,65 @@ const NODES = {
 
 // ---- State ----
 let path = ["hub"];
-let matchPhase = 1;      // 1 = no points, submissions only. 2 = points live.
-let matchState = "even"; // "leading" | "even" | "trailing"
 const QUICK_REF_IDS = ["rnc","guillotine","armbar_mount","triangle_from_armbar","backtake_pass","def_back_threat","def_guard_threat","mount"];
+
+// ---- Mastery (training progress) ----
+// Two sources: manual marks the user sets on a node, and auto marks derived
+// from the Training Journal. Effective level = the higher of the two, so
+// logging a session can only ever advance your map, never downgrade a manual mark.
+const MASTERY_KEY = "chinthe_mastery_v1";
+const MASTERY = { NEW:0, LEARNING:1, DRILLING:2, GOT:3 };
+const MASTERY_CLASS = ["m-new","m-learning","m-drilling","m-got"];
+let manualMastery = (function(){ try { return JSON.parse(localStorage.getItem(MASTERY_KEY)) || {}; } catch(e){ return {}; } })();
+let autoMastery = {};
+function saveMastery(){ try { localStorage.setItem(MASTERY_KEY, JSON.stringify(manualMastery)); } catch(e){} }
+function effectiveMastery(id){ return Math.max(manualMastery[id] || 0, autoMastery[id] || 0); }
+
+// Derive auto-progress from journal sessions: each logged technique tag that
+// maps cleanly to a node marks it "Drilling". Conservative on purpose — a tag
+// that matches more than 4 nodes is treated as too generic and skipped, so a
+// note like "guard" doesn't light up half the tree.
+function deriveAutoMastery(){
+  autoMastery = {};
+  let sessions = [];
+  try { sessions = JSON.parse(localStorage.getItem("chinthe_journal_v1")) || []; } catch(e){}
+  const norm = s => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const nodeNorm = Object.keys(NODES).map(id => ({ id, t: norm(NODES[id].title) }));
+  const tags = new Set();
+  sessions.forEach(s => (s.techniques || []).forEach(t => tags.add(norm(t))));
+  tags.forEach(tag => {
+    if (tag.length < 4) return;
+    const hits = nodeNorm.filter(({t}) => t && (t.includes(tag) || tag.includes(t))).map(x => x.id);
+    if (!hits.length || hits.length > 4) return;
+    hits.forEach(id => { autoMastery[id] = Math.max(autoMastery[id] || 0, MASTERY.DRILLING); });
+  });
+}
+
+function setMastery(id, level){
+  if ((manualMastery[id] || 0) === level) delete manualMastery[id]; // tap the active level to clear it
+  else manualMastery[id] = level;
+  saveMastery();
+  paintMastery();
+  renderProgress();
+  renderDetail();
+}
+
+function paintMastery(){
+  Object.keys(nodeEls).forEach(id => {
+    const btn = nodeEls[id];
+    MASTERY_CLASS.forEach(c => btn.classList.remove(c));
+    btn.classList.add(MASTERY_CLASS[effectiveMastery(id)]);
+  });
+}
+
+function renderProgress(){
+  const ids = Object.keys(NODES);
+  let mapped = 0, got = 0;
+  ids.forEach(id => { const l = effectiveMastery(id); if (l > 0) mapped++; if (l === MASTERY.GOT) got++; });
+  document.getElementById("masteryMapped").textContent = mapped;
+  document.getElementById("masteryGot").textContent = got;
+  document.getElementById("masteryBar").style.width = Math.round(mapped / ids.length * 100) + "%";
+}
 
 // Reverse-lookup: which nodes point to a given node as a child (used by search context tags)
 const PARENTS = {};
@@ -1867,17 +1857,16 @@ function renderPathConnectors(){
 }
 
 function renderTree(){
+  // Mastery is the primary paint (persistent per-node); "current" is just a
+  // gold focus ring on whatever you're reading. Nothing is ever locked —
+  // this is a study map, you can jump anywhere.
   const currentId = path[path.length-1];
-  const pathSet = new Set(path);
-  const availableSet = new Set(NODES[currentId].children || []);
-
   Object.keys(nodeEls).forEach(id=>{
     const btn = nodeEls[id];
-    const state = id===currentId ? "current" : pathSet.has(id) ? "visited" : availableSet.has(id) ? "available" : "locked";
-    btn.classList.remove("state-current","state-visited","state-available","state-locked");
-    btn.classList.add("state-"+state);
+    btn.classList.toggle("state-current", id===currentId);
     btn.setAttribute("aria-current", id===currentId ? "step" : "false");
   });
+  paintMastery();
 
   Object.values(edgeEls).forEach(el=>el.classList.remove("lit"));
   for (let i=0; i<path.length-1; i++){
@@ -2041,26 +2030,6 @@ function pointsBadge(points){
   if (points < 0) return `<span class="badge pts-neg">${points} pt</span>`;
   return `<span class="badge pts-pos">+${points} pt${points===1?"":"s"}</span>`;
 }
-function computeScore(){
-  let total = 0, win = false, loss = false;
-  path.forEach(id=>{
-    const n = NODES[id];
-    // Phase 1 = first half of the match: no points are live (submissions still end it)
-    if (typeof n.points === "number" && matchPhase !== 1) total += n.points;
-    if (n.points === "WIN") win = true;
-    if (n.points === "LOSS") loss = true;
-  });
-  return {total, win, loss};
-}
-
-function renderScore(){
-  const {total, win, loss} = computeScore();
-  const scoreEl = document.getElementById("scoreValue");
-  scoreEl.textContent = win ? "TAP" : loss ? "TAPPED"
-    : (matchPhase === 1 ? "—" : (total>=0 ? "+"+total : total));
-  scoreEl.className = "value" + (win ? " win" : loss ? " loss" : "");
-}
-
 // Make a non-button element keyboard-operable like a button
 function makeActionable(el, fn){
   el.setAttribute("role","button");
@@ -2095,41 +2064,6 @@ function goBack(){
   render();
 }
 
-function computeGuidance(node){
-  // Only meaningful for decision-bearing node types
-  if (!["position","submission","threat"].includes(node.type)) return null;
-
-  // Terminal loss nodes: always the same message, regardless of match state
-  if (node.points === "LOSS"){
-    return { text: "Tap early — no scoreboard situation, phase, or lead is worth a joint injury or blacking out.", urgent: true };
-  }
-
-  const p1 = matchPhase === 1;
-
-  if (node.type === "submission"){ // WIN nodes
-    if (p1) return { text: "No points live yet — pursue this fully. A failed attempt costs nothing on the scoreboard right now.", urgent:false };
-    if (matchState === "leading") return { text: "You're leading with points live — only commit if the entry is clean. A scrambled failed attempt can hand back the position you're protecting.", urgent:false };
-    if (matchState === "trailing") return { text: "You're trailing with points live — this is exactly the commitment level you need. Staying safe doesn't close the gap.", urgent:true };
-    return { text: "Score is even and points are live — a clean entry is worth the risk. Don't force it from a bad grip just because the clock is running.", urgent:false };
-  }
-
-  if (node.type === "position" && typeof node.points === "number" && node.points > 0){
-    if (p1) return { text: "No points live yet — treat this purely as a platform for the submission chain, not as a scoring event.", urgent:false };
-    if (matchState === "leading") return { text: "Bank these points, then weigh settling into control against chasing the higher-risk submission chain below.", urgent:false };
-    if (matchState === "trailing") return { text: "These points help, but they won't close the gap alone — use this as a bridge into the submission chain rather than stalling here.", urgent:false };
-    return { text: "Bank the points, then decide based on how clean your entry into the next attack looks.", urgent:false };
-  }
-
-  if (node.type === "threat"){
-    if (p1) return { text: "No points at stake yet, but a submission conceded here still ends the match immediately — treat this with full urgency regardless of phase.", urgent:true };
-    if (matchState === "leading") return { text: "You have a lead to protect — prioritize clean survival over an escape that risks a scramble costing you the position and the lead together.", urgent:true };
-    if (matchState === "trailing") return { text: "You're already behind — a little extra risk in the escape is more acceptable here than it would be protecting a lead.", urgent:false };
-    return { text: "Work the standard survival priority order — no reason to take on extra risk while the score is even.", urgent:true };
-  }
-
-  return null;
-}
-
 function renderDetail(){
   const centerId = path[path.length-1];
   const node = NODES[centerId];
@@ -2139,12 +2073,19 @@ function renderDetail(){
         <div class="label">${label}</div>
         <p>${text}</p>
       </div>` : "";
-  const guidance = computeGuidance(node);
-  const guidanceHtml = guidance ? `
-    <div class="guidance-box${guidance.urgent ? ' urgent' : ''}">
-      <div class="label">Match Guidance — Phase ${matchPhase}, ${matchState}</div>
-      <p>${guidance.text}</p>
-    </div>` : "";
+
+  // The hub is a map root, not a technique — no mastery marker on it.
+  const level = effectiveMastery(centerId);
+  const autoOnly = centerId!=="hub" && !manualMastery[centerId] && autoMastery[centerId];
+  const masteryHtml = centerId==="hub" ? "" : `
+    <div class="mastery-box">
+      <div class="label">Your progress${autoOnly ? " · auto-tracked from your journal" : ""}</div>
+      <div class="mastery-btns">
+        <button type="button" class="mastery-btn lvl-learning${level===1?' active':''}" data-lvl="1">Learning</button>
+        <button type="button" class="mastery-btn lvl-drilling${level===2?' active':''}" data-lvl="2">Drilling</button>
+        <button type="button" class="mastery-btn lvl-got${level===3?' active':''}" data-lvl="3">Got it</button>
+      </div>
+    </div>`;
 
   card.innerHTML = `
     <div class="detail-card type-${node.type}">
@@ -2153,23 +2094,24 @@ function renderDetail(){
         ${pointsBadge(node.points)}
       </div>
       <h2 class="node-title">${node.title}</h2>
-      ${guidanceHtml}
+      ${masteryHtml}
       ${section("Objective", node.objective)}
       ${section("Mechanics", node.mechanics)}
       ${section("Opponent Reactions", node.defense, "dim")}
       ${section("Common Mistake", node.commonMistake, "mistake")}
       ${section("Drill", node.drill)}
-      ${(!node.children || node.children.length===0) ? `<div class="empty-note">End of chain — no further branches mapped yet.</div>` : ""}
+      ${(!node.children || node.children.length===0) ? `<div class="empty-note">Leaf node — no branches lead onward from here.</div>` : ""}
     </div>
   `;
+  card.querySelectorAll(".mastery-btn").forEach(b=>{
+    b.onclick = ()=> setMastery(centerId, Number(b.dataset.lvl));
+  });
 }
 
 function render(){
   document.querySelectorAll(".nav-btn[data-jump]").forEach(btn=>{
     btn.classList.toggle("active", path[path.length-1] === btn.dataset.jump && path.length===1);
   });
-
-  renderScore();
 
   const trail = document.getElementById("chainTrail");
   trail.innerHTML = "";
@@ -2199,26 +2141,6 @@ document.querySelectorAll(".nav-btn[data-jump]").forEach(btn=>{
   btn.onclick = ()=>jumpTo(btn.dataset.jump);
 });
 document.getElementById("backBtn").onclick = goBack;
-
-// ---- Match phase / scoreboard state ----
-function setPhase(p){
-  matchPhase = p;
-  document.querySelectorAll(".phase-btn").forEach(b=>b.classList.toggle("active", Number(b.dataset.phase)===p));
-  renderScore();
-  renderDetail();
-}
-function setMatchState(s){
-  matchState = s;
-  document.querySelectorAll(".state-btn").forEach(b=>{
-    b.classList.remove("active","leading","even","trailing");
-    if (b.dataset.state===s) b.classList.add("active", s);
-  });
-  renderDetail();
-}
-document.querySelectorAll(".phase-btn").forEach(b=> b.onclick = ()=>setPhase(Number(b.dataset.phase)) );
-document.querySelectorAll(".state-btn").forEach(b=> b.onclick = ()=>setMatchState(b.dataset.state) );
-setPhase(matchPhase);
-setMatchState(matchState);
 
 // ---- Quick Reference ----
 function renderQuickRef(){
@@ -2290,24 +2212,20 @@ searchInput.addEventListener("input", ()=>{
 window.addEventListener("resize", ()=> centerOnCurrentNode(false));
 
 // ---- Export ----
+const MASTERY_LABEL = ["New", "Learning", "Drilling", "Got it"];
 function buildExportText(){
-  const {total, win, loss} = computeScore();
   const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-  const scoreLabel = win ? 'FINISH — TAP' : loss ? 'TAPPED' : (total>=0?'+':'')+total+' pts';
   const filtered = path.filter(id=>id!=='hub');
 
-  let md = `# Guardian Matrix — Chain Notes\n`;
+  let md = `# Guardian Matrix — Study Notes\n`;
   md += `**CHINTHE / Guardian Matrix** — exported ${date}\n`;
-  md += `**Chain score:** ${scoreLabel}\n`;
-  md += `**Match context at export:** Phase ${matchPhase} (${matchPhase===1?'no points live':'points live'}), scoreboard: ${matchState}\n\n`;
+  md += `**Line explored:** ${filtered.map(id=>NODES[id].title).join(' → ') || '(hub)'}\n\n`;
   md += `---\n\n`;
 
   filtered.forEach((id, i)=>{
     const n = NODES[id];
-    const pts = n.points==='WIN' ? ' — FINISH' : n.points==='LOSS' ? ' — TAPPED' :
-                typeof n.points==='number' && n.points!==0 ? ` (${n.points>0?'+':''}${n.points} pts)` : '';
-    md += `## Step ${i+1}: ${n.title}${pts}\n`;
-    md += `**Type:** ${typeLabel(n.type)}\n\n`;
+    md += `## Step ${i+1}: ${n.title}\n`;
+    md += `**Type:** ${typeLabel(n.type)} · **Your progress:** ${MASTERY_LABEL[effectiveMastery(id)]}\n\n`;
     if(n.objective)     md += `**Objective:** ${n.objective}\n\n`;
     if(n.mechanics)     md += `**Mechanics:** ${n.mechanics}\n\n`;
     if(n.defense)       md += `**Opponent Reactions:** ${n.defense}\n\n`;
@@ -2316,16 +2234,15 @@ function buildExportText(){
     md += `---\n\n`;
   });
 
-  md += `*Exported from CHINTHE Guardian Matrix — Alpha*\n`;
+  md += `*Exported from CHINTHE Guardian Matrix*\n`;
   return md;
 }
 
 function showExportModal(){
   const text = buildExportText();
-  const {total, win, loss} = computeScore();
   const filtered = path.filter(id=>id!=='hub');
   document.getElementById('modalSub').textContent =
-    `${filtered.length} step${filtered.length===1?'':'s'} · ${win?'FINISH':loss?'TAPPED':(total>=0?'+':'')+total+' pts'}`;
+    `${filtered.length} step${filtered.length===1?'':'s'} explored`;
   document.getElementById('exportText').value = text;
   document.getElementById('copyFeedback').style.display='none';
   document.getElementById('exportModal').style.display='flex';
@@ -2495,6 +2412,13 @@ document.addEventListener("keydown", e=>{
 });
 
 updateFlagsCount();
+deriveAutoMastery();   // read the Training Journal → auto-progress
+renderProgress();
+// Re-sync auto-progress whenever the user returns to the tab (they may have
+// logged sessions in the Journal in the meantime).
+document.addEventListener("visibilitychange", ()=>{
+  if (document.visibilityState === "visible"){ deriveAutoMastery(); paintMastery(); renderProgress(); }
+});
 // Defer initial render to let CSS flex layout settle before reading the
 // tree viewport's size — needed for the fit-to-context framing.
 requestAnimationFrame(function(){
