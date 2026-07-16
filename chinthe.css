@@ -30,6 +30,8 @@
   --steel:       #7A7A7A;
   --danger:      #B5462F;
   --danger-dim:  #2A1610;
+  --victory:     #E8C468;   /* brighter gold — finish / win accents */
+  --victory-dim: #2A2210;
 
   /* Utility */
   --line:        rgba(245, 243, 236, 0.08);
@@ -396,6 +398,36 @@ a {
 ═══════════════════════════════════════════════════ */
 .divider { height: 1px; background: var(--line); }
 .section-divider { height: 1px; background: var(--line); margin: 0; }
+
+/* ═══════════════════════════════════════════════════
+   11b. DISCLOSURE ACCORDION (shared)
+   Progressive disclosure for detail content — a lead
+   paragraph stays visible, deeper sections collapse
+   behind single-open rows. Used by the Matrix node
+   card and the Knowledge technique cards.
+═══════════════════════════════════════════════════ */
+.node-lead { margin: 2px 0 4px; }
+.node-lead p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--stone); }
+
+.disc { margin-top: 6px; }
+.disc-section { border-top: 1px solid var(--line); }
+.disc-head {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 12px 2px;
+  background: none; border: none; cursor: pointer; text-align: left;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--stone-dim); transition: color 0.15s;
+}
+.disc-head:hover { color: var(--stone); }
+.disc-section.open > .disc-head { color: var(--stone); }
+.disc-caret { flex-shrink: 0; font-size: 10px; opacity: 0.6; transition: transform 0.2s; }
+.disc-section.open > .disc-head .disc-caret { transform: rotate(90deg); }
+.disc-body { display: none; padding: 0 2px 14px; }
+.disc-section.open > .disc-body { display: block; }
+.disc-body p { margin: 0; font-size: 13.5px; line-height: 1.6; color: var(--stone); }
+.disc-body.tone-dim p  { color: var(--stone-dim); }
+.disc-body.tone-warn p { color: var(--danger); }
 
 /* ═══════════════════════════════════════════════════
    12. MODAL / OVERLAY (shared)

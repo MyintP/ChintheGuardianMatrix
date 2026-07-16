@@ -18,15 +18,16 @@
    ONE cascade order. Zero !important.
 ══════════════════════════════════════════════════════ */
 
-/* ── Alias matrix-specific tokens ── */
+/* ── Matrix-local aliases → single source of truth in chinthe.css.
+   No hard-coded colours here: these just give the app-shell shorter
+   local names for the shared brand tokens. ── */
 :root {
-  --mat:        #0D0D0D;
-  --mat-elev:   #171717;
-  --mat-elev-2: #222222;
-  --chalk:      #F2EDE2;
-  --chalk-dim:  #A29E93;
-  --victory:    #E8C468;
-  --victory-dim:#2E2410;
+  --mat:        var(--bg);
+  --mat-elev:   var(--surface);
+  --mat-elev-2: var(--surface-2);
+  --chalk:      var(--stone);
+  --chalk-dim:  var(--stone-dim);
+  /* --victory / --victory-dim inherited from chinthe.css */
 }
 
 /* ── Base body override (matrix is an app, not a document) ── */
@@ -252,10 +253,14 @@ main { padding: 12px 16px 60px; }
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 .tree-node-label {
-  font-size: 9.5px; line-height: 1.2; text-align: center; color: var(--chalk-dim);
+  font-size: 11px; line-height: 1.2; text-align: center; color: var(--chalk-dim);
   max-width: 104px; background: rgba(13, 13, 13, 0.55); border-radius: 6px;
   padding: 2px 5px; transition: color 0.25s;
 }
+/* Level-of-detail: when zoomed out for an overview, labels would render as
+   unreadable slivers — hide them so the tree reads as a mastery heatmap.
+   The focused node keeps its label. */
+.tree-canvas.lod-badges .tree-node:not(.state-current) .tree-node-label { display: none; }
 .tree-node-pts {
   display: block; margin-top: 1px; font-family: 'IBM Plex Mono', monospace;
   font-size: 8px; opacity: 0.85;
@@ -1883,39 +1888,27 @@ const treeViewport = document.getElementById("treeViewport");
 const treeCanvas = document.getElementById("treeCanvas");
 const treeHint = document.getElementById("treeHint");
 
+const LOD_ZOOM = 0.5;   // below this, labels are unreadable → badge heatmap
 function clampZoom(z){ return Math.min(1.6, Math.max(0.08, z)); }
 function applyTransform(animate){
   treeCanvas.style.transition = (animate && !REDUCE_MOTION) ? "transform 0.35s cubic-bezier(.2,.8,.2,1)" : "none";
   treeCanvas.style.transform = `translate(${panX}px,${panY}px) scale(${zoom})`;
+  treeCanvas.classList.toggle("lod-badges", zoom < LOD_ZOOM);
 }
 function dismissHint(){ treeHint.classList.add("faded"); }
-function bboxOf(ids, pad){
-  let x0=Infinity, y0=Infinity, x1=-Infinity, y1=-Infinity;
-  ids.forEach(id=>{
-    const p = TREE.posById[id];
-    if (!p) return;
-    x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y);
-    x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y);
-  });
-  return { x0: x0-pad, y0: y0-pad, x1: x1+pad, y1: y1+pad };
-}
-function fitBox(b, animate, maxZoom){
-  const vw = treeViewport.clientWidth || 320, vh = treeViewport.clientHeight || 400;
-  const bw = Math.max(b.x1-b.x0, 1), bh = Math.max(b.y1-b.y0, 1);
-  zoom = clampZoom(Math.min(vw/bw, vh/bh, maxZoom || 1));
-  panX = vw/2 - (b.x0+b.x1)/2 * zoom;
-  panY = vh/2 - (b.y0+b.y1)/2 * zoom;
-  applyTransform(animate);
-}
-// Frame the current node together with its options (children), its primary
-// parent, and the step we came from — every navigation lands on a view
-// where all your choices are on screen.
+// Center the focused node at a comfortable, always-readable zoom. The radial
+// layout keeps a node's children on the adjacent ring, so they're in view
+// without shrinking the whole map to an unreadable sliver (the old fit-to-
+// bbox could drop to ~0.14 on wide branches). Overview is the pinch/zoom-out
+// gesture, which the level-of-detail heatmap handles.
 function centerOnCurrentNode(animate){
-  const cur = path[path.length-1];
-  const ids = [cur, ...(NODES[cur].children || [])];
-  (PARENTS[cur] || []).forEach(p=>{ if (primaryEdgeKeys.has(p+"→"+cur)) ids.push(p); });
-  if (path.length > 1) ids.push(path[path.length-2]);
-  fitBox(bboxOf(ids, 115), animate, 1);
+  const vw = treeViewport.clientWidth || 320, vh = treeViewport.clientHeight || 400;
+  zoom = clampZoom(vw < 600 ? 0.82 : 1);
+  const p = TREE.posById[path[path.length-1]];
+  if (!p) return;
+  panX = vw/2 - p.x*zoom;
+  panY = vh*0.40 - p.y*zoom;   // focus a touch above center so children below stay visible
+  applyTransform(animate);
 }
 function zoomBy(factor, cx, cy){
   const vw = treeViewport.clientWidth, vh = treeViewport.clientHeight;
@@ -2068,11 +2061,6 @@ function renderDetail(){
   const centerId = path[path.length-1];
   const node = NODES[centerId];
   const card = document.getElementById("detailCard");
-  const section = (label, text, cls="") => text ? `
-      <div class="node-section ${cls}">
-        <div class="label">${label}</div>
-        <p>${text}</p>
-      </div>` : "";
 
   // The hub is a map root, not a technique — no mastery marker on it.
   const level = effectiveMastery(centerId);
@@ -2087,6 +2075,25 @@ function renderDetail(){
       </div>
     </div>`;
 
+  // Progressive disclosure: a short lead stays visible; the deeper sections
+  // collapse behind single-open rows so a tap focuses rather than dumps.
+  const leadText = node.objective || node.mechanics || "";
+  const mechIsLead = !node.objective && !!node.mechanics;
+  const leadHtml = leadText ? `<div class="node-lead"><p>${leadText}</p></div>` : "";
+  const discDefs = [
+    mechIsLead ? null : { label:"Mechanics", text:node.mechanics, tone:"" },
+    { label:"Opponent Reactions", text:node.defense, tone:"tone-dim" },
+    { label:"Common Mistake", text:node.commonMistake, tone:"tone-warn" },
+    { label:"Drill", text:node.drill, tone:"" }
+  ].filter(d=>d && d.text);
+  const discHtml = discDefs.length ? `<div class="disc">` + discDefs.map((d,i)=>`
+      <div class="disc-section${i===0?' open':''}">
+        <button type="button" class="disc-head" aria-expanded="${i===0?'true':'false'}">
+          <span>${d.label}</span><span class="disc-caret" aria-hidden="true">▸</span>
+        </button>
+        <div class="disc-body ${d.tone}"><p>${d.text}</p></div>
+      </div>`).join("") + `</div>` : "";
+
   card.innerHTML = `
     <div class="detail-card type-${node.type}">
       <div class="badges">
@@ -2095,16 +2102,25 @@ function renderDetail(){
       </div>
       <h2 class="node-title">${node.title}</h2>
       ${masteryHtml}
-      ${section("Objective", node.objective)}
-      ${section("Mechanics", node.mechanics)}
-      ${section("Opponent Reactions", node.defense, "dim")}
-      ${section("Common Mistake", node.commonMistake, "mistake")}
-      ${section("Drill", node.drill)}
+      ${leadHtml}
+      ${discHtml}
       ${(!node.children || node.children.length===0) ? `<div class="empty-note">Leaf node — no branches lead onward from here.</div>` : ""}
     </div>
   `;
   card.querySelectorAll(".mastery-btn").forEach(b=>{
     b.onclick = ()=> setMastery(centerId, Number(b.dataset.lvl));
+  });
+  // Single-open accordion
+  card.querySelectorAll(".disc-head").forEach(head=>{
+    head.onclick = ()=>{
+      const sec = head.parentElement;
+      const isOpen = sec.classList.contains("open");
+      card.querySelectorAll(".disc-section.open").forEach(s=>{
+        s.classList.remove("open");
+        s.querySelector(".disc-head").setAttribute("aria-expanded","false");
+      });
+      if (!isOpen){ sec.classList.add("open"); head.setAttribute("aria-expanded","true"); }
+    };
   });
 }
 

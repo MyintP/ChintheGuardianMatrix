@@ -11,12 +11,7 @@
 <link rel="stylesheet" href="chinthe.css">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0D000D;--surface:#111315;--surface-2:#1B1E22;--surface-3:#222222;
-  --jade:#0E2B22;--jade-bright:#3FA383;--gold:#D4A017;--gold-dim:#2A2210;
-  --stone:#F2EDE2;--stone-dim:#A29E93;--crimson:#8D2323;--steel:#7A7A7A;
-  --line:rgba(245,243,236,0.08);--radius:10px;
-}
+/* Design tokens come from chinthe.css — single source of truth. */
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:80px;}
 /* Nav styles in chinthe.css */
@@ -946,11 +941,7 @@ function renderCards(){
         <div class="tech-card-tags">${(t.tags||[]).map(tg=>`<span class="tag">${tg}</span>`).join("")}</div>
       </div>
       <div class="tech-detail" id="detail-${t.id}">
-        ${t.objective?`<div class="detail-section"><div class="detail-label">Objective</div><div class="detail-text">${t.objective}</div></div>`:""}
-        ${t.mechanics?`<div class="detail-section"><div class="detail-label">Mechanics</div><div class="detail-text">${t.mechanics}</div></div>`:""}
-        ${t.defense?`<div class="detail-section"><div class="detail-label">Opponent Reactions</div><div class="detail-text" style="color:var(--stone-dim)">${t.defense}</div></div>`:""}
-        ${t.mistake?`<div class="detail-section"><div class="detail-label">Common Mistake</div><div class="detail-text mistake">${t.mistake}</div></div>`:""}
-        ${t.drill?`<div class="detail-section"><div class="detail-label">Drill</div><div class="detail-text">${t.drill}</div></div>`:""}
+        ${discBlock(t)}
         <button class="close-btn" onclick="event.stopPropagation();closeCard('${t.id}')">✕ Close</button>
       </div>
     `;
@@ -991,6 +982,42 @@ function closeCard(id){
   if(d) d.classList.remove("open");
   syncExpanded();
 }
+
+// Progressive disclosure inside an expanded card: Objective is the lead,
+// the rest collapse behind single-open rows (first open by default).
+function discBlock(t){
+  const lead = t.objective ? `<div class="node-lead"><p>${t.objective}</p></div>` : "";
+  const defs = [
+    { label:"Mechanics", text:t.mechanics, tone:"" },
+    { label:"Opponent Reactions", text:t.defense, tone:"tone-dim" },
+    { label:"Common Mistake", text:t.mistake, tone:"tone-warn" },
+    { label:"Drill", text:t.drill, tone:"" }
+  ].filter(d=>d.text);
+  const disc = defs.length ? `<div class="disc">` + defs.map((d,i)=>`
+    <div class="disc-section${i===0?' open':''}">
+      <button type="button" class="disc-head" aria-expanded="${i===0?'true':'false'}">
+        <span>${d.label}</span><span class="disc-caret" aria-hidden="true">▸</span>
+      </button>
+      <div class="disc-body ${d.tone}"><p>${d.text}</p></div>
+    </div>`).join("") + `</div>` : "";
+  return lead + disc;
+}
+
+// One delegated handler for every card's accordion (grid persists across
+// re-renders, its children don't — so bind once, here).
+document.getElementById("grid").addEventListener("click", e=>{
+  const head = e.target.closest(".disc-head");
+  if(!head) return;
+  e.stopPropagation();
+  const sec = head.parentElement;
+  const scope = head.closest(".disc");
+  const isOpen = sec.classList.contains("open");
+  scope.querySelectorAll(".disc-section.open").forEach(s=>{
+    s.classList.remove("open");
+    s.querySelector(".disc-head").setAttribute("aria-expanded","false");
+  });
+  if(!isOpen){ sec.classList.add("open"); head.setAttribute("aria-expanded","true"); }
+});
 
 document.querySelectorAll(".filter-btn").forEach(btn=>{
   btn.onclick=()=>{
