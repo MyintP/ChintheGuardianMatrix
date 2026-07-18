@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0D000D">
+<title>Compete — CHINTHE</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="chinthe-lion.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="chinthe.css">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Design tokens + .btn / .disc / nav come from chinthe.css — single source of truth.
+   Compete is a mat-side quick reference: static-first, thumb-first, big and glanceable. */
+
+.compete { max-width: 780px; margin: 0 auto; padding: 24px 20px 100px; }
+.compete-header { margin-bottom: 22px; }
+.compete-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--jade-bright); text-transform: uppercase; margin-bottom: 8px; }
+.compete-title { font-family: 'Oswald', sans-serif; font-size: clamp(40px, 9vw, 68px); text-transform: uppercase; letter-spacing: 0.02em; line-height: 0.95; margin-bottom: 8px; }
+.compete-title span { color: var(--gold); }
+.compete-sub { font-size: 14px; color: var(--stone-dim); line-height: 1.6; max-width: 560px; }
+
+/* Ruleset switcher — segmented control */
+.ruleset-switch { display: flex; gap: 6px; margin-top: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px; }
+.ruleset-btn {
+  flex: 1; padding: 13px 8px; min-height: 44px; border-radius: 999px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  background: none; border: none; color: var(--stone-dim); transition: background 0.15s, color 0.15s;
+}
+.ruleset-btn.active { background: var(--gold); color: var(--bg); font-weight: 600; }
+.ruleset-note { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--stone-dim); margin-top: 10px; line-height: 1.5; }
+.verify-flag { color: var(--victory); }
+
+/* Section scaffolding */
+.compete-section { margin-top: 30px; }
+.section-head { font-family: 'Oswald', sans-serif; font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 4px; }
+.section-note { font-size: 12.5px; color: var(--stone-dim); line-height: 1.5; margin-bottom: 14px; }
+
+/* ── Net-score tracker ── */
+.tracker { background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 18px 16px 16px; }
+.tracker-scores { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-bottom: 16px; }
+.tracker-col { text-align: center; }
+.tracker-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); margin-bottom: 4px; }
+.tracker-col.you .tracker-label { color: var(--jade-bright); }
+.tracker-col.opp .tracker-label { color: var(--danger); }
+.tracker-value { font-family: 'Oswald', sans-serif; font-size: clamp(52px, 15vw, 76px); line-height: 0.9; color: var(--stone); }
+.tracker-diff { font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.06em; color: var(--stone-dim); white-space: nowrap; }
+.tracker-diff strong { display: block; font-size: 22px; color: var(--gold); margin-top: 2px; }
+.tracker-diff.lead strong { color: var(--jade-bright); }
+.tracker-diff.trail strong { color: var(--danger); }
+.tracker-adds { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tracker-add-col { display: flex; flex-direction: column; gap: 6px; }
+.tracker-add-col .add-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.add-btn {
+  flex: 1; min-width: 44px; min-height: 44px; padding: 10px 6px; border-radius: 10px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600;
+  background: var(--surface-2); border: 1px solid var(--line); color: var(--stone); transition: background 0.12s, border-color 0.12s;
+}
+.tracker-col.you ~ .tracker-adds .you-col .add-btn:hover,
+.you-col .add-btn:hover { border-color: var(--jade-bright); }
+.opp-col .add-btn:hover { border-color: var(--danger); }
+.add-btn.minus { flex: 0 0 44px; color: var(--stone-dim); font-size: 18px; }
+.tracker-reset { display: block; margin: 14px auto 0; }
+
+/* ── Scoring cheat-sheet ── */
+.score-table { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.score-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; border-top: 1px solid var(--line); }
+.score-row:first-child { border-top: none; }
+.score-row.neg { color: var(--stone-dim); }
+.score-action { font-size: 14.5px; color: var(--stone); }
+.score-row.neg .score-action { color: var(--stone-dim); }
+.score-pts { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: var(--jade-bright); white-space: nowrap; }
+.score-pts.neg { color: var(--danger); }
+.score-pts.adv { color: var(--victory); }
+.score-subhead { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); padding: 10px 16px 4px; background: var(--surface-2); }
+
+/* ── Quick-jump ── */
+.qjump-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.qjump {
+  display: flex; flex-direction: column; gap: 3px; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 15px 16px; transition: border-color 0.15s, transform 0.12s;
+}
+.qjump:hover { border-color: var(--gold); transform: translateY(-1px); }
+.qjump-name { font-family: 'Oswald', sans-serif; font-size: 17px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--stone); }
+.qjump-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone-dim); }
+
+/* Mat-side tap targets: lift the guidance rows to the 44px floor on this page
+   only — the shared .disc-head stays as-is for the study pages. */
+#guidance .disc-head { padding: 14px 2px; min-height: 44px; }
+
+footer.brand-footer { text-align: center; margin-top: 40px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--stone-dim); letter-spacing: 0.12em; text-transform: uppercase; }
+
+@media (min-width: 900px) {
+  .compete { padding: 40px 20px 100px; }
+  .tracker-adds { gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-brand" href="index.html">
+      <img class="site-nav-lion" src="chinthe-lion.png" alt="" width="28" height="28">
+      <span class="site-nav-wordmark">CHINTHE</span>
+    </a>
+    <div class="site-nav-links">
+      <a class="site-nav-link" href="index.html">Home</a>
+      <a class="site-nav-link" href="chinthe-guardian-matrix.html">Matrix</a>
+      <a class="site-nav-link active" href="competition.html">Compete</a>
+      <a class="site-nav-link" href="knowledge.html">Knowledge</a>
+      <a class="site-nav-link" href="principles.html">Principles</a>
+      <a class="site-nav-link" href="journal.html">Journal</a>
+    </div>
+  </div>
+</nav>
+
+<div class="compete">
+  <div class="compete-header">
+    <div class="compete-eyebrow">CHINTHE — Mat-side</div>
+    <h1 class="compete-title">Compete<span>.</span></h1>
+    <p class="compete-sub">Quick reference for the corner and the cage-side. Scores, decisions, and your core game — one glance.</p>
+
+    <div class="ruleset-switch" id="rulesetSwitch" role="tablist" aria-label="Ruleset">
+      <button class="ruleset-btn" type="button" data-rs="adcc" role="tab">ADCC</button>
+      <button class="ruleset-btn" type="button" data-rs="ibjjf" role="tab">IBJJF</button>
+      <button class="ruleset-btn" type="button" data-rs="naga" role="tab">NAGA</button>
+    </div>
+    <p class="ruleset-note" id="rulesetNote"></p>
+  </div>
+
+  <!-- Net-score tracker -->
+  <div class="compete-section">
+    <div class="section-head">Score</div>
+    <p class="section-note">Tap to add as points happen. Stays put if you leave and come back.</p>
+    <div class="tracker">
+      <div class="tracker-scores">
+        <div class="tracker-col you">
+          <div class="tracker-label">You</div>
+          <div class="tracker-value" id="youScore">0</div>
+        </div>
+        <div class="tracker-diff" id="trackerDiff">NET<strong>0</strong></div>
+        <div class="tracker-col opp">
+          <div class="tracker-label">Opponent</div>
+          <div class="tracker-value" id="oppScore">0</div>
+        </div>
+      </div>
+      <div class="tracker-adds">
+        <div class="tracker-add-col you-col" id="youAdds"></div>
+        <div class="tracker-add-col opp-col" id="oppAdds"></div>
+      </div>
+      <button class="btn btn-ghost tracker-reset" type="button" id="resetScore">Reset score</button>
+    </div>
+  </div>
+
+  <!-- Scoring cheat-sheet -->
+  <div class="compete-section">
+    <div class="section-head">Scoring</div>
+    <p class="section-note"><span class="verify-flag">⚑ Verify against the current official rulebook before you rely on it.</span></p>
+    <div class="score-table" id="scoreTable"></div>
+  </div>
+
+  <!-- Decision guidance -->
+  <div class="compete-section">
+    <div class="section-head">If the clock's running…</div>
+    <p class="section-note">Tap your scoreboard situation.</p>
+    <div class="disc" id="guidance"></div>
+  </div>
+
+  <!-- Quick-jump -->
+  <div class="compete-section">
+    <div class="section-head">Your go-to game</div>
+    <p class="section-note">Jump straight to the position on the Matrix.</p>
+    <div class="qjump-grid" id="qjump"></div>
+  </div>
+
+  <footer class="brand-footer">Chinthe — Compete — Alpha</footer>
+</div>
+
+<script>
+// ─── Ruleset data ───────────────────────────────────────────────
+// ADCC aligns to this app's own Matrix values. IBJJF / NAGA use standard
+// published figures — VERIFY against the current official rulebook. Every
+// number lives here so corrections are one line.
+const RULESETS = {
+  adcc: {
+    name: "ADCC",
+    note: "Submission-only in the first half; points go live in the second half. Numbers match the CHINTHE Matrix.",
+    verify: false,
+    positive: [
+      { action: "Takedown (to guard/control)", pts: 2 },
+      { action: "Clean sweep", pts: 2 },
+      { action: "Knee on belly", pts: 2 },
+      { action: "Mount", pts: 2 },
+      { action: "Guard pass", pts: 3 },
+      { action: "Back control (hooks / body triangle)", pts: 3 }
+    ],
+    other: [
+      { action: "Pulling guard without engaging", pts: "−2", kind: "neg" },
+      { action: "Stalling (per warning)", pts: "−1", kind: "neg" }
+    ],
+    quickAdd: [2, 3]
+  },
+  ibjjf: {
+    name: "IBJJF",
+    note: "Points live the whole match; advantages break ties. Verify against the current IBJJF rulebook.",
+    verify: true,
+    positive: [
+      { action: "Takedown", pts: 2 },
+      { action: "Sweep", pts: 2 },
+      { action: "Knee on belly", pts: 2 },
+      { action: "Guard pass", pts: 3 },
+      { action: "Mount", pts: 4 },
+      { action: "Back control (hooks)", pts: 4 }
+    ],
+    other: [
+      { action: "Advantage (near-score / near-finish)", pts: "+1 adv", kind: "adv" },
+      { action: "Penalty (stalling / fouls)", pts: "−1", kind: "neg" }
+    ],
+    quickAdd: [2, 3, 4]
+  },
+  naga: {
+    name: "NAGA",
+    note: "No-gi points; values vary by division — verify against your event's current rules.",
+    verify: true,
+    positive: [
+      { action: "Takedown", pts: 2 },
+      { action: "Sweep", pts: 2 },
+      { action: "Knee on belly", pts: 2 },
+      { action: "Guard pass", pts: 3 },
+      { action: "Mount", pts: 4 },
+      { action: "Back mount", pts: 4 }
+    ],
+    other: [
+      { action: "Stalling / penalty", pts: "−1", kind: "neg" }
+    ],
+    quickAdd: [2, 3, 4]
+  }
+};
+
+// Decision guidance is general grappling strategy (no ruleset-specific numbers).
+const GUIDANCE = [
+  { state: "Trailing", tone: "tone-warn", text: "Hunt the finish — the submission resets everything a deficit can't. Raise your risk on entries, but never trade your back or concede a sweep chasing a low-percentage attack. Points help; the tap wins." },
+  { state: "Even", tone: "", text: "Play your highest-percentage game. Take the clean score when it's there, keep advancing position, and don't force a submission from a bad grip just because the clock is running." },
+  { state: "Leading", tone: "tone-dim", text: "Protect position first. Bank what you have, keep climbing to more dominant control, and only commit to a finish when the entry is clean. Don't scramble a lead away." }
+];
+
+// Quick-jump targets deep-link into the Matrix tree (hash → jumpTo).
+const QUICK_JUMPS = [
+  { id: "rnc",          name: "Rear Naked Choke", sub: "Back finish" },
+  { id: "guillotine",   name: "Guillotine",       sub: "Front headlock" },
+  { id: "backtake_pass",name: "Back Take",        sub: "Off the pass" },
+  { id: "mount",        name: "Mount",            sub: "Top control" },
+  { id: "pass",         name: "Guard Passing",    sub: "Top game" },
+  { id: "armbar_mount", name: "Armbar",           sub: "From mount" }
+];
+
+const STORE_KEY = "chinthe_compete_v1";
+let state = loadState();
+
+function loadState(){
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY));
+    if (s && RULESETS[s.ruleset]) return { ruleset: s.ruleset, you: +s.you||0, opp: +s.opp||0 };
+  } catch(e){}
+  return { ruleset: "adcc", you: 0, opp: 0 };
+}
+function saveState(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e){} }
+
+function el(tag, cls, text){
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+}
+
+function renderRuleset(){
+  const rs = RULESETS[state.ruleset];
+  document.querySelectorAll(".ruleset-btn").forEach(b=>{
+    const on = b.dataset.rs === state.ruleset;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  document.getElementById("rulesetNote").textContent = rs.note;
+
+  // Scoring table
+  const table = document.getElementById("scoreTable");
+  table.innerHTML = "";
+  rs.positive.forEach(r=>{
+    const row = el("div", "score-row");
+    row.appendChild(el("span", "score-action", r.action));
+    row.appendChild(el("span", "score-pts", "+" + r.pts));
+    table.appendChild(row);
+  });
+  if (rs.other && rs.other.length){
+    table.appendChild(el("div", "score-subhead", "Other"));
+    rs.other.forEach(r=>{
+      const row = el("div", "score-row neg");
+      row.appendChild(el("span", "score-action", r.action));
+      row.appendChild(el("span", "score-pts " + (r.kind || "neg"), r.pts));
+      table.appendChild(row);
+    });
+  }
+
+  renderTrackerButtons();
+}
+
+function renderTrackerButtons(){
+  const rs = RULESETS[state.ruleset];
+  [["youAdds","you"],["oppAdds","opp"]].forEach(([id, who])=>{
+    const wrap = document.getElementById(id);
+    wrap.innerHTML = "";
+    const row = el("div", "add-row");
+    rs.quickAdd.forEach(p=>{
+      const b = el("button", "add-btn", "+" + p);
+      b.type = "button";
+      b.addEventListener("click", ()=> bump(who, p));
+      row.appendChild(b);
+    });
+    const minus = el("button", "add-btn minus", "−");
+    minus.type = "button";
+    minus.setAttribute("aria-label", "Subtract 1 from " + who);
+    minus.addEventListener("click", ()=> bump(who, -1));
+    row.appendChild(minus);
+    wrap.appendChild(row);
+  });
+}
+
+function bump(who, delta){
+  state[who] = Math.max(0, state[who] + delta);
+  saveState();
+  renderScore();
+}
+
+function renderScore(){
+  document.getElementById("youScore").textContent = state.you;
+  document.getElementById("oppScore").textContent = state.opp;
+  const diff = state.you - state.opp;
+  const box = document.getElementById("trackerDiff");
+  box.className = "tracker-diff" + (diff > 0 ? " lead" : diff < 0 ? " trail" : "");
+  box.innerHTML = "";
+  box.appendChild(document.createTextNode("NET"));
+  box.appendChild(el("strong", null, (diff > 0 ? "+" : "") + diff));
+}
+
+function renderGuidance(){
+  const wrap = document.getElementById("guidance");
+  wrap.innerHTML = "";
+  GUIDANCE.forEach((g, i)=>{
+    const sec = el("div", "disc-section" + (i === 0 ? " open" : ""));
+    const head = el("button", "disc-head");
+    head.type = "button";
+    head.setAttribute("aria-expanded", i === 0 ? "true" : "false");
+    head.appendChild(el("span", null, g.state));
+    const caret = el("span", "disc-caret", "▸");
+    caret.setAttribute("aria-hidden", "true");
+    head.appendChild(caret);
+    const body = el("div", "disc-body " + g.tone);
+    body.appendChild(el("p", null, g.text));
+    sec.appendChild(head); sec.appendChild(body);
+    head.addEventListener("click", ()=>{
+      const open = sec.classList.contains("open");
+      wrap.querySelectorAll(".disc-section.open").forEach(s=>{
+        s.classList.remove("open");
+        s.querySelector(".disc-head").setAttribute("aria-expanded", "false");
+      });
+      if (!open){ sec.classList.add("open"); head.setAttribute("aria-expanded", "true"); }
+    });
+    wrap.appendChild(sec);
+  });
+}
+
+function renderQuickJumps(){
+  const grid = document.getElementById("qjump");
+  QUICK_JUMPS.forEach(q=>{
+    const a = el("a", "qjump");
+    a.href = "chinthe-guardian-matrix.html#" + q.id;
+    a.appendChild(el("span", "qjump-name", q.name));
+    a.appendChild(el("span", "qjump-sub", q.sub));
+    grid.appendChild(a);
+  });
+}
+
+document.querySelectorAll(".ruleset-btn").forEach(b=>{
+  b.addEventListener("click", ()=>{ state.ruleset = b.dataset.rs; saveState(); renderRuleset(); });
+});
+document.getElementById("resetScore").addEventListener("click", ()=>{
+  if (!confirm("Reset the score to 0–0?")) return;
+  state.you = 0; state.opp = 0; saveState(); renderScore();
+});
+
+renderRuleset();
+renderScore();
+renderGuidance();
+renderQuickJumps();
+</script>
+<script src="chinthe.js"></script>
+</body>
+</html>
