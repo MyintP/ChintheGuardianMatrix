@@ -58,7 +58,7 @@ header {
 
 .eyebrow {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
+  font-size: var(--text-xs);
   letter-spacing: 0.2em;
   color: var(--jade-bright);
   text-transform: uppercase;
@@ -85,7 +85,7 @@ h1 {
 h1 span { color: var(--victory); }
 
 .tagline  { font-size: 11px; color: var(--chalk-dim); line-height: 1.4; }
-.myanmar-slot { font-family: 'Noto Sans Myanmar', sans-serif; font-size: 10px; color: var(--chalk-dim); margin-top: 2px; }
+.myanmar-slot { font-family: 'Noto Sans Myanmar', sans-serif; font-size: var(--text-xs); color: var(--chalk-dim); margin-top: 2px; }
 
 /* ── Progress card (mastery) ── */
 .progress-card { margin-top: 12px; }
@@ -96,16 +96,47 @@ h1 span { color: var(--victory); }
 .progress-bar { height: 6px; border-radius: 999px; background: var(--mat-elev-2); overflow: hidden; }
 .progress-bar-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, #C9A23A, #3FA383); transition: width 0.4s ease; }
 
-/* ── Section nav: horizontal scroll on mobile ── */
+/* ── Nav groups: destinations and tools are different jobs, so they no
+   longer sit in one undifferentiated row. ── */
+.nav-group { margin-top: 14px; }
+.nav-group-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--chalk-dim);
+  opacity: 0.75;
+  margin-bottom: 7px;
+}
+
+/* Section nav: horizontal scroll on mobile */
 .section-nav {
   display: flex;
   gap: 6px;
   overflow-x: auto;
-  margin-top: 10px;
   scrollbar-width: none;
   padding-bottom: 2px;
 }
 .section-nav::-webkit-scrollbar { display: none; }
+
+/* Tools read as secondary — ghosted until hovered */
+.tool-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.tool-btn {
+  flex: 1 1 auto;
+  background: none;
+  border: 1px dashed var(--line-strong);
+  color: var(--chalk-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tool-btn:hover { color: var(--chalk); border-color: var(--chalk-dim); }
 
 .nav-btn {
   flex-shrink: 0;
@@ -113,7 +144,7 @@ h1 span { color: var(--victory); }
   border: 1px solid var(--line);
   color: var(--chalk-dim);
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
+  font-size: var(--text-xs);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   padding: 8px 12px;
@@ -124,9 +155,9 @@ h1 span { color: var(--victory); }
 }
 .nav-btn.active { background: var(--chalk); color: var(--mat); border-color: var(--chalk); font-weight: 600; }
 
-/* ── Search panel ── */
-.search-panel { display: none; margin-top: 10px; }
-.search-panel.open { display: block; }
+/* ── Search: persistent, not a hidden toggle. With 102 nodes this is the
+   fastest path to any position, so it earns permanent real estate. ── */
+.search-panel { display: block; margin-top: 12px; }
 .search-panel input {
   width: 100%;
   background: var(--mat-elev);
@@ -162,7 +193,7 @@ h1 span { color: var(--victory); }
 .chain-item { display: flex; align-items: center; flex-shrink: 0; }
 .chain-node {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
+  font-size: var(--text-xs);
   padding: 5px 10px;
   border-radius: 999px;
   border: 1px solid var(--line);
@@ -175,7 +206,8 @@ h1 span { color: var(--victory); }
 .chain-link { width: 12px; height: 1px; background: var(--line); flex-shrink: 0; }
 
 /* ── Main canvas ── */
-main { padding: 12px 16px 60px; }
+/* Bottom padding clears the collapsed detail sheet's peek bar */
+main { padding: 12px 16px 78px; }
 
 /* ── Skill Tree ──
    A persistent, pannable/zoomable dendrogram (Diablo/Arc Raiders style).
@@ -263,7 +295,7 @@ main { padding: 12px 16px 60px; }
 .tree-canvas.lod-badges .tree-node:not(.state-current) .tree-node-label { display: none; }
 .tree-node-pts {
   display: block; margin-top: 1px; font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px; opacity: 0.85;
+  font-size: var(--text-xs); opacity: 0.85;
 }
 
 /* ── Mastery: the badge fill IS your progress on that node ──
@@ -281,7 +313,7 @@ main { padding: 12px 16px 60px; }
   content: "✓"; position: absolute; right: -4px; bottom: -4px;
   width: 16px; height: 16px; border-radius: 50%;
   background: var(--jade-bright); color: #0C1A14;
-  font-size: 10px; font-weight: 700; line-height: 1;
+  font-size: var(--text-xs); font-weight: 700; line-height: 1;
   display: flex; align-items: center; justify-content: center;
   border: 2px solid var(--mat);
 }
@@ -308,10 +340,47 @@ main { padding: 12px 16px 60px; }
 .back-btn:hover { border-color: var(--chalk-dim); color: var(--chalk); }
 .back-row { display: flex; justify-content: center; }
 
+/* ── Mobile: the node detail is a bottom sheet over the tree ──
+   Previously it sat below the canvas, so every node tap meant scrolling
+   down to read anything. As a sheet it rises where the thumb already is,
+   and collapses to a peek bar that keeps the current node in view. ── */
+#detailCard {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  max-height: 78vh; overflow-y: auto;
+  background: var(--mat-elev);
+  border-top: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.55);
+  transform: translateY(calc(100% - 54px));   /* collapsed → peek bar only */
+  transition: transform 0.28s cubic-bezier(.2, .8, .2, 1);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+}
+body.sheet-open #detailCard { transform: translateY(0); }
+
+.sheet-handle {
+  position: sticky; top: 0; z-index: 2;
+  width: 100%; height: 54px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 18px; background: var(--mat-elev);
+  border: none; cursor: pointer; text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.sheet-grabber {
+  position: absolute; top: 7px; left: 50%; transform: translateX(-50%);
+  width: 34px; height: 4px; border-radius: 999px; background: var(--line-strong);
+}
+.sheet-title {
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: 'Oswald', sans-serif; font-size: 17px; letter-spacing: 0.02em;
+  text-transform: uppercase; color: var(--chalk);
+}
+.sheet-caret { color: var(--chalk-dim); font-size: var(--text-xs); transition: transform 0.28s; }
+body.sheet-open .sheet-caret { transform: rotate(180deg); }
+
 /* ── Detail card ── */
 .detail-card {
   background: var(--mat-elev); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 18px 20px; margin-top: 16px;
+  border-radius: var(--radius); padding: 18px 20px; margin-top: 0;
   position: relative; overflow: hidden;
 }
 .detail-card::before {
@@ -345,7 +414,7 @@ main { padding: 12px 16px 60px; }
 }
 .node-section { margin-top: 12px; }
 .node-section .label {
-  font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--chalk-dim);
+  font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); color: var(--chalk-dim);
   letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;
 }
 .node-section p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--chalk); }
@@ -383,8 +452,8 @@ main { padding: 12px 16px 60px; }
 }
 .quickref-item:hover { background: var(--mat); }
 .quickref-item .qr-title { font-family: 'Oswald', sans-serif; font-size: 16px; letter-spacing: 0.02em; text-transform: uppercase; }
-.quickref-item .qr-sub { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--chalk-dim); letter-spacing: 0.04em; margin-top: 2px; }
-.qr-context { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--jade-bright); margin-top: 2px; letter-spacing: 0.02em; }
+.quickref-item .qr-sub { font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); color: var(--chalk-dim); letter-spacing: 0.04em; margin-top: 2px; }
+.qr-context { font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); color: var(--jade-bright); margin-top: 2px; letter-spacing: 0.02em; }
 
 /* ── Action row ── */
 .action-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
@@ -445,7 +514,7 @@ main { padding: 12px 16px 60px; }
 .flag-type-btn {
   flex: 1; min-width: 70px;
   background: var(--mat-elev-2); border: 1px solid var(--line); color: var(--chalk-dim);
-  font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); letter-spacing: 0.04em; text-transform: uppercase;
   padding: 8px 6px; border-radius: 6px; cursor: pointer; transition: background 0.15s;
 }
 .flag-type-btn.active { background: var(--danger-dim); color: var(--danger); border-color: var(--danger); font-weight: 600; }
@@ -455,17 +524,17 @@ main { padding: 12px 16px 60px; }
   border-left: 3px solid var(--danger); border-radius: 8px; padding: 12px 14px;
 }
 .flag-list-item .fl-title { font-family: 'Oswald', sans-serif; font-size: 15px; text-transform: uppercase; }
-.flag-list-item .fl-meta { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--chalk-dim); margin: 2px 0 6px; text-transform: uppercase; }
+.flag-list-item .fl-meta { font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); color: var(--chalk-dim); margin: 2px 0 6px; text-transform: uppercase; }
 .flag-list-item .fl-note { font-size: 13px; line-height: 1.5; color: var(--chalk); }
-.flag-list-item .fl-delete { margin-top: 8px; background: none; border: none; color: var(--chalk-dim); font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-decoration: underline; cursor: pointer; padding: 0; }
+.flag-list-item .fl-delete { margin-top: 8px; background: none; border: none; color: var(--chalk-dim); font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); text-decoration: underline; cursor: pointer; padding: 0; }
 
 /* ── Legend ── */
 .legend {
   display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center;
   margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line);
-  font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--chalk-dim);
+  font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); color: var(--chalk-dim);
 }
-.legend-heading { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--chalk-dim); opacity: 0.7; }
+.legend-heading { font-size: var(--text-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--chalk-dim); opacity: 0.7; }
 .legend-heading:not(:first-child) { margin-left: 8px; }
 .legend-item { display: flex; align-items: center; gap: 6px; }
 .dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid transparent; }
@@ -478,7 +547,7 @@ main { padding: 12px 16px 60px; }
 /* ── Brand footer ── */
 footer.brand-footer {
   text-align: center; margin-top: 30px;
-  font-family: 'IBM Plex Mono', monospace; font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs);
   color: var(--chalk-dim); letter-spacing: 0.12em; text-transform: uppercase;
 }
 
@@ -526,7 +595,7 @@ footer.brand-footer {
   .tagline       { display: none; } /* not needed in app chrome */
   .myanmar-slot  { display: none; }
   .header-row    { margin-bottom: 8px; }
-  .eyebrow       { font-size: 10px; margin-bottom: 3px; }
+  .eyebrow       { font-size: var(--text-xs); margin-bottom: 3px; }
   .progress-card { margin-top: 4px; margin-bottom: 4px; }
 
   /* Sidebar nav: 2-column pill grid */
@@ -564,7 +633,7 @@ footer.brand-footer {
     padding: 8px 0 4px;
     margin-top: 6px;
   }
-  .chain-node { font-size: 10px; padding: 5px 9px; }
+  .chain-node { font-size: var(--text-xs); padding: 5px 9px; }
 
   /* ── Right canvas ── */
   main {
@@ -586,7 +655,13 @@ footer.brand-footer {
     margin-top: 0;
   }
 
-  /* Detail card */
+  /* Detail card — the mobile bottom sheet reverts to an inline card here */
+  #detailCard {
+    position: static; transform: none; max-height: none; overflow: visible;
+    background: none; border-top: none; border-radius: 0; box-shadow: none;
+    padding-bottom: 0; z-index: auto;
+  }
+  .sheet-handle { display: none; }
   .detail-card  { padding: 22px 26px; margin-top: 18px; }
   .node-title   { font-size: 26px; }
   .node-section p { font-size: 14px; line-height: 1.6; }
@@ -647,20 +722,28 @@ footer.brand-footer {
       <div class="progress-bar"><div class="progress-bar-fill" id="masteryBar"></div></div>
     </div>
 
-    <nav class="section-nav" id="sectionNav">
-      <button class="nav-btn" data-jump="hub">Hub</button>
-      <button class="nav-btn" data-jump="start">Standing</button>
-      <button class="nav-btn" data-jump="pass">Top Game</button>
-      <button class="nav-btn" data-jump="guard_bottom">Bottom Game</button>
-      <button class="nav-btn" data-jump="def_start">Defence</button>
-      <button class="nav-btn" id="searchToggle">⌕ Search</button>
-      <button class="nav-btn" id="quickRefToggle">⚡ Quick Ref</button>
-      <button class="nav-btn" id="flagsToggle">🚩 Flags <span id="flagsCount"></span></button>
-    </nav>
-
     <div class="search-panel" id="searchPanel">
-      <input type="text" id="searchInput" placeholder="Search moves, positions, chokes…" autocomplete="off">
+      <input type="search" id="searchInput" placeholder="⌕  Search 102 positions…" autocomplete="off" aria-label="Search positions">
       <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label" id="areasLabel">Areas</div>
+      <nav class="section-nav" id="sectionNav" aria-labelledby="areasLabel">
+        <button class="nav-btn" data-jump="hub">Hub</button>
+        <button class="nav-btn" data-jump="start">Standing</button>
+        <button class="nav-btn" data-jump="pass">Top Game</button>
+        <button class="nav-btn" data-jump="guard_bottom">Bottom Game</button>
+        <button class="nav-btn" data-jump="def_start">Defence</button>
+      </nav>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Tools</div>
+      <div class="tool-row">
+        <button class="tool-btn" type="button" id="quickRefToggle">⚡ Quick Ref</button>
+        <button class="tool-btn" type="button" id="flagsToggle">🚩 Flags <span id="flagsCount"></span></button>
+      </div>
     </div>
 
     <div class="chain" id="chainTrail"></div>
@@ -2034,6 +2117,14 @@ function makeActionable(el, fn){
   };
 }
 
+// Mobile detail sheet. On desktop the CSS makes #detailCard an inline card,
+// so toggling this class there is a harmless no-op.
+function setSheet(open){
+  document.body.classList.toggle("sheet-open", !!open);
+  const h = document.querySelector(".sheet-handle");
+  if (h) h.setAttribute("aria-expanded", open ? "true" : "false");
+}
+
 function scrollCanvasTop(){
   // On desktop (≥900px) html/body are overflow:hidden and <main> is the real
   // scroll container; on mobile the document scrolls. Scroll both — the
@@ -2045,12 +2136,14 @@ function scrollCanvasTop(){
 function goNode(id){
   path.push(id);
   render();
+  setSheet(true);   // surface the detail where the thumb is (mobile)
   scrollCanvasTop();
 }
 function jumpTo(id){
   path = [id];
-  document.getElementById("searchPanel").classList.remove("open");
+  clearSearch();   // search is always visible now — clear it rather than hide it
   render();
+  setSheet(true);
   scrollCanvasTop();
 }
 function goBack(){
@@ -2096,6 +2189,11 @@ function renderDetail(){
       </div>`).join("") + `</div>` : "";
 
   card.innerHTML = `
+    <button class="sheet-handle" type="button" aria-controls="detailCard">
+      <span class="sheet-grabber" aria-hidden="true"></span>
+      <span class="sheet-title">${node.title}</span>
+      <span class="sheet-caret" aria-hidden="true">▲</span>
+    </button>
     <div class="detail-card type-${node.type}">
       <div class="badges">
         <span class="badge tag-${node.type}">${typeLabel(node.type)}</span>
@@ -2108,6 +2206,11 @@ function renderDetail(){
       ${(!node.children || node.children.length===0) ? `<div class="empty-note">Leaf node — no branches lead onward from here.</div>` : ""}
     </div>
   `;
+  const handle = card.querySelector(".sheet-handle");
+  if (handle){
+    handle.setAttribute("aria-expanded", document.body.classList.contains("sheet-open") ? "true" : "false");
+    handle.onclick = ()=> setSheet(!document.body.classList.contains("sheet-open"));
+  }
   card.querySelectorAll(".mastery-btn").forEach(b=>{
     b.onclick = ()=> setMastery(centerId, Number(b.dataset.lvl));
   });
@@ -2193,14 +2296,13 @@ document.getElementById("quickRefModal").onclick = (e)=>{
     document.getElementById("quickRefModal").style.display = "none";
 };
 
-const searchToggle = document.getElementById("searchToggle");
 const searchPanel = document.getElementById("searchPanel");
 const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
-searchToggle.onclick = ()=>{
-  searchPanel.classList.toggle("open");
-  if (searchPanel.classList.contains("open")) searchInput.focus();
-};
+function clearSearch(){
+  if (searchInput) searchInput.value = "";
+  if (searchResults) searchResults.innerHTML = "";
+}
 searchInput.addEventListener("input", ()=>{
   const q = searchInput.value.trim().toLowerCase();
   searchResults.innerHTML = "";
@@ -2418,14 +2520,15 @@ render = function(){
   firstRender = false;
 };
 
-// Escape closes any open overlay (modals, search panel)
+// Escape closes any open overlay, and clears an in-progress search
 document.addEventListener("keydown", e=>{
   if (e.key !== "Escape") return;
   ["flagModal","flagsListModal","exportModal","quickRefModal"].forEach(id=>{
     const m = document.getElementById(id);
     if (m && m.style.display === "flex") m.style.display = "none";
   });
-  searchPanel.classList.remove("open");
+  clearSearch();
+  setSheet(false);
 });
 
 updateFlagsCount();

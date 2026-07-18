@@ -73,7 +73,7 @@
 .score-pts { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: var(--jade-bright); white-space: nowrap; }
 .score-pts.neg { color: var(--danger); }
 .score-pts.adv { color: var(--victory); }
-.score-subhead { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); padding: 10px 16px 4px; background: var(--surface-2); }
+.score-subhead { font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); padding: 10px 16px 4px; background: var(--surface-2); }
 
 /* ── Quick-jump ── */
 .qjump-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
@@ -84,13 +84,13 @@
 }
 .qjump:hover { border-color: var(--gold); transform: translateY(-1px); }
 .qjump-name { font-family: 'Oswald', sans-serif; font-size: 17px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--stone); }
-.qjump-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone-dim); }
+.qjump-sub { font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone-dim); }
 
 /* Mat-side tap targets: lift the guidance rows to the 44px floor on this page
    only — the shared .disc-head stays as-is for the study pages. */
 #guidance .disc-head { padding: 14px 2px; min-height: 44px; }
 
-footer.brand-footer { text-align: center; margin-top: 40px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--stone-dim); letter-spacing: 0.12em; text-transform: uppercase; }
+footer.brand-footer { text-align: center; margin-top: 40px; font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); color: var(--stone-dim); letter-spacing: 0.12em; text-transform: uppercase; }
 
 @media (min-width: 900px) {
   .compete { padding: 40px 20px 100px; }
