@@ -94,7 +94,7 @@ h1 span { color: var(--victory); }
 .progress-figures { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--chalk); letter-spacing: 0.02em; }
 .progress-figures span { color: var(--gold); font-weight: 600; }
 .progress-bar { height: 6px; border-radius: 999px; background: var(--mat-elev-2); overflow: hidden; }
-.progress-bar-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, #C9A23A, #3FA383); transition: width 0.4s ease; }
+.progress-bar-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--victory), var(--jade-bright)); transition: width 0.4s ease; }
 
 /* ── Nav groups: destinations and tools are different jobs, so they no
    longer sit in one undifferentiated row. ── */
@@ -299,11 +299,22 @@ main { padding: 12px 16px 78px; }
 }
 
 /* ── Mastery: the badge fill IS your progress on that node ──
-   New (hollow) → Learning (amber) → Drilling (gold) → Got it (jade + ✓).
-   The whole constellation reads as a heatmap of your game. */
+   New (hollow grey) → Learning (amber outline) → Drilling (amber solid)
+   → Got it (jade + ✓).
+
+   SEMANTIC COLOUR RULE — one job per hue:
+     gold    = brand / primary action / current focus / lit path   (navigation)
+     amber   = in progress                                          (learning ramp)
+     jade    = mastered / positive
+     crimson = threat / destructive
+     grey    = untouched / secondary
+   The ramp deliberately avoids gold: it previously collided with the gold
+   focus ring (a focused drilling node was gold-on-gold), and amber-vs-gold
+   were too close to tell apart. Amber now carries the whole "in progress"
+   idea, separated by fill weight instead of hue. */
 .tree-node.m-new      .tree-node-badge { background: var(--mat-elev-2); border-color: var(--line); color: var(--chalk-dim); opacity: 0.72; }
-.tree-node.m-learning .tree-node-badge { background: rgba(232,196,104,0.16); border-color: var(--victory); color: var(--victory); }
-.tree-node.m-drilling .tree-node-badge { background: rgba(212,160,23,0.34); border-color: var(--gold); color: var(--chalk); }
+.tree-node.m-learning .tree-node-badge { background: rgba(232,196,104,0.14); border-color: var(--victory); color: var(--victory); }
+.tree-node.m-drilling .tree-node-badge { background: var(--victory); border-color: var(--victory); color: #1F1806; }
 .tree-node.m-got      .tree-node-badge { background: var(--jade-bright); border-color: var(--jade-bright); color: #0C1A14; }
 .tree-node.m-got      .tree-node-label { color: var(--chalk); }
 .tree-node.m-new      .tree-node-label { opacity: 0.78; }
@@ -316,6 +327,21 @@ main { padding: 12px 16px 78px; }
   font-size: var(--text-xs); font-weight: 700; line-height: 1;
   display: flex; align-items: center; justify-content: center;
   border: 2px solid var(--mat);
+}
+
+/* "Learn next" cue — the growing edge of your game. Jade (growth/positive),
+   a dashed ring so it never reads as the gold focus or an amber fill. */
+.tree-node.is-suggested:not(.state-current) .tree-node-badge {
+  border-color: var(--jade-bright);
+  border-style: dashed;
+  box-shadow: 0 0 0 3px rgba(63, 163, 131, 0.18);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tree-node.is-suggested:not(.state-current) .tree-node-badge { animation: suggest-pulse 2.4s ease-in-out infinite; }
+}
+@keyframes suggest-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(63, 163, 131, 0.12); }
+  50%      { box-shadow: 0 0 0 5px rgba(63, 163, 131, 0.30); }
 }
 
 .tree-node:hover:not(.state-current) .tree-node-badge { border-color: var(--gold); }
@@ -439,8 +465,8 @@ body.sheet-open .sheet-caret { transform: rotate(180deg); }
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 .mastery-btn:hover { border-color: var(--chalk-dim); color: var(--chalk); }
-.mastery-btn.active.lvl-learning { background: rgba(232,196,104,0.16); border-color: var(--victory); color: var(--victory); font-weight: 600; }
-.mastery-btn.active.lvl-drilling { background: rgba(212,160,23,0.28); border-color: var(--gold); color: var(--gold); font-weight: 600; }
+.mastery-btn.active.lvl-learning { background: rgba(232,196,104,0.14); border-color: var(--victory); color: var(--victory); font-weight: 600; }
+.mastery-btn.active.lvl-drilling { background: rgba(232,196,104,0.30); border-color: var(--victory); color: var(--victory); font-weight: 600; }
 .mastery-btn.active.lvl-got      { background: var(--jade); border-color: var(--jade-bright); color: var(--jade-bright); font-weight: 600; }
 
 /* ── Quick ref list ── */
@@ -540,8 +566,9 @@ body.sheet-open .sheet-caret { transform: rotate(180deg); }
 .dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid transparent; }
 .dot.m-new      { background: var(--mat-elev-2); border-color: var(--line); }
 .dot.m-learning { background: rgba(232,196,104,0.2); border-color: var(--victory); }
-.dot.m-drilling { background: rgba(212,160,23,0.5); border-color: var(--gold); }
+.dot.m-drilling { background: var(--victory); border-color: var(--victory); }
 .dot.m-got      { background: var(--jade-bright); border-color: var(--jade-bright); }
+.dot.dot-suggested { background: none; border-color: var(--jade-bright); border-style: dashed; }
 .glyph-key { color: var(--chalk-dim); font-size: 12px; width: 12px; text-align: center; }
 
 /* ── Brand footer ── */
@@ -741,6 +768,7 @@ footer.brand-footer {
     <div class="nav-group">
       <div class="nav-group-label">Tools</div>
       <div class="tool-row">
+        <button class="tool-btn" type="button" id="learnNextBtn">🌱 Learn Next</button>
         <button class="tool-btn" type="button" id="quickRefToggle">⚡ Quick Ref</button>
         <button class="tool-btn" type="button" id="flagsToggle">🚩 Flags <span id="flagsCount"></span></button>
       </div>
@@ -756,7 +784,7 @@ footer.brand-footer {
         <button class="tree-tool-btn" id="treeZoomOut" type="button" aria-label="Zoom out">−</button>
         <button class="tree-tool-btn" id="treeRecenter" type="button" aria-label="Center on current node">◎</button>
       </div>
-      <div class="tree-hint" id="treeHint">Drag to pan · Scroll or pinch to zoom · Tap a node to jump</div>
+      <div class="tree-hint" id="treeHint">Tap a node to open · Long-press to mark progress · Drag to pan</div>
       <div class="tree-viewport" id="treeViewport">
         <div class="tree-canvas" id="treeCanvas">
           <svg class="tree-edges" id="treeEdges"></svg>
@@ -851,6 +879,7 @@ footer.brand-footer {
       <div class="legend-item"><span class="dot m-learning"></span> Learning</div>
       <div class="legend-item"><span class="dot m-drilling"></span> Drilling</div>
       <div class="legend-item"><span class="dot m-got"></span> Got it</div>
+      <div class="legend-item"><span class="dot dot-suggested"></span> Learn next</div>
       <span class="legend-heading">Node type</span>
       <div class="legend-item"><span class="glyph-key">◎</span> Area</div>
       <div class="legend-item"><span class="glyph-key">◆</span> Position</div>
@@ -1728,11 +1757,37 @@ function setMastery(id, level){
 }
 
 function paintMastery(){
+  const suggestions = new Set(computeSuggestions());
   Object.keys(nodeEls).forEach(id => {
     const btn = nodeEls[id];
     MASTERY_CLASS.forEach(c => btn.classList.remove(c));
     btn.classList.add(MASTERY_CLASS[effectiveMastery(id)]);
+    btn.classList.toggle("is-suggested", suggestions.has(id));
   });
+}
+
+// "Learn next": untouched nodes whose primary parent you already know
+// (drilling or better) — the natural growing edge of your game. Before you
+// know anything, seed from the hub's branches. Returned best-first.
+function computeSuggestions(limit){
+  const cap = limit || 6;
+  const out = [];
+  const anyProgress = Object.keys(NODES).some(id => effectiveMastery(id) > 0);
+  if (!anyProgress){
+    (NODES.hub.children || []).forEach(id => { if (out.length < cap) out.push(id); });
+    return out;
+  }
+  // Walk primary tree order (BFS from hub) for stable, sensible ordering.
+  const queue = ["hub"], seen = new Set(["hub"]);
+  while (queue.length && out.length < cap){
+    const pid = queue.shift();
+    const parentKnown = pid === "hub" || effectiveMastery(pid) >= MASTERY.DRILLING;
+    (TREE.primaryChildrenOf[pid] || []).forEach(cid => {
+      if (parentKnown && pid !== "hub" && effectiveMastery(cid) === MASTERY.NEW && out.length < cap) out.push(cid);
+      if (!seen.has(cid)){ seen.add(cid); queue.push(cid); }
+    });
+  }
+  return out;
 }
 
 function renderProgress(){
@@ -1914,6 +1969,63 @@ function buildTreeDOM(){
     if (!btn) return;
     handleTreeNodeClick(btn.dataset.id);
   });
+
+  // Mark-from-node: long-press (touch/mouse) or right-click cycles a node's
+  // mastery in place — New → Learning → Drilling → Got it → New — without
+  // opening the detail card. Attention is on the tree, so let you mark there.
+  let pressTimer = null, pressId = null, pressStart = null;
+  function cancelPress(){ if (pressTimer){ clearTimeout(pressTimer); pressTimer = null; } pressId = null; }
+  nodesEl.addEventListener("pointerdown", e=>{
+    const btn = e.target.closest(".tree-node");
+    if (!btn) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return; // right-click handled separately
+    pressId = btn.dataset.id;
+    pressStart = { x: e.clientX, y: e.clientY };
+    pressTimer = setTimeout(()=>{
+      pressTimer = null;
+      if (pressId && pressId !== "hub"){
+        cycleMastery(pressId);
+        suppressClick = true;                  // don't also navigate
+        setTimeout(()=>{ suppressClick = false; }, 350);
+      }
+    }, 500);
+  });
+  nodesEl.addEventListener("pointermove", e=>{
+    if (!pressTimer || !pressStart) return;
+    if (Math.abs(e.clientX-pressStart.x) > 8 || Math.abs(e.clientY-pressStart.y) > 8) cancelPress(); // a drag, not a press
+  });
+  ["pointerup","pointercancel","pointerleave"].forEach(ev => nodesEl.addEventListener(ev, cancelPress));
+  nodesEl.addEventListener("contextmenu", e=>{
+    const btn = e.target.closest(".tree-node");
+    if (!btn) return;
+    e.preventDefault();
+    if (btn.dataset.id !== "hub") cycleMastery(btn.dataset.id);
+  });
+}
+
+// Cycle a node's MANUAL mastery through New → Learning → Drilling → Got it → New.
+function cycleMastery(id){
+  if (id === "hub" || !NODES[id]) return;   // the map root has no progress
+  const next = (effectiveMastery(id) + 1) % 4;
+  manualMastery[id] = next;
+  if (next === MASTERY.NEW) delete manualMastery[id];
+  saveMastery();
+  paintMastery();
+  renderProgress();
+  if (path[path.length-1] === id) renderDetail();   // keep the card's marker in sync
+  announce(NODES[id].title + ": " + MASTERY_LABELS[next]);
+}
+const MASTERY_LABELS = ["New", "Learning", "Drilling", "Got it"];
+function announce(msg){
+  let live = document.getElementById("a11yLive");
+  if (!live){
+    live = document.createElement("div");
+    live.id = "a11yLive";
+    live.setAttribute("aria-live", "polite");
+    live.style.cssText = "position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;";
+    document.body.appendChild(live);
+  }
+  live.textContent = msg;
 }
 
 function handleTreeNodeClick(id){
@@ -2284,6 +2396,11 @@ function renderQuickRef(){
     list.appendChild(row);
   });
 }
+document.getElementById("learnNextBtn").onclick = ()=>{
+  const next = computeSuggestions(1)[0];
+  if (next){ jumpTo(next); }
+  else { announce("No suggestions — you've mapped everything reachable."); }
+};
 document.getElementById("quickRefToggle").onclick = ()=>{
   renderQuickRef();
   document.getElementById("quickRefModal").style.display = "flex";
