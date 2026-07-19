@@ -11,91 +11,168 @@
 <link rel="stylesheet" href="chinthe.css">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Cinzel:wght@400;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* Design tokens come from chinthe.css — single source of truth. */
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:80px;}
+body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:60px;}
 
-/* ── NAV — shared .site-nav styles live in chinthe.css ── */
-
-/* ── PAGE LAYOUT ── */
+/* ── PAGE HERO ── */
 .page-hero{
   padding:80px 40px 60px;
   border-bottom:1px solid var(--line);
   position:relative;overflow:hidden;
 }
-.hero-glow{position:absolute;top:-40%;left:30%;width:700px;height:700px;background:radial-gradient(ellipse,rgba(15,59,46,0.22) 0%,transparent 70%);pointer-events:none;}
-.page-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.2em;color:var(--jade-bright);text-transform:uppercase;margin-bottom:12px;}
-.page-title{font-family:'Oswald',sans-serif;font-size:clamp(48px,7vw,96px);text-transform:uppercase;letter-spacing:0.02em;line-height:0.95;margin-bottom:20px;}
+.hero-glow{position:absolute;top:-40%;left:30%;width:700px;height:700px;
+  background:radial-gradient(ellipse,rgba(15,59,46,0.22) 0%,transparent 70%);pointer-events:none;}
+.page-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.2em;
+  color:var(--jade-bright);text-transform:uppercase;margin-bottom:12px;}
+.page-title{font-family:'Oswald',sans-serif;font-size:clamp(48px,7vw,96px);text-transform:uppercase;
+  letter-spacing:0.02em;line-height:0.95;margin-bottom:20px;}
 .page-title em{color:var(--gold);font-style:normal;}
 .page-intro{font-size:15px;color:var(--stone-dim);line-height:1.65;max-width:680px;margin-bottom:32px;}
 .source-strip{display:flex;gap:8px;flex-wrap:wrap;}
-.source-tag{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);padding:4px 10px;border-radius:5px;}
+.source-tag{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);padding:4px 10px;border-radius:5px;}
 
-/* ── PHILOSOPHY QUOTE ── */
+/* ── PHILOSOPHY BAR ── */
 .philosophy-bar{background:var(--jade);padding:28px 40px;border-bottom:1px solid rgba(63,163,131,0.2);}
-.philosophy-bar blockquote{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(18px,2.5vw,32px);text-transform:uppercase;letter-spacing:0.04em;color:var(--stone);margin-bottom:8px;}
-.philosophy-bar cite{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(245,243,236,0.55);letter-spacing:0.1em;text-transform:uppercase;}
+.philosophy-bar blockquote{font-family:'Cinzel',serif;font-weight:600;
+  font-size:clamp(16px,2vw,26px);text-transform:uppercase;letter-spacing:0.04em;color:var(--stone);margin-bottom:8px;}
+.philosophy-bar cite{font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:rgba(245,243,236,0.55);letter-spacing:0.1em;text-transform:uppercase;}
 
-/* ── SECTIONS ── */
-.section{padding:60px 40px;}
-.section-label{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.2em;color:var(--jade-bright);text-transform:uppercase;margin-bottom:10px;}
-.section-heading{font-family:'Oswald',sans-serif;font-size:clamp(32px,4vw,52px);text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px;}
-.section-sub{font-size:14px;color:var(--stone-dim);line-height:1.6;max-width:600px;margin-bottom:44px;}
+/* ── MASTER-DETAIL EXPLORER ── */
+.principles-explorer{display:flex;flex-direction:column;}
 
-/* ── PRINCIPLE CARDS ── */
-.principles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;align-items:start;}
-
-.principle-card{
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-  overflow:hidden;cursor:pointer;transition:border-color .18s,transform .14s;
+@media(min-width:960px){
+  .principles-explorer{display:grid;grid-template-columns:268px 1fr;align-items:start;}
 }
-.principle-card:hover{border-color:rgba(245,243,236,0.16);transform:translateY(-2px);}
-.principle-accent{height:2px;}
-.acc-efficiency{background:linear-gradient(90deg,var(--jade-bright),#2ECC71);}
-.acc-ju{background:linear-gradient(90deg,var(--steel),#7BACBA);}
-.acc-timing{background:linear-gradient(90deg,var(--gold),#E8C468);}
-.acc-reaction{background:linear-gradient(90deg,var(--crimson),#E84040);}
-.acc-drive{background:linear-gradient(90deg,#9B59B6,#BB8FCE);}
-.acc-leverage{background:linear-gradient(90deg,#E67E22,#F39C12);}
-.acc-weight{background:linear-gradient(90deg,#2980B9,#5DADE2);}
-.acc-angles{background:linear-gradient(90deg,#1ABC9C,#48C9B0);}
-.acc-balance{background:linear-gradient(90deg,var(--gold-dim),var(--gold));}
-.acc-kuzushi{background:linear-gradient(90deg,var(--crimson),#C0392B);}
-.acc-position{background:linear-gradient(90deg,var(--jade-bright),var(--jade));}
-.acc-chess{background:linear-gradient(90deg,#8E44AD,#6C3483);}
-.acc-frames{background:linear-gradient(90deg,var(--steel),#2E86AB);}
-.acc-grips{background:linear-gradient(90deg,var(--stone-dim),var(--stone));}
 
-.principle-header{padding:20px 22px 16px;}
-.principle-num{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;}
-.principle-name{font-family:'Oswald',sans-serif;font-size:26px;text-transform:uppercase;letter-spacing:0.02em;line-height:1;margin-bottom:8px;}
-.principle-tagline{font-size:13px;color:var(--stone-dim);line-height:1.5;}
-.principle-body{
-  display:none;padding:0 22px 22px;border-top:1px solid var(--line);
+/* ── SIDEBAR ── */
+.md-sidebar{background:var(--surface);}
+
+@media(min-width:960px){
+  .md-sidebar{
+    border-right:1px solid var(--line);
+    position:sticky;
+    top:var(--nav-h,60px);
+    height:calc(100vh - var(--nav-h,60px));
+    overflow-y:auto;
+    scrollbar-width:thin;
+    scrollbar-color:var(--line) transparent;
+  }
 }
-.principle-body.open{display:block;padding-top:18px;}
-.principle-section{margin-bottom:16px;}
-.principle-section-label{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;}
-.principle-section-text{font-size:13.5px;line-height:1.65;color:var(--stone);}
-.principle-section-text.gold{color:var(--gold);}
-.principle-section-text.jade{color:var(--jade-bright);}
-.principle-examples{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
-.principle-example{
+
+.md-group-label{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--stone-dim);padding:18px 18px 6px;
+  opacity:0.55;border-top:1px solid var(--line);
+}
+.md-group-label.first{border-top:none;padding-top:14px;}
+
+.md-item{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:9px 18px 9px 16px;background:transparent;
+  border:none;border-left:2px solid transparent;
+  cursor:pointer;text-align:left;
+  transition:background 0.12s,border-color 0.12s;
+}
+.md-item:hover{background:rgba(200,168,78,0.06);}
+.md-item.active{background:rgba(200,168,78,0.09);border-left-color:var(--gold);}
+
+.md-item-num{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--stone-dim);min-width:26px;flex-shrink:0;
+}
+.md-item-name{
+  font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;
+  letter-spacing:0.04em;color:var(--stone);line-height:1.2;
+}
+.md-item.active .md-item-name{color:var(--gold);}
+
+/* Back button — mobile only */
+.md-back-btn{
+  display:none;font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--stone-dim);
+  background:transparent;border:1px solid var(--line);
+  padding:7px 14px;border-radius:5px;cursor:pointer;margin-bottom:32px;
+}
+
+/* ── PANEL ── */
+@media(max-width:959px){
+  .md-panel{display:none;padding:28px 20px 60px;}
+  .md-panel.panel-open{display:block;}
+  .md-back-btn{display:inline-block;}
+  .sidebar-hidden{display:none !important;}
+}
+
+@media(min-width:960px){
+  .md-panel{padding:52px 60px 80px;min-height:calc(100vh - var(--nav-h,60px));}
+}
+@media(min-width:1280px){
+  .md-panel{padding:60px 80px 80px;}
+}
+
+/* Panel content */
+.panel-accent-bar{height:3px;border-radius:2px;margin-bottom:36px;max-width:320px;}
+
+.panel-eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
+  letter-spacing:0.18em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:10px;
+}
+.panel-title{
+  font-family:'Oswald',sans-serif;font-size:clamp(32px,4vw,54px);
+  text-transform:uppercase;letter-spacing:0.02em;line-height:0.93;
+  margin-bottom:16px;color:var(--stone);
+}
+.panel-tagline{
+  font-size:15px;color:var(--gold);line-height:1.6;
+  margin-bottom:40px;max-width:580px;
+}
+
+.panel-section{
+  margin-bottom:32px;padding-bottom:32px;
+  border-bottom:1px solid var(--line);
+}
+.panel-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+
+.panel-section-label{
+  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--jade-bright);margin-bottom:10px;
+}
+.panel-section-text{
+  font-size:15px;line-height:1.72;color:var(--stone-dim);max-width:680px;
+}
+.panel-section-text.jade{color:var(--jade-bright);}
+
+.panel-examples{display:flex;flex-direction:column;gap:14px;}
+.panel-example{
   background:var(--surface-2);border-left:2px solid var(--jade-bright);
-  border-radius:0 6px 6px 0;padding:10px 14px;
-  font-size:13px;line-height:1.5;color:var(--stone-dim);
+  border-radius:0 8px 8px 0;padding:14px 18px;
 }
-.principle-example strong{color:var(--stone);display:block;font-size:12px;margin-bottom:2px;}
+.panel-example strong{
+  display:block;font-family:'Oswald',sans-serif;font-size:14px;
+  text-transform:uppercase;letter-spacing:0.05em;color:var(--stone);margin-bottom:5px;
+}
+.panel-example p{font-size:13.5px;line-height:1.6;color:var(--stone-dim);}
 
-/* ── CHESS SECTION ── */
-.chess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:8px;}
-.chess-card{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:18px 20px;}
-.chess-title{font-family:'Oswald',sans-serif;font-size:20px;letter-spacing:0.02em;text-transform:uppercase;margin-bottom:6px;color:var(--stone);}
-.chess-chess{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:#8E44AD;letter-spacing:0.08em;margin-bottom:8px;text-transform:uppercase;}
-.chess-text{font-size:13px;line-height:1.6;color:var(--stone-dim);}
+/* Welcome state */
+.panel-welcome{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:360px;text-align:center;
+}
+.panel-welcome-mark{
+  font-family:'IBM Plex Mono',monospace;font-size:36px;
+  color:var(--gold);opacity:0.22;margin-bottom:20px;
+}
+.panel-welcome-text{font-size:13px;color:var(--stone-dim);line-height:1.7;max-width:240px;}
 
-/* ── POSITIONAL HIERARCHY ── */
-.hierarchy-wrap{display:flex;flex-direction:column;gap:4px;max-width:480px;margin-top:8px;}
+/* ── Reference: Hierarchy ── */
+.panel-hierarchy{display:flex;flex-direction:column;gap:4px;max-width:460px;}
+.hier-label-row{
+  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
+  color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;
+  padding:6px 16px;opacity:0.55;
+}
 .hier-row{display:flex;align-items:center;gap:14px;padding:11px 16px;border-radius:8px;border:1px solid var(--line);}
 .hier-row.best{background:rgba(15,59,46,0.3);border-color:var(--jade-bright);}
 .hier-row.good{background:rgba(15,59,46,0.15);border-color:rgba(63,163,131,0.3);}
@@ -108,36 +185,47 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .hier-pts.dim{color:var(--stone-dim);}
 .hier-pts.red{color:var(--crimson);}
 .hier-name{font-size:14px;font-weight:500;flex:1;}
-.hier-label{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;margin-left:auto;}
+.hier-badge{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;}
 
-/* ── GRIPS SECTION ── */
-.grips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px;}
-.grip-card{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:16px 18px;}
-.grip-name{font-family:'Oswald',sans-serif;font-size:18px;letter-spacing:0.02em;text-transform:uppercase;margin-bottom:5px;}
-.grip-use{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:7px;}
-.grip-desc{font-size:13px;line-height:1.55;color:var(--stone-dim);}
+/* ── Reference: Chess ── */
+.panel-chess-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+@media(min-width:640px){.panel-chess-grid{grid-template-columns:1fr 1fr;}}
 
-/* ── DISTANCES SECTION ── */
-.distances-strip{display:flex;flex-direction:column;gap:6px;margin-top:8px;max-width:600px;}
-.distance-row{display:flex;gap:14px;align-items:flex-start;padding:12px 16px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;}
-.distance-range{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;min-width:110px;padding-top:2px;}
-.distance-text{font-size:13px;color:var(--stone-dim);line-height:1.5;}
+.panel-chess-card{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:18px 20px;}
+.panel-chess-title{font-family:'Oswald',sans-serif;font-size:18px;letter-spacing:0.03em;
+  text-transform:uppercase;margin-bottom:5px;color:var(--stone);}
+.panel-chess-sub{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
+  color:#9B59B6;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.panel-chess-text{font-size:13px;line-height:1.6;color:var(--stone-dim);}
+
+/* ── Reference: Grips ── */
+.panel-grips-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+@media(min-width:640px){.panel-grips-grid{grid-template-columns:1fr 1fr;}}
+
+.panel-grip-card{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:16px 18px;}
+.panel-grip-name{font-family:'Oswald',sans-serif;font-size:17px;letter-spacing:0.03em;
+  text-transform:uppercase;margin-bottom:4px;}
+.panel-grip-use{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
+  color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:7px;}
+.panel-grip-desc{font-size:13px;line-height:1.55;color:var(--stone-dim);}
+
+/* ── Reference: Distances ── */
+.panel-distances{display:flex;flex-direction:column;gap:6px;max-width:600px;}
+.panel-dist-row{display:flex;gap:14px;align-items:flex-start;padding:12px 16px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:8px;}
+.panel-dist-range{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
+  color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;min-width:110px;flex-shrink:0;padding-top:2px;}
+.panel-dist-text{font-size:13px;color:var(--stone-dim);line-height:1.5;}
 
 @media(max-width:768px){
-  .page-hero,.section{padding:40px 20px;}
+  .page-hero{padding:40px 20px;}
   .philosophy-bar{padding:20px;}
-  .principles-grid{grid-template-columns:1fr;}
-  .chess-grid{grid-template-columns:1fr;}
-  .grips-grid{grid-template-columns:1fr 1fr;}
+  .panel-dist-row{flex-direction:column;gap:6px;}
+  .panel-dist-range{min-width:unset;}
 }
 @media(min-width:1280px){
-  .principles-grid{grid-template-columns:repeat(3,1fr);}
   .page-hero{padding:100px 80px 80px;}
-  .section{padding:80px;}
   .philosophy-bar{padding:36px 80px;}
-}
-@media(min-width:1600px){
-  .principles-grid{grid-template-columns:repeat(4,1fr);}
 }
 </style>
 </head>
@@ -164,7 +252,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   <div class="hero-glow"></div>
   <div class="page-eyebrow">CHINTHE — Foundation</div>
   <h1 class="page-title">Principles<br>of <em>Grappling.</em></h1>
-  <p class="page-intro">Techniques are what you do. Principles are why they work. Understanding the physics, mechanics, and strategic logic behind every movement is what separates athletes who drill moves from athletes who understand their art. Every principle here applies across BJJ, Judo, Wrestling, and Sambo — because the laws of physics don't care which gym you trained in.</p>
+  <p class="page-intro">Techniques are what you do. Principles are why they work. Understanding the physics, mechanics, and strategic logic behind every movement is what separates athletes who drill moves from athletes who understand their art.</p>
   <div class="source-strip">
     <span class="source-tag">Galibert — Principles of Martial Arts</span>
     <span class="source-tag">Galibert — Chess Principles for MA</span>
@@ -178,161 +266,30 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   <cite>Sylvain Galibert — Principles of Martial Arts</cite>
 </div>
 
-<!-- ── CORE PRINCIPLES ── -->
-<div class="section">
-  <div class="section-label">Core Mechanics</div>
-  <h2 class="section-heading">The Laws Behind<br>Every Technique</h2>
-  <p class="section-sub">These are the principles your instructors reference when they shake their heads and say "you're muscling it." Learn these and you'll stop needing to be told.</p>
+<!-- ── MASTER-DETAIL EXPLORER ── -->
+<div class="principles-explorer">
 
-  <div class="principles-grid" id="principlesGrid"></div>
-</div>
+  <aside class="md-sidebar" id="mdSidebar">
+    <div class="md-group-label first">Principles</div>
+    <div id="sidebarPrinciples"></div>
+    <div class="md-group-label">Reference</div>
+    <div id="sidebarRef"></div>
+    <div style="height:32px;"></div>
+  </aside>
 
-<!-- ── POSITIONAL HIERARCHY ── -->
-<div class="section" style="border-top:1px solid var(--line);padding-top:60px;">
-  <div class="section-label">Strategic Foundation</div>
-  <h2 class="section-heading">Position Before<br>Submission</h2>
-  <p class="section-sub">BJJ has one strategic spine. Get to a better position first. The hierarchy below is how the scoring system is designed — and how you should plan every roll. ADCC point values shown.</p>
+  <main class="md-panel" id="mdPanel">
+    <div class="panel-welcome" id="panelWelcome">
+      <div class="panel-welcome-mark">◈</div>
+      <p class="panel-welcome-text">Select a principle from the list to explore its mechanics, application, and examples.</p>
+    </div>
+  </main>
 
-  <div class="hierarchy-wrap">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;margin-bottom:4px;">← You have these positions</div>
-    <div class="hier-row best"><span class="hier-pts gold">+4</span><span class="hier-name">Rear Mount / Back Control</span><span class="hier-label">Best</span></div>
-    <div class="hier-row good"><span class="hier-pts jade">+3</span><span class="hier-name">Guard Pass (completed)</span></div>
-    <div class="hier-row good"><span class="hier-pts jade">+2</span><span class="hier-name">Mount</span></div>
-    <div class="hier-row good"><span class="hier-pts jade">+2</span><span class="hier-name">Knee on Belly</span></div>
-    <div class="hier-row good"><span class="hier-pts jade">+2</span><span class="hier-name">Sweep (completed)</span></div>
-    <div class="hier-row good"><span class="hier-pts jade">+4</span><span class="hier-name">Clean Takedown (past guard)</span></div>
-    <div class="hier-row good"><span class="hier-pts jade">+2</span><span class="hier-name">Standard Takedown</span></div>
-    <div class="hier-row neutral"><span class="hier-pts dim">0</span><span class="hier-name">Side Control (unpinned)</span></div>
-    <div class="hier-row neutral"><span class="hier-pts dim">0</span><span class="hier-name">Neutral / Standing</span></div>
-    <div class="hier-row neutral"><span class="hier-pts dim">0</span><span class="hier-name">Guard (your guard)</span><span class="hier-label">Neutral</span></div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;margin:4px 0;">← Opponent has these positions</div>
-    <div class="hier-row bad"><span class="hier-pts red">−1</span><span class="hier-name">Guard Pull (defensive)</span></div>
-    <div class="hier-row bad"><span class="hier-pts red">−2</span><span class="hier-name">Mount conceded</span></div>
-    <div class="hier-row bad"><span class="hier-pts red">−3</span><span class="hier-name">Guard passed against you</span></div>
-    <div class="hier-row worst"><span class="hier-pts red">−4</span><span class="hier-name">Back taken against you</span><span class="hier-label">Worst</span></div>
-  </div>
-  <p style="font-size:13px;color:var(--stone-dim);margin-top:20px;max-width:520px;line-height:1.6;">Source: Kesting, <em>Roadmap for BJJ</em>. Modified for ADCC no-gi ruleset — first half of match, submissions only; points activate in second half.</p>
-</div>
-
-<!-- ── CHESS PRINCIPLES ── -->
-<div class="section" style="border-top:1px solid var(--line);">
-  <div class="section-label">Strategic Thinking</div>
-  <h2 class="section-heading">Chess Principles<br>Applied to Grappling</h2>
-  <p class="section-sub">Chess and grappling share the same decision architecture. The tactics that win at the highest levels of chess describe exactly what happens in the best grappling chains.</p>
-
-  <div class="chess-grid">
-    <div class="chess-card">
-      <div class="chess-title">The Fork</div>
-      <div class="chess-chess">Chess: Attack two pieces at once</div>
-      <p class="chess-text">Attack two submission threats simultaneously. The armbar-triangle chain is the classic fork: your armbar defence is my triangle setup. Your opponent cannot cover both. This is why chains beat isolated attacks — always be setting up the next attack while the first is live.</p>
-    </div>
-    <div class="chess-card">
-      <div class="chess-title">The Pin</div>
-      <div class="chess-chess">Chess: Lock a piece in place</div>
-      <p class="chess-text">In grappling, a pin is positional control that forces your opponent to carry your weight or concede position. Side control, mount, knee-on-belly — you aren't just stopping their movement, you're forcing them to spend energy holding a bad position. Pins score no points but open submissions.</p>
-    </div>
-    <div class="chess-card">
-      <div class="chess-title">Remove the Defender</div>
-      <div class="chess-chess">Chess: Take the piece protecting the king</div>
-      <p class="chess-text">Every escape has a defending limb. The cross-face removes the underhook. The whizzer removes the back-take. Identify what is defending the position you want — and remove it before attacking the position itself. Don't attack the king when the knight is still guarding it.</p>
-    </div>
-    <div class="chess-card">
-      <div class="chess-title">Control the Center</div>
-      <div class="chess-chess">Chess: Dominate the board from the middle</div>
-      <p class="chess-text">In grappling, the center is your opponent's hips and spine. Whoever controls the hips controls the match. This is why hip escapes are the most important defensive movement in BJJ — and why shutting down your opponent's hip mobility is the first priority from any top position.</p>
-    </div>
-    <div class="chess-card">
-      <div class="chess-title">Overworked</div>
-      <div class="chess-chess">Chess: Force a piece to defend two threats</div>
-      <p class="chess-text">The arm that's defending the choke can't also defend the armbar. The hand that's gripping your collar can't also stop the sweep. Chain your attacks to create overloaded defenders. This is the Danaher principle: create a problem in one area to generate a solution somewhere else.</p>
-    </div>
-    <div class="chess-card">
-      <div class="chess-title">Remove Escape Routes</div>
-      <div class="chess-chess">Chess: Cut off the king's flight squares</div>
-      <p class="chess-text">Before finishing a submission, block every exit. For the rear naked choke: second hook in before the arm threads. For heel hook: perpendicular hip angle before the cup. For the triangle: lock the figure-four before pulling the head. An escape route left open is a submission lost.</p>
-    </div>
-    <div class="chess-card">
-      <div class="chess-title">Preparatory Moves</div>
-      <div class="chess-chess">Chess: Set up the combination first</div>
-      <p class="chess-text">The grip fight before the throw. The posture break before the submission. The underhook battle before the back take. Most successful techniques are invisible — they were set up three moves earlier. Identify what has to be true for your technique to land, and create those conditions first.</p>
-    </div>
-    <div class="chess-card">
-      <div class="chess-title">A Man with a Plan</div>
-      <div class="chess-chess">Chess: Know your next three moves</div>
-      <p class="chess-text">If defended, go to Y. If Y is defended, go to Z. Every attack should have a pre-decided secondary outcome so a stuffed attempt never resets to neutral. Armbar → triangle → back take. Guillotine → armbar → triangle. Plan your chain before you start it.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ── GRIP TAXONOMY ── -->
-<div class="section" style="border-top:1px solid var(--line);">
-  <div class="section-label">Technical Detail</div>
-  <h2 class="section-heading">Grip Taxonomy</h2>
-  <p class="section-sub">Not all grips are equal. The grip you choose determines how much force you can transmit, how quickly you lose it, and what techniques it enables. From Galibert's mechanical analysis.</p>
-
-  <div class="grips-grid">
-    <div class="grip-card">
-      <div class="grip-name">Gable Grip</div>
-      <div class="grip-use">Clinch control, bodylock, pummelling</div>
-      <p class="grip-desc">Palms facing each other, fingers interlaced. Highest overall strength. Go-to for clinch control, bodylock passes, and any grip where you need maximum structural integrity.</p>
-    </div>
-    <div class="grip-card">
-      <div class="grip-name">S-Grip</div>
-      <div class="grip-use">Armbar isolation, kimura setup</div>
-      <p class="grip-desc">Each hand hooks the other in an S-shape. Allows rotation. Standard for armbar isolation from mount (pull the arm across, S-grip to prevent the clasp). Weaker than gable under direct pull.</p>
-    </div>
-    <div class="grip-card">
-      <div class="grip-name">Figure-Four / Kimura Grip</div>
-      <div class="grip-use">Kimura, omoplata, guillotine variants</div>
-      <p class="grip-desc">One hand grips the wrist; the other arm threads over and grabs its own wrist. Creates a locked triangle of force that can transmit enormous shoulder pressure with minimal grip strength.</p>
-    </div>
-    <div class="grip-card">
-      <div class="grip-name">Three-Finger Grip</div>
-      <div class="grip-use">Gi only — collar and lapel control</div>
-      <p class="grip-desc">Middle three fingers inserted deep in the collar. Maximises choking pressure for collar chokes. Less structural than the gable — not for pulling, only for applying rotational choking force.</p>
-    </div>
-    <div class="grip-card">
-      <div class="grip-name">Ball and Socket</div>
-      <div class="grip-use">Rear clinch, body triangle, seatbelt</div>
-      <p class="grip-desc">One arm hooks over the shoulder, the other under the armpit — hands meet at the sternum. The body's most stable rear control position. The platform for every back attack and the seatbelt grip.</p>
-    </div>
-    <div class="grip-card">
-      <div class="grip-name">RNC Grip</div>
-      <div class="grip-use">Rear naked choke, bow-and-arrow entry</div>
-      <p class="grip-desc">Choking arm under the chin, bicep seals one carotid, free hand cups the back of the head. Pull elbows together and arch — do not just squeeze. Squeezing the bicep alone rarely finishes at competition level.</p>
-    </div>
-    <div class="grip-card">
-      <div class="grip-name">Heel Cup</div>
-      <div class="grip-use">Inside/outside heel hook, ashi-garami</div>
-      <p class="grip-desc">Palm against the back of the heel (inside), or palm against outside of heel (outside). The cup direction determines the rotation direction. No substitute exists — a heel hook without the cup is a straight ankle lock.</p>
-    </div>
-    <div class="grip-card">
-      <div class="grip-name">Idiot Grip</div>
-      <div class="grip-use">What not to do</div>
-      <p class="grip-desc">Thumbs wrapped inside the fingers. Named because it risks finger breaks when the opponent yanks free. Never use the idiot grip in live rolling — hook your fingers, keep the thumb on the outside.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ── FIGHTING DISTANCES ── -->
-<div class="section" style="border-top:1px solid var(--line);">
-  <div class="section-label">Range Management</div>
-  <h2 class="section-heading">Fighting Distances</h2>
-  <p class="section-sub">Every technique has a range. Managing distance — entering and exiting the right range at the right time — is as important as the technique itself.</p>
-
-  <div class="distances-strip">
-    <div class="distance-row"><span class="distance-range">Out of Range</span><span class="distance-text">Neither athlete can attack. Use this range for observation: stance, weight distribution, movement patterns. Where is their weight? Are they circling? This tells you which entries will be available when you close distance.</span></div>
-    <div class="distance-row"><span class="distance-range">Kicking Range</span><span class="distance-text">Single strikes. For grapplers: the range you pass through quickly. Don't linger here — you have no takedown grip, no clinch, and you're fully exposed to strikes. Enter or exit, don't idle.</span></div>
-    <div class="distance-row"><span class="distance-range">Clinch Range</span><span class="distance-text">Grip fighting, collar ties, underhook battles. Your first grappling range — where wrestling shots and judo throws live. Everything starts here. Establish your grip before committing to an entry.</span></div>
-    <div class="distance-row"><span class="distance-range">Takedown Range</span><span class="distance-text">Penetration step distance. Close enough to shoot or throw. Kuzushi happens here — break the balance before the technique. The fastest path from neutral to back control runs through this range.</span></div>
-    <div class="distance-row"><span class="distance-range">Grappling Range</span><span class="distance-text">Ground work, guard passing, submissions. The arena where BJJ dominates. Whoever manages the transition from clinch to ground on their terms controls what happens next.</span></div>
-  </div>
 </div>
 
 <script>
 const PRINCIPLES = [
   {
-    id:"efficiency", accent:"acc-efficiency", num:"01",
+    id:"efficiency", accent:"efficiency", num:"01",
     name:"Maximum Efficiency",
     tagline:"Seiryoku Zenyo — the most efficient use of energy. If something requires a lot of effort, you are doing it wrong.",
     overview:"The core principle of Judo, and the foundation of all grappling. You are not trying to overpower your opponent — you are trying to redirect force, use leverage, and position your body so that physics does the work for you. A smaller, weaker practitioner using good principles beats a stronger one muscling through every technique.",
@@ -344,7 +301,7 @@ const PRINCIPLES = [
     ]
   },
   {
-    id:"ju", accent:"acc-ju", num:"02",
+    id:"ju", accent:"ju", num:"02",
     name:"JU — Yielding",
     tagline:"Bend, don't break. Use the opponent's force against them rather than meeting it with your own.",
     overview:"JU (柔) is what gives Judo and Jiu-Jitsu their names. It is not passivity — it is the skill of redirecting force. When your opponent pushes, you pull. When they pull, you push. You are combining your force with theirs so that the total force opposing them is their own strength plus yours.",
@@ -356,7 +313,7 @@ const PRINCIPLES = [
     ]
   },
   {
-    id:"timing", accent:"acc-timing", num:"03",
+    id:"timing", accent:"timing", num:"03",
     name:"Timing",
     tagline:"The art of predicting the future. Attack when your opponent is in the weak position — not before, not after.",
     overview:"Timing is not reaction speed. It is prediction. The athlete who reacts to what they see is always half a second late. The athlete who predicts what will happen — based on pattern recognition, causation, and opponent tendencies — attacks when the window opens, not after it appears.",
@@ -368,7 +325,7 @@ const PRINCIPLES = [
     ]
   },
   {
-    id:"reaction", accent:"acc-reaction", num:"04",
+    id:"reaction", accent:"reaction", num:"04",
     name:"Action-Reaction",
     tagline:"Newton's Third Law applied. Every attack sets up the next one through your opponent's defensive response.",
     overview:"Every action you take causes a reaction from your opponent. If you understand what that reaction will be before you attack, you can prepare the counter to their counter. This is how chains are built: attack A creates reaction X, which opens attack B, which creates reaction Y, which opens attack C.",
@@ -380,7 +337,7 @@ const PRINCIPLES = [
     ]
   },
   {
-    id:"drive", accent:"acc-drive", num:"05",
+    id:"drive", accent:"drive", num:"05",
     name:"Drive, Don't Strike",
     tagline:"A push applied smoothly through the target transmits force efficiently. A strike bounces off it and loses 90% in vibration.",
     overview:"A powerful jerk or yank causes an equal and opposite reaction — which is exactly what you don't want when trying to sweep or throw someone. The force you want moving your opponent is the sustained drive, not the impact. Establish contact, remove the slack, and drive smoothly in the direction you want them to go.",
@@ -392,7 +349,7 @@ const PRINCIPLES = [
     ]
   },
   {
-    id:"leverage", accent:"acc-leverage", num:"06",
+    id:"leverage", accent:"leverage", num:"06",
     name:"Leverage",
     tagline:"A rigid lever, a stable fulcrum, and maximum distance from the fulcrum to the point of force. Every joint in the body is a potential fulcrum.",
     overview:"Leverage is the physics of every joint lock, throw, and control position. You have a lever (a rigid object), a fulcrum (a stable pivot point), and a load (what you want to move). The further your force is applied from the fulcrum, the more mechanical advantage you generate — but the slower the movement.",
@@ -404,19 +361,19 @@ const PRINCIPLES = [
     ]
   },
   {
-    id:"weight", accent:"acc-weight", num:"07",
+    id:"weight", accent:"weight", num:"07",
     name:"Weight Over Muscle",
     tagline:"Use your skeleton and gravity to move your opponent, not your arm muscles. Muscles fatigue; weight doesn't.",
     overview:"The single greatest efficiency improvement available to any grappler. When you drag someone with your arms, you're doing isolated muscle contractions against their full body weight. When you use your skeleton and gravity, you're loading your structural weight against theirs — and weight doesn't exhaust.",
     applications:"Remove the slack, establish connection, then shift your bodyweight rather than pulling with your arms. Your hips, shoulders, and bodyweight generate the movement. Your arms are just the conduit — they transmit force, they don't generate it.",
-    mat:"This is what Rickson Gracie calls 'invisible jiu-jitsu'. Observers see the same grips as everyone else, but can't stop the movement because it isn't muscular — it's weight and structure. It looks effortless because it is. Your training partners will complain that you're 'too strong' when you haven't tensed a muscle.",
+    mat:"This is what Rickson Gracie calls 'invisible jiu-jitsu'. Observers see the same grips as everyone else, but can't stop the movement because it isn't muscular — it's weight and structure. Your training partners will complain that you're 'too strong' when you haven't tensed a muscle.",
     examples:[
       {title:"Weight Drag Drill", text:"Two athletes same size, Judo grip. First: drag with arms. Second: keep arms slightly bent, remove slack, step back and shift bodyweight onto back leg. The second person moves the partner across the mat with a fraction of the effort."},
       {title:"Side Control Weight", text:"Holding side control with your arms against a squirming opponent exhausts you fast. Drop your whole weight through your shoulder, flatten your hips, and make your opponent carry you. They fatigue; you rest."}
     ]
   },
   {
-    id:"angles", accent:"acc-angles", num:"08",
+    id:"angles", accent:"angles", num:"08",
     name:"Angles and Force Vectors",
     tagline:"100% of a poorly angled force is wasted. Apply force in the exact direction you want movement to occur.",
     overview:"A force vector has a direction and a magnitude. If your direction is wrong, no amount of magnitude will produce the result you want. Pushing perpendicular to a leg moves it. Pushing along the length of the bone does nothing — the bone takes the load. This applies to every guard pass, throw, and submission.",
@@ -428,11 +385,11 @@ const PRINCIPLES = [
     ]
   },
   {
-    id:"balance", accent:"acc-balance", num:"09",
+    id:"balance", accent:"balance", num:"09",
     name:"Balance and Base",
-    tagline:"When your center of gravity is above the center of your base, you are in balance and at maximum strength. Move it to the edge and you can be thrown with no effort.",
+    tagline:"When your center of gravity is above your base, you are at maximum strength. Move it to the edge and you can be thrown with no effort.",
     overview:"Every person in balance is maximally resistant to being thrown. The only way to throw a balanced opponent is to first break their balance — to move their center of gravity to the edge of or outside their base. This is Kuzushi. Without it, a throw requires overpowering the opponent physically. With it, the opponent almost throws themselves.",
-    applications:"Your base changes with your stance. A wide base is stable side-to-side but vulnerable front-to-back. A narrow base is vulnerable in all directions but allows more mobility. Understand where your base ends in every position — and understand that your opponent is constantly trying to find that edge.",
+    applications:"Your base changes with your stance. A wide base is stable side-to-side but vulnerable front-to-back. A narrow base is vulnerable in all directions but allows more mobility. Understand where your base ends in every position.",
     mat:"Shutting down your opponent's base is the primary goal on top. On bottom, maintaining your base is survival. Every sweep is an attack on the opponent's center of gravity relative to their base. Every guard pass is an attempt to control the base until the guard collapses.",
     examples:[
       {title:"Kuzushi First", text:"Trying to hip-throw a balanced opponent requires you to physically lift them. Moving their center of gravity to the edge of their base first means the throw moves an empty shell — they have no resistance to give. Two very different problems."},
@@ -440,23 +397,23 @@ const PRINCIPLES = [
     ]
   },
   {
-    id:"kuzushi", accent:"acc-kuzushi", num:"10",
-    name:"Kuzushi — Breaking Balance",
-    tagline:"The key to an effortless throw. Move the center of gravity to the edge of the base — subtle enough that the opponent doesn't notice, far enough that they can't resist.",
+    id:"kuzushi", accent:"kuzushi", num:"10",
+    name:"Kuzushi",
+    tagline:"Breaking balance. Move the center of gravity to the edge of the base — subtle enough they don't notice, far enough they can't resist.",
     overview:"Kuzushi is NOT throwing your opponent completely off balance — they will just step to recover. It is bringing their center of gravity to the exact edge of their base: far enough that they lose power, close enough that they haven't yet realized they need to step. In that precise moment, the throw happens.",
-    applications:"Eight directions of Kuzushi: forward, forward-right, right, backward-right, backward, backward-left, left, forward-left. Every throw targets one of these 8 directions. Your set-up creates the imbalance; your throw uses the moment of imbalance. Missing the timing means your throw lands when they're still balanced — and fails.",
+    applications:"Eight directions of Kuzushi: forward, forward-right, right, backward-right, backward, backward-left, left, forward-left. Every throw targets one of these 8 directions. Your set-up creates the imbalance; your throw uses the moment of imbalance.",
     mat:"Don't over-extend the kuzushi. If you pull your opponent so far off balance that they feel it coming, they'll step. The goal is barely-noticeable imbalance at exactly the moment of the throw. Subtle off-balance beats dramatic off-balance because it gives them no time to respond.",
     examples:[
       {title:"The Edge, Not the Fall", text:"Your opponent feels the throw coming and steps to prevent it. That means your kuzushi was too much — you gave them time to recover their base. Reduce the initial imbalance and attack earlier in the movement."},
-      {title:"Attacks from the Perpendicular", text:"Stand perpendicular to your opponent's base. You only need to move their center 5 inches to break balance. Stand parallel and you need 10–14 inches. Half the work, same result — this is why the judo entry always starts from perpendicular."}
+      {title:"Attacks from the Perpendicular", text:"Stand perpendicular to your opponent's base. You only need to move their center 5 inches to break balance. Stand parallel and you need 10–14 inches. Half the work, same result."}
     ]
   },
   {
-    id:"position", accent:"acc-position", num:"11",
+    id:"position", accent:"position", num:"11",
     name:"Position Before Submission",
     tagline:"A dominant position gives you many submissions. An inferior position gives you few and bad ones. Get to the position first.",
     overview:"Submissions attempted from bad positions have a low completion rate and often cost you the position entirely. The same submission from a dominant position is nearly unstoppable. The hierarchy matters: earn the position, then execute the submission — not the other way around.",
-    applications:"Two allowed exceptions to this rule: (1) Leg locks, which are often best entered from neutral or scrambled positions. (2) Phase 1 of ADCC (no-points half), where a failed attempt costs nothing on the scoreboard — use this window to hunt submissions aggressively from non-ideal positions.",
+    applications:"Two allowed exceptions: (1) Leg locks, which are often best entered from neutral or scrambled positions. (2) Phase 1 of ADCC (no-points half), where a failed attempt costs nothing on the scoreboard — use this window to hunt submissions aggressively.",
     mat:"If you're trapped in a bad position, improve the position before attacking. Trying to armbar from under side control when you haven't established any frame or underhook is wasting both the submission and the energy you need to escape.",
     examples:[
       {title:"The 80/20 Rule", text:"You get 80% of your results from 20% of your techniques. Learn the high-percentage submissions from each position first. The armbar, triangle, and RNC are that 20%. The flying armbar is not."},
@@ -464,7 +421,7 @@ const PRINCIPLES = [
     ]
   },
   {
-    id:"frames", accent:"acc-frames", num:"12",
+    id:"frames", accent:"frames", num:"12",
     name:"Frames",
     tagline:"A frame is a structure that creates and holds space between you and your opponent. Without frames, escapes are impossible.",
     overview:"Frames are the defensive architecture of BJJ. Any time you are in a bad position, your first action is to establish a frame — a rigid structure (forearm, knee, hand on hip) that holds the opponent's weight away from you and creates space for your escape. Frames are not pushes: they are load-bearing structures.",
@@ -477,46 +434,211 @@ const PRINCIPLES = [
   }
 ];
 
-function renderPrinciples(){
-  const grid = document.getElementById("principlesGrid");
-  PRINCIPLES.forEach(p=>{
-    const card = document.createElement("div");
-    card.className = "principle-card";
-    const exHtml = (p.examples||[]).map(e=>`<div class="principle-example"><strong>${e.title}</strong>${e.text}</div>`).join("");
-    card.innerHTML = `
-      <div class="principle-accent ${p.accent}"></div>
-      <div class="principle-header" role="button" tabindex="0" aria-expanded="false" aria-controls="pb-${p.id}" onclick="togglePrinciple('${p.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePrinciple('${p.id}')}">
-        <div class="principle-num">Principle ${p.num}</div>
-        <div class="principle-name">${p.name}</div>
-        <div class="principle-tagline">${p.tagline}</div>
-      </div>
-      <div class="principle-body" id="pb-${p.id}">
-        <div class="principle-section">
-          <div class="principle-section-label">Explanation</div>
-          <div class="principle-section-text">${p.overview}</div>
-        </div>
-        ${p.applications?`<div class="principle-section"><div class="principle-section-label">Application</div><div class="principle-section-text jade">${p.applications}</div></div>`:""}
-        ${p.mat?`<div class="principle-section"><div class="principle-section-label">On the Mat</div><div class="principle-section-text">${p.mat}</div></div>`:""}
-        ${exHtml?`<div class="principle-section"><div class="principle-section-label">Examples</div><div class="principle-examples">${exHtml}</div></div>`:""}
-        <button class="btn btn-secondary" onclick="event.stopPropagation();togglePrinciple('${p.id}')">✕ Close</button>
-      </div>
-    `;
-    grid.appendChild(card);
+const ACCENT_GRADIENTS = {
+  efficiency:'linear-gradient(90deg,#3FA383,#2ECC71)',
+  ju:'linear-gradient(90deg,#5C7A85,#7BACBA)',
+  timing:'linear-gradient(90deg,#C8A84E,#E8C468)',
+  reaction:'linear-gradient(90deg,#8D2323,#E84040)',
+  drive:'linear-gradient(90deg,#9B59B6,#BB8FCE)',
+  leverage:'linear-gradient(90deg,#E67E22,#F39C12)',
+  weight:'linear-gradient(90deg,#2980B9,#5DADE2)',
+  angles:'linear-gradient(90deg,#1ABC9C,#48C9B0)',
+  balance:'linear-gradient(90deg,#8B6914,#C8A84E)',
+  kuzushi:'linear-gradient(90deg,#8D2323,#C0392B)',
+  position:'linear-gradient(90deg,#3FA383,#0C2820)',
+  frames:'linear-gradient(90deg,#5C7A85,#2E86AB)',
+};
+
+const REF_SECTIONS = [
+  {id:'hierarchy', num:'REF·01', name:'Positional Hierarchy'},
+  {id:'chess',     num:'REF·02', name:'Chess Principles'},
+  {id:'grips',     num:'REF·03', name:'Grip Taxonomy'},
+  {id:'distances', num:'REF·04', name:'Fighting Distances'},
+];
+
+function init(){
+  const sp = document.getElementById('sidebarPrinciples');
+  PRINCIPLES.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'md-item';
+    btn.id = 'si-' + p.id;
+    btn.innerHTML = '<span class="md-item-num">' + p.num + '</span><span class="md-item-name">' + p.name + '</span>';
+    btn.addEventListener('click', () => showPrinciple(p.id));
+    sp.appendChild(btn);
   });
-}
-function togglePrinciple(id){
-  const body = document.getElementById("pb-"+id);
-  if(!body)return;
-  const open = body.classList.contains("open");
-  document.querySelectorAll(".principle-body.open").forEach(b=>b.classList.remove("open"));
-  if(!open) body.classList.add("open");
-  document.querySelectorAll(".principle-header[aria-controls]").forEach(h=>{
-    const b = document.getElementById(h.getAttribute("aria-controls"));
-    h.setAttribute("aria-expanded", b && b.classList.contains("open") ? "true" : "false");
+
+  const sr = document.getElementById('sidebarRef');
+  REF_SECTIONS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'md-item';
+    btn.id = 'si-' + s.id;
+    btn.innerHTML = '<span class="md-item-num">' + s.num + '</span><span class="md-item-name">' + s.name + '</span>';
+    btn.addEventListener('click', () => showSection(s.id));
+    sr.appendChild(btn);
   });
+
+  if(window.innerWidth >= 960) showPrinciple(PRINCIPLES[0].id);
 }
 
-renderPrinciples();
+function setActive(id){
+  document.querySelectorAll('.md-item').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('si-' + id);
+  if(el){
+    el.classList.add('active');
+    if(window.innerWidth >= 960) el.scrollIntoView({block:'nearest'});
+  }
+}
+
+function openPanel(){
+  const panel = document.getElementById('mdPanel');
+  const sidebar = document.getElementById('mdSidebar');
+  panel.classList.add('panel-open');
+  if(window.innerWidth < 960){
+    sidebar.classList.add('sidebar-hidden');
+    window.scrollTo(0,0);
+  }
+}
+
+function backToList(){
+  const panel = document.getElementById('mdPanel');
+  const sidebar = document.getElementById('mdSidebar');
+  panel.classList.remove('panel-open');
+  sidebar.classList.remove('sidebar-hidden');
+  document.querySelectorAll('.md-item').forEach(el => el.classList.remove('active'));
+}
+
+function showPrinciple(id){
+  const p = PRINCIPLES.find(x => x.id === id);
+  if(!p) return;
+  setActive(id);
+  openPanel();
+
+  const grad = ACCENT_GRADIENTS[p.accent] || 'linear-gradient(90deg,var(--jade-bright),var(--gold))';
+  const exHtml = (p.examples||[]).map(e =>
+    '<div class="panel-example"><strong>' + e.title + '</strong><p>' + e.text + '</p></div>'
+  ).join('');
+
+  document.getElementById('mdPanel').innerHTML =
+    '<button class="md-back-btn" onclick="backToList()">← All Principles</button>' +
+    '<div class="panel-accent-bar" style="background:' + grad + '"></div>' +
+    '<div class="panel-eyebrow">Principle ' + p.num + '</div>' +
+    '<h2 class="panel-title">' + p.name + '</h2>' +
+    '<p class="panel-tagline">' + p.tagline + '</p>' +
+    '<div class="panel-section"><div class="panel-section-label">Explanation</div><p class="panel-section-text">' + p.overview + '</p></div>' +
+    (p.applications ? '<div class="panel-section"><div class="panel-section-label">Application</div><p class="panel-section-text jade">' + p.applications + '</p></div>' : '') +
+    (p.mat ? '<div class="panel-section"><div class="panel-section-label">On the Mat</div><p class="panel-section-text">' + p.mat + '</p></div>' : '') +
+    (exHtml ? '<div class="panel-section"><div class="panel-section-label">Examples</div><div class="panel-examples">' + exHtml + '</div></div>' : '');
+
+  document.getElementById('mdPanel').scrollTop = 0;
+}
+
+function showSection(id){
+  setActive(id);
+  openPanel();
+  const renders = {hierarchy:renderHierarchy, chess:renderChess, grips:renderGrips, distances:renderDistances};
+  const fn = renders[id];
+  if(!fn) return;
+  document.getElementById('mdPanel').innerHTML =
+    '<button class="md-back-btn" onclick="backToList()">← Back</button>' + fn();
+  document.getElementById('mdPanel').scrollTop = 0;
+}
+
+function renderHierarchy(){
+  return '<div class="panel-accent-bar" style="background:linear-gradient(90deg,#0C2820,#3FA383)"></div>' +
+    '<div class="panel-eyebrow">Reference · Strategic Foundation</div>' +
+    '<h2 class="panel-title">Positional<br>Hierarchy</h2>' +
+    '<p class="panel-tagline">BJJ has one strategic spine: get to a better position first. ADCC point values shown.</p>' +
+    '<div class="panel-section"><div class="panel-section-label">Position Ranking</div>' +
+    '<div class="panel-hierarchy">' +
+      '<div class="hier-label-row">← You have these positions</div>' +
+      '<div class="hier-row best"><span class="hier-pts gold">+4</span><span class="hier-name">Rear Mount / Back Control</span><span class="hier-badge">Best</span></div>' +
+      '<div class="hier-row good"><span class="hier-pts jade">+3</span><span class="hier-name">Guard Pass (completed)</span></div>' +
+      '<div class="hier-row good"><span class="hier-pts jade">+2</span><span class="hier-name">Mount</span></div>' +
+      '<div class="hier-row good"><span class="hier-pts jade">+2</span><span class="hier-name">Knee on Belly</span></div>' +
+      '<div class="hier-row good"><span class="hier-pts jade">+2</span><span class="hier-name">Sweep (completed)</span></div>' +
+      '<div class="hier-row good"><span class="hier-pts jade">+4</span><span class="hier-name">Clean Takedown (past guard)</span></div>' +
+      '<div class="hier-row good"><span class="hier-pts jade">+2</span><span class="hier-name">Standard Takedown</span></div>' +
+      '<div class="hier-row neutral"><span class="hier-pts dim">0</span><span class="hier-name">Side Control (unpinned)</span></div>' +
+      '<div class="hier-row neutral"><span class="hier-pts dim">0</span><span class="hier-name">Neutral / Standing</span></div>' +
+      '<div class="hier-row neutral"><span class="hier-pts dim">0</span><span class="hier-name">Guard (your guard)</span><span class="hier-badge">Neutral</span></div>' +
+      '<div class="hier-label-row">← Opponent has these positions</div>' +
+      '<div class="hier-row bad"><span class="hier-pts red">−1</span><span class="hier-name">Guard Pull (defensive)</span></div>' +
+      '<div class="hier-row bad"><span class="hier-pts red">−2</span><span class="hier-name">Mount conceded</span></div>' +
+      '<div class="hier-row bad"><span class="hier-pts red">−3</span><span class="hier-name">Guard passed against you</span></div>' +
+      '<div class="hier-row worst"><span class="hier-pts red">−4</span><span class="hier-name">Back taken against you</span><span class="hier-badge">Worst</span></div>' +
+    '</div>' +
+    '<p style="font-size:13px;color:var(--stone-dim);margin-top:16px;line-height:1.6;">Source: Kesting, <em>Roadmap for BJJ</em>. Modified for ADCC no-gi ruleset — submissions only in first half; points activate in second half.</p>' +
+    '</div>';
+}
+
+function renderChess(){
+  const cards = [
+    {title:'The Fork', chess:'Chess: Attack two pieces at once', text:'Attack two submission threats simultaneously. The armbar-triangle chain is the classic fork — your armbar defence is my triangle setup. Your opponent cannot cover both. This is why chains beat isolated attacks.'},
+    {title:'The Pin', chess:'Chess: Lock a piece in place', text:"A pin is positional control that forces your opponent to carry your weight or concede position. Side control, mount, knee-on-belly — you aren't just stopping movement, you're forcing them to spend energy holding a bad position."},
+    {title:'Remove the Defender', chess:"Chess: Take the piece protecting the king", text:"Every escape has a defending limb. The cross-face removes the underhook. The whizzer removes the back-take. Identify what is defending the position you want — and remove it before attacking."},
+    {title:'Control the Center', chess:'Chess: Dominate from the middle', text:"In grappling, the center is your opponent's hips and spine. Whoever controls the hips controls the match. This is why hip escapes are the most important defensive movement in BJJ."},
+    {title:'Overworked', chess:'Chess: Force a piece to defend two threats', text:"The arm defending the choke can't also defend the armbar. Chain your attacks to create overloaded defenders. This is the Danaher principle: create a problem in one area to generate a solution somewhere else."},
+    {title:'Remove Escape Routes', chess:"Chess: Cut off the king's flight squares", text:'Before finishing a submission, block every exit. For RNC: second hook before the arm threads. For heel hook: perpendicular hip angle before the cup. An escape route left open is a submission lost.'},
+    {title:'Preparatory Moves', chess:'Chess: Set up the combination first', text:'The grip fight before the throw. The posture break before the submission. Most successful techniques are invisible — they were set up three moves earlier. Create the conditions before the technique.'},
+    {title:'A Man with a Plan', chess:'Chess: Know your next three moves', text:'If defended, go to Y. If Y is defended, go to Z. Every attack should have a pre-decided secondary outcome. Armbar → triangle → back take. Plan your chain before you start it.'},
+  ];
+  return '<div class="panel-accent-bar" style="background:linear-gradient(90deg,#8E44AD,#6C3483)"></div>' +
+    '<div class="panel-eyebrow">Reference · Strategic Thinking</div>' +
+    '<h2 class="panel-title">Chess Principles<br>Applied to Grappling</h2>' +
+    '<p class="panel-tagline">Chess and grappling share the same decision architecture. The tactics that win at chess describe what happens in elite grappling chains.</p>' +
+    '<div class="panel-section"><div class="panel-chess-grid">' +
+    cards.map(c =>
+      '<div class="panel-chess-card"><div class="panel-chess-title">' + c.title + '</div>' +
+      '<div class="panel-chess-sub">' + c.chess + '</div>' +
+      '<p class="panel-chess-text">' + c.text + '</p></div>'
+    ).join('') +
+    '</div></div>';
+}
+
+function renderGrips(){
+  const grips = [
+    {name:'Gable Grip', use:'Clinch control, bodylock, pummelling', desc:'Palms facing each other, fingers interlaced. Highest overall strength. Go-to for clinch control, bodylock passes, and any grip where you need maximum structural integrity.'},
+    {name:'S-Grip', use:'Armbar isolation, kimura setup', desc:'Each hand hooks the other in an S-shape. Allows rotation. Standard for armbar isolation from mount. Weaker than gable under direct pull.'},
+    {name:'Figure-Four / Kimura', use:'Kimura, omoplata, guillotine variants', desc:'One hand grips the wrist; the other arm threads over and grabs its own wrist. Creates a locked triangle of force that transmits enormous shoulder pressure with minimal grip strength.'},
+    {name:'Three-Finger Grip', use:'Gi only — collar and lapel control', desc:'Middle three fingers inserted deep in the collar. Maximises choking pressure. Not for pulling — only for applying rotational choking force.'},
+    {name:'Ball and Socket', use:'Rear clinch, body triangle, seatbelt', desc:"One arm hooks over the shoulder, the other under the armpit — hands meet at the sternum. The body's most stable rear control. The platform for every back attack."},
+    {name:'RNC Grip', use:'Rear naked choke, bow-and-arrow entry', desc:'Choking arm under the chin, bicep seals one carotid, free hand cups back of the head. Pull elbows together and arch — do not just squeeze. Squeezing alone rarely finishes at competition level.'},
+    {name:'Heel Cup', use:'Inside/outside heel hook, ashi-garami', desc:'Palm against the back of the heel (inside), or outside of heel (outside). The cup direction determines rotation direction. No substitute exists — no cup means a straight ankle lock.'},
+    {name:'Idiot Grip', use:'What not to do', desc:'Thumbs wrapped inside the fingers. Named because it risks finger breaks when the opponent yanks free. Never use in live rolling — hook your fingers, keep thumb on the outside.'},
+  ];
+  return '<div class="panel-accent-bar" style="background:linear-gradient(90deg,#ADAA9F,#F2EDE2)"></div>' +
+    '<div class="panel-eyebrow">Reference · Technical Detail</div>' +
+    '<h2 class="panel-title">Grip Taxonomy</h2>' +
+    '<p class="panel-tagline">The grip you choose determines force transmission, endurance, and which techniques it enables. From Galibert\'s mechanical analysis.</p>' +
+    '<div class="panel-section"><div class="panel-grips-grid">' +
+    grips.map(g =>
+      '<div class="panel-grip-card"><div class="panel-grip-name">' + g.name + '</div>' +
+      '<div class="panel-grip-use">' + g.use + '</div>' +
+      '<p class="panel-grip-desc">' + g.desc + '</p></div>'
+    ).join('') +
+    '</div></div>';
+}
+
+function renderDistances(){
+  const distances = [
+    {range:'Out of Range', text:'Neither athlete can attack. Use this range for observation: stance, weight distribution, movement patterns. Where is their weight? Are they circling? This tells you which entries will be available when you close distance.'},
+    {range:'Kicking Range', text:"Single strikes. For grapplers: the range you pass through quickly. Don't linger here — no takedown grip, no clinch, and you're fully exposed to strikes. Enter or exit, don't idle."},
+    {range:'Clinch Range', text:'Grip fighting, collar ties, underhook battles. Your first grappling range — where wrestling shots and judo throws live. Everything starts here. Establish your grip before committing to an entry.'},
+    {range:'Takedown Range', text:'Penetration step distance. Close enough to shoot or throw. Kuzushi happens here — break the balance before the technique. The fastest path from neutral to back control runs through this range.'},
+    {range:'Grappling Range', text:'Ground work, guard passing, submissions. The arena where BJJ dominates. Whoever manages the transition from clinch to ground on their terms controls what happens next.'},
+  ];
+  return '<div class="panel-accent-bar" style="background:linear-gradient(90deg,#5C7A85,#5DADE2)"></div>' +
+    '<div class="panel-eyebrow">Reference · Range Management</div>' +
+    '<h2 class="panel-title">Fighting Distances</h2>' +
+    '<p class="panel-tagline">Every technique has a range. Managing distance — entering and exiting at the right time — is as important as the technique itself.</p>' +
+    '<div class="panel-section"><div class="panel-distances">' +
+    distances.map(d =>
+      '<div class="panel-dist-row"><span class="panel-dist-range">' + d.range + '</span><span class="panel-dist-text">' + d.text + '</span></div>'
+    ).join('') +
+    '</div></div>';
+}
+
+init();
 </script>
 <script src="chinthe.js"></script>
 </body>
