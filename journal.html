@@ -119,8 +119,20 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
   .session-field-text{font-size:14.5px;line-height:1.6;}
 }
 
+@media(min-width:1100px){
+  .wrap{
+    max-width:1460px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    column-gap:60px;
+    align-items:start;
+    padding:0 60px;
+  }
+  .journal-right .sessions-header{padding-top:48px;}
+}
+
 @media(min-width:1280px){
-  .wrap{max-width:1000px;margin:0 auto;padding:0 40px;}
+  .wrap{max-width:1460px;padding:0 80px;}
 }
 </style>
 </head>
@@ -144,6 +156,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
 </nav>
 
 <div class="wrap">
+  <div class="journal-left">
   <div class="page-header">
     <div class="page-eyebrow">CHINTHE Training Journal</div>
     <h1 class="page-title">Session<br>Review</h1>
@@ -205,12 +218,15 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
       <button class="btn btn-primary" onclick="saveSession()">Save Session</button>
     </div>
   </div>
+  </div><!-- /.journal-left -->
 
+  <div class="journal-right">
   <div class="sessions-header">
     <div class="sessions-title">Session History</div>
     <button class="btn btn-ghost" onclick="exportAll()">↗ Export All</button>
   </div>
   <div class="sessions-list" id="sessionsList"></div>
+  </div><!-- /.journal-right -->
 </div>
 
 <script>

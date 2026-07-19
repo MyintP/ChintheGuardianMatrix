@@ -259,7 +259,7 @@ main { padding: 12px 16px 78px; }
 }
 .tree-edges { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
 .tree-edge {
-  fill: none; stroke: var(--line); stroke-width: 2;
+  fill: none; stroke: rgba(200,215,230,0.30); stroke-width: 2;
   transition: stroke 0.3s, stroke-width 0.3s, filter 0.3s;
 }
 .tree-edge.lit {
@@ -277,17 +277,17 @@ main { padding: 12px 16px 78px; }
 }
 .tree-node-badge {
   position: relative;
-  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+  width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; background: var(--mat-elev-2);
-  border: 2px solid var(--line); color: var(--chalk-dim);
+  font-size: 17px; background: var(--mat-elev-2);
+  border: 2px solid rgba(200,215,230,0.30); color: var(--chalk);
   transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s, color 0.25s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .tree-node-label {
-  font-size: 13px; line-height: 1.2; text-align: center; color: var(--chalk);
-  max-width: 108px; background: rgba(13, 13, 13, 0.62); border-radius: 6px;
-  padding: 3px 6px; transition: color 0.25s;
+  font-size: 13px; line-height: 1.2; text-align: center; color: var(--stone);
+  max-width: 108px; background: rgba(8,12,16,0.80); border-radius: 6px;
+  padding: 3px 7px; transition: color 0.25s;
 }
 /* Level-of-detail: when zoomed out for an overview, labels would render as
    unreadable slivers — hide them so the tree reads as a mastery heatmap.
@@ -312,12 +312,12 @@ main { padding: 12px 16px 78px; }
    focus ring (a focused drilling node was gold-on-gold), and amber-vs-gold
    were too close to tell apart. Amber now carries the whole "in progress"
    idea, separated by fill weight instead of hue. */
-.tree-node.m-new      .tree-node-badge { background: var(--mat-elev-2); border-color: var(--line); color: var(--chalk-dim); opacity: 0.72; }
-.tree-node.m-learning .tree-node-badge { background: rgba(232,196,104,0.14); border-color: var(--victory); color: var(--victory); }
+.tree-node.m-new      .tree-node-badge { background: var(--surface-2); border-color: rgba(200,215,230,0.32); color: var(--stone-dim); }
+.tree-node.m-learning .tree-node-badge { background: rgba(232,196,104,0.16); border-color: var(--victory); color: var(--victory); }
 .tree-node.m-drilling .tree-node-badge { background: var(--victory); border-color: var(--victory); color: #1F1806; }
 .tree-node.m-got      .tree-node-badge { background: var(--jade-bright); border-color: var(--jade-bright); color: #0C1A14; }
-.tree-node.m-got      .tree-node-label { color: var(--chalk); }
-.tree-node.m-new      .tree-node-label { opacity: 0.78; }
+.tree-node.m-got      .tree-node-label { color: var(--stone); }
+.tree-node.m-new      .tree-node-label { color: var(--stone-dim); }
 
 /* Got-it check pip */
 .tree-node.m-got .tree-node-badge::after {
