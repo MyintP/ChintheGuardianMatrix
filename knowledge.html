@@ -46,6 +46,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .filter-btn.cat-takedown.active{background:var(--crimson);color:var(--stone);border-color:var(--crimson);}
 .filter-btn.cat-defence.active{background:#B5462F;color:var(--stone);border-color:#B5462F;}
 .filter-btn.cat-concept.active{background:#8E44AD;color:var(--stone);border-color:#8E44AD;}
+.filter-btn.cat-judo.active{background:#4A7FBE;color:var(--stone);border-color:#4A7FBE;}
 
 /* Results count */
 .results-meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--stone-dim);letter-spacing:0.06em;margin-bottom:20px;}
@@ -68,6 +69,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .cat-takedown .tech-card-accent{background:var(--crimson);}
 .cat-defence .tech-card-accent{background:#B5462F;}
 .cat-concept .tech-card-accent{background:#8E44AD;}
+.cat-judo .tech-card-accent{background:#4A7FBE;}
 
 .tech-card-body{padding:18px 20px 20px;}
 .tech-card-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
@@ -83,6 +85,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .cat-takedown .tech-badge{background:rgba(141,35,35,0.18);color:var(--crimson);}
 .cat-defence .tech-badge{background:rgba(181,70,47,0.15);color:#B5462F;}
 .cat-concept .tech-badge{background:rgba(142,68,173,0.15);color:#B07CC6;}
+.cat-judo .tech-badge{background:rgba(74,127,190,0.14);color:#7EB4E8;}
 
 .tech-card-name{font-family:'Oswald',sans-serif;font-size:22px;letter-spacing:0.02em;text-transform:uppercase;line-height:1;margin-bottom:6px;}
 .tech-card-tagline{font-size:13px;color:var(--stone-dim);line-height:1.4;margin-bottom:12px;}
@@ -173,6 +176,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
       <button class="filter-btn cat-takedown" data-cat="takedown">Takedowns</button>
       <button class="filter-btn cat-defence" data-cat="defence">Defence</button>
       <button class="filter-btn cat-concept" data-cat="concept">Concepts</button>
+      <button class="filter-btn cat-judo" data-cat="judo">Judo</button>
     </div>
   </div>
 
@@ -562,7 +566,7 @@ const DB = [
     drill:"Penetration step drill: 20 reps focusing on hip-to-heel drive and head position. Partner stationary, then live at 50%."
   },
   {
-    id:"judo_throw", cat:"takedown",
+    id:"judo_throw", cat:"judo",
     name:"Judo Throw Entry",
     tagline:"Win the grip fight before attempting the throw. Most failed throws are grip failures, not technique failures.",
     tags:["Judo","Kuzushi","2-4 Points"],
@@ -732,7 +736,7 @@ const DB = [
 
   // ── TAKEDOWNS (expanded from Kesting + Galibert) ───────────────
   {
-    id:"o_soto_gari", cat:"takedown",
+    id:"o_soto_gari", cat:"judo",
     name:"O-Soto-Gari (Major Outer Reap)",
     tagline:"The most effective foot throw in Judo for wrestling-base grapplers. Works with or without a gi.",
     tags:["Judo","Ashi-Waza","Foot Throw","Outside Reap"],
@@ -743,7 +747,7 @@ const DB = [
     drill:"Kuzushi-then-reap: establish kuzushi, execute the reap on signal. If they're still two-legged, abort and re-establish the off-balance. Partner resists at 30% — time the reap to the moment of maximum imbalance. 15 reps each side."
   },
   {
-    id:"seoi_nage", cat:"takedown",
+    id:"seoi_nage", cat:"judo",
     name:"Seoi-Nage (Shoulder Throw)",
     tagline:"The highest-percentage throw in Judo competition history. Works at every level — from beginner to world champion.",
     tags:["Judo","Te-Waza","Shoulder Throw","Ippon & Morote"],
@@ -824,7 +828,7 @@ const DB = [
 
   // ── JUDO THROWING TECHNIQUES (Diaz — Judo For Beginners) ────────
   {
-    id:"tai_otoshi", cat:"takedown",
+    id:"tai_otoshi", cat:"judo",
     name:"Tai-Otoshi (Body Drop)",
     tagline:"Phil's signature throw. Minimal body contact, powerful when timed to opponent's forward movement. Works against pushers and rushers.",
     tags:["Judo","Te-Waza","Forward Throw","Body Drop"],
@@ -835,7 +839,7 @@ const DB = [
     drill:"Entry timing drill: partner walks forward, execute tai otoshi only at the moment of maximum forward lean. 15 reps. If they're not leaning, wait. Timing is 90% of this throw."
   },
   {
-    id:"o_goshi", cat:"takedown",
+    id:"o_goshi", cat:"judo",
     name:"O-Goshi (Large Hip Throw)",
     tagline:"The fundamental hip throw. First koshi-waza most judoka learn. Your hip is the fulcrum — load their center of gravity over it.",
     tags:["Judo","Koshi-Waza","Hip Throw","Kuzushi"],
@@ -846,7 +850,7 @@ const DB = [
     drill:"Hip position check: achieve the entry position with a partner, then pause and feel whether your hip is below their center of gravity before committing to the throw. 10 reps, checking position each time."
   },
   {
-    id:"harai_goshi", cat:"takedown",
+    id:"harai_goshi", cat:"judo",
     name:"Harai-Goshi (Sweeping Hip Throw)",
     tagline:"The hip throw with a leg sweep. Works when uke's weight is loaded onto one leg — sweep the loaded leg.",
     tags:["Judo","Koshi-Waza","Hip Throw","Leg Sweep"],
@@ -857,7 +861,7 @@ const DB = [
     drill:"Harai goshi weight loading: pull uke sideways until you can feel their weight shift to one leg, then sweep. 10 reps — if you can't feel the weight shift, don't sweep."
   },
   {
-    id:"uchi_mata", cat:"takedown",
+    id:"uchi_mata", cat:"judo",
     name:"Uchi-Mata (Inner Thigh Throw)",
     tagline:"Devastating against opponents with a wide or parallel stance. One of the most competition-successful throws in Judo history.",
     tags:["Judo","Ashi-Waza","Foot Throw","Inner Thigh"],
@@ -868,7 +872,7 @@ const DB = [
     drill:"Leg thread and sweep isolation: thread the leg between partner's feet and sweep the inner thigh with no throw. 15 reps, focusing purely on the sweep path — upward and through, not sideways."
   },
   {
-    id:"ukemi", cat:"concept",
+    id:"ukemi", cat:"judo",
     name:"Ukemi (Break Falls)",
     tagline:"Learn to fall before you learn to throw. Ukemi is not a warm-up drill — it is the foundational safety system of all grappling.",
     tags:["Judo","Fundamentals","Safety","Break Fall"],
@@ -879,7 +883,7 @@ const DB = [
     drill:"Ukemi sequence: 5 reps each of all four break falls at the start of every session — from kneeling first, then standing. Non-negotiable. Drill these until they happen before your brain processes the fall."
   },
   {
-    id:"kesa_gatame", cat:"position",
+    id:"kesa_gatame", cat:"judo",
     name:"Kesa-Gatame (Scarf Hold)",
     tagline:"Judo's classic side control. Devastatingly heavy when executed correctly — the 'Hundred Kilos' name is literal.",
     tags:["Judo","Katame-Waza","Pin","Osaekomi"],
@@ -890,7 +894,7 @@ const DB = [
     drill:"Kesa gatame weight drill: hold for 60 seconds against a resisting partner. They must feel your weight — if they can breathe comfortably, your position isn't heavy enough."
   },
   {
-    id:"randori", cat:"concept",
+    id:"randori", cat:"judo",
     name:"Randori (Freestyle Practice)",
     tagline:"Taking chaos. The emphasis of Judo over kata. The training method that separates knowing techniques from owning them.",
     tags:["Judo","Training Method","Freestyle","Live Practice"],
@@ -899,6 +903,107 @@ const DB = [
     defense:"The partner in randori is not the enemy — they are the tool. Protecting your partner during randori is part of the practice, not a limitation of it.",
     mistake:"Treating randori as a competition. When randori becomes about winning, athletes stop experimenting and default to their strongest two techniques. This halts development. Use randori to test new techniques, not to confirm existing strengths.",
     drill:"Randori with a constraint: 5-minute round where you can only throw from one of the 8 kuzushi directions. Forces you to set up the throw rather than relying on athleticism."
+  },
+
+  // ── JUDO STANDUP & ENTRIES (new — standup to BJJ bridge) ─────────
+  {
+    id:"kumi_kata", cat:"judo",
+    name:"Kumi-Kata (Grip Fighting)",
+    tagline:"You cannot throw without a grip. The clinch begins the moment you establish your hands — win the grip fight or you never get a throw.",
+    tags:["Judo","Standup","Grip","Clinch Entry","Foundation"],
+    objective:"Establish your preferred grip before your opponent establishes theirs. The dominant grip determines who gets to initiate — you cannot throw from a broken or denied grip.",
+    mechanics:"Standard right-handed grip (kenka yotsu): left hand grips right sleeve at the elbow, right hand grips left collar. Priority: inside position on the collar. Key grips — sleeve-and-collar (standard), sleeve-and-bicep (no-gi), head-and-arm (MMA/no-gi). Grip breaks: rotate your arm outward against their grip, snap down on their wrist, pivot away. Never let them settle into a two-handed grip — break one side immediately, attack with the other. From dominant grip → kuzushi → throw. From denied grip → work the grip fight, never throw from nothing.",
+    defense:"They will attempt a high collar grip or double-wrist control to prevent throws. Answer: snap down on their grip arm, pivot, re-establish position. Use broken grips as a feint to bait their grip-fight reaction, then attack that reaction.",
+    mistake:"Telegraphing your intended throw through your grip setup. A grip on the collar signals a hip throw; a high sleeve grip signals seoi-nage. Use broken or neutral grips to disguise the entry, then switch to your preferred grip at the moment of the throw.",
+    drill:"Grip-fighting rounds: 2-minute round, no throws allowed. Score yourself on how many times you establish dominant grip vs. how many times theirs gets established. Target: 70% win rate before adding throws. Then add: first person to establish dominant grip gets to throw."
+  },
+  {
+    id:"ouchi_gari", cat:"judo",
+    name:"Ouchi-Gari (Large Inner Reap)",
+    tagline:"Push backward, load their back leg, reap it. Works against opponents who resist or push back — their resistance is what loads the target leg.",
+    tags:["Judo","Ashi-Waza","Inner Reap","Entry Throw"],
+    objective:"Force uke backward to load their back leg, then reap that leg backward and diagonal. Ouchi-gari converts an opponent's resistance (pushing back) into the setup for the throw.",
+    mechanics:"Setup: push uke backward with both hands, or use their own backward movement. Their weight loads onto their back leg. Entry: step forward with your right foot, bringing it inside uke's stance. Drive your right leg behind uke's left leg — place your right leg behind their knee, not their ankle. The knee is the structural break point. Simultaneously pull down on the sleeve and drive through with the body. Sweep direction is backward-diagonal, not straight back. Stay upright — leaning forward with the sweep removes your control of uke's landing.",
+    defense:"Stepping the attacked leg backward to neutralize the reap. Counter with ko-uchi-gari (sweep their other leg simultaneously). Dropping weight to deny the single-leg loading. Counter-throw to the opposite side.",
+    mistake:"Attacking the ankle instead of behind the knee. Ankle attacks are easily shrugged off. Also: reaping straight back instead of diagonal — uke can step out of a straight-back reap. The diagonal direction forces them to the mat.",
+    drill:"Ouchi-gari with reaction: partner pushes you → use their push to load the ouchi-gari entry. 15 reps — the push IS the setup, not something to resist. Build the reflex to convert their force into your entry."
+  },
+  {
+    id:"ko_uchi_gari", cat:"judo",
+    name:"Ko-Uchi-Gari (Small Inner Reap)",
+    tagline:"The timing trap. Catches opponents mid-step. Excellent combination with ouchi-gari — they defend one, you attack the other foot.",
+    tags:["Judo","Ashi-Waza","Inner Reap","Combination Throw","Timing"],
+    objective:"Catch uke's foot at the moment of the step — when their weight is in transition. The 'small' in the name describes the arc, not the force. Timing is everything.",
+    mechanics:"Entry: as uke steps forward with their right foot, your right foot hooks their advancing right heel from the inside. The hook lands on the heel just as their weight shifts forward onto it. Sweep backward and through at that exact moment. Simultaneous pull: as you hook the heel, pull the right sleeve forward and down to accelerate the imbalance. Ko-uchi combination: if uke steps back to avoid ouchi-gari, their weight shifts to the front foot → immediately hook that foot with ko-uchi. The two throws are best learned as a pair.",
+    defense:"Staying at distance, not stepping into range. Stepping over the hook. Counter-throwing immediately (tomoe-nage or sumi-gaeshi are natural counters to a missed ko-uchi).",
+    mistake:"Sweeping the middle of the foot rather than the heel. The arch of the foot is easier to step over. Also: over-committing body weight in the sweep direction — a missed ko-uchi puts you in a bad position if you've leaned into it.",
+    drill:"Ko-uchi → ouchi combination: start with ko-uchi, partner steps back to avoid → immediately transition to ouchi-gari on the loaded back leg. 15 reps. Then reverse the sequence. The combination is what matters — drill both directions."
+  },
+  {
+    id:"ko_soto_gari", cat:"judo",
+    name:"Ko-Soto-Gari (Small Outer Reap)",
+    tagline:"The outside heel trip. Short arc, close range, precise timing. Natural counter to opponents who step back from ouchi-gari.",
+    tags:["Judo","Ashi-Waza","Outer Reap","Outside Trip","Combination"],
+    objective:"Attack their outside support foot at the moment it bears weight. Smaller arc than o-soto-gari — this is a close-range precision technique, not a power sweep.",
+    mechanics:"Entry: step your right foot to the outside of uke's right foot. Using the ball of your right foot or inside edge, sweep their right heel/ankle in a short backward arc. Simultaneously push their upper body backward with sleeve and collar grips to increase loading on the target leg. The sweep is short and precise — this is not o-soto-gari (different throw). Natural combination: after ouchi-gari attempt, if uke steps backward, they load their back foot → ko-soto-gari that foot. The two throws cover each other's escape routes.",
+    defense:"Spreading feet to deny single-leg loading. Transferring weight to the other leg before the sweep lands. Counter-throw to the opposite direction.",
+    mistake:"Sweeping with the heel of your foot (instead of ball or inside edge). Heel sweeps lack arc control. Also: using too large a sweeping arc — that becomes o-soto-gari and requires a different entry position.",
+    drill:"Ko-soto combination: throw ouchi-gari, partner steps back → ko-soto the retreating foot. Then reverse: throw ko-soto, partner steps in → ouchi-gari. 10 reps each direction. The two throws are one technique, not two."
+  },
+  {
+    id:"hane_goshi", cat:"judo",
+    name:"Hane-Goshi (Spring Hip Throw)",
+    tagline:"The hip throw for light, fast opponents. Your right leg springs their leg — you are both the fulcrum and the spring, not just a static hip.",
+    tags:["Judo","Koshi-Waza","Hip Throw","Spring Action"],
+    objective:"Use the spring action of your right leg to bounce uke off the mat and over your hip. The spring leg hooks theirs and drives upward — without the spring, this is just a weaker o-goshi.",
+    mechanics:"Setup: pull uke forward-right, making them step their right foot forward. Entry: as their right foot steps, step your left foot between their feet (heel first). Turn so your back faces uke, your hip below their center of gravity. Your right leg's outer shin contacts the outside of their right knee or upper thigh. Spring action: simultaneously spring your right leg upward and backward, flipping their leg and body over your hip. Arms pull sleeve down and drive lapel through. The spring and the throw are one movement — not a two-phase action.",
+    defense:"Wide stance absorbs the spring by distributing weight. Dropping level to get below the hip entry. Stepping around the entry turn before it completes.",
+    mistake:"Executing hane-goshi as a static hip throw. Without the spring action it becomes a weak o-goshi that stronger opponents absorb. The spring must be explosive — a coiled right leg releasing all at once through uke's leg.",
+    drill:"Spring isolation: practice the right-leg spring action without a partner (mirror or wall). Coil the leg, step in, feel the spring mechanics. 20 reps of the spring alone. Then add partner: 10 full throws."
+  },
+  {
+    id:"tomoe_nage", cat:"judo",
+    name:"Tomoe-Nage (Circle Throw / Sacrifice)",
+    tagline:"A counter to rushers. You sacrifice your standing position to flip them over you — and land in perfect position for BJJ ground work. The clearest Judo-to-BJJ bridge.",
+    tags:["Judo","Sutemi-Waza","Sacrifice Throw","BJJ Entry","Counter"],
+    objective:"Use uke's forward momentum to flip them over you, then follow to the mat and transition immediately to BJJ. The throw IS the entry into ne-waza — never stand up after a successful tomoe-nage.",
+    mechanics:"Trigger: uke drives forward aggressively. Pull them in the direction they're already going — accentuate their momentum, don't resist it. Step back, begin to sit. Place your right foot on their left hip or stomach as you fall backward. Both hands pull their sleeves toward you. As your back contacts the mat, extend your right leg and flip them in a circular arc over you. They land in front. BJJ follow-up (in order of preference): pursue armbar immediately, or triangle from open guard, or back control if they turn to turtle. Never stand up.",
+    defense:"Stopping their own forward drive kills the throw — no momentum, no tomoe. Stepping around the leg placement. Posting a hand to the mat to prevent the full flip.",
+    mistake:"Attempting tomoe-nage against a stationary or backward-moving opponent. The mechanics require forward momentum. Without it, you fall to your back with your opponent standing over you — the opposite of what you want.",
+    drill:"Momentum timing drill: partner walks forward, execute tomoe-nage only when you feel their drive. Then immediate BJJ follow-up: 5 reps ending in armbar, 5 reps ending in triangle, 5 reps ending in back control. Throw-to-submission as one continuous sequence."
+  },
+  {
+    id:"sumi_gaeshi", cat:"judo",
+    name:"Sumi-Gaeshi (Corner Reversal)",
+    tagline:"One of Kano's original 40 throws. A close-clinch sacrifice throw that drops directly into BJJ ground work — designed for inside clinch, not range.",
+    tags:["Judo","Sutemi-Waza","Sacrifice Throw","Clinch","Ne-Waza Entry"],
+    objective:"From close-clinch, fall backward to reverse the position — uke rolls over you, you follow to dominant position or side control. This throw is as much an entry into ne-waza as it is a standalone throw.",
+    mechanics:"Setup: establish close clinch, grip below uke's collar or behind their neck. Your hips close to uke's. Begin to fall backward while placing your right knee or foot on uke's left inner thigh — specifically the upper inner thigh, not the knee. Roll backward, using your right leg as a rolling lever. Pull uke forward and over you with the collar grip. They roll. Follow up: come to turtle-attack position with seatbelt, or shift to side control. BJJ follow-up: if they don't stand, pursue back control from their turtle immediately.",
+    defense:"Sprawling against their level change (drops hips to prevent the fall). Maintaining distance — requires close clinch to initiate. Stepping over the leg placement.",
+    mistake:"Placing the right foot on the knee instead of the upper inner thigh. Foot on the knee injures your partner and provides poor leverage. The thigh gives both the lever point and the mechanical advantage for the circular throw.",
+    drill:"Sumi-gaeshi to back take: establish close clinch, execute sumi-gaeshi, immediately pursue seatbelt for back control as uke turtles. 10 reps. Measure time from clinch to locked seatbelt."
+  },
+  {
+    id:"judo_bjj_bridge", cat:"concept",
+    name:"The Judo-to-BJJ Bridge",
+    tagline:"The throw is not the finish — it's the entry. In Judo, ippon wins. In BJJ, the throw is where the match begins. Never stand up after a successful throw.",
+    tags:["Judo","BJJ","Strategy","Transition","Philosophy"],
+    objective:"After executing a Judo throw, follow immediately to the ground and transition to BJJ ne-waza. The throw earns position — use that position to finish. Standing up after a throw in BJJ/no-gi competition abandons all the advantage the throw created.",
+    mechanics:"Key follow-ups by throw type. From seoi-nage (uke lands on their back): follow forward into mount or north-south. From o-soto-gari / ouchi-gari (uke may turn): anticipate turtle → attack with seatbelt for back control immediately. From o-goshi / hane-goshi (uke lands on back): step over to knee-on-belly → slide to mount. From tomoe-nage / sumi-gaeshi (sacrifice throws): you're already on the ground, uke is in front → armbar, triangle, or closed guard attacks. From uchi-mata: uke often lands face-down → instant turtle attack.",
+    defense:"BJJ-trained opponents will pull guard after being thrown rather than accept the pin. Anticipate this: when they start pulling guard, enter with a guard-passing position rather than standing up confused.",
+    mistake:"Standing up after a throw 'to show the ippon'. Nothing is scored in no-gi/BJJ for standing up. The positional advantage from the throw exists only while you are on the mat exploiting it. Follow through — every single time.",
+    drill:"Throw-and-follow drill: execute any Judo throw (drilling pace), immediately follow to the mat without standing. End in a submission attempt or established position. 15 reps each throw. Zero repetitions where you stand up after the throw — ever."
+  },
+  {
+    id:"clinch_entry", cat:"concept",
+    name:"Standup Entry to Clinch",
+    tagline:"The clinch is where Judo and BJJ meet. Every throw begins here. Control the distance and timing of your clinch entry or every attempt fails before it starts.",
+    tags:["Standup","Clinch","Entry","Judo","Wrestling","Distance"],
+    objective:"Control the distance and timing of the clinch entry. Entering from too far away or at the wrong moment — before a controlling grip is established — is the single most common error in standup grappling.",
+    mechanics:"Three distances. Far range: feint attacks, draw reactions, create entry openings via controlled step-ins. Mid-range (arm's reach): grip-fight range, establish sleeve or collar control. Close clinch: Judo throw range — hip throws, inner trips, sacrifice throws. Entry sequence: establish one controlling grip (sleeve or collar) → break their posture via kuzushi → step in for the throw or takedown. Never step in without a grip. The grip is the permission to enter; without it you're throwing from nothing. Use their reactions: push-back → attack forward. Pull-back → follow and enter. Drive into you → use sacrifice counter.",
+    defense:"They will push you off from clinch or grip-fight to maintain distance. Use their push-back to load a forward throw (tai otoshi, seoi-nage). Use their forward drive to load a sacrifice counter (tomoe-nage, sumi-gaeshi). Their energy is always the technique.",
+    mistake:"Committing to a shot or throw with zero hand control. This forces a pure-athletics takedown that a scramble-capable opponent can sprawl, redirect, or counter. Controlled grip first — then the throw is easy.",
+    drill:"Clinch entry drill: partner stands in defensive posture, 10 successful clinch entries with at least one controlling grip established before stepping in. No throws — the drill objective is the grip-before-entry. Partner tries to prevent the grip. Measure: grips established vs. failed attempts."
   }
 ];
 
