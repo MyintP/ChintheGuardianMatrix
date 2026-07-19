@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0D000D">
+<meta name="theme-color" content="#080C10">
 <meta name="description" content="CHINTHE — The Guardian System. Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the Modern Grappler.">
 <title>CHINTHE — Guardian System</title>
 <link rel="manifest" href="manifest.json">
@@ -16,7 +16,9 @@
 html { scroll-behavior: smooth; }
 body { overflow-x: hidden; }
 
-/* ── HERO ── */
+/* ════════════════════════════════
+   HERO
+════════════════════════════════ */
 .hero{
   min-height:calc(100vh - var(--nav-h));
   display:flex;flex-direction:column;justify-content:center;
@@ -24,9 +26,9 @@ body { overflow-x: hidden; }
   padding:80px 20px 60px;
 }
 .hero-glow{
-  position:absolute;top:-20%;left:50%;transform:translateX(-50%);
+  position:absolute;top:-10%;left:30%;transform:translateX(-50%);
   width:900px;height:900px;
-  background:radial-gradient(ellipse at center,rgba(15,59,46,0.28) 0%,transparent 70%);
+  background:radial-gradient(ellipse at center,rgba(12,60,36,0.38) 0%,transparent 68%);
   pointer-events:none;
 }
 .hero-grid{
@@ -38,7 +40,13 @@ body { overflow-x: hidden; }
   mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);
   pointer-events:none;
 }
-.hero-inner{max-width:1100px;margin:0 auto;position:relative;}
+.hero-inner{
+  max-width:1200px;margin:0 auto;position:relative;
+  display:grid;grid-template-columns:1fr;gap:48px;align-items:center;
+}
+.hero-content{position:relative;}
+.hero-visual{display:none;}
+
 .hero-eyebrow{
   font-family:'IBM Plex Mono',monospace;font-size:11px;
   letter-spacing:0.2em;color:var(--jade-bright);
@@ -52,8 +60,8 @@ body { overflow-x: hidden; }
 }
 .hero-heading em{color:var(--gold);font-style:normal;}
 .hero-sub{
-  font-size:clamp(16px,2vw,20px);color:var(--stone-dim);
-  line-height:1.5;max-width:520px;margin-bottom:40px;
+  font-size:clamp(15px,1.8vw,18px);color:var(--stone-dim);
+  line-height:1.6;max-width:520px;margin-bottom:40px;
 }
 .hero-myanmar{
   font-family:'Noto Sans Myanmar',sans-serif;
@@ -63,34 +71,58 @@ body { overflow-x: hidden; }
 .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
 
 .hero-badges{
-  display:flex;gap:8px;flex-wrap:wrap;margin-top:56px;
-  padding-top:28px;border-top:1px solid var(--line);
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:52px;
+  padding-top:24px;border-top:1px solid var(--line);
 }
 .hero-badge{
   font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
   letter-spacing:0.1em;text-transform:uppercase;
   color:var(--stone-dim);
-  border:1px solid var(--line);
+  border:1px solid var(--line-strong);
   padding:5px 12px;border-radius:999px;
+  transition:border-color .2s,color .2s;
+}
+.hero-badge:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── Hero emblem SVG ── */
+.hero-emblem{display:block;width:420px;height:420px;max-width:100%;}
+@keyframes emblem-spin{to{transform:rotate(360deg);}}
+@keyframes emblem-pulse{0%,100%{stroke-opacity:.50;}50%{stroke-opacity:.80;}}
+.hero-emblem-oct{transform-origin:240px 240px;animation:emblem-spin 240s linear infinite;}
+.hero-emblem-ring{animation:emblem-pulse 5s ease-in-out infinite;}
+.hero-visual::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(12,60,36,0.22) 0%,transparent 65%);
+  pointer-events:none;border-radius:50%;
 }
 
-/* ── MODULES ── */
-.section{max-width:1100px;margin:0 auto;padding:80px 20px;}
+/* ════════════════════════════════
+   MODULES SECTION
+════════════════════════════════ */
+.section{max-width:1200px;margin:0 auto;padding:80px 20px;}
+.section-header{
+  display:flex;flex-direction:column;gap:16px;
+  margin-bottom:48px;
+}
 .section-label{
   font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
   letter-spacing:0.2em;color:var(--jade-bright);
-  text-transform:uppercase;margin-bottom:14px;
+  text-transform:uppercase;margin-bottom:10px;
 }
 .section-title{
   font-family:'Oswald',sans-serif;font-weight:400;
   font-size:clamp(36px,6vw,56px);text-transform:uppercase;
-  letter-spacing:0.02em;line-height:1;margin-bottom:10px;
+  letter-spacing:0.02em;line-height:1;margin-bottom:0;
 }
-.section-sub{font-size:15px;color:var(--stone-dim);line-height:1.6;max-width:480px;margin-bottom:52px;}
+.section-sub{
+  font-size:15px;color:var(--stone-dim);line-height:1.65;
+  max-width:480px;margin-bottom:0;
+  align-self:flex-end;
+}
 
 .modules-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
   gap:16px;
 }
 .module-card{
@@ -102,13 +134,15 @@ body { overflow-x: hidden; }
   color:var(--stone);
   display:flex;flex-direction:column;gap:16px;
   position:relative;overflow:hidden;
-  transition:border-color .2s,transform .15s;
+  transition:border-color .2s,transform .18s,box-shadow .2s;
 }
-.module-card:hover{border-color:rgba(245,243,236,0.18);transform:translateY(-2px);}
-.module-card.coming{opacity:0.48;pointer-events:none;}
-.module-accent{
-  position:absolute;top:0;left:0;right:0;height:2px;
+.module-card:hover{
+  border-color:rgba(200,168,78,0.28);
+  transform:translateY(-3px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.32);
 }
+.module-card.coming{opacity:0.42;pointer-events:none;}
+.module-accent{position:absolute;top:0;left:0;right:0;height:2px;}
 .module-accent.jade{background:var(--jade-bright);}
 .module-accent.gold{background:var(--gold);}
 .module-accent.steel{background:var(--steel);}
@@ -118,9 +152,9 @@ body { overflow-x: hidden; }
   display:flex;align-items:center;justify-content:center;
   font-size:20px;
 }
-.module-icon.jade{background:var(--jade);}
+.module-icon.jade{background:rgba(63,163,131,0.12);}
 .module-icon.gold{background:var(--gold-dim);}
-.module-icon.steel{background:rgba(92,122,133,0.15);}
+.module-icon.steel{background:rgba(122,122,122,0.12);}
 .module-icon.crimson{background:rgba(141,35,35,0.15);}
 .module-tag{
   font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
@@ -132,7 +166,7 @@ body { overflow-x: hidden; }
   font-size:24px;letter-spacing:0.03em;text-transform:uppercase;
   line-height:1;
 }
-.module-desc{font-size:13.5px;color:var(--stone-dim);line-height:1.55;}
+.module-desc{font-size:13.5px;color:var(--stone-dim);line-height:1.6;}
 .module-meta{
   font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
   letter-spacing:0.06em;text-transform:uppercase;color:var(--stone-dim);
@@ -142,47 +176,68 @@ body { overflow-x: hidden; }
 .module-meta-dot.live{background:#3FA383;}
 .module-meta-dot.soon{background:var(--stone-dim);}
 
-/* ── PILLARS ── */
+/* ════════════════════════════════
+   PHILOSOPHY STRIP
+════════════════════════════════ */
+.philosophy{
+  background:linear-gradient(135deg,rgba(12,40,32,1) 0%,rgba(10,34,22,0.96) 100%);
+  border-top:1px solid rgba(63,163,131,0.22);
+  border-bottom:1px solid rgba(63,163,131,0.22);
+  padding:72px 20px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.philosophy::before{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:600px;height:300px;
+  background:radial-gradient(ellipse,rgba(63,163,131,0.10) 0%,transparent 70%);
+  pointer-events:none;
+}
+.philosophy-mark{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:22px;color:var(--gold);opacity:0.55;
+  margin-bottom:28px;letter-spacing:0.2em;
+}
+.philosophy-quote{
+  font-family:'Cinzel',serif;font-weight:600;
+  font-size:clamp(22px,3.5vw,42px);
+  text-transform:uppercase;letter-spacing:0.05em;
+  color:var(--stone);line-height:1.25;
+  max-width:760px;margin:0 auto 18px;
+  position:relative;
+}
+.philosophy-attr{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:rgba(245,243,236,0.45);letter-spacing:0.14em;text-transform:uppercase;
+}
+
+/* ════════════════════════════════
+   PILLARS
+════════════════════════════════ */
 .pillars{
   border-top:1px solid var(--line);
   margin-top:20px;
 }
-.pillars-inner{max-width:1100px;margin:0 auto;padding:80px 20px;}
+.pillars-inner{max-width:1200px;margin:0 auto;padding:80px 20px;}
 .pillars-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:40px;margin-top:52px;
+  gap:0;margin-top:40px;
+}
+.pillars-grid > div{
+  padding:32px 32px 32px 0;
+  border-top:1px solid var(--line);
+  position:relative;
 }
 .pillar-num{
   font-family:'IBM Plex Mono',monospace;font-size:11px;
-  color:var(--gold);letter-spacing:0.1em;margin-bottom:10px;
+  color:var(--gold);letter-spacing:0.12em;margin-bottom:12px;
 }
 .pillar-name{
-  font-family:'Oswald',sans-serif;font-size:22px;
+  font-family:'Oswald',sans-serif;font-size:24px;
   letter-spacing:0.03em;text-transform:uppercase;
-  margin-bottom:10px;color:var(--stone);
+  margin-bottom:12px;color:var(--stone);
 }
-.pillar-desc{font-size:13.5px;color:var(--stone-dim);line-height:1.6;}
-
-/* ── PHILOSOPHY STRIP ── */
-.philosophy{
-  background:var(--jade);
-  border-top:1px solid rgba(63,163,131,0.2);
-  border-bottom:1px solid rgba(63,163,131,0.2);
-  padding:60px 20px;text-align:center;
-  margin:0;
-}
-.philosophy-quote{
-  font-family:'Cinzel',serif;font-weight:600;
-  font-size:clamp(24px,4vw,44px);
-  text-transform:uppercase;letter-spacing:0.04em;
-  color:var(--stone);line-height:1.2;
-  max-width:800px;margin:0 auto 16px;
-}
-.philosophy-attr{
-  font-family:'IBM Plex Mono',monospace;font-size:11px;
-  color:rgba(245,243,236,0.5);letter-spacing:0.12em;text-transform:uppercase;
-}
+.pillar-desc{font-size:14px;color:var(--stone-dim);line-height:1.65;}
 
 /* ── FOOTER ── */
 footer{
@@ -190,7 +245,7 @@ footer{
   padding:40px 20px;
 }
 .footer-inner{
-  max-width:1100px;margin:0 auto;
+  max-width:1200px;margin:0 auto;
   display:flex;align-items:center;justify-content:space-between;
   flex-wrap:wrap;gap:20px;
 }
@@ -207,37 +262,60 @@ footer{
   letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);
 }
 
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
 @media(max-width:640px){
   .nav-links{display:none;}
   .hero-heading{font-size:clamp(52px,15vw,90px);}
   .modules-grid{grid-template-columns:1fr;}
 }
 
-/* ── DESKTOP IMPROVEMENTS ── */
+@media(min-width:900px){
+  .section-header{
+    flex-direction:row;align-items:flex-end;
+    justify-content:space-between;gap:48px;
+  }
+  .section-header .section-sub{max-width:400px;}
+}
+
 @media(min-width:960px){
   .hero{padding:60px 40px 52px;min-height:0;}
-  .hero-inner{max-width:none;}
-  .hero-heading{font-size:clamp(72px,8vw,140px);}
-  .hero-sub{font-size:clamp(16px,1.5vw,20px);max-width:560px;margin-bottom:40px;}
-  .hero-badges{margin-top:48px;}
+  .hero-inner{
+    max-width:1400px;
+    width:100%;
+    grid-template-columns:1fr 400px;
+    gap:80px;
+  }
+  .hero-visual{
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .hero-heading{font-size:clamp(68px,7.5vw,130px);}
+  .hero-sub{font-size:clamp(15px,1.4vw,18px);max-width:520px;}
+  .hero-badges{margin-top:44px;}
 
   .section{max-width:none;padding:80px 40px;}
-  .section-title{font-size:clamp(38px,4.5vw,64px);}
-  .modules-grid{grid-template-columns:repeat(3,1fr);gap:18px;}
+  .section-title{font-size:clamp(38px,4.5vw,60px);}
+  .modules-grid{grid-template-columns:repeat(3,1fr);gap:16px;}
 
   .pillars-inner{max-width:none;padding:80px 40px;}
-  .pillars-grid{grid-template-columns:repeat(4,1fr);gap:40px;}
+  .pillars-grid{grid-template-columns:repeat(4,1fr);}
 
-  .philosophy{padding:72px 40px;}
-  .philosophy-quote{font-size:clamp(28px,4vw,56px);}
+  .philosophy{padding:80px 40px;}
+  .philosophy-quote{font-size:clamp(26px,3.5vw,44px);}
 
   footer{padding:48px 40px;}
+}
+
+@media(min-width:1280px){
+  .hero-inner{max-width:1560px;grid-template-columns:1fr 460px;gap:100px;}
 }
 
 @media(min-width:1400px){
   .hero{padding:80px 80px 64px;}
   .section,.pillars-inner{padding:100px 80px;}
-  .hero-heading{font-size:clamp(90px,8vw,160px);}
+  .hero-heading{font-size:clamp(90px,7vw,150px);}
   .modules-grid{grid-template-columns:repeat(3,1fr);}
 }
 
@@ -270,30 +348,104 @@ footer{
   <div class="hero-glow"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">CHINTHE — Guardian System · Alpha</div>
-    <h1 class="hero-heading">
-      Discipline.<br>Respect.<br><em>Legacy.</em>
-    </h1>
-    <p class="hero-sub">Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the Modern Grappler.</p>
-    <div class="hero-myanmar">ခြင်္သေ့ — The Guardian Lion</div>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="chinthe-guardian-matrix.html">Open Guardian Matrix →</a>
-      <a class="btn btn-secondary" href="knowledge.html">Browse Knowledge Base</a>
+    <div class="hero-content">
+      <div class="hero-eyebrow">CHINTHE — Guardian System · Alpha</div>
+      <h1 class="hero-heading">
+        Discipline.<br>Respect.<br><em>Legacy.</em>
+      </h1>
+      <p class="hero-sub">Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the Modern Grappler.</p>
+      <div class="hero-myanmar">ခြင်္သေ့ — The Guardian Lion</div>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="chinthe-guardian-matrix.html">Open Guardian Matrix →</a>
+        <a class="btn btn-secondary" href="knowledge.html">Browse Knowledge Base</a>
+      </div>
+      <div class="hero-badges">
+        <span class="hero-badge">ADCC Ruleset</span>
+        <span class="hero-badge">No-Gi</span>
+        <span class="hero-badge">Blue Belt+</span>
+        <span class="hero-badge">Offline Capable</span>
+        <span class="hero-badge">Alpha Build</span>
+      </div>
     </div>
-    <div class="hero-badges">
-      <span class="hero-badge">ADCC Ruleset</span>
-      <span class="hero-badge">No-Gi</span>
-      <span class="hero-badge">Blue Belt+</span>
-      <span class="hero-badge">Offline Capable</span>
-      <span class="hero-badge">Alpha Build</span>
+    <!-- Architectural guardian emblem — desktop only -->
+    <div class="hero-visual" aria-hidden="true">
+      <svg class="hero-emblem" viewBox="0 0 480 480" width="420" height="420" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow-gold" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-jade" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <!-- Outermost measurement ring -->
+        <circle cx="240" cy="240" r="228" stroke="#3FA383" stroke-width="1" stroke-opacity="0.22"/>
+        <!-- Outer octagon (slow rotation) -->
+        <polygon class="hero-emblem-oct"
+          points="240,34 386,94 446,240 386,386 240,446 94,386 34,240 94,94"
+          stroke="#3FA383" stroke-width="1.5" stroke-opacity="0.48"/>
+        <!-- Radial connectors: outer → mid (cardinal) -->
+        <line x1="240" y1="34"  x2="240" y2="85"  stroke="#3FA383" stroke-width="1" stroke-opacity="0.55"/>
+        <line x1="446" y1="240" x2="395" y2="240" stroke="#3FA383" stroke-width="1" stroke-opacity="0.55"/>
+        <line x1="240" y1="446" x2="240" y2="395" stroke="#3FA383" stroke-width="1" stroke-opacity="0.55"/>
+        <line x1="34"  y1="240" x2="85"  y2="240" stroke="#3FA383" stroke-width="1" stroke-opacity="0.55"/>
+        <!-- Radial connectors: diagonal -->
+        <line x1="386" y1="94"  x2="350" y2="130" stroke="#3FA383" stroke-width="0.8" stroke-opacity="0.40"/>
+        <line x1="386" y1="386" x2="350" y2="350" stroke="#3FA383" stroke-width="0.8" stroke-opacity="0.40"/>
+        <line x1="94"  y1="386" x2="130" y2="350" stroke="#3FA383" stroke-width="0.8" stroke-opacity="0.40"/>
+        <line x1="94"  y1="94"  x2="130" y2="130" stroke="#3FA383" stroke-width="0.8" stroke-opacity="0.40"/>
+        <!-- Mid octagon -->
+        <polygon
+          points="240,85 350,130 395,240 350,350 240,395 130,350 85,240 130,130"
+          stroke="#3FA383" stroke-width="1" stroke-opacity="0.32" filter="url(#glow-jade)"/>
+        <!-- Inner octagon -->
+        <polygon
+          points="240,140 311,169 340,240 311,311 240,340 169,311 140,240 169,169"
+          stroke="#3FA383" stroke-width="0.8" stroke-opacity="0.22"/>
+        <!-- Cardinal axis lines -->
+        <line x1="240" y1="34"  x2="240" y2="446" stroke="#3FA383" stroke-width="0.5" stroke-opacity="0.14"/>
+        <line x1="34"  y1="240" x2="446" y2="240" stroke="#3FA383" stroke-width="0.5" stroke-opacity="0.14"/>
+        <!-- Diagonal axes -->
+        <line x1="94"  y1="94"  x2="386" y2="386" stroke="#3FA383" stroke-width="0.5" stroke-opacity="0.10"/>
+        <line x1="386" y1="94"  x2="94"  y2="386" stroke="#3FA383" stroke-width="0.5" stroke-opacity="0.10"/>
+        <!-- Gold outer ring (pulsing) -->
+        <circle class="hero-emblem-ring" cx="240" cy="240" r="92" stroke="#C8A84E" stroke-width="1.5" stroke-opacity="0.50"/>
+        <!-- Gold mid ring -->
+        <circle cx="240" cy="240" r="68" stroke="#C8A84E" stroke-width="1" stroke-opacity="0.38"/>
+        <!-- Gold inner ring (glow) -->
+        <circle cx="240" cy="240" r="44" stroke="#C8A84E" stroke-width="2" stroke-opacity="0.78" filter="url(#glow-gold)"/>
+        <!-- Gold diamond -->
+        <polygon points="240,178 302,240 240,302 178,240" stroke="#C8A84E" stroke-width="1.2" stroke-opacity="0.52" fill="none"/>
+        <!-- Crosshair -->
+        <line x1="230" y1="240" x2="250" y2="240" stroke="#C8A84E" stroke-width="1.5" stroke-opacity="0.80"/>
+        <line x1="240" y1="230" x2="240" y2="250" stroke="#C8A84E" stroke-width="1.5" stroke-opacity="0.80"/>
+        <!-- Center dot -->
+        <circle cx="240" cy="240" r="4" fill="#C8A84E" fill-opacity="0.80" filter="url(#glow-gold)"/>
+        <!-- Registration L-brackets at cardinal octagon vertices -->
+        <path d="M233,27 L240,27 L240,34" stroke="#C8A84E" stroke-width="1.5" stroke-opacity="0.72" fill="none"/>
+        <path d="M453,233 L453,240 L446,240" stroke="#C8A84E" stroke-width="1.5" stroke-opacity="0.72" fill="none"/>
+        <path d="M247,453 L240,453 L240,446" stroke="#C8A84E" stroke-width="1.5" stroke-opacity="0.72" fill="none"/>
+        <path d="M27,247 L27,240 L34,240" stroke="#C8A84E" stroke-width="1.5" stroke-opacity="0.72" fill="none"/>
+        <!-- Cardinal indicator dots -->
+        <circle cx="240" cy="10"  r="2.5" fill="#3FA383" fill-opacity="0.55"/>
+        <circle cx="470" cy="240" r="2.5" fill="#3FA383" fill-opacity="0.55"/>
+        <circle cx="240" cy="470" r="2.5" fill="#3FA383" fill-opacity="0.55"/>
+        <circle cx="10"  cy="240" r="2.5" fill="#3FA383" fill-opacity="0.55"/>
+      </svg>
     </div>
   </div>
 </section>
 
 <div class="section">
-  <div class="section-label">The System</div>
-  <h2 class="section-title">Everything answers<br>one question.</h2>
-  <p class="section-sub">Given my current state, what is the highest expected-value decision? The CHINTHE Guardian System is built around that question.</p>
+  <div class="section-header">
+    <div>
+      <div class="section-label">The System</div>
+      <h2 class="section-title">Everything answers<br>one question.</h2>
+    </div>
+    <p class="section-sub">Given my current state, what is the highest expected-value decision? The CHINTHE Guardian System is built around that question.</p>
+  </div>
   <div class="modules-grid">
     <a class="module-card" href="chinthe-guardian-matrix.html">
       <div class="module-accent jade"></div>
@@ -364,6 +516,7 @@ footer{
 </div>
 
 <div class="philosophy">
+  <div class="philosophy-mark">◈</div>
   <p class="philosophy-quote">"Build with athletes, not for athletes."</p>
   <p class="philosophy-attr">CHINTHE Core Principle</p>
 </div>
