@@ -245,6 +245,7 @@
     p("chess",      "Chess Principles Applied to Grappling");
     p("grips",      "Grip Taxonomy");
     p("distances",  "Fighting Distances");
+    p("glossary",   "Glossary — BJJ Terms");
 
     // Knowledge techniques
     k("rnc",                     "Rear Naked Choke (Hadaka-Jime)");

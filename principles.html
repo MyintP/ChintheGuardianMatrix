@@ -214,6 +214,11 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 
 /* ── Reference: Distances ── */
 .panel-distances{display:flex;flex-direction:column;gap:6px;max-width:600px;}
+.glossary{display:grid;gap:8px;margin:0;}
+.gl-row{display:grid;grid-template-columns:200px 1fr;gap:14px;padding:12px 16px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;}
+.gl-row dt{font-family:'Oswald',sans-serif;font-size:15px;letter-spacing:.02em;text-transform:uppercase;color:var(--gold);}
+.gl-row dd{margin:0;font-size:13.5px;line-height:1.55;color:var(--stone-dim);}
+@media(max-width:768px){.gl-row{grid-template-columns:1fr;gap:4px;}}
 .panel-dist-row{display:flex;gap:14px;align-items:flex-start;padding:12px 16px;
   background:var(--surface-2);border:1px solid var(--line);border-radius:8px;}
 .panel-dist-range{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
@@ -443,6 +448,7 @@ const REF_SECTIONS = [
   {id:'chess',     num:'REF·02', name:'Chess Principles'},
   {id:'grips',     num:'REF·03', name:'Grip Taxonomy'},
   {id:'distances', num:'REF·04', name:'Fighting Distances'},
+  {id:'glossary',  num:'REF·05', name:'Glossary'},
 ];
 
 function init(){
@@ -524,7 +530,7 @@ function showPrinciple(id){
 function showSection(id){
   setActive(id);
   openPanel();
-  const renders = {hierarchy:renderHierarchy, chess:renderChess, grips:renderGrips, distances:renderDistances};
+  const renders = {hierarchy:renderHierarchy, chess:renderChess, grips:renderGrips, distances:renderDistances, glossary:renderGlossary};
   const fn = renders[id];
   if(!fn) return;
   document.getElementById('mdPanel').innerHTML =
@@ -626,6 +632,167 @@ function renderDistances(){
       '<div class="panel-dist-row"><span class="panel-dist-range">' + d.range + '</span><span class="panel-dist-text">' + d.text + '</span></div>'
     ).join('') +
     '</div></div>';
+}
+
+// Plain-language definitions of the terms used across the site.
+const GLOSSARY = [
+ {
+  "t": "2-on-1",
+  "d": "Both your hands controlling one of their arms (wrist and above the elbow). Feeds the arm drag and the single leg."
+ },
+ {
+  "t": "50/50",
+  "d": "Symmetrical leg entanglement: each athlete has the same inside leg position on the other. Both can attack the heel."
+ },
+ {
+  "t": "Ashi-garami",
+  "d": "The family of leg entanglements used to control a leg and attack it — inside ashi, outside ashi, saddle, 50/50."
+ },
+ {
+  "t": "Base",
+  "d": "Your stable support — feet, knees, hands and hips spread to resist being swept or rolled."
+ },
+ {
+  "t": "Body triangle",
+  "d": "Legs locked in a figure-four around the torso from back control. Tighter than hooks; check how your ruleset scores it."
+ },
+ {
+  "t": "Bridge",
+  "d": "Driving the hips up from your back to make space or roll an opponent off you."
+ },
+ {
+  "t": "Clean (takedown / sweep)",
+  "d": "Under ADCC, a takedown or sweep that lands past the guard — scores 4 instead of 2."
+ },
+ {
+  "t": "Collar tie",
+  "d": "Hand on the back of their head/neck from standing. Controls posture; sets up snap downs and ankle picks."
+ },
+ {
+  "t": "Combat base / HQ",
+  "d": "Top passing stance with one knee up and one down, used to read the guard before committing to a pass."
+ },
+ {
+  "t": "Crossface",
+  "d": "Your shoulder or forearm across their jaw, turning their head away. Stops them turning in and kills the underhook."
+ },
+ {
+  "t": "Dog fight",
+  "d": "Half-guard scramble where both athletes are on their knees, the bottom player holding the underhook."
+ },
+ {
+  "t": "Frame",
+  "d": "A bone structure (forearm, shin, hand on hip) that holds their weight off you. Load-bearing, not pushing."
+ },
+ {
+  "t": "Front headlock",
+  "d": "Head-and-arm control from in front, usually after a sprawl or snap down. Entry to the guillotine, D'Arce, anaconda and back take."
+ },
+ {
+  "t": "Gable grip",
+  "d": "Palm-to-palm clasp with fingers together. Strong grip for body locks and chokes."
+ },
+ {
+  "t": "Granby roll",
+  "d": "A shoulder roll from turtle or bottom to recover guard or escape."
+ },
+ {
+  "t": "Guard retention",
+  "d": "Keeping your legs between you and the passer with frames, hip movement and inversion."
+ },
+ {
+  "t": "Hip escape (shrimp)",
+  "d": "Turning on your side and driving your hips away to create space — the base movement of most escapes."
+ },
+ {
+  "t": "Hooks",
+  "d": "Your heels inside their thighs from back control (or insteps under their thighs in butterfly guard)."
+ },
+ {
+  "t": "Inside position",
+  "d": "Having your hands, arms or legs inside theirs. Whoever owns inside position usually controls the exchange."
+ },
+ {
+  "t": "Inversion",
+  "d": "Rolling onto your shoulders to bring your legs back in front of a passer or to enter the legs."
+ },
+ {
+  "t": "Knee shield",
+  "d": "Half-guard bottom: your shin across their belly to hold their weight off you."
+ },
+ {
+  "t": "Kuzushi",
+  "d": "Breaking balance. Moving their centre of gravity to the edge of their base so they can be thrown or swept."
+ },
+ {
+  "t": "Overhook / whizzer",
+  "d": "Your arm over their arm, clamping it. Defends their underhook and the single leg."
+ },
+ {
+  "t": "Positional sparring",
+  "d": "Live rounds that start in a set position with a set goal, reset when it ends. The bridge between drilling and rolling."
+ },
+ {
+  "t": "Posture",
+  "d": "Head up, back straight, hips under you. Broken posture is what makes guard attacks work."
+ },
+ {
+  "t": "Pummel",
+  "d": "Swimming your arms inside theirs to win underhooks."
+ },
+ {
+  "t": "Saddle",
+  "d": "Leg entanglement where both your legs trap one of theirs (also 411 / honey hole / inside sankaku). Strong heel hook platform."
+ },
+ {
+  "t": "Seatbelt",
+  "d": "Back-control grip: one arm over the shoulder, one under the armpit, hands joined on their chest."
+ },
+ {
+  "t": "Shot / penetration step",
+  "d": "The level change and deep step that drives a takedown."
+ },
+ {
+  "t": "Sprawl",
+  "d": "Throwing your hips back and down to stop a shot."
+ },
+ {
+  "t": "Stack",
+  "d": "Driving their hips over their head so their legs can't work. Defends guard submissions and powers some passes."
+ },
+ {
+  "t": "Stalling",
+  "d": "Avoiding engagement. Penalised with negative points in ADCC after warnings."
+ },
+ {
+  "t": "Tap",
+  "d": "Submitting — tap the opponent or the mat, or say \"tap\". Tap early on leg locks."
+ },
+ {
+  "t": "Tori / uke",
+  "d": "Judo terms: tori performs the technique, uke receives it."
+ },
+ {
+  "t": "Turtle",
+  "d": "On your knees and elbows, protecting the neck. A transition position, not a resting one."
+ },
+ {
+  "t": "Underhook",
+  "d": "Your arm under their armpit. The key to half guard, the dog fight, body locks and back takes."
+ },
+ {
+  "t": "Wrestle up",
+  "d": "Coming up from bottom position onto a leg and finishing on top."
+ }
+];
+function renderGlossary(){
+  return '<div class="panel-accent-bar" style="background:' + BRAND_ACCENT + '"></div>' +
+    '<div class="panel-eyebrow">Reference · Language</div>' +
+    '<h2 class="panel-title">Glossary</h2>' +
+    '<p class="panel-tagline">The terms used across the Matrix, Knowledge Base and Principles, in plain language.</p>' +
+    '<div class="panel-section"><dl class="glossary">' +
+    GLOSSARY.map(g => '<div class="gl-row"><dt>' + g.t + '</dt><dd>' + g.d + '</dd></div>').join('') +
+    '</dl></div>';
 }
 
 init();
