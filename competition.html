@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>/* theme before first paint: avoids a flash of the wrong theme */try{var t=localStorage.getItem("chinthe_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080C10">
+<meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
 <meta name="description" content="Mat-side reference: ADCC, IBJJF and NAGA scoring, a tap-to-add score tracker, and what to do when you are ahead, level or behind.">
 <title>Compete — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
@@ -15,12 +17,8 @@
 /* Design tokens + .btn / .disc / nav come from chinthe.css — single source of truth.
    Compete is a mat-side quick reference: static-first, thumb-first, big and glanceable. */
 
-.compete { max-width: 900px; margin: 0 auto; padding: 24px 20px 100px; }
+.compete { max-width: 1240px; margin: 0 auto; padding: 0 20px 56px; }
 .compete-header { margin-bottom: 22px; }
-.compete-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--jade-bright); text-transform: uppercase; margin-bottom: 8px; }
-.compete-title { font-family: 'Oswald', sans-serif; font-size: clamp(40px, 9vw, 68px); text-transform: uppercase; letter-spacing: 0.02em; line-height: 0.95; margin-bottom: 8px; }
-.compete-title span { color: var(--gold); }
-.compete-sub { font-size: 14px; color: var(--stone-dim); line-height: 1.6; max-width: 560px; }
 
 /* Ruleset switcher — segmented control */
 .ruleset-switch { display: flex; gap: 6px; margin-top: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px; }
@@ -94,18 +92,17 @@
 footer.brand-footer { text-align: center; margin-top: 40px; font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); color: var(--stone-dim); letter-spacing: 0.12em; text-transform: uppercase; }
 
 @media (min-width: 900px) {
-  .compete { padding: 40px 20px 100px; }
+  .compete { padding: 0 32px 64px; }
   .tracker-adds { gap: 20px; }
 }
 
 @media (min-width: 1100px) {
   .compete {
-    max-width: 1400px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 56px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 40px;
     align-items: start;
-    padding: 48px 60px 80px;
+    padding: 0 48px 64px;
   }
   .compete-header                          { grid-column: 1 / -1; }
   /* Left column stacks score → clock guidance → core positions; the tall scoring
@@ -139,9 +136,11 @@ footer.brand-footer { text-align: center; margin-top: 40px; font-family: 'IBM Pl
 
 <div class="compete">
   <div class="compete-header">
-    <div class="compete-eyebrow">CHINTHE — Mat-side</div>
-    <h1 class="compete-title">Compete<span>.</span></h1>
-    <p class="compete-sub">Quick reference for the corner and the cage-side. Scores, decisions, and your core game — one glance.</p>
+    <header class="page-head">
+      <div class="app-eyebrow">CHINTHE Mat-side</div>
+      <h1 class="page-head-title">Compete</h1>
+      <p class="page-head-sub">Mat-side reference: scoring by ruleset, a score tracker, and what to do when you're ahead, level or behind.</p>
+    </header>
 
     <div class="ruleset-switch" id="rulesetSwitch" role="tablist" aria-label="Ruleset">
       <button class="ruleset-btn" type="button" data-rs="adcc" role="tab">ADCC</button>

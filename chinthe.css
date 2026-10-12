@@ -13,37 +13,49 @@
    1. DESIGN TOKENS
 ═══════════════════════════════════════════════════ */
 :root {
-  /* Backgrounds — cool blue-black, premium dark without purple tint */
-  --bg:          #080C10;
-  --surface:     #0F1318;
-  --surface-2:   #161D28;
-  --surface-3:   #1E2733;
-
-  /* Brand colours — CHINTHE brand system */
+  /* ── Theme tokens (dark default). Light values below apply when the user picks
+     Light, or picks System and the device is in light mode. ── */
+  /* Surfaces */
+  --bg:          #0A0E13;
+  --surface:     #10151C;
+  --surface-2:   #171E28;
+  --surface-3:   #202937;
+  /* Text (legacy names: stone = primary text, stone-dim = secondary) */
+  --stone:       #F2EDE2;
+  --stone-dim:   #ADAA9F;
+  /* Brand + semantic */
   --jade:        #0C2820;
   --jade-bright: #3FA383;
   --gold:        #C8A84E;   /* brand spec: Imperial Gold */
-  --gold-dim:    #211805;
-  --stone:       #F2EDE2;
-  --stone-dim:   #ADAA9F;   /* slightly lighter for readability */
+  --gold-dim:    #241B07;
   --crimson:     #8D2323;
-  --steel:       #7A7A7A;
-  --danger:      #B5462F;
+  --steel:       #8A93A0;
+  --danger:      #C9553B;
   --danger-dim:  #2A1610;
-  --victory:     #E8CA70;   /* brighter amber — finish / win accents */
-  --victory-dim: #221806;
+  --danger-text: #E8907E;
+  --victory:     #E8CA70;   /* finish / win accents */
+  --victory-dim: #241B07;
+  --on-accent:   #0A0E13;   /* text on gold / jade / amber fills */
+  /* Chrome */
+  --line:        rgba(200, 215, 230, 0.09);
+  --line-strong: rgba(200, 215, 230, 0.16);
+  --nav-bg:      rgba(10, 14, 19, 0.92);
+  --overlay:     rgba(4, 7, 10, 0.66);
+  --shadow:      #000000;
+  --cat-defence: #D0674F;
+  --cat-neutral: #8C99A8;
+  color-scheme: dark;
+
+  --brand-ink:   #F2EDE2;
+  --brand-band:  #0C2820;
+  --brand-night: #0A0E13;
 
   /* Semantic category colours — one meaning each, used site-wide:
      attack/finish = amber-gold, control/position = jade, defence/threat = red,
      everything else neutral. Avoids per-category rainbow palettes. */
   --cat-attack:  var(--victory);
   --cat-control: var(--jade-bright);
-  --cat-defence: #D0674F;
-  --cat-neutral: #8C99A8;
 
-  /* Utility — cool-tinted lines match the blue-black bg */
-  --line:        rgba(200, 215, 230, 0.08);
-  --line-strong: rgba(200, 215, 230, 0.13);
   --radius:      10px;
   --radius-sm:   6px;
   --radius-lg:   16px;
@@ -80,6 +92,65 @@
   --space-8:  32px;
   --space-10: 40px;
 }
+:root[data-theme="light"] {
+  --bg:          #F5F3EE;
+  --surface:     #FFFFFF;
+  --surface-2:   #EFECE5;
+  --surface-3:   #E4E0D6;
+  --stone:       #1B1F25;
+  --stone-dim:   #5A6068;
+  --jade:        #DDF0E8;
+  --jade-bright: #1D7558;
+  --gold:        #8A6A12;   /* brand gold, darkened for text contrast on white */
+  --gold-dim:    #F4EBD3;
+  --crimson:     #9B2C2C;
+  --steel:       #66707D;
+  --danger:      #B23A22;
+  --danger-dim:  #FBE7E1;
+  --danger-text: #B23A22;
+  --victory:     #8F6B0F;
+  --victory-dim: #F6EDD3;
+  --on-accent:   #FFFFFF;
+  --line:        rgba(20, 28, 38, 0.10);
+  --line-strong: rgba(20, 28, 38, 0.18);
+  --nav-bg:      rgba(255, 255, 255, 0.92);
+  --overlay:     rgba(20, 26, 34, 0.38);
+  --shadow:      #3A4555;
+  --cat-defence: #B5452E;
+  --cat-neutral: #66717F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg:          #F5F3EE;
+    --surface:     #FFFFFF;
+    --surface-2:   #EFECE5;
+    --surface-3:   #E4E0D6;
+    --stone:       #1B1F25;
+    --stone-dim:   #5A6068;
+    --jade:        #DDF0E8;
+    --jade-bright: #1D7558;
+    --gold:        #8A6A12;   /* brand gold, darkened for text contrast on white */
+    --gold-dim:    #F4EBD3;
+    --crimson:     #9B2C2C;
+    --steel:       #66707D;
+    --danger:      #B23A22;
+    --danger-dim:  #FBE7E1;
+    --danger-text: #B23A22;
+    --victory:     #8F6B0F;
+    --victory-dim: #F6EDD3;
+    --on-accent:   #FFFFFF;
+    --line:        rgba(20, 28, 38, 0.10);
+    --line-strong: rgba(20, 28, 38, 0.18);
+    --nav-bg:      rgba(255, 255, 255, 0.92);
+    --overlay:     rgba(20, 26, 34, 0.38);
+    --shadow:      #3A4555;
+    --cat-defence: #B5452E;
+    --cat-neutral: #66717F;
+    color-scheme: light;
+  }
+}
+
 
 /* ═══════════════════════════════════════════════════
    2. RESET
@@ -147,7 +218,7 @@ a {
   z-index: 100;
   width: 100%;
   height: var(--nav-h);
-  background: rgba(8, 12, 16, 0.94);
+  background: var(--nav-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--line);
@@ -174,6 +245,7 @@ a {
 }
 
 .site-nav-lion {
+  background: var(--brand-night);
   width: 28px;
   height: 28px;
   border-radius: var(--radius-sm);
@@ -248,6 +320,15 @@ a {
 /* Narrow phones: the CTA duplicates the menu's Matrix link — drop it */
 @media (max-width: 419px) { .site-nav-cta { display: none; } }
 
+/* Theme toggle — injected by chinthe.js: System → Light → Dark */
+.site-nav-theme {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; flex-shrink: 0; border-radius: var(--radius-sm);
+  color: var(--stone-dim); transition: color 0.15s, background 0.15s;
+}
+.site-nav-theme:hover { color: var(--stone); background: var(--surface-2); }
+.site-nav-theme svg { width: 18px; height: 18px; }
+
 /* Mobile menu toggle — injected by chinthe.js, hidden at md+ */
 .site-nav-toggle {
   display: inline-flex;
@@ -282,7 +363,7 @@ a {
   top: var(--nav-h);
   left: 0;
   right: 0;
-  background: rgba(8, 12, 16, 0.97);
+  background: var(--nav-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--line);
@@ -488,7 +569,7 @@ a {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(0, 0, 0, 0.75);
+  background: var(--overlay);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -620,7 +701,7 @@ a {
 .search-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(4, 7, 10, 0.75);
+  background: var(--overlay);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   z-index: 1100;
@@ -638,7 +719,7 @@ a {
   max-height: min(480px, 70vh);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,215,230,0.04);
+  box-shadow: 0 24px 64px color-mix(in srgb, var(--shadow) 60%, transparent), 0 0 0 1px color-mix(in srgb, var(--stone) 4%, transparent);
   overflow: hidden;
 }
 .search-head {
@@ -700,9 +781,9 @@ a {
   min-width: 66px;
   text-align: center;
 }
-.sr-cat.c-M { background: rgba(63,163,131,0.14); color: var(--jade-bright); }
-.sr-cat.c-P { background: rgba(200,168,78,0.14);  color: var(--gold); }
-.sr-cat.c-T { background: rgba(141,35,35,0.22);   color: #d47a7a; }
+.sr-cat.c-M { background: color-mix(in srgb, var(--jade-bright) 14%, transparent); color: var(--jade-bright); }
+.sr-cat.c-P { background: color-mix(in srgb, var(--gold) 14%, transparent);  color: var(--gold); }
+.sr-cat.c-T { background: color-mix(in srgb, var(--danger) 16%, transparent);   color: var(--danger-text); }
 .sr-title { flex: 1; font-size: 0.88rem; }
 .sr-arrow { color: var(--stone-dim); opacity: 0.4; font-size: 0.85rem; }
 .search-empty {
@@ -732,3 +813,89 @@ a {
 }
 /* Keyboard hints mean nothing on touch screens */
 @media (hover: none) and (pointer: coarse) { .search-foot { display: none; } }
+
+/* ═══════════════════════════════════════════════════
+   17. LAYOUT SYSTEM — one shell, one header style, site-wide
+   App pages (Knowledge, Principles; the Matrix follows the same rhythm):
+     .app-shell > .app-nav (browse list) + .app-main (content) [+ docked detail]
+   Document pages (Compete, Journal): .page-head at the top of the content.
+═══════════════════════════════════════════════════ */
+.app-shell { display: block; }
+.app-nav { background: var(--surface); border-bottom: 1px solid var(--line); }
+.app-nav-head { padding: 20px 20px 14px; display: grid; gap: 10px; }
+.app-eyebrow {
+  font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--jade-bright);
+}
+.app-title {
+  font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1;
+  text-transform: uppercase; letter-spacing: 0.02em; color: var(--stone);
+}
+.app-search, .app-select {
+  width: 100%; background: var(--surface-2); color: var(--stone);
+  border: 1px solid var(--line-strong); border-radius: 8px;
+  padding: 10px 12px; font: inherit; font-size: 14px;
+}
+.app-search::placeholder { color: var(--stone-dim); }
+.app-search:focus, .app-select:focus { border-color: var(--jade-bright); outline: none; }
+.app-nav-list { display: none; }
+.app-nav-group {
+  font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--stone-dim); padding: 16px 18px 6px;
+}
+.app-nav-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  padding: 9px 16px 9px 15px; border-left: 3px solid transparent;
+  font-family: var(--font-display); font-size: 14px; letter-spacing: 0.03em;
+  text-transform: uppercase; color: var(--stone);
+}
+.app-nav-item > span:not(.app-nav-num):not(.app-nav-count) { flex: 1; min-width: 0; }
+.app-nav-item:hover { background: var(--surface-2); }
+.app-nav-item.active { border-left-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
+.app-nav-item:focus-visible { outline: 2px solid var(--jade-bright); outline-offset: -2px; }
+.app-nav-num, .app-nav-count { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--stone-dim); }
+.app-nav-num { min-width: 34px; }
+.app-nav-foot { padding: 18px 20px 24px; border-top: 1px solid var(--line); margin-top: 8px; }
+.app-main { padding: 18px 20px 48px; min-width: 0; }
+.app-head { display: grid; gap: 6px; padding-bottom: 14px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+.app-head-title {
+  font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 3.2vw, 36px);
+  line-height: 1.05; text-transform: uppercase; letter-spacing: 0.02em; color: var(--stone);
+}
+.app-head-sub { font-size: 15px; line-height: 1.55; color: var(--stone-dim); max-width: 760px; }
+.app-reading { max-width: 780px; }
+
+@media (min-width: 900px) {
+  body.app-page { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  body.app-page > .site-nav, body.app-page > .breadcrumb { flex-shrink: 0; }
+  .app-shell { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 270px minmax(0, 1fr); }
+  .app-nav { border-bottom: none; border-right: 1px solid var(--line); overflow-y: auto; min-height: 0; }
+  .app-select { display: none; }
+  .app-nav-list { display: block; padding-bottom: 12px; }
+  .app-main { overflow-y: auto; min-height: 0; padding: 26px 32px 56px; }
+}
+@media (min-width: 1600px) {
+  .app-shell { grid-template-columns: 300px minmax(0, 1fr); }
+  .app-main { padding: 32px 48px 64px; }
+}
+
+/* Document pages: one header style */
+.page-head { display: grid; gap: 8px; padding: 32px 0 22px; margin-bottom: 8px; border-bottom: 1px solid var(--line); }
+.page-head .app-eyebrow { margin-bottom: 2px; }
+.page-head-title {
+  font-family: var(--font-display); font-weight: 400; font-size: clamp(32px, 4.4vw, 48px);
+  line-height: 1; text-transform: uppercase; letter-spacing: 0.02em; color: var(--stone);
+}
+.page-head-sub { font-size: 15px; line-height: 1.6; color: var(--stone-dim); max-width: 640px; }
+
+/* Shared content blocks */
+.callout {
+  padding: 14px 16px; border-left: 3px solid var(--jade-bright); border-radius: 0 8px 8px 0;
+  background: var(--surface-2); color: var(--stone); font-size: 15px; line-height: 1.6;
+}
+.block-label {
+  font-family: var(--font-mono); font-weight: 600; font-size: var(--text-xs); letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--stone-dim); margin-bottom: 8px;
+}
+.empty-state-block { padding: 48px 20px; text-align: center; color: var(--stone-dim); font-size: 14px; line-height: 1.6; }
+.empty-state-block .mark { display: block; font-size: 28px; color: var(--gold); margin-bottom: 8px; }

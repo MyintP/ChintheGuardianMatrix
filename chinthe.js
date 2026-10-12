@@ -31,6 +31,40 @@
     var cta = inner.querySelector(".site-nav-cta");
     inner.insertBefore(searchBtn, cta || null);
 
+    // Theme: System (follow the device) → Light → Dark. Stored per device;
+    // the inline script in each <head> applies it before first paint.
+    var THEME_KEY = "chinthe_theme";
+    var THEME_ICONS = {
+      system: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>',
+      light:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+      dark:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>'
+    };
+    var THEME_NEXT = { system: "light", light: "dark", dark: "system" };
+    var THEME_NAME = { system: "System", light: "Light", dark: "Dark" };
+    function currentTheme() { try { var t = localStorage.getItem(THEME_KEY); return t === "light" || t === "dark" ? t : "system"; } catch (e) { return "system"; } }
+    function applyTheme(t) {
+      if (t === "system") document.documentElement.removeAttribute("data-theme");
+      else document.documentElement.setAttribute("data-theme", t);
+      document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+        if (!m.dataset.orig) m.dataset.orig = m.getAttribute("content");
+        m.setAttribute("content", t === "system" ? m.dataset.orig : (t === "light" ? "#F5F3EE" : "#0A0E13"));
+      });
+      themeBtn.innerHTML = THEME_ICONS[t];
+      themeBtn.setAttribute("aria-label", "Theme: " + THEME_NAME[t] + " (switch to " + THEME_NAME[THEME_NEXT[t]] + ")");
+      themeBtn.setAttribute("title", "Theme: " + THEME_NAME[t]);
+    }
+    var themeBtn = document.createElement("button");
+    themeBtn.type = "button";
+    themeBtn.className = "site-nav-theme";
+    themeBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var next = THEME_NEXT[currentTheme()];
+      try { if (next === "system") localStorage.removeItem(THEME_KEY); else localStorage.setItem(THEME_KEY, next); } catch (err) {}
+      applyTheme(next);
+    });
+    inner.insertBefore(themeBtn, searchBtn.nextSibling);
+    applyTheme(currentTheme());
+
     var toggle = document.createElement("button");
     toggle.type = "button";
     toggle.className = "site-nav-toggle";

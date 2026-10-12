@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>/* theme before first paint: avoids a flash of the wrong theme */try{var t=localStorage.getItem("chinthe_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080C10">
+<meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
 <meta name="description" content="98 no-gi technique entries — positions, submissions, passes, sweeps, takedowns, judo and defence — each with mechanics, opponent reactions, common mistakes and drills.">
 <title>Knowledge Base — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
@@ -17,29 +19,8 @@
 body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:48px;}
 /* Nav styles in chinthe.css */
 
-.wrap{max-width:1100px;margin:0 auto;padding:0 20px;}
-.page-header{padding:48px 0 32px;}
-.page-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.2em;color:var(--jade-bright);text-transform:uppercase;margin-bottom:10px;}
-.page-title{font-family:'Oswald',sans-serif;font-size:clamp(40px,8vw,72px);text-transform:uppercase;letter-spacing:0.02em;line-height:1;margin-bottom:10px;}
-.page-sub{font-size:14px;color:var(--stone-dim);line-height:1.6;max-width:520px;}
 
 /* Controls */
-.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--line);}
-.search-box{
-  flex:1;min-width:200px;
-  background:var(--surface);border:1px solid var(--line);border-radius:8px;
-  color:var(--stone);font-family:'Inter',sans-serif;font-size:14px;
-  padding:10px 14px;outline:none;
-}
-.search-box:focus{border-color:var(--jade-bright);}
-.search-box::placeholder{color:var(--stone-dim);}
-.filter-row{display:flex;gap:6px;flex-wrap:wrap;}
-.filter-btn{
-  background:var(--surface);border:1px solid var(--line);color:var(--stone-dim);
-  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.07em;text-transform:uppercase;
-  padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;
-}
-.filter-btn.active{background:var(--stone);color:var(--bg);border-color:var(--stone);font-weight:600;}
 /* Results count */
 .results-meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--stone-dim);letter-spacing:0.06em;margin-bottom:20px;}
 
@@ -52,7 +33,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   cursor:pointer;overflow:hidden;transition:border-color .2s,transform .15s;
   position:relative;
 }
-.tech-card:hover{border-color:rgba(245,243,236,0.18);transform:translateY(-2px);}
+.tech-card:hover{border-color:color-mix(in srgb, var(--stone) 18%, transparent);transform:translateY(-2px);}
 /* One accent per meaning, shared with the Matrix: gold = finish, jade =
    position/control, red = defence; passes, sweeps, takedowns, judo and
    concepts stay neutral so the page doesn't read as a rainbow. */
@@ -80,8 +61,6 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .tag{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);border-radius:4px;padding:2px 7px;}
 
 /* Level filter, start banner, meta chips */
-.controls{flex-direction:column;align-items:stretch;}
-.controls > .search-box{flex:none;}
 .level-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .level-label{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--stone-dim);margin-right:4px;}
 .level-btn{background:none;border:1px dashed var(--line-strong);color:var(--stone-dim);font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-radius:999px;white-space:nowrap;}
@@ -93,9 +72,9 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .tech-card-meta{justify-content:space-between;gap:8px;}
 .chips{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap;}
 .chip{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:.04em;padding:2px 7px;border-radius:5px;border:1px solid var(--line-strong);color:var(--stone-dim);white-space:nowrap;}
-.chip.lvl-F{color:var(--jade-bright);border-color:rgba(63,163,131,.35);}
-.chip.lvl-I{color:var(--gold);border-color:rgba(200,168,78,.35);}
-.chip.lvl-A{color:#E8907E;border-color:rgba(208,103,79,.4);}
+.chip.lvl-F{color:var(--jade-bright);border-color:color-mix(in srgb, var(--jade-bright) 35%, transparent);}
+.chip.lvl-I{color:var(--gold);border-color:color-mix(in srgb, var(--gold) 35%, transparent);}
+.chip.lvl-A{color:var(--danger-text);border-color:color-mix(in srgb, var(--cat-defence) 40%, transparent);}
 .chip.pts{color:var(--stone);}
 .mdot{width:8px;height:8px;border-radius:50%;display:inline-block;}
 .mdot.m1{border:1.5px solid var(--victory);} .mdot.m2{background:var(--victory);} .mdot.m3{background:var(--jade-bright);}
@@ -112,9 +91,9 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .kb-steps a{color:var(--jade-bright);}
 .kb-progress{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
 .kb-progress button{flex:1 1 0;min-width:90px;padding:9px 10px;border-radius:8px;border:1px solid var(--line-strong);font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:.06em;text-transform:uppercase;color:var(--stone-dim);}
-.kb-progress button.active.p1{border-color:var(--victory);color:var(--victory);background:rgba(232,202,112,.1);}
-.kb-progress button.active.p2{border-color:var(--victory);background:var(--victory);color:#1F1806;}
-.kb-progress button.active.p3{border-color:var(--jade-bright);background:var(--jade-bright);color:#0C1A14;}
+.kb-progress button.active.p1{border-color:var(--victory);color:var(--victory);background:color-mix(in srgb, var(--victory) 10%, transparent);}
+.kb-progress button.active.p2{border-color:var(--victory);background:var(--victory);color:var(--on-accent);}
+.kb-progress button.active.p3{border-color:var(--jade-bright);background:var(--jade-bright);color:var(--on-accent);}
 .kb-links{display:flex;gap:8px;flex-wrap:wrap;}
 .kb-link{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:8px;border:1px solid var(--line-strong);font-size:13.5px;color:var(--stone);text-decoration:none;background:var(--surface-2);}
 .kb-link:hover{border-color:var(--jade-bright);}
@@ -133,13 +112,13 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .tech-card.is-selected{border-color:var(--cat);box-shadow:0 0 0 1px var(--cat) inset;}
 
 /* Detail panel: slide-over on desktop, full-screen sheet on phones */
-.kb-backdrop{position:fixed;inset:0;z-index:1000;background:rgba(4,7,10,.6);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);}
+.kb-backdrop{position:fixed;inset:0;z-index:1000;background:var(--overlay);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);}
 .kb-backdrop[hidden],.kb-panel[hidden]{display:none;}
 .kb-panel{
   --cat:var(--cat-neutral);
   position:fixed;z-index:1001;top:0;right:0;bottom:0;width:min(600px,100vw);
   background:var(--surface);border-left:1px solid var(--line-strong);
-  box-shadow:-24px 0 64px rgba(0,0,0,.5);display:flex;flex-direction:column;
+  box-shadow:-24px 0 64px color-mix(in srgb, var(--shadow) 50%, transparent);display:flex;flex-direction:column;
 }
 .kb-panel.cat-submission{--cat:var(--cat-attack);} .kb-panel.cat-position{--cat:var(--cat-control);} .kb-panel.cat-defence{--cat:var(--cat-defence);}
 @media (prefers-reduced-motion:no-preference){
@@ -147,10 +126,10 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   @keyframes kb-in{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
 }
 .kb-panel-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);border-top:3px solid var(--cat);flex-shrink:0;}
-.kb-nav,.kb-close{width:40px;height:40px;border-radius:8px;color:var(--stone-dim);font-size:20px;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
-.kb-nav:hover,.kb-close:hover{background:var(--surface-2);color:var(--stone);}
-.kb-nav:disabled{opacity:.3;cursor:default;background:none;}
-.kb-nav:focus-visible,.kb-close:focus-visible{outline:2px solid var(--jade-bright);outline-offset:1px;}
+.kb-nav-btn,.kb-close{width:40px;height:40px;border-radius:8px;color:var(--stone-dim);font-size:20px;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+.kb-nav-btn:hover,.kb-close:hover{background:var(--surface-2);color:var(--stone);}
+.kb-nav-btn:disabled{opacity:.3;cursor:default;background:none;}
+.kb-nav-btn:focus-visible,.kb-close:focus-visible{outline:2px solid var(--jade-bright);outline-offset:1px;}
 .kb-close{margin-left:auto;font-size:16px;}
 .kb-pos{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:.08em;color:var(--stone-dim);min-width:56px;text-align:center;}
 .kb-panel-body{overflow-y:auto;overscroll-behavior:contain;padding:22px 26px 40px;}
@@ -162,7 +141,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .kb-sec:last-child{border-bottom:none;}
 .kb-sec h3{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:8px;}
 .kb-sec p{font-size:14.5px;line-height:1.65;color:var(--stone);}
-.kb-sec.tone-warn p{color:#E8907E;}
+.kb-sec.tone-warn p{color:var(--danger-text);}
 .kb-sec.tone-dim p{color:var(--stone-dim);}
 body.kb-open{overflow:hidden;}
 @media (max-width:640px){
@@ -173,44 +152,30 @@ body.kb-open{overflow:hidden;}
 
 @media(max-width:640px){
   .nav-links{display:none;}
-  /* One scrolling row of filters instead of three wrapped rows */
-  .filter-row{flex:1 1 100%;min-width:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:0 20px 2px;}
-  .filter-row::-webkit-scrollbar{display:none;}
-  .page-header{padding:32px 0 24px;}
   .knowledge-grid{grid-template-columns:1fr;}
 }
 
-/* ── DESKTOP IMPROVEMENTS ── */
-@media(min-width:960px){
-  .nav-inner{padding:16px 40px;}
-  .nav-wordmark{font-size:22px;}
-  .nav-link{font-size:12px;padding:8px 16px;}
 
-  .wrap{max-width:none;padding:0 40px;}
-  .page-header{padding:60px 0 40px;}
-  .page-title{font-size:clamp(52px,6vw,96px);}
-  .page-sub{font-size:15px;max-width:600px;}
 
-  .search-box{font-size:15px;padding:12px 18px;}
-  .filter-btn{font-size:11px;padding:10px 18px;}
-
-  .knowledge-grid{grid-template-columns:repeat(3,1fr);gap:18px;}
-  .tech-card-name{font-size:21px;}
-  .tech-card-tagline{font-size:14px;}
-  .detail-text{font-size:14px;}
+/* ═══ Knowledge = shared app shell (chinthe.css §17) + a docked detail panel ═══ */
+body{padding-bottom:0;}
+.app-head .level-row{margin-top:6px;}
+.knowledge-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
+.kb-section{margin:18px 0 0;}
+.kb-section h2{font-size:17px;}
+.tech-card-name{font-size:18px;}
+.kb-panel-bar [hidden]{display:none;}
+.kb-panel.is-empty .kb-panel-bar{display:none;}
+/* Wide: the detail is docked as the third panel */
+@media (min-width:1200px){
+  .app-shell.kb-app{grid-template-columns:270px minmax(0,1fr) minmax(400px,34vw);}
+  .kb-panel,.kb-panel[hidden]{position:static;display:flex;width:auto;min-height:0;box-shadow:none;border-left:1px solid var(--line);animation:none;z-index:auto;}
+  .kb-backdrop{display:none !important;}
 }
-
-@media(min-width:1280px){
-  .wrap{padding:0 60px;}
-  .knowledge-grid{grid-template-columns:repeat(4,1fr);}
-}
-
-@media(min-width:1600px){
-  .knowledge-grid{grid-template-columns:repeat(5,1fr);}
-}
+@media (min-width:1600px){ .app-shell.kb-app{grid-template-columns:300px minmax(0,1fr) 560px;} }
 </style>
 </head>
-<body>
+<body class="app-page">
 
 <nav class="site-nav">
   <div class="site-nav-inner">
@@ -229,57 +194,52 @@ body.kb-open{overflow:hidden;}
   </div>
 </nav>
 
-<div class="wrap">
-  <div class="page-header">
-    <div class="page-eyebrow">CHINTHE Knowledge Base</div>
-    <h1 class="page-title">Technique<br>Database</h1>
-    <p class="page-sub">Competition-focused mechanics for every position. Tap any card for the full breakdown — objective, mechanics, opponent reactions, common mistake and drill.</p>
-  </div>
-
-  <div class="controls">
-    <input class="search-box" type="text" id="searchInput" placeholder="Search techniques, positions, aliases (e.g. Mata Leão)…" autocomplete="off">
-    <div class="filter-row" id="filterRow">
-      <button class="filter-btn active" data-cat="all">All</button>
-      <button class="filter-btn" data-cat="position">Positions</button>
-      <button class="filter-btn" data-cat="submission">Submissions</button>
-      <button class="filter-btn" data-cat="pass">Passes</button>
-      <button class="filter-btn" data-cat="sweep">Sweeps</button>
-      <button class="filter-btn" data-cat="takedown">Takedowns</button>
-      <button class="filter-btn" data-cat="judo">Judo</button>
-      <button class="filter-btn" data-cat="defence">Defence</button>
-      <button class="filter-btn" data-cat="concept">Concepts</button>
+<div class="app-shell kb-app" id="kbApp">
+  <aside class="app-nav" aria-label="Browse the database">
+    <div class="app-nav-head">
+      <div class="app-eyebrow">CHINTHE Knowledge Base</div>
+      <h1 class="app-title">Technique Database</h1>
+      <input class="app-search" type="search" id="searchInput" placeholder="Search moves or aliases…" autocomplete="off" aria-label="Search techniques">
+      <select class="app-select" id="navSelect" aria-label="Browse by position or type"></select>
     </div>
-    <div class="level-row" id="levelRow" role="group" aria-label="Filter by level">
-      <span class="level-label">Level</span>
-      <button class="level-btn active" type="button" data-lvl="all">All</button>
-      <button class="level-btn" type="button" data-lvl="F">Fundamental</button>
-      <button class="level-btn" type="button" data-lvl="I">Intermediate</button>
-      <button class="level-btn" type="button" data-lvl="A">Advanced</button>
-    </div>
-  </div>
+    <nav class="app-nav-list" id="navList"></nav>
+  </aside>
 
-  <div class="start-here" id="startHere">
-    <div>
-      <div class="start-title">New to the system? Start with the fundamentals.</div>
-      <div class="start-sub">Learn each one → drill it → spar from the position → hunt it live. Mark progress as you go; it syncs with the Matrix.</div>
+  <main class="app-main" id="kbMid">
+    <header class="app-head">
+      <div class="app-eyebrow" id="midEyebrow">Browse</div>
+      <h2 class="app-head-title" id="midTitle">All techniques</h2>
+      <p class="app-head-sub" id="midSub"></p>
+      <div class="level-row" id="levelRow" role="group" aria-label="Filter by level">
+        <span class="level-label">Level</span>
+        <button class="level-btn active" type="button" data-lvl="all">All</button>
+        <button class="level-btn" type="button" data-lvl="F">Fundamental</button>
+        <button class="level-btn" type="button" data-lvl="I">Intermediate</button>
+        <button class="level-btn" type="button" data-lvl="A">Advanced</button>
+      </div>
+    </header>
+    <div class="start-here" id="startHere">
+      <div>
+        <div class="start-title">New to the system? Start with the fundamentals.</div>
+        <div class="start-sub">Learn each one → drill it → spar from the position → hunt it live. Mark progress as you go; it syncs with the Matrix.</div>
+      </div>
+      <button class="btn btn-primary" type="button" id="startBtn">Show fundamentals</button>
     </div>
-    <button class="btn btn-primary" type="button" id="startBtn">Show fundamentals</button>
-  </div>
+    <div class="results-meta" id="resultsMeta"></div>
+    <div class="knowledge-grid" id="grid"></div>
+  </main>
 
-  <div class="results-meta" id="resultsMeta"></div>
-  <div class="knowledge-grid" id="grid"></div>
+  <aside class="kb-panel" id="kbPanel" aria-labelledby="kbPanelTitle" hidden>
+    <div class="kb-panel-bar">
+      <button type="button" class="kb-nav-btn" id="kbPrev" aria-label="Previous move">‹</button>
+      <span class="kb-pos" id="kbPos"></span>
+      <button type="button" class="kb-nav-btn" id="kbNext" aria-label="Next move">›</button>
+      <button type="button" class="kb-close" id="kbClose" aria-label="Close">✕</button>
+    </div>
+    <div class="kb-panel-body" id="kbPanelBody"></div>
+  </aside>
 </div>
-
 <div class="kb-backdrop" id="kbBackdrop" hidden></div>
-<aside class="kb-panel" id="kbPanel" role="dialog" aria-modal="true" aria-labelledby="kbPanelTitle" hidden>
-  <div class="kb-panel-bar">
-    <button type="button" class="kb-nav" id="kbPrev" aria-label="Previous technique">‹</button>
-    <span class="kb-pos" id="kbPos"></span>
-    <button type="button" class="kb-nav" id="kbNext" aria-label="Next technique">›</button>
-    <button type="button" class="kb-close" id="kbClose" aria-label="Close">✕</button>
-  </div>
-  <div class="kb-panel-body" id="kbPanelBody"></div>
-</aside>
 
 <script>
 const DB = [
@@ -1383,8 +1343,15 @@ const DB = [
 // (Matrix node id), rel (related entries), fmt (format). Related entries come
 // from the Matrix graph (neighbouring nodes) plus attack/counter pairs.
 const META = {"rnc":{"lvl":"F","aka":["Mata Leão"],"node":"rnc","rel":["back_control","choke_survival","back_survival"]},"armbar":{"lvl":"F","aka":["Juji-Gatame","Arm Bar"],"node":"armbar_mount","rel":["mount","mount_escape","triangle"]},"triangle":{"lvl":"F","aka":["Sankaku-Jime"],"node":"cg_triangle","rel":["guard_closed","armbar","omoplata"]},"guillotine":{"lvl":"F","aka":["Front Choke"],"node":"guillotine","rel":["front_headlock_td","front_headlock_defence","darce"]},"heel_hook_inside":{"lvl":"A","node":"leg_inside_heel_hook","rel":["ashi_inside","saddle","ankle_lock","leg_escape"]},"heel_hook_outside":{"lvl":"A","node":"leg_outside_heel_hook","rel":["leg_escape"]},"ankle_lock":{"lvl":"F","aka":["Achilles Lock","Straight Footlock"],"node":"leg_straight_ankle","rel":["heel_hook_inside","ashi_inside"]},"kneebar":{"lvl":"A","node":"leg_kneebar","rel":["ashi_inside","saddle","leg_escape"]},"bow_arrow":{"lvl":"I","node":"bow_arrow","rel":["back_control"]},"kimura":{"lvl":"F","aka":["Double Wristlock"],"node":"cg_kimura","rel":["hip_bump","guard_closed","kimura_trap","americana"]},"omoplata":{"lvl":"I","rel":["triangle","armbar","guard_closed"]},"back_control":{"lvl":"F","aka":["Back Mount","Rear Mount"],"pts":"3","node":"backtake_pass","rel":["rnc","knee_on_belly","back_survival","body_triangle","bow_arrow"]},"mount":{"lvl":"F","aka":["Full Mount"],"pts":"2","node":"mount","rel":["armbar","arm_triangle","americana","hip_bump","scissor"]},"guard_closed":{"lvl":"F","node":"guard_closed","rel":["triangle","kimura","hip_bump","scissor"]},"half_guard_bottom":{"lvl":"F","node":"guard_half","rel":["guard_recovery"]},"butterfly":{"lvl":"F","node":"guard_butterfly","rel":["butterfly_sweep","guard_recovery","seated_guard"]},"slx":{"lvl":"I","aka":["Ashi-Garami (SLX)"],"node":"guard_slx","rel":["slx_sweep","x_guard","shin_to_shin"]},"x_guard":{"lvl":"I","node":"guard_x","rel":["xg_sweep","slx"]},"ashi_inside":{"lvl":"I","node":"leg_ashi_inside","rel":["heel_hook_inside","ankle_lock","kneebar","k_guard"]},"saddle":{"lvl":"A","aka":["411","Honey Hole","Inside Sankaku"],"node":"leg_saddle","rel":["heel_hook_inside","kneebar","k_guard"]},"over_under":{"lvl":"I","pts":"3","node":"pass_over_under"},"knee_slice":{"lvl":"F","aka":["Knee Cut","Knee Through"],"pts":"3","node":"pass_knee_slice","rel":["knee_shield_pass","guard_retention"]},"torreando":{"lvl":"F","aka":["Toreando","Bullfighter Pass"],"pts":"3","node":"pass_torreando","rel":["guard_retention"]},"body_lock":{"lvl":"I","pts":"3","node":"pass_body_lock","rel":["knee_shield_pass"]},"leg_drag":{"lvl":"I","pts":"3","node":"pass_leg_drag","rel":["guard_retention"]},"smash_pass":{"lvl":"I","pts":"3","node":"pass_smash","rel":["knee_shield_pass"]},"double_under":{"lvl":"F","aka":["Stack Pass"],"pts":"3","node":"pass_double_under"},"hip_bump":{"lvl":"F","pts":"2–4","node":"cg_hip_bump","rel":["mount","kimura","guard_closed"]},"scissor":{"lvl":"F","pts":"2–4","node":"cg_scissor","rel":["mount","guard_closed"]},"butterfly_sweep":{"lvl":"F","aka":["Hook Sweep"],"pts":"2–4","node":"bg_elevate","rel":["mount","butterfly"]},"old_school":{"lvl":"F","pts":"2–4","node":"hg_old_school","rel":["mount"]},"slx_sweep":{"lvl":"I","pts":"2–4","node":"slx_sweep","rel":["mount","slx"]},"xg_sweep":{"lvl":"I","pts":"2–4","node":"xg_back_sweep","rel":["mount","x_guard"]},"wrestling_shot":{"lvl":"F","pts":"2–4","node":"td_wrestling","rel":["double_leg","clean_takedown","front_headlock_defence","sprawl"]},"judo_throw":{"lvl":"F","pts":"2–4","node":"td_judo","rel":["o_soto_gari","seoi_nage","tai_otoshi","o_goshi","harai_goshi"],"fmt":"Gi & No-Gi"},"clean_takedown":{"lvl":"I","pts":"4","node":"td_clean","rel":["wrestling_shot","double_leg","judo_throw","o_soto_gari","seoi_nage"]},"front_headlock_td":{"lvl":"I","node":"td_stuffed","rel":["guillotine","darce","anaconda","snap_down","turtle_top"]},"sprawl":{"lvl":"F","aka":["Sprawl"],"node":"def_takedown_threat","rel":["wrestling_shot","double_leg","single_leg_wrestling"]},"guard_recovery":{"lvl":"F","node":"def_guard_threat","rel":["guard_retention","half_guard_bottom","butterfly"]},"back_survival":{"lvl":"F","node":"def_back_threat","rel":["rnc","back_control"]},"choke_survival":{"lvl":"F","node":"def_choke_threat","rel":["front_headlock_defence","rnc"]},"leg_escape":{"lvl":"I","node":"def_leg_threat","rel":["heel_hook_inside","heel_hook_outside","kneebar"]},"mount_escape":{"lvl":"F","node":"def_mount_conceded","rel":["side_control_escape","armbar","mount"]},"side_control":{"lvl":"F","aka":["Side Mount","Cross-Side"],"node":"side_control","rel":["americana","kimura_trap","arm_triangle","north_south","knee_on_belly"]},"north_south":{"lvl":"F","aka":["Kami-Shiho"],"node":"north_south","rel":["north_south_choke","kimura_trap","side_control"]},"turtle_top":{"lvl":"F","node":"turtle_top","rel":["crucifix","front_headlock_td","mat_return"]},"turtle_bottom":{"lvl":"F","rel":["turtle_top","back_survival","guard_recovery","crucifix"]},"knee_on_belly":{"lvl":"F","aka":["Knee Ride","Knee Mount"],"pts":"2","node":"knee_belly","rel":["mount","back_control","side_control"]},"guard_bottom_closed_detail":{"lvl":"F","rel":["guard_closed","over_under","leg_drag"]},"o_soto_gari":{"lvl":"F","pts":"2–4","node":"td_judo","rel":["judo_throw","seoi_nage","tai_otoshi","o_goshi","harai_goshi"],"fmt":"Gi & No-Gi"},"seoi_nage":{"lvl":"F","pts":"2–4","node":"td_judo","rel":["judo_throw","o_soto_gari","tai_otoshi","o_goshi","harai_goshi"],"fmt":"Gi & No-Gi"},"single_leg_wrestling":{"lvl":"F","pts":"2–4","node":"st_single_leg","rel":["clean_takedown","front_headlock_defence","hand_fighting","clinch_entry","arm_drag_standing"]},"kuzushi_application":{"lvl":"I","rel":["knee_slice","torreando","over_under"]},"chain_attacks":{"lvl":"I","rel":["armbar","triangle","bow_arrow"]},"action_reaction_entries":{"lvl":"I","rel":["kumi_kata","ouchi_gari","arm_drag_standing"]},"hip_movement":{"lvl":"F","aka":["Shrimp","Hip Escape","Bridge"],"rel":["mount_escape","side_control_escape","guard_recovery"]},"fluid_efficiency":{"lvl":"I","rel":["kuzushi_application","chain_attacks"]},"tai_otoshi":{"lvl":"I","pts":"2–4","node":"td_judo","rel":["judo_throw","o_soto_gari","seoi_nage","o_goshi","harai_goshi"],"fmt":"Gi & No-Gi"},"o_goshi":{"lvl":"F","pts":"2–4","node":"td_judo","rel":["judo_throw","o_soto_gari","seoi_nage","tai_otoshi","harai_goshi"],"fmt":"Gi & No-Gi"},"harai_goshi":{"lvl":"I","pts":"2–4","node":"td_judo","rel":["judo_throw","o_soto_gari","seoi_nage","tai_otoshi","o_goshi"],"fmt":"Gi & No-Gi"},"uchi_mata":{"lvl":"I","pts":"2–4","node":"td_judo","rel":["judo_throw","o_soto_gari","seoi_nage","tai_otoshi","o_goshi"],"fmt":"Gi & No-Gi"},"ukemi":{"lvl":"F","aka":["Break Falls"],"rel":["o_soto_gari","seoi_nage","randori"],"fmt":"Gi & No-Gi"},"kesa_gatame":{"lvl":"F","rel":["side_control","north_south"],"fmt":"Gi & No-Gi"},"randori":{"lvl":"F","rel":["kumi_kata","ukemi"],"fmt":"Gi & No-Gi"},"kumi_kata":{"lvl":"F","aka":["Grip Fighting"],"node":"td_judo","rel":["judo_throw","o_soto_gari","seoi_nage","tai_otoshi","o_goshi"],"fmt":"Gi & No-Gi"},"ouchi_gari":{"lvl":"F","pts":"2–4","node":"td_judo","rel":["judo_throw","o_soto_gari","seoi_nage","tai_otoshi","o_goshi"],"fmt":"Gi & No-Gi"},"ko_uchi_gari":{"lvl":"F","pts":"2–4","node":"td_judo","rel":["judo_throw","o_soto_gari","seoi_nage","tai_otoshi","o_goshi"],"fmt":"Gi & No-Gi"},"ko_soto_gari":{"lvl":"I","pts":"2–4","node":"td_judo","rel":["judo_throw","o_soto_gari","seoi_nage","tai_otoshi","o_goshi"],"fmt":"Gi & No-Gi"},"hane_goshi":{"lvl":"A","pts":"2–4","node":"td_judo","rel":["judo_throw","o_soto_gari","seoi_nage","tai_otoshi","o_goshi"],"fmt":"Gi & No-Gi"},"tomoe_nage":{"lvl":"I","rel":["judo_bjj_bridge","sumi_gaeshi"],"fmt":"Gi & No-Gi"},"sumi_gaeshi":{"lvl":"A","rel":["tomoe_nage","judo_bjj_bridge"],"fmt":"Gi & No-Gi"},"judo_bjj_bridge":{"lvl":"F","rel":["tomoe_nage","knee_on_belly","turtle_top"],"fmt":"Gi & No-Gi"},"clinch_entry":{"lvl":"F","node":"hand_fight","rel":["hand_fighting","arm_drag_standing","snap_down","ankle_pick","single_leg_wrestling"],"fmt":"Gi & No-Gi"},"darce":{"lvl":"I","aka":["D'Arce","Brabo Choke"],"node":"fh_darce","rel":["front_headlock_td","anaconda","guillotine","front_headlock_defence"]},"anaconda":{"lvl":"I","node":"fh_anaconda","rel":["front_headlock_td","darce","front_headlock_defence"]},"arm_triangle":{"lvl":"F","aka":["Kata-Gatame","Head-and-Arm Choke"],"node":"sc_arm_triangle","rel":["mount","side_control","side_control_escape"]},"americana":{"lvl":"F","aka":["Keylock","Ude-Garami"],"node":"sc_americana","rel":["kimura_trap","mount","side_control","kimura"]},"north_south_choke":{"lvl":"I","node":"ns_choke","rel":["north_south"]},"toe_hold":{"lvl":"A","rel":["ankle_lock","ashi_inside","heel_hook_inside"]},"seated_guard":{"lvl":"I","node":"guard_seated","rel":["wrestle_up","shin_to_shin","k_guard","butterfly","guard_retention"]},"k_guard":{"lvl":"A","aka":["K Guard"],"node":"gs_k_guard","rel":["saddle","ashi_inside","seated_guard"]},"shin_to_shin":{"lvl":"I","node":"gs_shin_to_shin","rel":["slx","wrestle_up","seated_guard"]},"crucifix":{"lvl":"I","node":"turtle_crucifix","rel":["turtle_top","turtle_bottom"]},"body_triangle":{"lvl":"I","rel":["back_control","rnc","back_survival"]},"double_leg":{"lvl":"F","pts":"2–4","node":"td_wrestling","rel":["wrestling_shot","clean_takedown","front_headlock_defence","sprawl"]},"ankle_pick":{"lvl":"I","pts":"2–4","node":"st_ankle_pick","rel":["clean_takedown","hand_fighting","clinch_entry","snap_down"]},"snap_down":{"lvl":"F","aka":["Snapdown"],"node":"st_collar_snap","rel":["front_headlock_td","ankle_pick","hand_fighting","clinch_entry","front_headlock_defence"]},"arm_drag_standing":{"lvl":"I","aka":["Russian Tie","2-on-1"],"node":"st_two_on_one","rel":["single_leg_wrestling","hand_fighting","clinch_entry"]},"body_lock_takedown":{"lvl":"I","pts":"2–4","node":"st_body_lock_td","rel":["clean_takedown"]},"mat_return":{"lvl":"I","pts":"2–4","node":"st_mat_return","rel":["turtle_top","clean_takedown"]},"wrestle_up":{"lvl":"I","aka":["Technical Stand-Up Single"],"pts":"2–4","node":"gs_wrestle_up","rel":["front_headlock_defence","seated_guard","shin_to_shin"]},"knee_shield_pass":{"lvl":"I","pts":"3","node":"pass_knee_shield","rel":["smash_pass","knee_slice","body_lock"]},"guard_retention":{"lvl":"F","node":"def_guard_retention","rel":["seated_guard","guard_recovery","knee_slice","torreando","leg_drag"]},"side_control_escape":{"lvl":"F","node":"def_side_control","rel":["mount_escape","side_control","arm_triangle"]},"front_headlock_defence":{"lvl":"I","node":"def_headlock_threat","rel":["choke_survival","wrestling_shot","double_leg","single_leg_wrestling","wrestle_up"]},"hand_fighting":{"lvl":"F","aka":["Ties","Inside Position"],"node":"hand_fight","rel":["clinch_entry","arm_drag_standing","snap_down","ankle_pick","single_leg_wrestling"]},"kimura_trap":{"lvl":"I","node":"sc_kimura","rel":["north_south","americana","side_control","kimura"]},"adcc_match_strategy":{"lvl":"I","rel":["clean_takedown","back_control","guard_retention"]}};
+// Browse-by-position groups. A move can live in several (an armbar is a
+// closed-guard, mount and back attack). "anchor" is the position entry itself.
+const GROUPS = [{"id":"standing","name":"Standing & Clinch","anchor":"hand_fighting","desc":"Hand fighting, ties and the takedowns they open.","ids":["hand_fighting","clinch_entry","wrestling_shot","double_leg","single_leg_wrestling","ankle_pick","snap_down","arm_drag_standing","body_lock_takedown","mat_return","clean_takedown","action_reaction_entries","sprawl"]},{"id":"judo","name":"Judo Throws","anchor":"judo_throw","desc":"Grip, off-balance, throw — and how to follow it to the mat.","ids":["judo_throw","kumi_kata","o_soto_gari","seoi_nage","tai_otoshi","o_goshi","harai_goshi","uchi_mata","ouchi_gari","ko_uchi_gari","ko_soto_gari","hane_goshi","tomoe_nage","sumi_gaeshi","judo_bjj_bridge","ukemi","randori","kesa_gatame"]},{"id":"headlock","name":"Front Headlock & Turtle","anchor":"front_headlock_td","desc":"After a sprawl or snap down: chokes, go-behinds and turtle attacks.","ids":["front_headlock_td","guillotine","darce","anaconda","snap_down","turtle_top","crucifix","front_headlock_defence","turtle_bottom"]},{"id":"closed","name":"Closed Guard","anchor":"guard_closed","desc":"Break posture, then attack: submissions and sweeps from closed guard.","ids":["guard_closed","armbar","triangle","kimura","omoplata","guillotine","hip_bump","scissor","guard_bottom_closed_detail"]},{"id":"half","name":"Half Guard","anchor":"half_guard_bottom","desc":"The underhook battle — from both sides.","ids":["half_guard_bottom","old_school","kimura_trap","smash_pass","knee_shield_pass","body_lock"]},{"id":"open","name":"Butterfly, Seated & Open Guard","anchor":"seated_guard","desc":"Upright guards, wrestle-ups and the entries to the legs.","ids":["seated_guard","butterfly","butterfly_sweep","wrestle_up","shin_to_shin","slx","slx_sweep","x_guard","xg_sweep","k_guard","guard_retention"]},{"id":"legs","name":"Leg Entanglements","anchor":"ashi_inside","desc":"Ashi-garami family: control the hip, then attack the leg.","ids":["ashi_inside","saddle","k_guard","heel_hook_inside","heel_hook_outside","ankle_lock","kneebar","toe_hold","leg_escape"]},{"id":"passing","name":"Passing the Guard","anchor":"over_under","desc":"Read the guard, pick the pass, settle the pin.","ids":["over_under","knee_slice","torreando","body_lock","leg_drag","smash_pass","double_under","knee_shield_pass","kuzushi_application","guard_bottom_closed_detail"]},{"id":"side","name":"Side Control & North-South","anchor":"side_control","desc":"Pin, advance, or attack the arms and neck.","ids":["side_control","north_south","kesa_gatame","knee_on_belly","americana","kimura","arm_triangle","north_south_choke","side_control_escape"]},{"id":"mount","name":"Mount","anchor":"mount","desc":"Stay heavy, isolate an arm, or take the back when they turn.","ids":["mount","armbar","triangle","arm_triangle","americana","knee_on_belly","mount_escape"]},{"id":"back","name":"Back Control","anchor":"back_control","desc":"The highest-value position and its finishes — and how to survive it.","ids":["back_control","body_triangle","rnc","bow_arrow","armbar","back_survival","choke_survival"]},{"id":"defence","name":"Escapes & Survival","anchor":"guard_recovery","desc":"Frames, hip movement and escapes from every bad spot.","ids":["hip_movement","sprawl","guard_recovery","guard_retention","mount_escape","side_control_escape","back_survival","choke_survival","leg_escape","front_headlock_defence","turtle_bottom"]},{"id":"concepts","name":"Concepts & Strategy","anchor":"chain_attacks","desc":"How the pieces fit: chains, set-ups, efficiency and scoring.","ids":["chain_attacks","action_reaction_entries","fluid_efficiency","kuzushi_application","kimura_trap","hand_fighting","adcc_match_strategy"]}];
+const TYPE_ORDER = ["position","submission","sweep","pass","takedown","judo","defence","concept"];
+const TYPE_LABEL = {position:"Positions",submission:"Submissions",pass:"Passes",sweep:"Sweeps",takedown:"Takedowns",judo:"Judo Throws",defence:"Escapes & Defence",concept:"Concepts"};
+const LABELS = {position:"Position",submission:"Submission",pass:"Pass",sweep:"Sweep",takedown:"Takedown",judo:"Judo",defence:"Defence",concept:"Concept"};
 const LEVEL_NAME = {F:"Fundamental", I:"Intermediate", A:"Advanced"};
 const MASTERY_KEY = "chinthe_mastery_v1";   // shared with the Matrix
+const byId = id => DB.find(d=>d.id===id);
 function loadMastery(){ try { return JSON.parse(localStorage.getItem(MASTERY_KEY)) || {}; } catch(e){ return {}; } }
 function masteryOf(id){ const n = META[id] && META[id].node; return n ? (loadMastery()[n] || 0) : 0; }
 function setMasteryFor(id, level){
@@ -1394,77 +1361,48 @@ function setMasteryFor(id, level){
   try { localStorage.setItem(MASTERY_KEY, JSON.stringify(all)); } catch(e){}
 }
 
-let activeCat = "all";
+// ── State ─────────────────────────────────────────────────────
+let view = "all";          // "all" | "g:<group>" | "t:<type>"
 let activeLvl = "all";
 let searchQ = "";
+let openId = null, visibleIds = [], lastFocus = null;
+const docked = ()=> window.matchMedia("(min-width:1200px)").matches;
 
-function renderCards(){
-  const grid = document.getElementById("grid");
-  const meta = document.getElementById("resultsMeta");
-  const filtered = DB.filter(t=>{
-    const catMatch = (activeCat==="all" || t.cat===activeCat) && (activeLvl==="all" || (META[t.id]||{}).lvl===activeLvl);
-    const q = searchQ.toLowerCase();
-    const textMatch = !q ||
-      t.name.toLowerCase().includes(q) ||
-      ((META[t.id]||{}).aka||[]).some(a=>a.toLowerCase().includes(q)) ||
-      t.tagline.toLowerCase().includes(q) ||
-      (t.tags||[]).some(tg=>tg.toLowerCase().includes(q)) ||
-      (t.mechanics||"").toLowerCase().includes(q) ||
-      (t.objective||"").toLowerCase().includes(q) ||
-      (t.defense||"").toLowerCase().includes(q) ||
-      (t.mistake||"").toLowerCase().includes(q) ||
-      (t.drill||"").toLowerCase().includes(q);
-    return catMatch && textMatch;
-  });
-  meta.textContent = `${filtered.length} technique${filtered.length!==1?"s":""}`;
-  document.getElementById("startHere").hidden = !(activeCat==="all" && activeLvl==="all" && !searchQ.trim());
-  grid.innerHTML = "";
-  // All view with no search: section per category, in study order
-  const grouped = activeCat==="all" && !searchQ.trim();
-  const ORDER = ["position","submission","pass","sweep","takedown","judo","defence","concept"];
-  const LABEL = {position:"Positions",submission:"Submissions",pass:"Passes",sweep:"Sweeps",takedown:"Takedowns",judo:"Judo",defence:"Defence",concept:"Concepts"};
-  if (grouped) filtered.sort((a,b)=>ORDER.indexOf(a.cat)-ORDER.indexOf(b.cat));
-  let lastCat = null;
-  filtered.forEach(t=>{
-    if (grouped && t.cat !== lastCat){
-      lastCat = t.cat;
-      const h = document.createElement("div");
-      h.className = "kb-section";
-      h.innerHTML = `<h2>${LABEL[t.cat]||t.cat}</h2><span>${filtered.filter(x=>x.cat===t.cat).length}</span>`;
-      grid.appendChild(h);
-    }
-    const card = document.createElement("button");
-    card.type = "button";
-    card.className = `tech-card cat-${t.cat}` + (t.id === openId ? " is-selected" : "");
-    card.id = `tech-${t.id}`;
-    card.setAttribute("aria-haspopup","dialog");
-    card.innerHTML = `
-      <span class="tech-card-accent" style="display:block"></span>
-      <span class="tech-card-body" style="display:block">
-        <span class="tech-card-meta" style="display:flex">
-          <span class="tech-badge">${t.cat.charAt(0).toUpperCase()+t.cat.slice(1)}</span>
-          <span class="chips">${cardChips(t)}</span>
-        </span>
-        <span class="tech-card-name" style="display:block">${t.name}</span>
-        <span class="tech-card-tagline">${t.tagline}</span>
-      </span>
-    `;
-    card.onclick = ()=>openPanel(t.id);
-    grid.appendChild(card);
-  });
-  visibleIds = filtered.map(t=>t.id);
-  if (openId) updatePanelNav();
+// ── Left panel: the database ──────────────────────────────────
+function renderNav(){
+  const item = (v, name, count)=>`<button type="button" class="app-nav-item${view===v?" active":""}" data-view="${v}" aria-current="${view===v}"><span>${name}</span><span class="app-nav-count">${count}</span></button>`;
+  document.getElementById("navList").innerHTML =
+    item("all", "All techniques", DB.length) +
+    `<div class="app-nav-group">By position</div>` +
+    GROUPS.map(g=>item("g:"+g.id, g.name, g.ids.length)).join("") +
+    `<div class="app-nav-group">By type</div>` +
+    TYPE_ORDER.map(t=>item("t:"+t, TYPE_LABEL[t], DB.filter(d=>d.cat===t).length)).join("");
+  const sel = document.getElementById("navSelect");
+  sel.innerHTML = `<option value="all">All techniques (${DB.length})</option>` +
+    `<optgroup label="By position">${GROUPS.map(g=>`<option value="g:${g.id}">${g.name} (${g.ids.length})</option>`).join("")}</optgroup>` +
+    `<optgroup label="By type">${TYPE_ORDER.map(t=>`<option value="t:${t}">${TYPE_LABEL[t]}</option>`).join("")}</optgroup>`;
+  sel.value = view;
+}
+function setView(v, opts){
+  view = v;
+  if (!(opts && opts.keepSearch)){ searchQ = ""; document.getElementById("searchInput").value = ""; }
+  renderNav();
+  renderCards();
+  document.getElementById("kbMid").scrollTop = 0;
+  // Choosing a position on a wide screen shows that position's own entry
+  const g = v.startsWith("g:") && GROUPS.find(x=>"g:"+x.id===v);
+  if (g && docked() && !(opts && opts.noAutoOpen)) openPanel(g.anchor);
+  else if (docked() && openId && !visibleIds.includes(openId)) showPlaceholder();
 }
 
-// ── Detail panel ──────────────────────────────────────────────
-// One panel for the whole page (slide-over on desktop, full-screen sheet on
-// phones) instead of expanding cards inside the grid, which stretched a single
-// narrow column and pushed everything else around.
-let openId = null, visibleIds = [], lastFocus = null;
-const panel = document.getElementById("kbPanel");
-const backdrop = document.getElementById("kbBackdrop");
-const LABELS = {position:"Position",submission:"Submission",pass:"Pass",sweep:"Sweep",takedown:"Takedown",judo:"Judo",defence:"Defence",concept:"Concept"};
-
+// ── Middle panel: the moves ───────────────────────────────────
+function matches(t, q){
+  return t.name.toLowerCase().includes(q) ||
+    ((META[t.id]||{}).aka||[]).some(a=>a.toLowerCase().includes(q)) ||
+    t.tagline.toLowerCase().includes(q) ||
+    (t.tags||[]).some(tg=>tg.toLowerCase().includes(q)) ||
+    [t.mechanics,t.objective,t.defense,t.mistake,t.drill].some(x=>(x||"").toLowerCase().includes(q));
+}
 function cardChips(t){
   const m = META[t.id] || {};
   const ms = masteryOf(t.id);
@@ -1473,8 +1411,75 @@ function cardChips(t){
   const lv = m.lvl ? `<span class="chip lvl-${m.lvl}">${LEVEL_NAME[m.lvl]}</span>` : "";
   return dot + pts + lv;
 }
+function renderCards(){
+  const grid = document.getElementById("grid");
+  const q = searchQ.trim().toLowerCase();
+  let items, eyebrow, title, sub;
+  if (q){
+    items = DB.filter(t=>matches(t, q));
+    eyebrow = "Search"; title = `“${searchQ.trim()}”`; sub = "Matches across the whole database.";
+  } else if (view.startsWith("g:")){
+    const g = GROUPS.find(x=>"g:"+x.id===view);
+    items = g.ids.map(byId); eyebrow = "Position"; title = g.name; sub = g.desc;
+  } else if (view.startsWith("t:")){
+    const t = view.slice(2);
+    items = DB.filter(d=>d.cat===t); eyebrow = "Type"; title = TYPE_LABEL[t]; sub = "";
+  } else {
+    items = DB.slice(); eyebrow = "Browse"; title = "All techniques"; sub = "Pick a position to see every move from it, or browse everything here.";
+  }
+  if (activeLvl !== "all") items = items.filter(t=>(META[t.id]||{}).lvl===activeLvl);
+  // Group by type; within a position group the position entry itself leads
+  const anchor = view.startsWith("g:") && !q ? GROUPS.find(x=>"g:"+x.id===view).anchor : null;
+  items.sort((a,b)=> (b.id===anchor)-(a.id===anchor) || TYPE_ORDER.indexOf(a.cat)-TYPE_ORDER.indexOf(b.cat));
 
-// Positional-sparring start per category (Learn → Drill → Spar → Live)
+  document.getElementById("midEyebrow").textContent = eyebrow;
+  document.getElementById("midTitle").textContent = title;
+  document.getElementById("midSub").textContent = sub;
+  document.getElementById("midSub").hidden = !sub;
+  document.getElementById("resultsMeta").textContent = `${items.length} move${items.length!==1?"s":""}${activeLvl!=="all" ? " · "+LEVEL_NAME[activeLvl] : ""}`;
+  document.getElementById("startHere").hidden = !(view==="all" && activeLvl==="all" && !q);
+
+  grid.innerHTML = "";
+  if (!items.length){
+    grid.innerHTML = `<div class="empty-state-block" style="grid-column:1/-1"><span class="mark">◈</span>Nothing here at this level.<br>Try “All” levels or another position.</div>`;
+  }
+  const types = new Set(items.map(t=>t.cat));
+  let lastCat = null;
+  items.forEach(t=>{
+    if (types.size > 1 && t.cat !== lastCat){
+      lastCat = t.cat;
+      const h = document.createElement("div");
+      h.className = "kb-section";
+      h.innerHTML = `<h2>${TYPE_LABEL[t.cat]||t.cat}</h2><span>${items.filter(x=>x.cat===t.cat).length}</span>`;
+      grid.appendChild(h);
+    }
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = `tech-card cat-${t.cat}` + (t.id === openId ? " is-selected" : "");
+    card.id = `tech-${t.id}`;
+    card.setAttribute("aria-controls","kbPanel");
+    card.innerHTML = `
+      <span class="tech-card-accent" style="display:block"></span>
+      <span class="tech-card-body" style="display:block">
+        <span class="tech-card-meta" style="display:flex">
+          <span class="tech-badge">${LABELS[t.cat]||t.cat}</span>
+          <span class="chips">${cardChips(t)}</span>
+        </span>
+        <span class="tech-card-name" style="display:block">${t.name}</span>
+        <span class="tech-card-tagline">${t.tagline}</span>
+      </span>`;
+    card.onclick = ()=>openPanel(t.id);
+    grid.appendChild(card);
+  });
+  visibleIds = items.map(t=>t.id);
+  updatePanelNav();
+}
+
+// ── Right panel: the detail ───────────────────────────────────
+// Docked as the third column on wide screens; a slide-over (laptop) or
+// full-screen sheet (phone) below that.
+const panel = document.getElementById("kbPanel");
+const backdrop = document.getElementById("kbBackdrop");
 const SPAR = {
   submission:"Start in the position it's attacked from with the grip half set. They defend; reset on a tap or an escape. 1-minute rounds.",
   position:"Start in the position. Top keeps or advances, bottom escapes. Reset on an escape. 1-minute rounds.",
@@ -1485,7 +1490,6 @@ const SPAR = {
   defence:"Start in the bad position. You escape, they hold or attack. Reset on an escape or a tap.",
   concept:"Pick one position and run rounds where only this idea scores."
 };
-
 function panelHTML(t){
   const m = META[t.id] || {};
   const ms = masteryOf(t.id);
@@ -1501,7 +1505,8 @@ function panelHTML(t){
     m.pts ? `<span class="chip pts">ADCC +${m.pts}</span>` : "",
     `<span class="chip">${m.fmt || "No-Gi"}</span>`
   ].join("");
-  const rel = (m.rel||[]).map(id=>DB.find(d=>d.id===id)).filter(Boolean);
+  const rel = (m.rel||[]).map(byId).filter(Boolean);
+  const inGroups = GROUPS.filter(g=>g.ids.includes(t.id));
   const video = "https://www.youtube.com/results?search_query=" + encodeURIComponent(plain + (t.cat==="judo" ? " judo" : " no gi bjj"));
   return `
     <span class="tech-badge">${LABELS[t.cat]||t.cat}</span>
@@ -1528,54 +1533,84 @@ function panelHTML(t){
         ${["Learning","Drilling","Got it"].map((l,i)=>`<button type="button" class="p${i+1}${ms===i+1?" active":""}" data-mastery="${i+1}" aria-pressed="${ms===i+1}">${l}</button>`).join("")}
       </div>
     </div>` : ""}
+    ${inGroups.length ? `<div class="kb-block"><h3>Found in</h3><div class="kb-rel">${inGroups.map(g=>`<button type="button" data-goto="g:${g.id}">${g.name}</button>`).join("")}</div></div>` : ""}
     ${rel.length ? `<div class="kb-block"><h3>Related</h3><div class="kb-rel">${rel.map(r=>`<button type="button" data-open="${r.id}">${r.name}</button>`).join("")}</div></div>` : ""}
     <div class="kb-block"><h3>Watch</h3><div class="kb-links"><a class="kb-link ext" href="${video}" target="_blank" rel="noopener noreferrer">Search videos: ${plain}</a></div></div>`;
 }
-
+function placeholderHTML(){
+  const g = view.startsWith("g:") && GROUPS.find(x=>"g:"+x.id===view);
+  return `<div class="empty-state-block"><span class="mark">◈</span><strong style="color:var(--stone)">Select a move</strong><br>
+    ${g ? `Every move from ${g.name.toLowerCase()} is in the middle panel.` : "Pick a position, then a move — its full breakdown shows here."}</div>`;
+}
+function applyPanelMode(){
+  if (docked()){
+    panel.hidden = false;
+    panel.removeAttribute("role"); panel.removeAttribute("aria-modal");
+    backdrop.hidden = true;
+    document.body.classList.remove("kb-open");
+    if (!openId) showPlaceholder();
+  } else {
+    panel.setAttribute("role","dialog"); panel.setAttribute("aria-modal","true");
+    const open = !!openId;
+    panel.hidden = !open; backdrop.hidden = !open;
+    document.body.classList.toggle("kb-open", open);
+  }
+}
+function showPlaceholder(){
+  openId = null;
+  panel.className = "kb-panel is-empty";
+  document.getElementById("kbPanelBody").innerHTML = placeholderHTML();
+  document.querySelectorAll(".tech-card.is-selected").forEach(c=>c.classList.remove("is-selected"));
+  updatePanelNav();
+}
 function updatePanelNav(){
   const i = visibleIds.indexOf(openId);
   document.getElementById("kbPrev").disabled = i <= 0;
   document.getElementById("kbNext").disabled = i < 0 || i >= visibleIds.length - 1;
   document.getElementById("kbPos").textContent = i < 0 ? "" : `${i+1} / ${visibleIds.length}`;
+  document.getElementById("kbClose").hidden = docked() && !openId;
 }
-
 function openPanel(id, opts){
-  const t = DB.find(x=>x.id===id);
+  const t = byId(id);
   if (!t) return;
-  if (!openId) lastFocus = document.activeElement;
+  if (!openId && !docked()) lastFocus = document.activeElement;
   openId = id;
   panel.className = "kb-panel cat-" + t.cat;
   document.getElementById("kbPanelBody").innerHTML = panelHTML(t);
   document.getElementById("kbPanelBody").scrollTop = 0;
-  panel.hidden = false; backdrop.hidden = false;
-  document.body.classList.add("kb-open");
+  applyPanelMode();
   document.querySelectorAll(".tech-card.is-selected").forEach(c=>c.classList.remove("is-selected"));
   const card = document.getElementById(`tech-${id}`);
   if (card){ card.classList.add("is-selected"); card.scrollIntoView({block:"nearest"}); }
   updatePanelNav();
   if (!(opts && opts.keepHash)) history.replaceState(null, "", "#" + id);
-  document.getElementById("kbClose").focus({preventScroll:true});
+  if (!docked()) document.getElementById("kbClose").focus({preventScroll:true});
 }
-
 function closePanel(){
   if (!openId) return;
-  openId = null;
-  panel.hidden = true; backdrop.hidden = true;
-  document.body.classList.remove("kb-open");
-  document.querySelectorAll(".tech-card.is-selected").forEach(c=>c.classList.remove("is-selected"));
   history.replaceState(null, "", location.pathname + location.search);
+  if (docked()){ showPlaceholder(); return; }
+  openId = null;
+  applyPanelMode();
+  document.querySelectorAll(".tech-card.is-selected").forEach(c=>c.classList.remove("is-selected"));
   if (lastFocus && document.contains(lastFocus)) lastFocus.focus({preventScroll:true});
 }
-
 function stepPanel(dir){
   const i = visibleIds.indexOf(openId);
   const next = visibleIds[i + dir];
   if (next) openPanel(next);
 }
 
+// ── Wiring ────────────────────────────────────────────────────
+document.getElementById("navList").addEventListener("click", e=>{
+  const b = e.target.closest("[data-view]"); if (b) setView(b.dataset.view);
+});
+document.getElementById("navSelect").addEventListener("change", e=>setView(e.target.value));
 document.getElementById("kbPanelBody").addEventListener("click", e=>{
   const rel = e.target.closest("[data-open]");
   if (rel){ openPanel(rel.dataset.open); return; }
+  const go = e.target.closest("[data-goto]");
+  if (go){ const keep = openId; setView(go.dataset.goto, {noAutoOpen:true}); openPanel(keep); return; }
   const mb = e.target.closest("[data-mastery]");
   if (mb && openId){
     setMasteryFor(openId, Number(mb.dataset.mastery));
@@ -1590,25 +1625,17 @@ document.getElementById("kbPrev").onclick = ()=>stepPanel(-1);
 document.getElementById("kbNext").onclick = ()=>stepPanel(1);
 document.addEventListener("keydown", e=>{
   if (!openId || document.querySelector(".search-overlay")) return;
+  const typing = e.target.closest && e.target.closest("input,textarea,select");
   if (e.key === "Escape"){ e.preventDefault(); closePanel(); }
-  else if (e.key === "ArrowLeft" && !e.target.closest("input,textarea")) stepPanel(-1);
-  else if (e.key === "ArrowRight" && !e.target.closest("input,textarea")) stepPanel(1);
-  else if (e.key === "Tab"){
+  else if (e.key === "ArrowLeft" && !typing) stepPanel(-1);
+  else if (e.key === "ArrowRight" && !typing) stepPanel(1);
+  else if (e.key === "Tab" && !docked()){
     // keep focus inside the dialog
-    const f = [...panel.querySelectorAll("button:not([disabled])")];
+    const f = [...panel.querySelectorAll("button:not([disabled]):not([hidden]), a[href]")];
     if (!f.length) return;
     if (e.shiftKey && document.activeElement === f[0]){ e.preventDefault(); f[f.length-1].focus(); }
     else if (!e.shiftKey && document.activeElement === f[f.length-1]){ e.preventDefault(); f[0].focus(); }
   }
-});
-
-document.querySelectorAll(".filter-btn").forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    activeCat = btn.dataset.cat;
-    renderCards();
-  };
 });
 document.querySelectorAll(".level-btn").forEach(btn=>{
   btn.onclick=()=>{
@@ -1617,31 +1644,31 @@ document.querySelectorAll(".level-btn").forEach(btn=>{
     renderCards();
   };
 });
-document.getElementById("startBtn").onclick = ()=>{
-  document.querySelector('.level-btn[data-lvl="F"]').click();
-  document.getElementById("resultsMeta").scrollIntoView({block:"start", behavior:"smooth"});
-};
-document.getElementById("searchInput").addEventListener("input",e=>{
+document.getElementById("startBtn").onclick = ()=> document.querySelector('.level-btn[data-lvl="F"]').click();
+document.getElementById("searchInput").addEventListener("input", e=>{
   searchQ = e.target.value;
   renderCards();
 });
+window.matchMedia("(min-width:1200px)").addEventListener("change", ()=>{ applyPanelMode(); updatePanelNav(); });
 
+renderNav();
 renderCards();
+applyPanelMode();
 
-// Deep-link support: knowledge.html#<id> (used by global search) clears any
-// filter hiding the entry and opens it in the detail panel.
+// Deep-link support: knowledge.html#<id> (used by global search) shows the
+// move inside its main position group and opens its detail.
 function applyHash(){
   const id = decodeURIComponent(location.hash.replace(/^#/, ""));
-  if(!id || !DB.some(t=>t.id===id)) return;
-  activeCat = "all"; activeLvl = "all"; searchQ = "";
+  if(!id || !byId(id)) return;
+  activeLvl = "all";
   document.querySelectorAll(".level-btn").forEach(b=>b.classList.toggle("active", b.dataset.lvl==="all"));
-  document.getElementById("searchInput").value = "";
-  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.toggle("active", b.dataset.cat==="all"));
-  renderCards();
+  const g = GROUPS.find(x=>x.anchor===id) || GROUPS.find(x=>x.ids.includes(id));
+  setView(g ? "g:"+g.id : "all", {noAutoOpen:true});
   openPanel(id, {keepHash:true});
 }
 window.addEventListener("hashchange", applyHash);
 applyHash();
+
 </script>
 <script src="chinthe.js"></script>
 </body>

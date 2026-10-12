@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>/* theme before first paint: avoids a flash of the wrong theme */try{var t=localStorage.getItem("chinthe_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080C10">
+<meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
 <meta name="description" content="Twelve grappling principles — efficiency, leverage, kuzushi, frames and more — plus positional hierarchy with ADCC points, chess strategy, grip taxonomy and fighting distances.">
 <title>Principles — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
@@ -12,232 +14,64 @@
 <link rel="stylesheet" href="chinthe.css">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Cinzel:wght@400;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:60px;}
+/* Principles = shared app shell (chinthe.css §17) + reading components below. */
+body{padding-bottom:0;}
+.pr-intro{font-size:13.5px;line-height:1.55;color:var(--stone-dim);}
+.pr-quote{font-family:'Cinzel',serif;font-size:14px;line-height:1.5;color:var(--stone);margin:0 0 12px;}
+.pr-quote cite{display:block;margin-top:6px;font-family:var(--font-mono);font-style:normal;font-size:var(--text-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--stone-dim);}
+.pr-sources{display:flex;flex-direction:column;gap:4px;}
+.pr-sources span{font-size:12.5px;color:var(--stone-dim);line-height:1.45;}
+.app-nav-foot .block-label{margin-top:12px;}
+@media (max-width:899px){ .app-nav-foot{display:none;} }
 
-/* ── PAGE HERO ── */
-.page-hero{
-  padding:44px 40px 32px;
-  border-bottom:1px solid var(--line);
-  position:relative;overflow:hidden;
-}
-.hero-glow{position:absolute;top:-40%;left:30%;width:700px;height:700px;
-  background:radial-gradient(ellipse,rgba(15,59,46,0.22) 0%,transparent 70%);pointer-events:none;}
-.page-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.2em;
-  color:var(--jade-bright);text-transform:uppercase;margin-bottom:12px;}
-.page-title{font-family:'Oswald',sans-serif;font-size:clamp(36px,5vw,60px);text-transform:uppercase;
-  letter-spacing:0.02em;line-height:1;margin-bottom:14px;}
-.page-title em{color:var(--gold);font-style:normal;}
-.page-intro{font-size:15px;color:var(--stone-dim);line-height:1.65;max-width:680px;margin-bottom:18px;}
-.hero-quote{font-family:'Cinzel',serif;font-size:15px;color:var(--stone);line-height:1.5;max-width:720px;margin:0 0 18px;padding-left:14px;border-left:2px solid var(--jade-bright);}
-.hero-quote cite{display:block;margin-top:4px;font-family:'IBM Plex Mono',monospace;font-style:normal;font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);}
-.source-strip{display:flex;gap:8px;flex-wrap:wrap;}
-.source-tag{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.1em;
-  text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);padding:4px 10px;border-radius:5px;}
+/* Reading column */
+.panel-accent-bar{display:none;}
+.panel-eyebrow{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.18em;text-transform:uppercase;color:var(--jade-bright);margin-bottom:6px;}
+.panel-title{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.2vw,36px);line-height:1.05;text-transform:uppercase;letter-spacing:.02em;color:var(--stone);margin-bottom:8px;}
+.panel-title br{display:none;}
+.panel-tagline{font-size:16px;line-height:1.55;color:var(--stone);max-width:720px;padding-bottom:18px;margin-bottom:22px;border-bottom:1px solid var(--line);}
+.panel-section{margin-bottom:24px;}
+.panel-section:last-child{margin-bottom:0;}
+.panel-section-label{font-family:var(--font-mono);font-weight:600;font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:8px;}
+.panel-section-text{font-size:15px;line-height:1.7;color:var(--stone);max-width:720px;}
+.panel-section-text.jade{padding:14px 16px;border-left:3px solid var(--jade-bright);border-radius:0 8px 8px 0;background:var(--surface-2);}
+.panel-examples{display:grid;gap:10px;}
+@media(min-width:1100px){.panel-examples{grid-template-columns:1fr 1fr;}}
+.panel-example{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+.panel-example strong{display:block;font-family:var(--font-display);font-weight:400;font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--stone);margin-bottom:6px;}
+.panel-example p{font-size:14px;line-height:1.6;color:var(--stone-dim);}
 
-/* ── PHILOSOPHY BAR ── */
-.philosophy-bar{background:var(--jade);padding:28px 40px;border-bottom:1px solid rgba(63,163,131,0.2);}
-.philosophy-bar blockquote{font-family:'Cinzel',serif;font-weight:600;
-  font-size:clamp(16px,2vw,26px);text-transform:uppercase;letter-spacing:0.04em;color:var(--stone);margin-bottom:8px;}
-.philosophy-bar cite{font-family:'IBM Plex Mono',monospace;font-size:11px;
-  color:rgba(245,243,236,0.55);letter-spacing:0.1em;text-transform:uppercase;}
+/* Reference: positional hierarchy */
+.panel-hierarchy{display:flex;flex-direction:column;gap:4px;max-width:560px;}
+.hier-label-row{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:.1em;text-transform:uppercase;padding:8px 2px 4px;}
+.hier-row{display:flex;align-items:center;gap:14px;padding:11px 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);}
+.hier-row.best{background:color-mix(in srgb, var(--jade-bright) 14%, var(--surface));border-color:color-mix(in srgb, var(--jade-bright) 55%, transparent);}
+.hier-row.good{background:color-mix(in srgb, var(--jade-bright) 6%, var(--surface));border-color:color-mix(in srgb, var(--jade-bright) 25%, transparent);}
+.hier-row.neutral{background:var(--surface);}
+.hier-row.bad{background:color-mix(in srgb, var(--danger) 6%, var(--surface));border-color:color-mix(in srgb, var(--danger) 25%, transparent);}
+.hier-row.worst{background:color-mix(in srgb, var(--danger) 12%, var(--surface));border-color:color-mix(in srgb, var(--danger) 50%, transparent);}
+.hier-pts{font-family:var(--font-mono);font-size:12px;font-weight:600;min-width:38px;text-align:right;}
+.hier-pts.gold{color:var(--gold);} .hier-pts.jade{color:var(--jade-bright);} .hier-pts.dim{color:var(--stone-dim);} .hier-pts.red{color:var(--danger-text);}
+.hier-name{font-size:14.5px;font-weight:500;flex:1;color:var(--stone);}
+.hier-badge{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:.1em;text-transform:uppercase;}
 
-/* ── MASTER-DETAIL EXPLORER ── */
-.principles-explorer{display:flex;flex-direction:column;}
+/* Reference: card grids (chess, grips) */
+.panel-chess-grid,.panel-grips-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+@media(min-width:760px){.panel-chess-grid,.panel-grips-grid{grid-template-columns:1fr 1fr;}}
+.panel-chess-card,.panel-grip-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+.panel-chess-title,.panel-grip-name{font-family:var(--font-display);font-weight:400;font-size:17px;letter-spacing:.03em;text-transform:uppercase;color:var(--stone);margin-bottom:4px;}
+.panel-chess-sub,.panel-grip-use{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--jade-bright);margin-bottom:8px;}
+.panel-chess-text,.panel-grip-desc{font-size:14px;line-height:1.6;color:var(--stone-dim);}
 
-@media(min-width:960px){
-  .principles-explorer{display:grid;grid-template-columns:268px 1fr;align-items:start;}
-}
-
-/* ── SIDEBAR ── */
-.md-sidebar{background:var(--surface);}
-
-@media(min-width:960px){
-  .md-sidebar{
-    border-right:1px solid var(--line);
-    position:sticky;
-    top:var(--nav-h,60px);
-    height:calc(100vh - var(--nav-h,60px));
-    overflow-y:auto;
-    scrollbar-width:thin;
-    scrollbar-color:var(--line) transparent;
-  }
-}
-
-.md-group-label{
-  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.2em;
-  text-transform:uppercase;color:var(--stone-dim);padding:18px 18px 6px;
-  opacity:0.55;border-top:1px solid var(--line);
-}
-.md-group-label.first{border-top:none;padding-top:14px;}
-
-.md-item{
-  display:flex;align-items:center;gap:10px;width:100%;
-  padding:9px 18px 9px 16px;background:transparent;
-  border:none;border-left:2px solid transparent;
-  cursor:pointer;text-align:left;
-  transition:background 0.12s,border-color 0.12s;
-}
-.md-item:hover{background:rgba(200,168,78,0.06);}
-.md-item.active{background:rgba(200,168,78,0.09);border-left-color:var(--gold);}
-
-.md-item-num{
-  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
-  color:var(--stone-dim);min-width:26px;flex-shrink:0;
-}
-.md-item-name{
-  font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;
-  letter-spacing:0.04em;color:var(--stone);line-height:1.2;
-}
-.md-item.active .md-item-name{color:var(--gold);}
-
-/* Back button — mobile only */
-.md-back-btn{
-  display:none;font-family:'IBM Plex Mono',monospace;font-size:10px;
-  letter-spacing:0.14em;text-transform:uppercase;color:var(--stone-dim);
-  background:transparent;border:1px solid var(--line);
-  padding:7px 14px;border-radius:5px;cursor:pointer;margin-bottom:32px;
-}
-
-/* ── PANEL ── */
-@media(max-width:959px){
-  .md-panel{display:none;padding:28px 20px 60px;}
-  .md-panel.panel-open{display:block;}
-  .md-back-btn{display:inline-block;}
-  .sidebar-hidden{display:none !important;}
-}
-
-@media(min-width:960px){
-  .md-panel{padding:52px 60px 80px;min-height:calc(100vh - var(--nav-h,60px));}
-}
-@media(min-width:1280px){
-  .md-panel{padding:60px 80px 80px;}
-}
-
-/* Panel content */
-.panel-accent-bar{height:3px;border-radius:2px;margin-bottom:36px;max-width:320px;}
-
-.panel-eyebrow{
-  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
-  letter-spacing:0.18em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:10px;
-}
-.panel-title{
-  font-family:'Oswald',sans-serif;font-size:clamp(32px,4vw,54px);
-  text-transform:uppercase;letter-spacing:0.02em;line-height:0.93;
-  margin-bottom:16px;color:var(--stone);
-}
-.panel-tagline{
-  font-size:15px;color:var(--gold);line-height:1.6;
-  margin-bottom:40px;max-width:580px;
-}
-
-.panel-section{
-  margin-bottom:32px;padding-bottom:32px;
-  border-bottom:1px solid var(--line);
-}
-.panel-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-
-.panel-section-label{
-  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
-  letter-spacing:0.14em;text-transform:uppercase;
-  color:var(--jade-bright);margin-bottom:10px;
-}
-.panel-section-text{
-  font-size:15px;line-height:1.72;color:var(--stone-dim);max-width:680px;
-}
-.panel-section-text.jade{color:var(--jade-bright);}
-
-.panel-examples{display:flex;flex-direction:column;gap:14px;}
-.panel-example{
-  background:var(--surface-2);border-left:2px solid var(--jade-bright);
-  border-radius:0 8px 8px 0;padding:14px 18px;
-}
-.panel-example strong{
-  display:block;font-family:'Oswald',sans-serif;font-size:14px;
-  text-transform:uppercase;letter-spacing:0.05em;color:var(--stone);margin-bottom:5px;
-}
-.panel-example p{font-size:13.5px;line-height:1.6;color:var(--stone-dim);}
-
-/* Welcome state */
-.panel-welcome{
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;min-height:360px;text-align:center;
-}
-.panel-welcome-mark{
-  font-family:'IBM Plex Mono',monospace;font-size:36px;
-  color:var(--gold);opacity:0.22;margin-bottom:20px;
-}
-.panel-welcome-text{font-size:13px;color:var(--stone-dim);line-height:1.7;max-width:240px;}
-
-/* ── Reference: Hierarchy ── */
-.panel-hierarchy{display:flex;flex-direction:column;gap:4px;max-width:460px;}
-.hier-label-row{
-  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
-  color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;
-  padding:6px 16px;opacity:0.55;
-}
-.hier-row{display:flex;align-items:center;gap:14px;padding:11px 16px;border-radius:8px;border:1px solid var(--line);}
-.hier-row.best{background:rgba(15,59,46,0.3);border-color:var(--jade-bright);}
-.hier-row.good{background:rgba(15,59,46,0.15);border-color:rgba(63,163,131,0.3);}
-.hier-row.neutral{background:var(--surface-2);border-color:var(--line);}
-.hier-row.bad{background:rgba(181,70,47,0.08);border-color:rgba(181,70,47,0.2);}
-.hier-row.worst{background:rgba(141,35,35,0.2);border-color:var(--crimson);}
-.hier-pts{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;min-width:38px;text-align:right;}
-.hier-pts.gold{color:var(--gold);}
-.hier-pts.jade{color:var(--jade-bright);}
-.hier-pts.dim{color:var(--stone-dim);}
-.hier-pts.red{color:var(--crimson);}
-.hier-name{font-size:14px;font-weight:500;flex:1;}
-.hier-badge{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;}
-
-/* ── Reference: Chess ── */
-.panel-chess-grid{display:grid;grid-template-columns:1fr;gap:12px;}
-@media(min-width:640px){.panel-chess-grid{grid-template-columns:1fr 1fr;}}
-
-.panel-chess-card{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:18px 20px;}
-.panel-chess-title{font-family:'Oswald',sans-serif;font-size:18px;letter-spacing:0.03em;
-  text-transform:uppercase;margin-bottom:5px;color:var(--stone);}
-.panel-chess-sub{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
-  color:#9B59B6;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
-.panel-chess-text{font-size:13px;line-height:1.6;color:var(--stone-dim);}
-
-/* ── Reference: Grips ── */
-.panel-grips-grid{display:grid;grid-template-columns:1fr;gap:12px;}
-@media(min-width:640px){.panel-grips-grid{grid-template-columns:1fr 1fr;}}
-
-.panel-grip-card{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:16px 18px;}
-.panel-grip-name{font-family:'Oswald',sans-serif;font-size:17px;letter-spacing:0.03em;
-  text-transform:uppercase;margin-bottom:4px;}
-.panel-grip-use{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
-  color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:7px;}
-.panel-grip-desc{font-size:13px;line-height:1.55;color:var(--stone-dim);}
-
-/* ── Reference: Distances ── */
-.panel-distances{display:flex;flex-direction:column;gap:6px;max-width:600px;}
-.glossary{display:grid;gap:8px;margin:0;}
-.gl-row{display:grid;grid-template-columns:200px 1fr;gap:14px;padding:12px 16px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;}
-.gl-row dt{font-family:'Oswald',sans-serif;font-size:15px;letter-spacing:.02em;text-transform:uppercase;color:var(--gold);}
-.gl-row dd{margin:0;font-size:13.5px;line-height:1.55;color:var(--stone-dim);}
-@media(max-width:768px){.gl-row{grid-template-columns:1fr;gap:4px;}}
-.panel-dist-row{display:flex;gap:14px;align-items:flex-start;padding:12px 16px;
-  background:var(--surface-2);border:1px solid var(--line);border-radius:8px;}
-.panel-dist-range{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
-  color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;min-width:110px;flex-shrink:0;padding-top:2px;}
-.panel-dist-text{font-size:13px;color:var(--stone-dim);line-height:1.5;}
-
-@media(max-width:768px){
-  .page-hero{padding:40px 20px;}
-  .philosophy-bar{padding:20px;}
-  .panel-dist-row{flex-direction:column;gap:6px;}
-  .panel-dist-range{min-width:unset;}
-}
-@media(min-width:1280px){
-  .page-hero{padding:48px 80px 36px;}
-  .philosophy-bar{padding:36px 80px;}
-}
+/* Reference: distances + glossary */
+.panel-distances,.glossary{display:grid;gap:8px;margin:0;max-width:820px;}
+.panel-dist-row,.gl-row{display:grid;grid-template-columns:180px 1fr;gap:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;}
+.panel-dist-range,.gl-row dt{font-family:var(--font-display);font-weight:400;font-size:15px;letter-spacing:.03em;text-transform:uppercase;color:var(--stone);}
+.panel-dist-text,.gl-row dd{margin:0;font-size:14px;line-height:1.6;color:var(--stone-dim);}
+@media(max-width:760px){.panel-dist-row,.gl-row{grid-template-columns:1fr;gap:4px;}}
 </style>
 </head>
-<body>
+<body class="app-page">
 
 <nav class="site-nav">
   <div class="site-nav-inner">
@@ -256,39 +90,34 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   </div>
 </nav>
 
-<div class="page-hero">
-  <div class="hero-glow"></div>
-  <div class="page-eyebrow">CHINTHE — Foundation</div>
-  <h1 class="page-title">Principles of <em>Grappling.</em></h1>
-  <p class="page-intro">Techniques are what you do. Principles are why they work. Understanding the physics, mechanics, and strategic logic behind every movement is what separates athletes who drill moves from athletes who understand their art.</p>
-  <blockquote class="hero-quote">"If something is very hard or requires a lot of effort, you are doing it wrong. Find the principle you're missing."<cite>Sylvain Galibert — Principles of Martial Arts</cite></blockquote>
-  <div class="source-strip">
-    <span class="source-tag">Galibert — Principles of Martial Arts</span>
-    <span class="source-tag">Galibert — Chess Principles for MA</span>
-    <span class="source-tag">Kesting — Roadmap for BJJ</span>
-    <span class="source-tag">Kesting — Unlocking BJJ</span>
-  </div>
-</div>
-
-
-<!-- ── MASTER-DETAIL EXPLORER ── -->
-<div class="principles-explorer">
-
-  <aside class="md-sidebar" id="mdSidebar">
-    <div class="md-group-label first">Principles</div>
-    <div id="sidebarPrinciples"></div>
-    <div class="md-group-label">Reference</div>
-    <div id="sidebarRef"></div>
-    <div style="height:32px;"></div>
-  </aside>
-
-  <main class="md-panel" id="mdPanel">
-    <div class="panel-welcome" id="panelWelcome">
-      <div class="panel-welcome-mark">◈</div>
-      <p class="panel-welcome-text">Select a principle from the list to explore its mechanics, application, and examples.</p>
+<div class="app-shell">
+  <aside class="app-nav" aria-label="Principles and reference">
+    <div class="app-nav-head">
+      <div class="app-eyebrow">CHINTHE Foundation</div>
+      <h1 class="app-title">Principles</h1>
+      <p class="pr-intro">Techniques are what you do. Principles are why they work.</p>
+      <select class="app-select" id="prSelect" aria-label="Choose a principle or reference section"></select>
     </div>
+    <nav class="app-nav-list">
+      <div class="app-nav-group">Principles</div>
+      <div id="sidebarPrinciples"></div>
+      <div class="app-nav-group">Reference</div>
+      <div id="sidebarRef"></div>
+    </nav>
+    <div class="app-nav-foot">
+      <blockquote class="pr-quote">"If something is very hard or requires a lot of effort, you are doing it wrong. Find the principle you're missing."<cite>Sylvain Galibert</cite></blockquote>
+      <div class="block-label">Sources</div>
+      <div class="pr-sources">
+        <span>Galibert — Principles of Martial Arts</span>
+        <span>Galibert — Chess Principles for Martial Arts</span>
+        <span>Kesting — A Roadmap for BJJ</span>
+        <span>Kesting — Unblocking BJJ</span>
+      </div>
+    </div>
+  </aside>
+  <main class="app-main" id="mdPanel">
+    <article class="app-reading" id="mdContent"></article>
   </main>
-
 </div>
 
 <script>
@@ -451,91 +280,66 @@ const REF_SECTIONS = [
   {id:'glossary',  num:'REF·05', name:'Glossary'},
 ];
 
+function navButton(id, num, name, onClick){
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'app-nav-item';
+  btn.id = 'si-' + id;
+  btn.innerHTML = '<span class="app-nav-num">' + num + '</span><span>' + name + '</span>';
+  btn.addEventListener('click', onClick);
+  return btn;
+}
 function init(){
   const sp = document.getElementById('sidebarPrinciples');
-  PRINCIPLES.forEach(p => {
-    const btn = document.createElement('button');
-    btn.className = 'md-item';
-    btn.id = 'si-' + p.id;
-    btn.innerHTML = '<span class="md-item-num">' + p.num + '</span><span class="md-item-name">' + p.name + '</span>';
-    btn.addEventListener('click', () => showPrinciple(p.id));
-    sp.appendChild(btn);
-  });
-
+  PRINCIPLES.forEach(p => sp.appendChild(navButton(p.id, p.num, p.name, () => showPrinciple(p.id))));
   const sr = document.getElementById('sidebarRef');
-  REF_SECTIONS.forEach(s => {
-    const btn = document.createElement('button');
-    btn.className = 'md-item';
-    btn.id = 'si-' + s.id;
-    btn.innerHTML = '<span class="md-item-num">' + s.num + '</span><span class="md-item-name">' + s.name + '</span>';
-    btn.addEventListener('click', () => showSection(s.id));
-    sr.appendChild(btn);
-  });
-
-  if(window.innerWidth >= 960) showPrinciple(PRINCIPLES[0].id);
+  REF_SECTIONS.forEach(r => sr.appendChild(navButton(r.id, r.num.replace('REF·', 'R'), r.name, () => showSection(r.id))));
+  const sel = document.getElementById('prSelect');
+  sel.innerHTML = '<optgroup label="Principles">' + PRINCIPLES.map(p => '<option value="' + p.id + '">' + p.num + ' · ' + p.name + '</option>').join('') + '</optgroup>' +
+                  '<optgroup label="Reference">' + REF_SECTIONS.map(r => '<option value="' + r.id + '">' + r.name + '</option>').join('') + '</optgroup>';
+  sel.addEventListener('change', () => show(sel.value));
+  show(PRINCIPLES[0].id, {noHash:true});
 }
-
+function show(id, opts){
+  if (PRINCIPLES.some(p => p.id === id)) showPrinciple(id);
+  else if (REF_SECTIONS.some(r => r.id === id)) showSection(id);
+  if (!(opts && opts.noHash)) history.replaceState(null, '', '#' + id);
+}
 function setActive(id){
-  document.querySelectorAll('.md-item').forEach(el => el.classList.remove('active'));
-  const el = document.getElementById('si-' + id);
-  if(el){
-    el.classList.add('active');
-    if(window.innerWidth >= 960) el.scrollIntoView({block:'nearest'});
-  }
+  document.querySelectorAll('.app-nav-item').forEach(el => {
+    const on = el.id === 'si-' + id;
+    el.classList.toggle('active', on);
+    el.setAttribute('aria-current', on ? 'true' : 'false');
+    if (on) el.scrollIntoView({block:'nearest'});
+  });
+  document.getElementById('prSelect').value = id;
 }
-
-function openPanel(){
-  const panel = document.getElementById('mdPanel');
-  const sidebar = document.getElementById('mdSidebar');
-  panel.classList.add('panel-open');
-  if(window.innerWidth < 960){
-    sidebar.classList.add('sidebar-hidden');
-    window.scrollTo(0,0);
-  }
+function render(html){
+  document.getElementById('mdContent').innerHTML = html;
+  document.getElementById('mdPanel').scrollTop = 0;
+  if (window.innerWidth < 900) window.scrollTo({top: 0});
 }
-
-function backToList(){
-  const panel = document.getElementById('mdPanel');
-  const sidebar = document.getElementById('mdSidebar');
-  panel.classList.remove('panel-open');
-  sidebar.classList.remove('sidebar-hidden');
-  document.querySelectorAll('.md-item').forEach(el => el.classList.remove('active'));
-}
-
 function showPrinciple(id){
   const p = PRINCIPLES.find(x => x.id === id);
   if(!p) return;
   setActive(id);
-  openPanel();
-
-  const grad = BRAND_ACCENT;
   const exHtml = (p.examples||[]).map(e =>
     '<div class="panel-example"><strong>' + e.title + '</strong><p>' + e.text + '</p></div>'
   ).join('');
-
-  document.getElementById('mdPanel').innerHTML =
-    '<button class="md-back-btn" onclick="backToList()">← All Principles</button>' +
-    '<div class="panel-accent-bar" style="background:' + grad + '"></div>' +
+  render(
     '<div class="panel-eyebrow">Principle ' + p.num + '</div>' +
     '<h2 class="panel-title">' + p.name + '</h2>' +
     '<p class="panel-tagline">' + p.tagline + '</p>' +
     '<div class="panel-section"><div class="panel-section-label">Explanation</div><p class="panel-section-text">' + p.overview + '</p></div>' +
     (p.applications ? '<div class="panel-section"><div class="panel-section-label">Application</div><p class="panel-section-text jade">' + p.applications + '</p></div>' : '') +
     (p.mat ? '<div class="panel-section"><div class="panel-section-label">On the Mat</div><p class="panel-section-text">' + p.mat + '</p></div>' : '') +
-    (exHtml ? '<div class="panel-section"><div class="panel-section-label">Examples</div><div class="panel-examples">' + exHtml + '</div></div>' : '');
-
-  document.getElementById('mdPanel').scrollTop = 0;
+    (exHtml ? '<div class="panel-section"><div class="panel-section-label">Examples</div><div class="panel-examples">' + exHtml + '</div></div>' : ''));
 }
-
 function showSection(id){
   setActive(id);
-  openPanel();
   const renders = {hierarchy:renderHierarchy, chess:renderChess, grips:renderGrips, distances:renderDistances, glossary:renderGlossary};
   const fn = renders[id];
-  if(!fn) return;
-  document.getElementById('mdPanel').innerHTML =
-    '<button class="md-back-btn" onclick="backToList()">← Back</button>' + fn();
-  document.getElementById('mdPanel').scrollTop = 0;
+  if(fn) render(fn());
 }
 
 function renderHierarchy(){
@@ -801,9 +605,7 @@ init();
 // principle or reference section directly.
 function applyHash(){
   const id = decodeURIComponent(location.hash.replace(/^#/, ''));
-  if(!id) return;
-  if(PRINCIPLES.some(p => p.id === id)) showPrinciple(id);
-  else if(REF_SECTIONS.some(r => r.id === id)) showSection(id);
+  if(id) show(id, {noHash:true});
 }
 window.addEventListener('hashchange', applyHash);
 applyHash();
