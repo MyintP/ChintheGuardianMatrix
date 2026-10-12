@@ -48,8 +48,7 @@ body { background: var(--mat); color: var(--chalk); font-family: 'IBM Plex Sans'
 
 /* Header (sidebar on desktop, stacked block on mobile) */
 header {
-  position: sticky;
-  top: var(--nav-h);
+  position: relative;   /* was sticky: it pinned ~430px of chrome over a 844px phone */
   z-index: 20;
   background: var(--mat);
   border-bottom: 1px solid var(--line);
@@ -354,6 +353,76 @@ main { padding: 12px 16px 78px; }
 }
 .tree-node.state-current .tree-node-label { color: var(--gold); font-weight: 600; }
 
+/* ── Decision focus on the tree ──
+   The focused node, its options and the previous step stay full strength and
+   readable at any zoom; everything else recedes. */
+.tree-node.state-current, .tree-node.is-option, .tree-node.is-parent {
+  transform: translate(-50%, -50%) scale(var(--focus-scale, 1));
+  z-index: 2;
+}
+.tree-node.state-current { z-index: 3; }
+.tree-node:not(.state-current):not(.is-option):not(.is-parent) { opacity: 0.42; transition: opacity 0.25s; }
+.tree-node:not(.state-current):not(.is-option):not(.is-parent):hover { opacity: 1; }
+.tree-node.is-option .tree-node-badge { border-color: var(--jade-bright); }
+.tree-node.is-option .tree-node-label { color: var(--chalk); }
+.tree-canvas.lod-badges .tree-node.is-option .tree-node-label,
+.tree-canvas.lod-badges .tree-node.is-parent .tree-node-label { display: block; }
+.tree-edge.option-edge { stroke: rgba(63,163,131,0.75); stroke-width: calc(2.5px * var(--focus-scale, 1)); }
+.tree-edge.lit { stroke-width: calc(3px * var(--focus-scale, 1)); }
+.tree-edge.tree-edge-jump.option-edge { stroke-dasharray: calc(6px * var(--focus-scale, 1)) calc(6px * var(--focus-scale, 1)); }
+
+/* ── Options: the moves available from the focused node ── */
+.came-from {
+  display: inline-flex; align-items: center; gap: 4px; margin: 0 0 8px;
+  background: none; border: none; padding: 2px 0; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs);
+  letter-spacing: 0.04em; color: var(--chalk-dim);
+}
+.came-from:hover { color: var(--chalk); }
+.options { margin: 16px 0 6px; }
+.options-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); color: var(--jade-bright);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px;
+}
+.option-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.option-btn {
+  width: 100%; min-height: 48px; display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 10px; text-align: left; cursor: pointer;
+  background: var(--mat-elev-2); border: 1px solid var(--line); color: var(--chalk);
+  font-family: inherit; transition: border-color 0.15s, background 0.15s;
+}
+.option-btn:hover, .option-btn:focus-visible { border-color: var(--jade-bright); background: var(--surface-3, var(--mat-elev-2)); }
+.option-btn:focus-visible { outline: 2px solid var(--jade-bright); outline-offset: 2px; }
+.option-glyph {
+  width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 13px;
+  border: 2px solid rgba(200,215,230,0.30); color: var(--stone-dim); background: var(--surface-2);
+}
+.option-btn.m-learning .option-glyph { border-color: var(--victory); color: var(--victory); background: rgba(232,196,104,0.16); }
+.option-btn.m-drilling .option-glyph { border-color: var(--victory); background: var(--victory); color: #1F1806; }
+.option-btn.m-got      .option-glyph { border-color: var(--jade-bright); background: var(--jade-bright); color: #0C1A14; }
+.option-btn.type-threat .option-glyph { color: var(--danger); }
+.option-title { flex: 1; min-width: 0; font-size: 14px; line-height: 1.3; }
+.option-pts {
+  flex-shrink: 0; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600;
+  padding: 3px 7px; border-radius: 5px;
+}
+.option-pts.pos  { background: var(--jade); color: var(--jade-bright); }
+.option-pts.neg, .option-pts.loss { background: var(--danger-dim); color: var(--danger); }
+.option-pts.win  { background: var(--victory); color: var(--mat); }
+.option-arrow { flex-shrink: 0; color: var(--chalk-dim); font-size: 18px; line-height: 1; }
+.detail-card .mastery-box { margin: 18px 0 0; }
+
+@media (max-width: 899px) {
+  .eyebrow, .tagline, .myanmar-slot { display: none; }
+  .nav-group { margin-top: 10px; }
+  .tool-row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .tool-row::-webkit-scrollbar { display: none; }
+  .tool-btn { flex: 0 0 auto; }
+  .tree-wrap { height: max(420px, calc(100svh - var(--nav-h) - 120px)); }
+}
+
+
 /* ── Back button ── */
 .back-btn {
   display: inline-flex; align-items: center; gap: 6px;
@@ -588,7 +657,8 @@ footer.brand-footer {
 
   /* Lock body to viewport — app frame, not document */
   html, body { height: 100%; overflow: hidden; }
-  body { padding-bottom: 0; }
+  body { padding-bottom: 0; display: flex; flex-direction: column; }
+  body > .site-nav, body > .breadcrumb { flex-shrink: 0; }
 
   /* Shell grid */
   .wrap {
@@ -596,7 +666,8 @@ footer.brand-footer {
     grid-template-columns: 300px 1fr;
     grid-template-rows: 1fr;
     width: 100%;
-    height: calc(100vh - var(--nav-h));
+    flex: 1 1 auto;
+    min-height: 0;     /* fills what's left under nav + breadcrumb */
     overflow: hidden;
   }
 
@@ -700,8 +771,32 @@ footer.brand-footer {
   .modal { border-radius: var(--radius-lg); align-self: center; }
 }
 
+/* Wide desktop: sidebar | tree | detail. The detail (objective, options,
+   drills) sits beside the tree instead of below the fold. */
+@media (min-width: 1024px) {
+  .wrap { grid-template-columns: 248px 1fr; }
+  header { padding: 18px 14px 32px; }
+  main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(340px, 30vw, 460px);
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: 20px;
+    overflow: hidden;
+    padding: 16px 20px 12px;
+  }
+  .tree-wrap { grid-column: 1; grid-row: 1; min-height: 0; height: auto; }
+  .legend { grid-column: 1; grid-row: 2; margin-top: 10px; }
+  .brand-footer { display: none; }
+  .detail-pane {
+    grid-column: 2; grid-row: 1 / 3; min-height: 0;
+    overflow-y: auto; overscroll-behavior: contain; padding-right: 4px;
+  }
+  .detail-card { margin-top: 0; }
+  .node-title { font-size: 24px; }
+}
+
 @media (min-width: 1280px) {
-  .wrap { grid-template-columns: 320px 1fr; }
+  .wrap { grid-template-columns: 280px 1fr; }
   header { padding: 24px 20px 48px; }
   main   { padding: 24px 40px 48px; }
   h1     { font-size: 24px; }
@@ -709,8 +804,8 @@ footer.brand-footer {
 }
 
 @media (min-width: 1600px) {
-  .wrap  { grid-template-columns: 340px 1fr; }
-  main   { padding: 28px 56px 56px; }
+  .wrap  { grid-template-columns: 300px 1fr; }
+  main   { padding: 24px 32px 16px; column-gap: 28px; }
 }
 </style>
 
@@ -792,19 +887,17 @@ footer.brand-footer {
         </div>
       </div>
     </div>
-    <div class="back-row" id="backRow" style="display:none;">
-      <button class="back-btn" id="backBtn">‹ Back</button>
-    </div>
-
-    <div id="detailCard"></div>
-    <div class="action-row">
-      <div class="export-row" id="exportRow" style="display:none;">
-        <button class="export-btn" id="exportBtn">↗ Export this chain</button>
+    <aside class="detail-pane" id="detailPane" aria-label="Selected position">
+      <div id="detailCard"></div>
+      <div class="action-row">
+        <div class="export-row" id="exportRow" style="display:none;">
+          <button class="export-btn" id="exportBtn">↗ Export this chain</button>
+        </div>
+        <div class="flag-row" id="flagRow" style="display:none;">
+          <button class="flag-btn" id="flagBtn">🚩 Flag this node</button>
+        </div>
       </div>
-      <div class="flag-row" id="flagRow" style="display:none;">
-        <button class="flag-btn" id="flagBtn">🚩 Flag this node</button>
-      </div>
-    </div>
+    </aside>
 
     <!-- Flag modal -->
     <div class="modal-overlay" id="flagModal" style="display:none;">
@@ -2055,6 +2148,18 @@ function renderPathConnectors(){
     p.setAttribute("d", edgeD(pa, pb));
     svg.appendChild(p);
   }
+  // Options that live elsewhere on the map (shared nodes) have no static edge
+  // from here — draw a dashed connector so every option visibly links back.
+  const cur = path[path.length-1];
+  (NODES[cur].children || []).forEach(cid=>{
+    if (primaryEdgeKeys.has(cur+"→"+cid)) return;
+    const pa = TREE.posById[cur], pb = TREE.posById[cid];
+    if (!pa || !pb) return;
+    const p = document.createElementNS(SVG_NS, "path");
+    p.setAttribute("class", "tree-edge tree-edge-jump option-edge");
+    p.setAttribute("d", edgeD(pa, pb));
+    svg.appendChild(p);
+  });
 }
 
 function renderTree(){
@@ -2062,10 +2167,18 @@ function renderTree(){
   // gold focus ring on whatever you're reading. Nothing is ever locked —
   // this is a study map, you can jump anywhere.
   const currentId = path[path.length-1];
+  const optionIds = new Set(NODES[currentId].children || []);
+  const prevId = path.length > 1 ? path[path.length-2] : null;
   Object.keys(nodeEls).forEach(id=>{
     const btn = nodeEls[id];
     btn.classList.toggle("state-current", id===currentId);
+    btn.classList.toggle("is-option", optionIds.has(id) && id!==currentId);
+    btn.classList.toggle("is-parent", id===prevId);
     btn.setAttribute("aria-current", id===currentId ? "step" : "false");
+  });
+  Object.keys(edgeEls).forEach(key=>{
+    const [from, to] = key.split("→");
+    edgeEls[key].classList.toggle("option-edge", from===currentId && optionIds.has(to));
   });
   paintMastery();
 
@@ -2076,7 +2189,6 @@ function renderTree(){
   }
   renderPathConnectors();
 
-  document.getElementById("backRow").style.display = path.length>1 ? "flex" : "none";
 }
 
 // ---- Pan & zoom ----
@@ -2085,11 +2197,13 @@ const treeCanvas = document.getElementById("treeCanvas");
 const treeHint = document.getElementById("treeHint");
 
 const LOD_ZOOM = 0.5;   // below this, labels are unreadable → badge heatmap
-function clampZoom(z){ return Math.min(1.6, Math.max(0.08, z)); }
+function clampZoom(z){ return Math.min(1.6, Math.max(0.05, z)); }
 function applyTransform(animate){
   treeCanvas.style.transition = (animate && !REDUCE_MOTION) ? "transform 0.35s cubic-bezier(.2,.8,.2,1)" : "none";
   treeCanvas.style.transform = `translate(${panX}px,${panY}px) scale(${zoom})`;
   treeCanvas.classList.toggle("lod-badges", zoom < LOD_ZOOM);
+  // Focus-set nodes keep a readable on-screen size at any zoom
+  treeCanvas.style.setProperty("--focus-scale", Math.min(16, Math.max(1, 0.85/zoom)).toFixed(3));
 }
 function dismissHint(){ treeHint.classList.add("faded"); }
 // Center the focused node at a comfortable, always-readable zoom. The radial
@@ -2097,13 +2211,28 @@ function dismissHint(){ treeHint.classList.add("faded"); }
 // without shrinking the whole map to an unreadable sliver (the old fit-to-
 // bbox could drop to ~0.14 on wide branches). Overview is the pinch/zoom-out
 // gesture, which the level-of-detail heatmap handles.
+// Frame the decision, not just the node: the focused node, every option
+// leading from it, and the step you came from — so "what next" is always on
+// screen. Labels of those nodes counter-scale (see applyTransform) so they
+// stay readable when a wide branch forces the zoom down.
 function centerOnCurrentNode(animate){
   const vw = treeViewport.clientWidth || 320, vh = treeViewport.clientHeight || 400;
-  zoom = clampZoom(vw < 600 ? 0.82 : 1);
-  const p = TREE.posById[path[path.length-1]];
-  if (!p) return;
-  panX = vw/2 - p.x*zoom;
-  panY = vh*0.40 - p.y*zoom;   // focus a touch above center so children below stay visible
+  const curId = path[path.length-1];
+  const ids = [curId].concat(NODES[curId].children || []);
+  if (path.length > 1) ids.push(path[path.length-2]);
+  const pts = ids.map(id=>TREE.posById[id]).filter(Boolean);
+  if (!pts.length) return;
+  const xs = pts.map(p=>p.x), ys = pts.map(p=>p.y);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  // Padding is in SCREEN px: focus nodes keep a near-constant on-screen size
+  // (--focus-scale), so the room they need at the edges doesn't shrink with zoom.
+  // Right pad clears the zoom toolbar; bottom pad clears labels + the hint pill.
+  const PAD_L = 70, PAD_R = vw < 600 ? 70 : 90, PAD_T = 56, PAD_B = 80;
+  const spanX = Math.max(maxX - minX, 1), spanY = Math.max(maxY - minY, 1);
+  const fit = Math.min((vw - PAD_L - PAD_R) / spanX, (vh - PAD_T - PAD_B) / spanY);
+  zoom = clampZoom(Math.min(fit, vw < 600 ? 0.9 : 1.05));
+  panX = PAD_L + (vw - PAD_L - PAD_R)/2 - ((minX + maxX)/2)*zoom;
+  panY = PAD_T + (vh - PAD_T - PAD_B)/2 - ((minY + maxY)/2)*zoom;
   applyTransform(animate);
 }
 function zoomBy(factor, cx, cy){
@@ -2238,12 +2367,15 @@ function setSheet(open){
 }
 
 function scrollCanvasTop(){
-  // On desktop (≥900px) html/body are overflow:hidden and <main> is the real
-  // scroll container; on mobile the document scrolls. Scroll both — the
-  // inactive one is a harmless no-op.
+  // Reset whichever container holds the node detail: the side pane (wide
+  // desktop), <main> (narrow desktop) or the bottom sheet (mobile). The page
+  // itself is left alone so the tree doesn't jump out from under the user.
+  ["detailPane", "detailCard"].forEach(id=>{ const el = document.getElementById(id); if (el) el.scrollTop = 0; });
   const main = document.querySelector("main");
-  if (main) main.scrollTo({top:0, behavior:"smooth"});
-  window.scrollTo({top:0, behavior:"smooth"});
+  if (main && window.innerWidth >= 900 && window.innerWidth < 1024) {
+    const tree = document.getElementById("treeWrap");
+    main.scrollTo({top: tree ? tree.offsetTop - 12 : 0, behavior:"smooth"});
+  }
 }
 function goNode(id){
   path.push(id);
@@ -2300,6 +2432,30 @@ function renderDetail(){
         <div class="disc-body ${d.tone}"><p>${d.text}</p></div>
       </div>`).join("") + `</div>` : "";
 
+  // The decision itself: every move available from here, tappable.
+  const kids = (node.children || []).filter(cid=>NODES[cid]);
+  const optPts = p=>{
+    const t = pointsLabel(p);
+    if (!t) return "";
+    const cls = p==="WIN" ? "win" : p==="LOSS" ? "loss" : p<0 ? "neg" : "pos";
+    return `<span class="option-pts ${cls}">${t}</span>`;
+  };
+  const optionsHtml = kids.length ? `
+    <div class="options">
+      <div class="options-label">${centerId==="hub" ? "Where are you?" : "Your options from here"}</div>
+      <ul class="option-list">${kids.map(cid=>{
+        const c = NODES[cid];
+        return `<li><button type="button" class="option-btn type-${c.type} ${MASTERY_CLASS[effectiveMastery(cid)]}" data-go="${cid}">
+          <span class="option-glyph" aria-hidden="true">${nodeGlyph(c)}</span>
+          <span class="option-title">${c.title}</span>
+          ${optPts(c.points)}
+          <span class="option-arrow" aria-hidden="true">›</span>
+        </button></li>`;
+      }).join("")}</ul>
+    </div>` : "";
+  const prevId = path.length > 1 ? path[path.length-2] : null;
+  const backHtml = prevId ? `<button type="button" class="came-from" data-back>‹ Back to ${NODES[prevId].title}</button>` : "";
+
   card.innerHTML = `
     <button class="sheet-handle" type="button" aria-controls="detailCard">
       <span class="sheet-grabber" aria-hidden="true"></span>
@@ -2311,11 +2467,13 @@ function renderDetail(){
         <span class="badge tag-${node.type}">${typeLabel(node.type)}</span>
         ${pointsBadge(node.points)}
       </div>
+      ${backHtml}
       <h2 class="node-title">${node.title}</h2>
-      ${masteryHtml}
       ${leadHtml}
+      ${optionsHtml}
       ${discHtml}
-      ${(!node.children || node.children.length===0) ? `<div class="empty-note">Leaf node — no branches lead onward from here.</div>` : ""}
+      ${(!node.children || node.children.length===0) ? `<div class="empty-note">End of this branch — no moves lead onward from here.</div>` : ""}
+      ${masteryHtml}
     </div>
   `;
   const handle = card.querySelector(".sheet-handle");
@@ -2323,6 +2481,9 @@ function renderDetail(){
     handle.setAttribute("aria-expanded", document.body.classList.contains("sheet-open") ? "true" : "false");
     handle.onclick = ()=> setSheet(!document.body.classList.contains("sheet-open"));
   }
+  card.querySelectorAll("[data-go]").forEach(b=>{ b.onclick = ()=> goNode(b.dataset.go); });
+  const back = card.querySelector("[data-back]");
+  if (back) back.onclick = ()=>{ goBack(); scrollCanvasTop(); };
   card.querySelectorAll(".mastery-btn").forEach(b=>{
     b.onclick = ()=> setMastery(centerId, Number(b.dataset.lvl));
   });
@@ -2372,7 +2533,6 @@ function render(){
 document.querySelectorAll(".nav-btn[data-jump]").forEach(btn=>{
   btn.onclick = ()=>jumpTo(btn.dataset.jump);
 });
-document.getElementById("backBtn").onclick = goBack;
 
 // ---- Quick Reference ----
 function renderQuickRef(){

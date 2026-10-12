@@ -60,6 +60,11 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
 /* Sessions list */
 .sessions-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;margin-bottom:8px;}
 .sessions-actions{display:flex;flex-wrap:wrap;gap:6px;}
+.backup-reminder{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;margin:0 0 20px;padding:14px 16px;border:1px solid rgba(232,196,104,0.45);border-left:4px solid var(--gold);border-radius:var(--radius);background:rgba(232,196,104,0.07);}
+.backup-reminder[hidden]{display:none;}
+.br-title{font-weight:600;color:var(--stone);font-size:14px;}
+.br-sub{font-size:12.5px;color:var(--stone-dim);margin-top:2px;line-height:1.45;}
+.br-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .backup-note{font-size:12px;color:var(--stone-dim);margin:0 0 16px;line-height:1.5;}
 .sessions-title{font-family:'Oswald',sans-serif;font-size:22px;letter-spacing:0.03em;text-transform:uppercase;}
 .sessions-list{display:flex;flex-direction:column;gap:12px;}
@@ -171,6 +176,17 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
     <div class="stat-card"><div class="stat-value" id="statTopTech">—</div><div class="stat-label">Most Logged</div></div>
   </div>
 
+  <div class="backup-reminder" id="backupReminder" role="status" hidden>
+    <div class="br-text">
+      <div class="br-title" id="brTitle"></div>
+      <div class="br-sub" id="brSub"></div>
+    </div>
+    <div class="br-actions">
+      <button type="button" class="btn btn-primary" id="brBackup">⤓ Back up now</button>
+      <button type="button" class="btn btn-ghost" id="brLater">Later</button>
+    </div>
+  </div>
+
   <div class="form-card">
     <div class="form-title">Log New Session</div>
     <div class="form-grid">
@@ -232,7 +248,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
       <input type="file" id="restoreInput" accept="application/json,.json" hidden>
     </div>
   </div>
-  <p class="backup-note">Sessions are stored only on this device. Download a backup regularly — browsers can clear site data.</p>
+  <p class="backup-note">Stored only on this device · <span id="lastBackupText">Never backed up</span></p>
   <div class="sessions-list" id="sessionsList"></div>
   </div><!-- /.journal-right -->
 </div>
@@ -361,6 +377,7 @@ function renderAll(){
   sessions.forEach(s=>(s.techniques||[]).forEach(t=>{techCount[t]=(techCount[t]||0)+1;}));
   const topTech=Object.entries(techCount).sort((a,b)=>b[1]-a[1])[0];
 
+  renderBackupReminder();
   document.getElementById("statTotal").textContent=sessions.length;
   document.getElementById("statThisWeek").textContent=thisWeek;
   document.getElementById("statTopTech").textContent=topTech?topTech[0]:"—";
@@ -485,7 +502,50 @@ function backupJSON(){
   a.href=URL.createObjectURL(blob);
   a.download=`chinthe-journal-backup-${localISODate()}.json`;
   a.click();
+  saveBackupState({at:new Date().toISOString(),ids:sessions.map(s=>s.id)});
+  renderBackupReminder();
 }
+
+// ── Backup reminder ──────────────────────────────────────────
+// Nags only when there's something to lose: 3+ sessions never backed up,
+// 5+ new sessions since the last backup, or any new session and 14+ days.
+// "Later" snoozes for 3 days.
+const BACKUP_KEY="chinthe_journal_backup_v1";
+const DAY=864e5;
+function loadBackupState(){try{return JSON.parse(localStorage.getItem(BACKUP_KEY))||{};}catch(e){return {};}}
+function saveBackupState(st){try{localStorage.setItem(BACKUP_KEY,JSON.stringify(Object.assign(loadBackupState(),st)));}catch(e){}}
+function backupStatus(){
+  const st=loadBackupState();
+  const sessions=loadSessions();
+  const backedUp=new Set(st.ids||[]);
+  const unsaved=sessions.filter(s=>!backedUp.has(s.id)).length;
+  const days=st.at?Math.floor((Date.now()-new Date(st.at).getTime())/DAY):null;
+  const snoozed=st.snoozeUntil&&Date.now()<st.snoozeUntil;
+  let due=false;
+  if(days===null)due=unsaved>=3;
+  else due=unsaved>=5||(unsaved>0&&days>=14);
+  return {unsaved,days,due:due&&!snoozed,total:sessions.length};
+}
+function plural(n,w){return n+" "+w+(n===1?"":"s");}
+function renderBackupReminder(){
+  const b=backupStatus();
+  document.getElementById("lastBackupText").textContent=
+    b.days===null?"Never backed up":
+    "Last backup "+(b.days===0?"today":b.days===1?"yesterday":b.days+" days ago")+(b.unsaved?" · "+plural(b.unsaved,"session")+" not in it":"");
+  const box=document.getElementById("backupReminder");
+  box.hidden=!b.due;
+  if(!b.due)return;
+  document.getElementById("brTitle").textContent=
+    b.days===null?"Back up your journal":plural(b.unsaved,"session")+" not backed up";
+  document.getElementById("brSub").textContent=
+    (b.days===null?"You've logged "+plural(b.unsaved,"session")+" and none are backed up. ":"Last backup was "+plural(b.days,"day")+" ago. ")+
+    "They live only in this browser — clearing site data or an iOS storage purge would erase them.";
+}
+document.getElementById("brBackup").addEventListener("click",backupJSON);
+document.getElementById("brLater").addEventListener("click",()=>{
+  saveBackupState({snoozeUntil:Date.now()+3*DAY});
+  renderBackupReminder();
+});
 
 const SESSION_TYPES=["drilling","sparring","competition","conditioning"];
 function cleanSession(s){

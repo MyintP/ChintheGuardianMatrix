@@ -204,21 +204,23 @@ footer.brand-footer { text-align: center; margin-top: 40px; font-family: 'IBM Pl
 const RULESETS = {
   adcc: {
     name: "ADCC",
-    note: "Submission-only in the first half; points go live in the second half. Numbers match the CHINTHE Matrix.",
+    note: "No positive points in the first half (5 min in qualifiers, 10 min in finals) — but negative points count all match. Points go live in the second half and overtime.",
     verify: false,
     positive: [
-      { action: "Takedown (to guard/control)", pts: 2 },
-      { action: "Clean sweep", pts: 2 },
+      { action: "Takedown (lands in guard / half guard)", pts: 2 },
+      { action: "Clean takedown (lands past guard)", pts: 4 },
+      { action: "Sweep (ends in guard / half guard)", pts: 2 },
+      { action: "Clean sweep (ends past guard)", pts: 4 },
       { action: "Knee on belly", pts: 2 },
       { action: "Mount", pts: 2 },
       { action: "Guard pass", pts: 3 },
       { action: "Back control (hooks / body triangle)", pts: 3 }
     ],
     other: [
-      { action: "Pulling guard without engaging", pts: "−2", kind: "neg" },
+      { action: "Pulling guard (down 3s+ without a takedown)", pts: "−1", kind: "neg" },
       { action: "Stalling (per warning)", pts: "−1", kind: "neg" }
     ],
-    quickAdd: [2, 3]
+    quickAdd: [2, 3, 4]
   },
   ibjjf: {
     name: "IBJJF",
