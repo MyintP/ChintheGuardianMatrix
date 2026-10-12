@@ -27,3 +27,7 @@ personal-combat-codex.html
 .codex/
 .aider*
 *.zip
+
+# Test output
+tests/shots/
+tests/dump-*.txt
