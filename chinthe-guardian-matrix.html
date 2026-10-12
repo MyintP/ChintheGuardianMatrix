@@ -999,7 +999,7 @@ const NODES = {
     mechanics: "Match start or a reset after a stall-out. First half of the match: no points, submissions only. Second half: points go live and passivity is penalized.",
     commonMistake: "Circling and hand-fighting without committing to an entry — wastes the neutral position, where you have the most initiative available.",
     drill: "Entry commitment drill: 30-second rounds, must commit to a shot or throw attempt at least once every 5 seconds — no stalling.",
-    children: ["td_wrestling","td_judo","guard_pull","def_takedown_threat"]
+    children: ["hand_fight","td_wrestling","td_judo","guard_pull","def_takedown_threat"]
   },
   td_wrestling: {
     title: "Wrestling Shot", type: "entry", points: null,
@@ -1007,7 +1007,7 @@ const NODES = {
     mechanics: "Level change, penetration step, drive through the hips. Finish past the legs — don't settle for dumping them to guard.",
     commonMistake: "Shooting from too far away or not fully changing levels — a half-committed shot is the easiest one to sprawl.",
     drill: "Penetration step drill: 20 reps focusing on hip-to-heel drive and head position, partner stationary, then live at 50%.",
-    children: ["td_clean","td_standard","td_stuffed"]
+    children: ["td_clean","td_standard","def_headlock_threat"]
   },
   td_judo: {
     title: "Judo Throw Entry", type: "entry", points: null,
@@ -1042,12 +1042,12 @@ const NODES = {
     children: ["pass","guard_bottom"]
   },
   td_stuffed: {
-    title: "Shot Stuffed → Front Headlock", type: "entry", points: null,
-    objective: "Treat a stuffed shot as a position gained, not a position lost — the front headlock is the entry point for your two highest-value attacks.",
-    mechanics: "Sprawl or underhook defends the shot; you end up with head-and-arm control in front-headlock range.",
+    title: "Front Headlock", type: "entry", points: null,
+    objective: "You've stuffed their shot or snapped them down. The front headlock is the entry to your guillotine, D'Arce, anaconda and back take, so treat it as position gained.",
+    mechanics: "Head and arm control in front of them, your chest on their head, hips back. Chin strap under their chin, and control their near arm. From here: guillotine, D'Arce (they post or reach), anaconda (arm-in, roll), or go-behind to the back.",
     commonMistake: "Disengaging and resetting to neutral after the sprawl instead of immediately establishing head-and-arm control.",
     drill: "Sprawl-and-control drill: partner shots are stuffed, 10 reps — measure time from sprawl to front headlock grip established.",
-    children: ["guillotine","backtake_headlock"]
+    children: ["guillotine","fh_darce","fh_anaconda","fh_go_behind","backtake_headlock"]
   },
   turtle_from_throw: {
     title: "Opponent Turtles", type: "entry", points: null,
@@ -1055,15 +1055,15 @@ const NODES = {
     mechanics: "Throw is defended by turning away or down — opponent ends in turtle.",
     commonMistake: "Pausing on top of the turtle to decide what to do — they will stand up in that window.",
     drill: "Throw-to-turtle-to-back chain: 10 reps, throw attempt → turtle position → seatbelt locked, no pauses between phases.",
-    children: ["backtake_turtle"]
+    children: ["backtake_turtle","turtle_top"]
   },
   guard_bottom: {
     title: "Bottom Guard — Select Guard Type", type: "entry", points: null,
     objective: "Choose the guard that best matches your gripping situation and the opponent's passing posture — the wrong guard costs more energy than the right guard earns.",
-    mechanics: "Five primary no-gi guard types. Closed guard: posture control and submissions. Half guard: underhook battle. Butterfly: hooks and elevation. Single Leg X: one-leg control platform. X Guard: full elevation. Your wrestling base plays best from butterfly and half guard, where underhook battles mirror your natural game.",
+    mechanics: "Six primary no-gi guards. Seated guard: upright, built for wrestling up and leg entries. Closed guard: posture control and submissions. Half guard: underhook battle. Butterfly: hooks and elevation. Single Leg X: one-leg control platform. X Guard: full elevation. A wrestling base plays best from seated guard, butterfly and half guard, where the underhook battle and the wrestle-up mirror your natural game.",
     commonMistake: "Defaulting to closed guard in every scramble — closed guard is safe but low-return in no-gi; butterfly and half guard offer more back-take opportunities for a wrestling base.",
     drill: "Guard type switching: partner starts passing, identify the guard type available from the scramble and call it before establishing. 10 reps.",
-    children: ["guard_closed","guard_half","guard_butterfly","guard_slx","guard_x","def_guard_threat"]
+    children: ["guard_seated","guard_closed","guard_half","guard_butterfly","guard_slx","guard_x","def_guard_threat"]
   },
   guard_closed: {
     title: "Closed Guard", type: "position", points: 0,
@@ -1266,7 +1266,7 @@ const NODES = {
     mechanics: "Read the guard type first. Are they playing butterfly or open guard (hooks active)? Half guard (underhook battle)? Full closed guard (posture management)? Each guard type has a highest-EV passing entry. Don't fight their guard on their terms.",
     commonMistake: "Defaulting to the same pass regardless of guard type — a good guard player anticipates a predictable passer and has the counter pre-loaded.",
     drill: "Guard recognition drill: partner cycles through 4 guard types, name the correct passing system before committing. 10 reps.",
-    children: ["pass_over_under","pass_knee_slice","pass_torreando","pass_body_lock","pass_leg_drag","pass_double_under","pass_headquarters","pass_smash"]
+    children: ["pass_over_under","pass_knee_slice","pass_torreando","pass_body_lock","pass_leg_drag","pass_double_under","pass_headquarters","pass_smash","pass_knee_shield"]
   },
   pass_over_under: {
     title: "Over-Under Pass", type: "entry", points: null,
@@ -1346,7 +1346,7 @@ const NODES = {
     mechanics: "Legs cleared, 3-second stabilization holds. The pass is on the board. Back control with hooks is worth 3 points, mount is worth 2 — don't sit in side control.",
     commonMistake: "Celebrating the pass and sitting in side control — the pass is scored but the clock is still running. Continue attacking.",
     drill: "Pass-and-continue: complete any pass, immediately pursue back take or mount on the same rep. No stopping at side control. 10 reps.",
-    children: ["mount","backtake_pass","knee_belly","leg_entanglement"]
+    children: ["side_control","mount","backtake_pass","knee_belly","leg_entanglement"]
   },
   knee_belly: {
     title: "Knee on Belly", type: "position", points: 2,
@@ -1354,7 +1354,7 @@ const NODES = {
     mechanics: "Knee planted mid-stomach, held 3 seconds. Use as a bridge — re-attack the pass or the back rather than sitting in it.",
     commonMistake: "Sitting in knee-on-belly too long without re-attacking — gives the opponent time to frame, recover guard, or stand up.",
     drill: "Pass-to-knee-belly-to-back flow: 10 reps, 3-second hold, then continue directly into a back-take attempt on the same rep.",
-    children: ["mount","backtake_pass"]
+    children: ["mount","backtake_pass","side_control"]
   },
   mount: {
     title: "Mount", type: "position", points: 2,
@@ -1362,7 +1362,7 @@ const NODES = {
     mechanics: "Both knees down, hips controlled. Lower point value than back control — don't fight for this over an available back take.",
     commonMistake: "Staying flat and square, which makes it easy for the opponent to bridge and roll — stay heavy and offset your hips toward the side you're attacking.",
     drill: "Mount retention drill: partner bridges and rolls at 50%, 10 reps re-basing without losing the position, then continue into an attack.",
-    children: ["armbar_mount","triangle_mount","backtake_mount_scramble"]
+    children: ["armbar_mount","triangle_mount","sc_arm_triangle","sc_americana","backtake_mount_scramble"]
   },
   backtake_pass: {
     title: "Back Take (off the pass)", type: "position", points: 3,
@@ -1625,7 +1625,7 @@ const NODES = {
   def_start: {
     title: "Opponent Has Initiative", type: "entry", points: null,
     mechanics: "Five ways a roll goes bad. Work the survival order for whichever threat you're facing — concede as little as possible, then convert back to offense the moment it's neutralized.",
-    children: ["def_takedown_threat","def_guard_threat","def_back_threat","def_leg_threat","def_mount_conceded"]
+    children: ["def_takedown_threat","def_headlock_threat","def_guard_threat","def_back_threat","def_leg_threat","def_mount_conceded"]
   },
   def_takedown_threat: {
     title: "Opponent Shoots On You", type: "entry", points: null,
@@ -1657,7 +1657,7 @@ const NODES = {
     mechanics: "Frame early — forearm across the hip or bicep line before they clear your legs. Priority order: recover guard, or build back to your feet, before you accept the pass.",
     commonMistake: "Waiting until they've already cleared the legs to start framing — the frame is a preventative tool, not a recovery tool.",
     drill: "Early frame drill: partner starts passing from standing, establish forearm-to-hip frame before their knee clears your leg, 10 reps.",
-    children: ["def_guard_recovered","def_stood_up","def_pass_conceded"]
+    children: ["def_guard_retention","def_guard_recovered","def_stood_up","def_pass_conceded"]
   },
   def_guard_recovered: {
     title: "Guard Recovered", type: "position", points: 0,
@@ -1681,7 +1681,7 @@ const NODES = {
     mechanics: "They've cleared your legs and stabilized. Immediate priority: don't let the pass convert into back exposure or a pin that feeds a submission — frame to keep half guard or an underhook.",
     commonMistake: "Going flat on your back after the pass — flat side control is the most stable position for the passer and the hardest to escape.",
     drill: "Side-control recovery drill: partner holds stable side control, recover half-guard underhook within 10 seconds, 10 reps.",
-    children: ["def_half_recovered","def_mount_conceded","def_backtake_conceded"]
+    children: ["def_side_control","def_half_recovered","def_mount_conceded","def_backtake_conceded"]
   },
   def_half_recovered: {
     title: "Half Guard Recovered", type: "position", points: 0,
@@ -1801,6 +1801,290 @@ const NODES = {
     commonMistake: "Pausing after passing through to assess instead of continuing the scramble — the opponent is already reacting to your position.",
     drill: "Entanglement pass-through drill: pass through the leg entanglement and immediately establish mount or back control, 10 reps — no pausing at the clear.",
     children: ["mount","backtake_pass"]
+  },
+
+  // ── Expansion: hand fighting, front headlock, turtle, side control / north-south,
+  //    seated guard & leg entries, knee shield, defensive escapes ──
+  hand_fight: {
+    title: "Hand Fight & Tie-Ups", type: "entry", points: null,
+    objective: "Win inside position and a controlling tie before you shoot — the hand fight decides which attacks are even available.",
+    mechanics: "Fight for inside hand position, then convert it into a tie: 2-on-1 (both hands on one arm), collar tie, or underhook. Each tie opens a specific set of attacks — 2-on-1 → arm drag or single leg; collar tie → snap down or ankle pick; underhook → body lock. Clear their ties by peeling the wrist, not by pulling your arm back.",
+    commonMistake: "Reaching for the legs from open space with no tie — you shoot into their sprawl from a distance they control.",
+    drill: "Hand-fight rounds: 2 minutes, no shots allowed — score a point each time you establish a 2-on-1, collar tie or underhook for 2 seconds.",
+    defense: "They will fight for inside position and break your ties. Keep your elbows in, and re-establish a tie the moment one is stripped.",
+    children: ["st_two_on_one","st_collar_snap","st_underhook_tie","st_ankle_pick","st_single_leg"]
+  },
+  st_two_on_one: {
+    title: "2-on-1 / Arm Drag", type: "entry", points: null,
+    objective: "Use the 2-on-1 to take their arm out of the fight, then drag past it to their back or drop to the single leg.",
+    mechanics: "Both hands on one arm — one at the wrist, one above the elbow — with your chest on their shoulder. Arm drag: pull the arm across your body as you step to the outside and pivot behind them, hugging the back for a rear body lock. If they pull the arm back to fight the drag, change levels to the single leg on that side.",
+    commonMistake: "Dragging the arm without moving your feet — the arm crosses, but you stay in front of them and lose the angle.",
+    drill: "Arm drag chain: 10 reps drag-to-rear-body-lock, then 10 reps where partner pulls back and you switch to the single leg.",
+    defense: "They will turn back into you and square up, or pull the trapped elbow to their ribs. Follow the reaction into the single leg.",
+    children: ["st_rear_body_lock","st_single_leg"]
+  },
+  st_collar_snap: {
+    title: "Collar Tie & Snap Down", type: "entry", points: null,
+    objective: "Break their posture forward and convert the snap into front headlock control — or into the ankle pick if they step to catch their weight.",
+    mechanics: "Collar tie on the back of the head, other hand controlling the same-side wrist or elbow. Pull their head down and toward the controlled arm as they push into you, while sprawling your hips back. When their hands touch the mat or their head drops below their hips, circle to front headlock.",
+    commonMistake: "Snapping with the arms only — without stepping back and dropping your hips, they just posture up and you're left holding the neck.",
+    drill: "Snap-down-to-front-headlock: 15 reps, partner posting forward at 50% resistance. Finish each rep with chin strap and arm control.",
+    defense: "They posture up hard or clear the collar tie. Use the posture-up to enter a shot or ankle pick on the step.",
+    children: ["td_stuffed","st_ankle_pick"]
+  },
+  st_underhook_tie: {
+    title: "Underhook Tie-Up", type: "entry", points: null,
+    objective: "Turn the underhook into a body lock or a hip throw entry — underhooks are the primary upper-body route to the mat.",
+    mechanics: "Win the underhook deep, head tight to their chest on the underhook side, other hand controlling their wrist or overhook. From here: lock hands for the front body lock, or load the hip for a throw (o-goshi / uchi-mata entry). Lift their arm up with your underhook to expose the body.",
+    commonMistake: "A shallow underhook with your hand on their shoulder blade — no lift and no control. The hand should reach their far lat or back.",
+    drill: "Underhook pummel to body lock: 3 x 1 minute continuous pummel; lock the body every time you win double inside position.",
+    defense: "They will whizzer (overhook) and turn their hip away, or pummel back in. Follow the turn to the back or switch underhooks.",
+    children: ["st_body_lock_td","td_judo"]
+  },
+  st_body_lock_td: {
+    title: "Body Lock Takedown", type: "entry", points: null,
+    objective: "Use the locked hands to break their base — finish at an angle, never straight into their strength.",
+    mechanics: "Hands locked around their lower back (gable or S-grip), head on the chest. Step to a 45° angle, pull their hips into you to bend them backward, then trip the near leg (outside or inside trip) or turn the corner. Keep your hips under you.",
+    commonMistake: "Locking high around the ribs — they keep their hips back and post. Lock at the hips and pull them in tight.",
+    drill: "Body lock trip finishes: 8 reps each side, outside trip then inside trip, partner resists at 50%.",
+    defense: "They will drop their hips back, frame on your neck, or whizzer and turn. Stay tight and change the trip direction.",
+    children: ["td_clean","td_standard"]
+  },
+  st_ankle_pick: {
+    title: "Ankle Pick", type: "entry", points: null,
+    objective: "Make them step forward, then take the ankle they just stepped on — a low-risk takedown that doesn't require a full shot.",
+    mechanics: "From a collar tie, snap or pull their head forward so they step to catch their weight. Change levels, grab behind the heel of the forward foot, and drive your head into their chest to topple them backward. Keep the head pressure on as they fall.",
+    commonMistake: "Picking a foot that's carrying no weight — they simply lift the foot and you're bent over at their legs. Create the step first.",
+    drill: "Snap-to-ankle-pick timing: 10 reps — partner steps on the snap, finish on the stepped foot. Then 10 reps reading which foot steps.",
+    defense: "They will pull the foot back and sprawl, or step around. Return to the collar tie and re-snap.",
+    children: ["td_clean","td_standard"]
+  },
+  st_single_leg: {
+    title: "Single Leg", type: "entry", points: null,
+    objective: "Secure the leg high and close, then finish before they establish a whizzer or catch your head.",
+    mechanics: "Head on the inside, leg trapped between your knees or high on your hip. Finishes: run the pipe (turn away and drive down), trip the far leg, or lift and dump. Your head stays up, your back straight.",
+    commonMistake: "Head down and outside the leg — that hands them a guillotine or front headlock on the way down.",
+    drill: "Single leg finishes: 5 reps each of run-the-pipe, far-leg trip and lift-dump, partner hopping and whizzering at 50%.",
+    defense: "They will whizzer, hop, and sprawl their weight onto your head. If your head gets pinned, address the front headlock first.",
+    children: ["td_clean","td_standard","def_headlock_threat"]
+  },
+  st_rear_body_lock: {
+    title: "Rear Body Lock (Standing)", type: "position", points: null,
+    objective: "From behind, they can't attack you — take your time, lock your hands, and bring them down without giving up the angle.",
+    mechanics: "Hands locked around their waist, head tight to their back, hips close. Move your feet to keep their back to you. Finish with a mat return or by tripping a leg out. Back points only come once you're on the mat with hooks in.",
+    commonMistake: "Letting your hips drift back so they can peel your hands and turn in.",
+    drill: "Rear body lock hold: partner tries to turn and peel your grip for 30 seconds — 5 rounds, then finish with a mat return.",
+    defense: "They will peel your hands and pivot to face you, or sit down to guard. Return them to the mat before the peel completes.",
+    children: ["st_mat_return"]
+  },
+  st_mat_return: {
+    title: "Mat Return", type: "entry", points: null,
+    objective: "Return them to the mat under control, staying behind them — land with your chest on their back and get your hooks in.",
+    mechanics: "From the rear body lock, step behind with one leg, lift their hips onto yours, and turn them back to the mat (or sweep the leg out). Land on top and to the side, keeping your weight on them so they can't come up to their knees.",
+    commonMistake: "Lifting with your back instead of your hips, and landing next to them rather than on them.",
+    drill: "Mat return reps: 8 per side from a locked rear body lock, partner standing passively, then at 50% resistance.",
+    defense: "They will sit, post a hand or hook your leg. Change direction or trip the leg they hooked.",
+    children: ["backtake_turtle","turtle_top","td_clean"]
+  },
+  fh_darce: {
+    title: "D'Arce Choke", type: "submission", points: "WIN",
+    objective: "Thread under the near arm and finish — the D'Arce works when they reach or post, exposing the space under their arm.",
+    mechanics: "From front headlock (or a turtle/half-guard top reaction), thread your arm under their near arm and across the front of their neck until your hand reaches your other biceps. The other hand goes behind their head or back. Close the space, drop to the side of the trapped arm, and squeeze with your chest and shoulders.",
+    commonMistake: "Not threading deep enough — if your biceps isn't on their neck, it's an arm hold, not a choke.",
+    drill: "D'Arce threading: 10 reps from front headlock as partner posts a hand, then 10 reps from turtle top.",
+    defense: "They will clamp their elbow to their ribs and turn toward you, or hand-fight your threading arm. Switch to the anaconda or go-behind.",
+    children: ["fh_choke_defended"]
+  },
+  fh_anaconda: {
+    title: "Anaconda Choke", type: "submission", points: "WIN",
+    objective: "Lock the arm-in choke from the front and roll them onto their back to tighten it.",
+    mechanics: "From front headlock, your choking arm goes under their neck and through under their far armpit, locking on your other biceps. Roll toward the side of the trapped arm (the 'gator roll') so they land on their back, then walk toward their legs and squeeze.",
+    commonMistake: "Rolling before the lock is tight — any space and they slip their head out mid-roll.",
+    drill: "Anaconda lock-and-roll: 10 reps each side from front headlock, partner static, then with partner trying to stand.",
+    defense: "They will drive into you, pull their head out, or step over to stop the roll. Revert to front headlock or the D'Arce.",
+    children: ["fh_choke_defended"]
+  },
+  fh_go_behind: {
+    title: "Go-Behind (Spin to the Back)", type: "entry", points: null,
+    objective: "When they drive into the front headlock or fight the chokes, spin behind them and take the back.",
+    mechanics: "Keep chin-strap pressure, release the far side, and circle behind their hips, staying chest-to-back. Arrive with a seatbelt or rear body lock, then insert hooks or flatten them out.",
+    commonMistake: "Giving up head control too early in the spin — they come up to their feet facing you.",
+    drill: "Go-behind circles: 10 reps each direction from front headlock against a turtled partner.",
+    defense: "They will turn with you or sit to guard. Stay tight to the hips and keep circling.",
+    children: ["backtake_headlock","turtle_top"]
+  },
+  fh_choke_defended: {
+    title: "Front Headlock Choke — If Defended", type: "counter", points: null,
+    objective: "A failed front-headlock choke still leaves you on top — switch chokes or take the back rather than letting go.",
+    mechanics: "When they clear the threading arm or pull the head free, keep chest pressure on their head. Switch between guillotine, D'Arce and anaconda depending on which arm they expose, or spin to the back.",
+    commonMistake: "Letting go of the head entirely to readjust — they come straight up to their feet.",
+    drill: "Front headlock chain: partner defends each choke in turn; you must flow guillotine → D'Arce → go-behind without breaking contact.",
+    children: ["fh_go_behind","guillotine","turtle_top"]
+  },
+  turtle_top: {
+    title: "Turtle — Top", type: "position", points: 0,
+    objective: "Stay on top and break them down — attack the back or a crucifix before they stand up or roll to guard.",
+    mechanics: "Weight on their back, chest connected. Options: seatbelt and insert the first hook (back take), trap an arm with your legs (crucifix), or work front headlock attacks from in front. Keep your hips heavy and stay off your knees when they try to stand.",
+    commonMistake: "Floating on top with no chest connection — they stand up or Granby roll to guard.",
+    drill: "Turtle ride: 30-second rounds, partner tries to stand or roll to guard; you hold and look for a seatbelt. 5 rounds.",
+    defense: "They will stand up, sit through, or Granby roll. Follow with chest connection.",
+    children: ["backtake_turtle","turtle_crucifix","td_stuffed"]
+  },
+  turtle_crucifix: {
+    title: "Crucifix", type: "position", points: 0,
+    objective: "Trap one arm with your legs and control the other arm, then attack the free side. Finish with an armlock or a choke.",
+    mechanics: "From turtle top, trap their near arm with your legs (triangle or figure-four the arm), then roll them so they're on their back across you. Control the far arm with your hands. They can't defend with either arm.",
+    commonMistake: "Trapping the arm too low at the wrist, so they slip it free during the roll.",
+    drill: "Crucifix entry: 10 reps from turtle top, leg-trap the arm and roll to the crucifix before attacking.",
+    defense: "They will clamp their elbow to their knee, or roll toward you to free the trapped arm.",
+    children: ["crucifix_armlock","backtake_turtle"]
+  },
+  crucifix_armlock: {
+    title: "Crucifix Armlock", type: "submission", points: "WIN",
+    objective: "Straighten the controlled arm across your body and finish while their other arm is trapped.",
+    mechanics: "With one arm trapped in your legs, pull their free arm straight across your chest or stomach, thumb up, and extend your hips. Their head is controlled, so they can't turn into you.",
+    commonMistake: "Hunting the arm before the leg trap is secure — they free the trapped arm and roll out.",
+    drill: "Crucifix finish reps: 10 slow reps, partner taps early. Focus on keeping the leg trap tight while you extend.",
+    children: []
+  },
+  side_control: {
+    title: "Side Control", type: "position", points: 0,
+    objective: "You've banked the pass — now pin, then advance to mount or the back, or attack the arms. Don't sit in it.",
+    mechanics: "Crossface on the far side of their head, near-side underhook or hip control, chest heavy on their chest. Block the near hip with your knee to stop the reguard. From here: knee on belly, mount (slide the knee across), north-south, or arm attacks (americana, kimura, arm triangle).",
+    commonMistake: "Static pinning with your weight on your own knees — they frame, hip escape and recover guard.",
+    drill: "Side control rounds: 45 seconds, partner tries to reguard or come to knees; you must keep the pin and transition at least twice.",
+    defense: "They will frame on your neck and hip, bridge, hip escape or turn to their knees. Follow with knee on belly or north-south.",
+    children: ["sc_americana","sc_kimura","sc_arm_triangle","north_south","knee_belly","mount"]
+  },
+  sc_americana: {
+    title: "Americana (Keylock)", type: "submission", points: "WIN",
+    objective: "Pin the far wrist and finish the bent-arm lock before they can straighten or hide the arm.",
+    mechanics: "Pin their far wrist to the mat with their elbow bent at 90° and the hand toward their head. Thread your other arm under their upper arm and grab your own wrist (figure-four). Slide their hand along the mat toward their hips while lifting the elbow.",
+    commonMistake: "Lifting their wrist off the mat — the lock loosens. Keep their hand on the mat and paint it toward their hip.",
+    drill: "Americana from side control: 10 reps each side, then 10 reps from mount.",
+    defense: "They will straighten the arm or turn into you. A straightened arm opens the armbar; turning in opens the kimura.",
+    children: ["sc_kimura","mount"]
+  },
+  sc_kimura: {
+    title: "Kimura (Top)", type: "submission", points: "WIN",
+    objective: "Use the kimura grip as both a finish and a control handle — it takes you to north-south and back to the arm if they defend.",
+    mechanics: "Figure-four on their near (or far, from north-south) arm: wrist grip with one hand, your other arm under their upper arm grabbing your own wrist. Keep their elbow tight to your body and rotate the hand behind their back. Step over their head toward north-south to tighten the angle.",
+    commonMistake: "Letting their elbow drift away from your chest — without elbow control there's no lock.",
+    drill: "Kimura control: hold the kimura grip and transition side control → north-south → side control, 5 laps, then finish.",
+    defense: "They will grab their own belt line or leg to hide the hand. Use the grip to roll to north-south or switch to the armbar.",
+    children: ["north_south","sc_americana"]
+  },
+  sc_arm_triangle: {
+    title: "Arm Triangle (Kata Gatame)", type: "submission", points: "WIN",
+    objective: "Trap their arm across their own neck with your head, then move off to the opposite side to finish.",
+    mechanics: "Push their arm across their face and drop your head next to theirs on the trapped-arm side. Your arm wraps under their neck and locks on your other biceps (hand to your head). From mount, step off to the side opposite the trapped arm into side control and squeeze, chest down, hips low.",
+    commonMistake: "Trying to finish from the middle of mount — the angle isn't there until you step off to the side.",
+    drill: "Arm triangle from mount and side control: 8 reps each, focus on the step-off and head position.",
+    defense: "They will pull the arm back out or turn into you. Keep your head glued to the trapped arm.",
+    children: ["mount","side_control"]
+  },
+  north_south: {
+    title: "North-South", type: "position", points: 0,
+    objective: "A heavy pin that kills guard recovery — and opens the north-south choke and kimura.",
+    mechanics: "Chest on their chest, head over their belly, your hips low toward their head. Control both arms or underhook their near arm. Rotate back to side control if they turn.",
+    commonMistake: "Sitting up high on your knees — they bridge you over or slide out to the side.",
+    drill: "North-south ride: partner tries to turn to knees or recover guard, 30 seconds x 5. Keep chest connection.",
+    defense: "They will turn toward you to come to their knees or shrimp to reguard. Follow back to side control.",
+    children: ["ns_choke","sc_kimura","side_control"]
+  },
+  ns_choke: {
+    title: "North-South Choke", type: "submission", points: "WIN",
+    objective: "Use your chest and arm to compress the side of the neck from north-south.",
+    mechanics: "Wrap your arm around their neck from the top, with your armpit and lat over their neck. Their near arm needs to be out of the way. Grab your own wrist or post, drop your hips toward the mat, and turn your chest into the choke.",
+    commonMistake: "Squeezing with the arm alone without dropping your hips and turning the chest in.",
+    drill: "North-south choke positioning: 10 slow reps, partner taps early. Focus on hip drop and chest rotation.",
+    defense: "They will turn toward you and get their elbow inside. Revert to the kimura or side control.",
+    children: []
+  },
+  guard_seated: {
+    title: "Seated Guard", type: "position", points: 0,
+    objective: "Stay upright and active. Seated guard is the launch point for wrestling up, shin-to-shin and leg entries.",
+    mechanics: "Sit on one hip, one hand posting behind or reaching for a collar tie, feet active against their legs (butterfly hook, shin-to-shin). Keep your head forward and in front of your hips. Your goals: come up on a single leg, enter the legs, or play butterfly if they come down.",
+    commonMistake: "Leaning back flat with your hands on the mat — they pass easily and you can't wrestle up.",
+    drill: "Seated guard hand-fight: partner standing, 1-minute rounds, you must touch a leg or establish a tie at least every 10 seconds.",
+    defense: "They will stay standing, push your head down, or try to pass around your legs. Use their push to wrestle up.",
+    children: ["gs_wrestle_up","gs_shin_to_shin","gs_k_guard","guard_butterfly","bg_arm_drag"]
+  },
+  gs_wrestle_up: {
+    title: "Wrestle Up", type: "entry", points: null,
+    objective: "Come up from the bottom onto a single leg and finish on top — your wrestling base turns bottom position into offense.",
+    mechanics: "From seated guard or butterfly, grab a leg (single leg or high crotch), post your free hand and come up onto your knee (technical stand-up). Finish as a single leg or by driving through. Landing on top from bottom position is typically scored as a sweep in ADCC — confirm how your event calls it.",
+    commonMistake: "Coming up with your head down and outside — they catch the front headlock or guillotine.",
+    drill: "Wrestle-up reps: 10 from seated guard, 10 from butterfly, partner sprawling at 50%.",
+    defense: "They will sprawl, whizzer, or snap your head down. Keep your head up and on their chest.",
+    children: ["sweep","def_headlock_threat"]
+  },
+  gs_shin_to_shin: {
+    title: "Shin-to-Shin", type: "entry", points: null,
+    objective: "Connect your shin to theirs and use it to off-balance them into SLX, a wrestle-up, or a leg entry.",
+    mechanics: "Your shin against the inside of their same-side shin, holding their ankle or pants-line area. Elevate their leg with the shin while pulling. From here: enter single leg X, come up on a single leg, or move to a leg entanglement.",
+    commonMistake: "Pushing with the shin and leaning away — you need to stay close and pull them onto the hook.",
+    drill: "Shin-to-shin entries: 5 reps each to SLX, wrestle-up and ashi, partner standing.",
+    defense: "They will step back, free the leg, or drive into you to pass. Follow their weight shift.",
+    children: ["guard_slx","gs_wrestle_up","leg_entanglement"]
+  },
+  gs_k_guard: {
+    title: "K-Guard Entry", type: "entry", points: null,
+    objective: "Use the inside-leg position to off-balance them and invert into the saddle or inside ashi for heel hook entries.",
+    mechanics: "From seated or supine guard, place your leg inside their near leg with the knee pointing out (forming a 'K' shape). Off-balance them, then invert underneath to the saddle or inside ashi. Control their far leg as you come through.",
+    commonMistake: "Inverting without off-balancing first — they just step away or start passing.",
+    drill: "K-guard inversion reps: 8 each side, finish in the saddle with both legs controlled.",
+    defense: "They will step away or knee-slice to pass. Recover to seated guard.",
+    children: ["leg_saddle","leg_ashi_inside","leg_entanglement"]
+  },
+  pass_knee_shield: {
+    title: "Beating the Knee Shield", type: "entry", points: null,
+    objective: "Flatten the half-guard player's knee shield, kill their frame, then pass — don't pass through a shield that's still standing.",
+    mechanics: "Win the crossface or underhook so they can't turn toward you. Drive your knee through or collapse the shield with your hip, or switch your hips to a knee slice angle. Body lock passing ignores the shield by controlling the hips.",
+    commonMistake: "Trying to pass while their shin is still across your belly — you get pushed off and they recover guard.",
+    drill: "Knee-shield pass rounds: start in their half guard with knee shield up, 45 seconds to pass, 5 rounds.",
+    defense: "They will frame on your neck and come up on an elbow. Crossface to flatten them.",
+    children: ["pass_smash","pass_knee_slice","pass_body_lock"]
+  },
+  def_headlock_threat: {
+    title: "They Have Your Head (Front Headlock)", type: "threat", points: null,
+    objective: "Free your head and square up before they lock a choke or spin behind you.",
+    mechanics: "Fight their choking-arm wrist with both hands, keep your elbows tight to your body, and get your head up. Circle away from their choking arm and square your hips. If they lock a guillotine, address the choke first.",
+    commonMistake: "Reaching for their legs while your head is trapped — you give up the arm and the D'Arce.",
+    drill: "Front-headlock escapes: partner has the front headlock, 20 seconds to escape or reset, 8 rounds.",
+    children: ["def_headlock_escaped","def_choke_threat","def_backtake_conceded"]
+  },
+  def_headlock_escaped: {
+    title: "Head Free — Back to Neutral", type: "position", points: 0,
+    objective: "Reset your stance and hand fight immediately — don't give them another snap down.",
+    mechanics: "Head out, posture up, re-establish a tie or inside position.",
+    commonMistake: "Standing up tall and square — that invites another snap or shot.",
+    drill: "Escape-to-attack: as soon as your head is free, shoot or tie up within 2 seconds. 10 reps.",
+    children: ["start","hand_fight"]
+  },
+  def_side_control: {
+    title: "Pinned in Side Control", type: "threat", points: null,
+    objective: "Frame first, then recover guard or turn to your knees. Stop the transition to mount or knee on belly.",
+    mechanics: "Forearm frame on their neck, other hand on their near hip. Bridge to create space, then hip escape to bring your knee back in (reguard), or get the underhook and turn to your knees.",
+    commonMistake: "Pushing with straight arms — they get heavy and break your frames. Use bone frames, not muscle.",
+    drill: "Side-control escape rounds: 30 seconds from bottom, reguard or turn to knees, 6 rounds.",
+    children: ["def_guard_recovered","def_side_to_knees","def_mount_conceded"]
+  },
+  def_side_to_knees: {
+    title: "Underhook to Knees", type: "position", points: 0,
+    objective: "Turn the escape into a scramble — come up to your knees with the underhook and look to stand or take them down.",
+    mechanics: "Underhook their near arm, turn into them onto your knees, and drive up. From your knees, stand up or wrestle into a single leg.",
+    commonMistake: "Turning away from them to your knees — you give up the back.",
+    drill: "Bottom side control to knees: 10 reps, then continue into a stand-up.",
+    children: ["def_stood_up","def_back_threat"]
+  },
+  def_guard_retention: {
+    title: "Guard Retention", type: "entry", points: null,
+    objective: "Keep your knees and feet between you and them — retaining guard prevents the 3-point pass.",
+    mechanics: "Frames on their shoulders, biceps or hips, plus hip escape to keep your knees in front of their chest. Invert to recover your legs if they get past your knee line. Face them; don't let them get to your side.",
+    commonMistake: "Flattening out on your back with your legs extended — they walk around your feet.",
+    drill: "Guard retention rounds: partner passes at 70%, 1 minute rounds, you must recover guard each time they get past your knees.",
+    children: ["def_guard_recovered","guard_seated","def_stood_up"]
   }
 };
 
