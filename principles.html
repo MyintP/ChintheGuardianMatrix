@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080C10">
+<meta name="description" content="Twelve grappling principles — efficiency, leverage, kuzushi, frames and more — plus positional hierarchy with ADCC points, chess strategy, grip taxonomy and fighting distances.">
 <title>Principles — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="chinthe-lion.png">
@@ -320,7 +321,7 @@ const PRINCIPLES = [
     mat:"Create timing through set-ups (causation): make your opponent react in a predictable way, then have your counter pre-loaded. The classic: feint the armbar, they clasp — you already have the triangle grip. You didn't react to the clasp. You created it.",
     examples:[
       {title:"The Butterfly Elevator", text:"You don't just lift when you feel like it. You wait for their weight to shift to one hip — that's when the hook connects with no resistance. Attack at the wrong time and the sweep dies."},
-      {title:"Hip Bump Timing", text:"The hip bump only works when their hand posts on the mat. That hand on the mat is the signal. If you try it before the post, you get absorbed. Wait for the post, attack instantly."}
+      {title:"Hip Bump Timing", text:"The hip bump works when they posture up and sit back — their weight comes onto their heels. That posture is the signal. Bump while they lean into you and you get absorbed."}
     ]
   },
   {
@@ -329,7 +330,7 @@ const PRINCIPLES = [
     tagline:"Newton's Third Law applied. Every attack sets up the next one through your opponent's defensive response.",
     overview:"Every action you take causes a reaction from your opponent. If you understand what that reaction will be before you attack, you can prepare the counter to their counter. This is how chains are built: attack A creates reaction X, which opens attack B, which creates reaction Y, which opens attack C.",
     applications:"Stop thinking of a failed attack as a wasted effort. The failed armbar that creates a triangle. The stuffed guillotine that opens the back take. The push that triggers the pull you're waiting to throw. Every attack is a probe — and the response tells you what comes next.",
-    mat:"Do not persist in an attack past the point where it's beating the defence. Switch directions — ride their reaction into the next position. The Judo master Kimura discovered a new throw mid-match by reading how his opponent jumped to avoid the first one.",
+    mat:"Do not persist in an attack past the point where it's beating the defence. Switch directions — ride their reaction into the next position. Read how they escaped the first attack — the escape usually tells you where the next one is.",
     examples:[
       {title:"Armbar to Triangle", text:"They clasp hands to defend the armbar. That clasp is the triangle setup. Their defensive hand-fighting hands them the second leg entry. Don't fight the clasp — use it."},
       {title:"Push-Pull Setup", text:"You push them backward. They push back into you. At that moment of their push-back, you pull hard in that direction and launch the throw — their 20 units of force plus your 10 equals an unstoppable entry."}
@@ -338,7 +339,7 @@ const PRINCIPLES = [
   {
     id:"drive", accent:"drive", num:"05",
     name:"Drive, Don't Strike",
-    tagline:"A push applied smoothly through the target transmits force efficiently. A strike bounces off it and loses 90% in vibration.",
+    tagline:"A push applied smoothly through the target transmits force efficiently. A strike bounces off it and loses much of that force.",
     overview:"A powerful jerk or yank causes an equal and opposite reaction — which is exactly what you don't want when trying to sweep or throw someone. The force you want moving your opponent is the sustained drive, not the impact. Establish contact, remove the slack, and drive smoothly in the direction you want them to go.",
     applications:"Remove all slack from your grips before applying force. A loose gi yanked to full tension creates a jerk reaction — the energy spikes, bounces back, and your opponent is actually harder to move. Tighten the grip, maintain connection, then drive.",
     mat:"Foot sweeps fail when kicked. They succeed when you drive the leg in the direction it's already going, combining your force with their momentum. The same mechanical difference applies to every passing technique, takedown, and submission.",
@@ -356,7 +357,7 @@ const PRINCIPLES = [
     mat:"The armbar: your hips are the fulcrum, their elbow is where you apply the force, and you grip their wrist. Gripping their forearm reduces leverage dramatically. Gripping their hand maximises it. Two inches in the wrong direction makes the submission mediocre.",
     examples:[
       {title:"Armbar Fulcrum", text:"Hips below the elbow = maximum leverage on the joint. Hips above or beside it = minimal leverage. This is why positioning before the leg swing is mandatory — and why a hip-high armbar without proper alignment fails against any resistance."},
-      {title:"Double Leg Takedown", text:"Your arms hook behind their legs (fulcrum). Your head drives into their hip (the lever, at maximum distance from the fulcrum). Using your head rather than your shoulder adds 15–20 inches of leverage. That's the difference between driving through and being stuffed."}
+      {title:"Double Leg Takedown", text:"Your arms hook behind their legs (fulcrum). Your head drives into their hip (the lever, at maximum distance from the fulcrum). Driving with your head rather than your shoulder lengthens the lever — often the difference between driving through and being stuffed."}
     ]
   },
   {
@@ -376,7 +377,7 @@ const PRINCIPLES = [
     name:"Angles and Force Vectors",
     tagline:"100% of a poorly angled force is wasted. Apply force in the exact direction you want movement to occur.",
     overview:"A force vector has a direction and a magnitude. If your direction is wrong, no amount of magnitude will produce the result you want. Pushing perpendicular to a leg moves it. Pushing along the length of the bone does nothing — the bone takes the load. This applies to every guard pass, throw, and submission.",
-    applications:"Before applying force, ask: 'In what direction do I need this body part to move?' Then ensure your force is aligned with that direction. Even 30 degrees off-axis wastes half your force. 90 degrees off-axis wastes everything.",
+    applications:"Before applying force, ask: 'In what direction do I need this body part to move?' Then ensure your force is aligned with that direction. Force off-axis is lost fast: 30 degrees off costs about 13%, 60 degrees costs half, and 90 degrees wastes all of it.",
     mat:"The toreando pass depends entirely on angle: redirect the legs sideways (perpendicular to their body axis), simultaneously step perpendicular to that redirect. The angle is the technique. The grip and the footwork are just the delivery mechanism.",
     examples:[
       {title:"Toreando Angle", text:"Loading weight onto both knees = zero movement, the bones take it. Instantly shifting that weight 90 degrees sideways = the guard collapses. Changing direction rather than adding force is what makes the pass work."},
@@ -554,7 +555,7 @@ function renderHierarchy(){
       '<div class="hier-row bad"><span class="hier-pts red">−1</span><span class="hier-name">Guard Pull (defensive)</span></div>' +
       '<div class="hier-row bad"><span class="hier-pts red">−2</span><span class="hier-name">Mount conceded</span></div>' +
       '<div class="hier-row bad"><span class="hier-pts red">−3</span><span class="hier-name">Guard passed against you</span></div>' +
-      '<div class="hier-row worst"><span class="hier-pts red">−4</span><span class="hier-name">Back taken against you</span><span class="hier-badge">Worst</span></div>' +
+      '<div class="hier-row worst"><span class="hier-pts red">−3</span><span class="hier-name">Back taken against you</span><span class="hier-badge">Worst</span></div>' +
     '</div>' +
     '<p style="font-size:13px;color:var(--stone-dim);margin-top:16px;line-height:1.6;">Source: Kesting, <em>Roadmap for BJJ</em>. Modified for ADCC no-gi ruleset — submissions only in first half; points activate in second half.</p>' +
     '</div>';
@@ -566,7 +567,7 @@ function renderChess(){
     {title:'The Pin', chess:'Chess: Lock a piece in place', text:"A pin is positional control that forces your opponent to carry your weight or concede position. Side control, mount, knee-on-belly — you aren't just stopping movement, you're forcing them to spend energy holding a bad position."},
     {title:'Remove the Defender', chess:"Chess: Take the piece protecting the king", text:"Every escape has a defending limb. The cross-face removes the underhook. The whizzer removes the back-take. Identify what is defending the position you want — and remove it before attacking."},
     {title:'Control the Center', chess:'Chess: Dominate from the middle', text:"In grappling, the center is your opponent's hips and spine. Whoever controls the hips controls the match. This is why hip escapes are the most important defensive movement in BJJ."},
-    {title:'Overworked', chess:'Chess: Force a piece to defend two threats', text:"The arm defending the choke can't also defend the armbar. Chain your attacks to create overloaded defenders. This is the Danaher principle: create a problem in one area to generate a solution somewhere else."},
+    {title:'Overworked', chess:'Chess: Force a piece to defend two threats', text:"The arm defending the choke can't also defend the armbar. Chain your attacks to create overloaded defenders. Create a problem in one area to open a solution somewhere else."},
     {title:'Remove Escape Routes', chess:"Chess: Cut off the king's flight squares", text:'Before finishing a submission, block every exit. For RNC: second hook before the arm threads. For heel hook: perpendicular hip angle before the cup. An escape route left open is a submission lost.'},
     {title:'Preparatory Moves', chess:'Chess: Set up the combination first', text:'The grip fight before the throw. The posture break before the submission. Most successful techniques are invisible — they were set up three moves earlier. Create the conditions before the technique.'},
     {title:'A Man with a Plan', chess:'Chess: Know your next three moves', text:'If defended, go to Y. If Y is defended, go to Z. Every attack should have a pre-decided secondary outcome. Armbar → triangle → back take. Plan your chain before you start it.'},
@@ -586,14 +587,14 @@ function renderChess(){
 
 function renderGrips(){
   const grips = [
-    {name:'Gable Grip', use:'Clinch control, bodylock, pummelling', desc:'Palms facing each other, fingers interlaced. Highest overall strength. Go-to for clinch control, bodylock passes, and any grip where you need maximum structural integrity.'},
+    {name:'Gable Grip', use:'Clinch control, bodylock, pummelling', desc:'Palm to palm, hands clasped, fingers together — not interlaced. Highest overall strength. Go-to for clinch control, bodylock passes, and any grip where you need maximum structural integrity.'},
     {name:'S-Grip', use:'Armbar isolation, kimura setup', desc:'Each hand hooks the other in an S-shape. Allows rotation. Standard for armbar isolation from mount. Weaker than gable under direct pull.'},
     {name:'Figure-Four / Kimura', use:'Kimura, omoplata, guillotine variants', desc:'One hand grips the wrist; the other arm threads over and grabs its own wrist. Creates a locked triangle of force that transmits enormous shoulder pressure with minimal grip strength.'},
     {name:'Three-Finger Grip', use:'Gi only — collar and lapel control', desc:'Middle three fingers inserted deep in the collar. Maximises choking pressure. Not for pulling — only for applying rotational choking force.'},
-    {name:'Ball and Socket', use:'Rear clinch, body triangle, seatbelt', desc:"One arm hooks over the shoulder, the other under the armpit — hands meet at the sternum. The body's most stable rear control. The platform for every back attack."},
+    {name:'Ball and Socket', use:'Seatbelt, body lock, rear clinch', desc:"One hand makes a fist and the other cups it. Quick to form and hard to break — a common grip for the seatbelt and body locks."},
     {name:'RNC Grip', use:'Rear naked choke, bow-and-arrow entry', desc:'Choking arm under the chin, bicep seals one carotid, free hand cups back of the head. Pull elbows together and arch — do not just squeeze. Squeezing alone rarely finishes at competition level.'},
     {name:'Heel Cup', use:'Inside/outside heel hook, ashi-garami', desc:'Palm against the back of the heel (inside), or outside of heel (outside). The cup direction determines rotation direction. No substitute exists — no cup means a straight ankle lock.'},
-    {name:'Idiot Grip', use:'What not to do', desc:'Thumbs wrapped inside the fingers. Named because it risks finger breaks when the opponent yanks free. Never use in live rolling — hook your fingers, keep thumb on the outside.'},
+    {name:'Interlaced Fingers', use:'What not to do', desc:'Fingers laced together. It is the weakest clasp and your fingers can be bent back when they pull free. Use a gable, S-grip or ball-and-socket instead.'},
   ];
   return '<div class="panel-accent-bar" style="background:' + BRAND_ACCENT + '"></div>' +
     '<div class="panel-eyebrow">Reference · Technical Detail</div>' +

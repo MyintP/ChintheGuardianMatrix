@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080C10">
+<meta name="description" content="The Guardian Matrix: a no-gi competition decision map. Find your position, see every option, the ADCC points at stake, and how to drill it.">
 <title>Guardian Matrix — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="chinthe-lion.png">
@@ -1018,13 +1020,13 @@ footer.brand-footer {
 const NODES = {
   hub: {
     title: "Guardian Matrix", type: "entry", points: null,
-    mechanics: "Your full competition decision tree. Tap any node to expand it — tap Back, a breadcrumb, or drag/zoom the tree to navigate.",
+    mechanics: "Pick where you are. Every position lists your options from there — tap one to move. Focus view shows just that decision; Full map shows the whole game and your progress across it.",
     children: ["start","pass","guard_bottom","def_start"]
   },
   start: {
     title: "Neutral / Standing", type: "position", points: 0,
     objective: "Establish the tempo of the exchange — decide whether you're initiating or reacting, and act on it immediately rather than circling.",
-    mechanics: "Match start or a reset after a stall-out. First half of the match: no points, submissions only. Second half: points go live and passivity is penalized.",
+    mechanics: "Match start or a reset. Under ADCC, no positive points are scored in the first half (negative points still count, including for pulling guard); points go live in the second half and overtime.",
     commonMistake: "Circling and hand-fighting without committing to an entry — wastes the neutral position, where you have the most initiative available.",
     drill: "Entry commitment drill: 30-second rounds, must commit to a shot or throw attempt at least once every 5 seconds — no stalling.",
     children: ["hand_fight","td_wrestling","td_judo","guard_pull","def_takedown_threat"]
@@ -1048,7 +1050,7 @@ const NODES = {
   guard_pull: {
     title: "Guard Pull", type: "position", points: -1,
     objective: "If you pull guard, pull with immediate intent — have the sweep or submission attempt already in motion before you hit the floor.",
-    mechanics: "Penalized in the scoring half unless it follows a live, committed attack. Use sparingly and only with intent.",
+    mechanics: "ADCC scores pulling guard as −1 at any point in the match (sitting or jumping to guard and staying down 3+ seconds without a takedown attempt). Pull only with an attack already in motion — and remember the point.",
     commonMistake: "Pulling guard to stall rather than to attack — costs a point and signals passivity to the referee.",
     drill: "Guard pull to immediate attack: 10 reps, must be attacking a sweep or submission within 2 seconds of hitting the mat.",
     children: ["guard_bottom"]
@@ -1056,7 +1058,7 @@ const NODES = {
   td_clean: {
     title: "Clean Takedown", type: "position", points: 4,
     objective: "Convert the shot into a scoring position with zero recovery window for the opponent.",
-    mechanics: "Ends outside the guard with 75%+ of the opponent's back pinned to the mat, no submission threat, held 3 seconds.",
+    mechanics: "Any takedown that lands past the guard and is stabilised for 3 seconds. Under ADCC that scores 4 instead of 2 — the difference is driving past the legs rather than dumping them into guard.",
     commonMistake: "Finishing the takedown at the knees instead of driving through — leaves the pass still to be won separately.",
     drill: "10 reps: shot to crossbody pin, partner starts resisting the moment your hand touches the leg.",
     children: ["pass"]
@@ -1134,14 +1136,14 @@ const NODES = {
     commonMistake: "Letting them posture before the figure-four is locked — a kimura without the lock is easy to defend.",
     drill: "Kimura grip drill: from closed guard, establish the figure-four within 3 seconds of a partner posting their hand. 10 reps.",
     defense: "Clasping their own hands to prevent the figure-four; rolling toward the trapped arm to relieve shoulder pressure.",
-    children: ["backtake_from_stack","armbar_defended"]
+    children: ["cg_hip_bump","cg_guillotine_entry"]
   },
   cg_hip_bump: {
     title: "Hip Bump Sweep", type: "position", points: 2,
-    objective: "Time the sweep to the exact moment they're posting a hand to posture — a hand on the mat is a hand not blocking the sweep.",
-    mechanics: "Open the guard, post one foot on the mat, grip behind their neck or shoulder. Drive your hip explosively up and toward their posting arm, swinging your leg through to end in mount. No wind-up — the movement is the commitment.",
-    commonMistake: "Attempting the hip bump from closed guard without opening it first — the closed guard prevents the hip lift the sweep requires.",
-    drill: "Hip bump timing: from open guard, partner posts their hand, execute the hip bump within half a second. 10 reps.",
+    objective: "Time it to the moment they posture up and sit back — their weight comes off you and onto their heels, and that's when you sit up into them.",
+    mechanics: "Open the guard and sit up, posting one hand on the mat behind you. Reach your other arm over their shoulder to trap their arm on that side. Drive your hips up and into them, rolling them toward the trapped arm, and come up in mount.",
+    commonMistake: "Bumping while they're leaning into you — the sweep needs them sitting back. And forgetting to trap the arm, so they simply post on that side.",
+    drill: "Hip bump timing: partner postures up on your signal, sit up and bump within half a second. 10 reps each side.",
     children: ["mount","cg_kimura"]
   },
   cg_scissor: {
@@ -1214,7 +1216,7 @@ const NODES = {
     mechanics: "From butterfly: control their wrist with your near hand, far hand grips behind their tricep. Pull the wrist across your centerline while bumping the arm-dragged side with your butterfly hook. Their arm crosses their body, exposing the back — step around and establish hooks.",
     commonMistake: "Dragging the arm without simultaneously bumping with the butterfly hook — the drag alone without the hook is easy to resist.",
     drill: "Arm drag to back: arm drag with simultaneous hook bump, finish at seatbelt. 10 reps.",
-    children: ["backtake_headlock","rnc"]
+    children: ["bg_back_take"]
   },
   bg_x_entry: {
     title: "Entry to Single Leg X", type: "entry", points: null,
@@ -1250,17 +1252,17 @@ const NODES = {
   },
   guard_x: {
     title: "X Guard", type: "position", points: 0,
-    objective: "Elevate their base completely off the mat — X guard only works when their weight is on your hooks, not on their own feet.",
-    mechanics: "Both hooks inside both legs: one hook under their far knee (crossed X hook), one hook under their near knee. Hands grip their ankles. Extend your legs to elevate them entirely. They should be floating on your hooks with no floor contact.",
-    commonMistake: "Establishing X guard without fully elevating — X guard on a grounded opponent has no mechanical advantage and collapses under their base.",
-    drill: "X guard elevation: establish X, elevate partner completely off the mat and hold 3 seconds. 10 reps.",
+    objective: "Get under their hips and take one leg off the floor — X guard works when their weight is balanced on a single foot.",
+    mechanics: "You're underneath them controlling one leg: one foot pushes the front of that hip or thigh, the other hooks behind the same knee, so your legs cross in an X. Hug the controlled leg. Extend the hooks to lift it — they're left balancing on the other foot, which is what the sweeps attack.",
+    commonMistake: "Playing X guard from too far away — if your hips aren't under theirs, you can't lift the leg and they simply step out.",
+    drill: "X guard entry and lift: from butterfly or SLX, get under the hips, establish X and lift the leg so partner is on one foot. Hold 3 seconds, 10 reps.",
     children: ["xg_back_sweep","xg_front_sweep","xg_stand_up"]
   },
   xg_back_sweep: {
     title: "Back Dump Sweep (X Guard)", type: "position", points: 2,
-    objective: "Dump them backward while elevated — no base means no resistance.",
-    mechanics: "From full X elevation: extend both hooks forward while pulling the ankle grips toward you. They fall backward. Come up over them to mount or follow to top position.",
-    commonMistake: "Attempting the dump before full elevation — they post a foot and stay upright.",
+    objective: "Dump them backward while they're balanced on one foot — the lifted leg can't post.",
+    mechanics: "From X guard with the leg lifted: extend your legs to push them backward while holding the controlled leg to your chest. They fall back; come up on top to pass or establish position.",
+    commonMistake: "Attempting the dump before the leg is lifted — they keep both feet down and stay standing.",
     drill: "X guard back dump: elevation first, dump second. 10 reps measuring complete elevation before committing.",
     children: ["mount","pass_complete"]
   },
@@ -1282,8 +1284,8 @@ const NODES = {
   },
   sweep: {
     title: "Sweep", type: "position", points: 2,
-    objective: "Finish past their guard for 4 points whenever the angle is there — don't settle for a standard sweep if the clean finish is live.",
-    mechanics: "Facing each other, change bottom to top, establish 3 seconds. Ending past the guard with 75%+ back pinned scores 4 instead of 2.",
+    objective: "Finish past their guard whenever the angle is there — a clean sweep scores 4, a sweep that lands in their guard scores 2.",
+    mechanics: "Bottom to top from guard, stabilised for 3 seconds. Under ADCC, ending past the guard (clean sweep) scores 4 instead of 2.",
     commonMistake: "Sweeping directly into the opponent's guard instead of driving through to a dominant pin — scores 2 instead of 4 and leaves the pass still to do.",
     drill: "Sweep-to-pin: 10 reps from a chosen sweep, measure whether you finish in guard, half guard, or past the guard — aim for outside-the-guard finishes.",
     children: ["pass","pass_complete"]
@@ -1434,7 +1436,10 @@ const NODES = {
     children: ["rnc_defended"]
   },
   rnc_defended: {
-    title: "If Defended", type: "counter", points: null,
+    title: "RNC — If Defended", type: "counter", points: null,
+    drill: "RNC chain: partner defends the choke; flow to bow-and-arrow or the back armbar without letting go of the seatbelt. 10 reps.",
+    commonMistake: "Releasing the seatbelt to re-grip the choke — they turn into you and the back is gone.",
+    objective: "The choke was stopped, but you still have the back — switch the attack, don't reset.",
     mechanics: "Chain into the next option — never reset to neutral from here.",
     children: ["bow_arrow","armbar_back","mount_from_spin"]
   },
@@ -1473,7 +1478,10 @@ const NODES = {
     children: ["armbar_defended"]
   },
   armbar_defended: {
-    title: "If Defended", type: "counter", points: null,
+    title: "Armbar — If Defended", type: "counter", points: null,
+    drill: "Armbar chain: partner clasps hands; go triangle or take the back off their stack. 10 reps each.",
+    commonMistake: "Letting go of the arm to reset — you lose the isolation you already worked for.",
+    objective: "They clasped or stacked — use the grip that stopped the armbar to enter the next attack.",
     mechanics: "Their defensive grip usually gifts you the next attack — don't reset.",
     children: ["triangle_from_armbar","backtake_from_stack"]
   },
@@ -1503,7 +1511,10 @@ const NODES = {
     children: ["triangle_defended"]
   },
   triangle_defended: {
-    title: "If Defended", type: "counter", points: null,
+    title: "Triangle — If Defended", type: "counter", points: null,
+    drill: "Triangle chain: partner postures or stacks; finish the armbar or take the back. 10 reps.",
+    commonMistake: "Holding the leg lock while being stacked onto your neck — release and follow to the back or the armbar.",
+    objective: "They postured or stacked out — the arm is still isolated, and the stack often gives you the back.",
     mechanics: "A successful stack/posture defense usually costs them the back.",
     children: ["backtake_from_stack","armbar_from_triangle"]
   },
@@ -1525,7 +1536,10 @@ const NODES = {
     children: ["guillotine_defended"]
   },
   guillotine_defended: {
-    title: "If Defended", type: "counter", points: null,
+    title: "Guillotine — If Defended", type: "counter", points: null,
+    drill: "Guillotine chain: partner postures out; finish the armbar, triangle or back take off the same grip. 10 reps.",
+    commonMistake: "Falling back to guard with the choke and staying there after it fails — you give up top position for nothing.",
+    objective: "A stuffed guillotine is still a front-headlock position — convert it to the back or a limb attack.",
     mechanics: "A stuffed guillotine should never be a dead end for a wrestler.",
     children: ["armbar_from_guillotine","triangle_from_guillotine","backtake_from_guillotine"]
   },
@@ -1581,7 +1595,7 @@ const NODES = {
   },
   leg_saddle: {
     title: "Saddle / 411 / Honey Hole", type: "position", points: 0,
-    objective: "This is the most powerful leg entanglement position — once established with hip control, the inside heel hook from here has the highest finish rate of any leg lock entry.",
+    objective: "The strongest leg entanglement for control — once established with hip control, the inside heel hook from here is one of the highest-percentage leg attacks.",
     mechanics: "Both legs control one of theirs: inside leg drives across their hip (ashi-garami component), outside leg hooks behind their knee (outside ashi component). Their leg is fully trapped between yours. Inside heel cup: cup from below, rotate the heel away from their hip toward you.",
     commonMistake: "Failing to break them down flat before attacking — if they're sitting up or on their side they can frame and create space to pull the heel.",
     drill: "Saddle break-down drill: establish saddle, partner sits up and frames, break them to flat before attempting heel cup. 10 reps.",
@@ -1600,7 +1614,7 @@ const NODES = {
   leg_inside_heel_hook: {
     title: "Inside Heel Hook", type: "submission", points: "WIN",
     objective: "Rotate the heel before they can chase the hip — the window between a clean heel cup and a finished heel hook is very short at competition pace.",
-    mechanics: "Heel cup established (cup from below, palm against the back of the heel). Rotation: pull the heel toward you and rotate it away from their hip (internal tibial rotation). Elbow drives into the back of their knee as a fulcrum. Squeeze knees together to lock the hip. Finish with a short, controlled rotation — it's not a crank, it's a rotation.",
+    mechanics: "Heel cup established (cup from below, palm against the back of the heel). Pull the heel toward you and rotate it away from their hip. Elbow drives into the back of their knee as a fulcrum. Squeeze knees together to lock the hip. Finish with a short, controlled rotation — it's not a crank, it's a rotation.",
     commonMistake: "Cranking straight rather than rotating — a straight pull is a straight ankle lock, not a heel hook. The damage in a heel hook is rotational; the tap comes fast and without much warning.",
     drill: "Heel cup grip drill: 20 reps establishing the correct palm-to-heel cup from ashi-garami, no finish — groove the grip before the rotation.",
     defense: "Tap early. This is the submission where the damage (ACL, LCL, popliteal) happens in fractions of a second before significant pain registers. There is no halfway — either you're out or you tap.",
@@ -1609,7 +1623,7 @@ const NODES = {
   leg_outside_heel_hook: {
     title: "Outside Heel Hook", type: "submission", points: "WIN",
     objective: "Establish a locked hip-control grip before rotating — the outside heel hook without hip control is the most common cause of non-consensual leg injury in grappling.",
-    mechanics: "From outside ashi: cup the heel from the outside (palm against the outside of the heel), rotation is toward their hip (external tibial rotation). Hip control is critical — your near-side knee must be tight to their hip throughout.",
+    mechanics: "From outside ashi: cup the heel from the outside (palm against the outside of the heel); rotation is toward their hip — the opposite direction from the inside heel hook. Hip control is critical — your near-side knee must be tight to their hip throughout.",
     commonMistake: "Rotating without hip control — the outside heel hook with a loose hip gap puts enormous torque on the knee without a controlled release point if they scramble.",
     drill: "Outside cup and control drill: establish outside ashi, grip the heel correctly, confirm hip control is locked before any rotation — 10 reps, finish is not the drill objective.",
     defense: "Tap early — same warning as inside heel hook. External rotation damage is equally fast and equally under-telegraphed by pain.",
@@ -1642,7 +1656,7 @@ const NODES = {
     children: ["leg_saddle"]
   },
   leg_defended: {
-    title: "If Defended", type: "counter", points: null,
+    title: "Leg Lock — If Defended", type: "counter", points: null,
     objective: "Maintain positional control — a failed leg lock attempt that loses the entanglement is a worse outcome than not attacking at all.",
     mechanics: "They've survived the submission attempt. Reassess position: are you still in the same entanglement, have they created scramble space, or have they cleared entirely?",
     commonMistake: "Releasing all hip control after a failed attempt — the position is usually still partially live and abandoning it gives them a free scramble.",
@@ -1652,6 +1666,9 @@ const NODES = {
 
   def_start: {
     title: "Opponent Has Initiative", type: "entry", points: null,
+    drill: "Bad-position rounds: start in each threat position for 30 seconds — survive, then escape. Rotate through all six.",
+    commonMistake: "Fighting everything at once. Address the most dangerous problem (neck, back, legs) before worrying about points.",
+    objective: "Name the threat first — then apply that threat's survival order. Every defensive branch here ends in a way back to offense.",
     mechanics: "Five ways a roll goes bad. Work the survival order for whichever threat you're facing — concede as little as possible, then convert back to offense the moment it's neutralized.",
     children: ["def_takedown_threat","def_headlock_threat","def_guard_threat","def_back_threat","def_leg_threat","def_mount_conceded"]
   },
@@ -1674,7 +1691,7 @@ const NODES = {
   def_takedown_conceded: {
     title: "Takedown Conceded", type: "threat", points: -2,
     objective: "Limit the damage to the takedown score only — don't allow the position to cascade into a pass or a back take on the same exchange.",
-    mechanics: "They've landed the shot — −2 for a standard finish, −4 if it's clean (75%+ of your back pinned outside guard). Priority now: don't let it convert into an immediate pass.",
+    mechanics: "They've landed the takedown — −2 if you land in guard, −4 if they land past your guard (a clean takedown under ADCC). Priority now: don't let it convert into an immediate pass.",
     commonMistake: "Giving up the back or a submission attempt immediately after the takedown because of panic — take a breath, establish a frame first.",
     drill: "Takedown-recovery drill: partner finishes a shot, you recover full guard within 5 seconds, 10 reps.",
     children: ["guard_bottom"]
@@ -1753,7 +1770,10 @@ const NODES = {
   },
   def_submitted_armbar: {
     title: "Armbar Finished", type: "submission", points: "LOSS",
-    mechanics: "Tap early, tap often. No point total matters once a joint lock is fully extended.",
+    drill: "Review: replay the exchange with your partner at 25% and find the point where a frame or clasp would have saved it. Drill that point 10 times.",
+    commonMistake: "Holding on with a straightened elbow hoping to escape — damage comes before the escape does.",
+    objective: "You were caught — learn where the arm was isolated so it doesn't happen twice.",
+    mechanics: "Tap early: arm locks damage the elbow fast. Afterwards, note the moment the arm was isolated — usually a straight arm pushing from bottom or a late clasp.",
     children: []
   },
   def_back_threat: {
@@ -1798,7 +1818,10 @@ const NODES = {
   },
   def_submitted_choke: {
     title: "Choke Finished", type: "submission", points: "LOSS",
-    mechanics: "Tap before you're unconscious — there's no benefit to riding it out.",
+    drill: "Review: partner reproduces the back take slowly; identify where you could have denied the hook or peeled the wrist. Drill it 10 times.",
+    commonMistake: "Riding a locked choke to the edge of unconsciousness — there's nothing to gain.",
+    objective: "You were caught — find the step where the choke was let in.",
+    mechanics: "Tap before you're unconscious. Then work back: was the second hook allowed? Were both hands on the bicep instead of the wrist?",
     children: []
   },
   def_leg_threat: {
@@ -1819,7 +1842,10 @@ const NODES = {
   },
   def_submitted_leg: {
     title: "Leg Lock Finished", type: "submission", points: "LOSS",
-    mechanics: "The full leg-lock system — attack and defense both — is a separate future build. Tap early here; this is the position with the least warning before real damage.",
+    drill: "Review: partner re-enters the same entanglement slowly; practise the hip chase at the moment you lost it. 10 reps.",
+    commonMistake: "Spinning or yanking the leg out once the heel is cupped — that adds the rotation yourself.",
+    objective: "You were caught — learn where you lost the hip or the knee line.",
+    mechanics: "Tap early: heel hooks damage the knee before pain warns you. Then work out whether you lost the hip chase, let them get perpendicular, or pulled straight out.",
     children: []
   },
   def_leg_safe: {
@@ -2113,6 +2139,14 @@ const NODES = {
     commonMistake: "Flattening out on your back with your legs extended — they walk around your feet.",
     drill: "Guard retention rounds: partner passes at 70%, 1 minute rounds, you must recover guard each time they get past your knees.",
     children: ["def_guard_recovered","guard_seated","def_stood_up"]
+  },
+  bg_back_take: {
+    title: "Back Take (from arm drag)", type: "position", points: 3,
+    objective: "Finish what the drag started — get chest to back and your hooks in before they square up.",
+    mechanics: "As their arm crosses, climb to their back: seatbelt grip, chest tight to their back, then insert hooks (or a body triangle). Back points come once hooks are in and stabilised.",
+    commonMistake: "Stopping at the arm drag with your chest off their back — they turn back in and you're in front again.",
+    drill: "Arm drag to hooks: 10 reps from butterfly, finish only when both hooks are in.",
+    children: ["rnc"]
   }
 };
 
@@ -2632,7 +2666,7 @@ function centerOnCurrentNode(animate){
   // Padding is in SCREEN px: focus nodes keep a near-constant on-screen size
   // (--focus-scale), so the room they need at the edges doesn't shrink with zoom.
   // Right pad clears the zoom toolbar; bottom pad clears labels + the hint pill.
-  const PAD_L = 70, PAD_R = vw < 600 ? 70 : 90, PAD_T = 56, PAD_B = 80;
+  const PAD_L = 70, PAD_R = vw < 600 ? 70 : 90, PAD_T = 72, PAD_B = 80;   // top pad fits 3-line labels
   const spanX = Math.max(maxX - minX, 1), spanY = Math.max(maxY - minY, 1);
   const fit = Math.min((vw - PAD_L - PAD_R) / spanX, (vh - PAD_T - PAD_B) / spanY);
   zoom = clampZoom(Math.min(fit, vw < 600 ? 0.9 : 1.05));

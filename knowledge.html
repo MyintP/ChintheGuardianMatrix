@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080C10">
+<meta name="description" content="98 no-gi technique entries — positions, submissions, passes, sweeps, takedowns, judo and defence — each with mechanics, opponent reactions, common mistakes and drills.">
 <title>Knowledge Base — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="chinthe-lion.png">
@@ -183,7 +184,7 @@ const DB = [
     name:"Rear Naked Choke (Hadaka-Jime)",
     tagline:"The highest-percentage finish in modern no-gi. Your default finishing target from back control.",
     tags:["Back Control","No-Gi","ADCC Primary","Judo: Hadaka-Jime"],
-    objective:"Establish the seatbelt before threading the choke — the seatbelt is the position that makes the finish available. Full application compresses both carotids; unconsciousness follows in 3–5 seconds.",
+    objective:"Establish the seatbelt before threading the choke — the seatbelt is the position that makes the finish available. A full choke compresses both sides of the neck and works within seconds.",
     mechanics:"Seatbelt first: far-side hand deep under the armpit, near-side over the shoulder. Thread the choking arm under the chin — bicep seals one carotid, forearm the other. Grip the far shoulder or bicep with the choking hand. Cup the back of the head with the free hand. Pull elbows together and arch — the arch drives your elbow forward while the arms compress both carotids from the sides. Two-sided compression is what finishes, not the bicep squeeze.",
     defense:"Hand-fighting the choking forearm from the wrist (not the bicep) before it seats. Chin tuck. Spinning into you to kill back exposure. Hip escape to recover half guard.",
     mistake:"Squeezing the bicep instead of pulling the elbows together and arching. Bicep-only pressure compresses one side only and rarely finishes at competition pace.",
@@ -225,10 +226,10 @@ const DB = [
   {
     id:"heel_hook_inside", cat:"submission",
     name:"Inside Heel Hook",
-    tagline:"Statistically running neck-and-neck with the RNC as most common ADCC finish. Not optional to understand.",
+    tagline:"One of the most common finishes in modern no-gi competition. Not optional to understand.",
     tags:["Leg Lock","Ashi-Garami","Saddle"],
     objective:"Rotate before they can chase the hip. The window between a seated heel cup and a finished heel hook is very short at competition pace.",
-    mechanics:"From ashi-garami or saddle: cup the heel from below (palm against the back of the heel). Rotation: pull heel toward you and rotate it away from their hip (internal tibial rotation). Elbow drives into the back of the knee as a fulcrum. Squeeze knees together to lock the hip. Short, controlled rotation — this is not a crank, it's a rotation. The damage is rotational and arrives before significant pain.",
+    mechanics:"From ashi-garami or saddle: cup the heel from below (palm against the back of the heel). Pull the heel toward you and rotate it away from their hip. Elbow drives into the back of the knee as a fulcrum. Squeeze knees together to lock the hip. Short, controlled rotation — this is not a crank, it's a rotation. The damage is rotational and arrives before significant pain.",
     defense:"TAP EARLY. Heel hook damage (ACL, LCL, popliteal) occurs in fractions of a second before pain registers. There is no halfway.",
     mistake:"Cranking straight rather than rotating. A straight pull is a straight ankle lock. The damage in a heel hook is rotational.",
     drill:"Heel cup grip drill: 20 reps establishing the correct palm-to-heel cup from ashi-garami. No finish — groove the grip before any rotation."
@@ -239,7 +240,7 @@ const DB = [
     tagline:"Higher torque, stricter hip control requirement. Do not rotate without locked hip control.",
     tags:["Leg Lock","Outside Ashi","High Risk"],
     objective:"Hip control is not optional for this submission. Without it you are applying torque to the opponent's knee without a controlled release point.",
-    mechanics:"From outside ashi: cup heel from the outside (palm against outside of heel). Rotation is toward their hip (external tibial rotation — opposite direction from inside). Near-side knee must stay tight to their hip throughout. Hip control grip mandatory before any rotation begins.",
+    mechanics:"From outside ashi: cup heel from the outside (palm against outside of heel). Rotation is toward their hip — the opposite direction from the inside heel hook. Near-side knee must stay tight to their hip throughout. Hip control grip mandatory before any rotation begins.",
     defense:"Tap early — same urgency as inside heel hook. External rotation damage is equally fast and equally under-telegraphed by pain.",
     mistake:"Rotating without hip control. This is the most common source of non-consensual leg injury in grappling.",
     drill:"Outside cup and control: establish outside ashi, grip the heel, confirm hip control is locked. 10 reps. Rotation is not the drill objective."
@@ -303,8 +304,8 @@ const DB = [
   {
     id:"back_control", cat:"position",
     name:"Back Control",
-    tagline:"4 points. The highest-value position and your best finishing platform — simultaneously. All chains should funnel here.",
-    tags:["4 Points","Highest Value","ADCC Primary"],
+    tagline:"3 points under ADCC (hooks in). The highest-value position and your best finishing platform. All chains should funnel here.",
+    tags:["3 Points (ADCC)","Highest Value","ADCC Primary"],
     objective:"Treat back control as the destination, not a step. From here: hunt the RNC first, transition to bow-and-arrow if defended, armbar if the chin tuck exposes the arm.",
     mechanics:"Seatbelt (far underhook + near over-the-shoulder). Two hooks or body triangle. Body triangle: lace the feet behind their hip, lock the near-side ankle behind the far-side knee — more stable, frees one arm. Two hooks: both heels inside their thighs, knees squeezed in.",
     defense:"Deny second hook before it's set. Hand-fight the choking arm down before it seats. One hand on choke arm, one on hip — never both on the same problem.",
@@ -327,7 +328,7 @@ const DB = [
     name:"Closed Guard",
     tagline:"Control through broken posture. A broken posture makes sweeps and submissions live simultaneously.",
     tags:["Guard","Posture Control","Bottom Game"],
-    objective:"Never hold closed guard passively. Every second in closed guard without active posture control or an attack is a point going to their activity score.",
+    objective:"Never hold closed guard passively. Every second without posture control or an attack is time for them to posture, open the guard and pass.",
     mechanics:"Legs locked, feet crossed. Keep posture broken: pull head down with collar tie or arm drag. Primary attacks in order: armbar (when they post), triangle (simultaneous push-pull), hip bump sweep (when they post a hand), guillotine (when head drops inside).",
     defense:"Passive guard invites the stack pass and passivity penalty. Always have an active threat — something has to be working.",
     mistake:"Holding closed guard without attacking. Passive closed guard in no-gi is not a safe position — it's a slow loss.",
@@ -369,13 +370,13 @@ const DB = [
   {
     id:"x_guard", cat:"position",
     name:"X Guard",
-    tagline:"Elevate completely. X guard on a grounded opponent has no mechanical advantage.",
+    tagline:"Get under the hips and take one leg off the floor. X guard attacks an opponent balanced on one foot.",
     tags:["Guard","Elevation","Bottom Game"],
-    objective:"Their weight must be fully on your hooks — not on their own feet. If they're still touching the floor, the guard isn't live.",
-    mechanics:"Both hooks inside both legs. One hook under far knee (crossed X), one under near knee. Hands grip their ankles. Extend legs to elevate completely. From full elevation: back dump (extend both hooks forward, pull ankles back), front trip (redirect their step), stand-up to single leg.",
+    objective:"Get your hips under theirs and lift the controlled leg — if both their feet stay planted, the guard isn't working.",
+    mechanics:"You're underneath them controlling one leg: one foot pushes the front of that hip or thigh, the other hooks behind the same knee, so your legs cross in an X. Hug the controlled leg and extend the hooks to lift it. From there: back dump (push them backward over the planted foot), front trip (redirect their step), or come up on a single leg.",
     defense:"Stepping out before elevation is established. Posting a foot when they feel the hooks going in.",
-    mistake:"Establishing X guard without fully elevating. The position has zero mechanical advantage on a grounded opponent.",
-    drill:"X guard elevation: establish X, elevate partner completely off the mat, hold 3 seconds. 10 reps."
+    mistake:"Playing X guard from too far away — if your hips aren't under theirs, you can't lift the leg.",
+    drill:"X guard lift: from butterfly or SLX, get under the hips, establish X and lift the leg so partner is on one foot. Hold 3 seconds, 10 reps."
   },
   {
     id:"ashi_inside", cat:"position",
@@ -391,7 +392,7 @@ const DB = [
   {
     id:"saddle", cat:"position",
     name:"Saddle / 411 / Honey Hole",
-    tagline:"The most powerful leg entanglement. Highest finish rate of any leg lock entry.",
+    tagline:"The strongest leg entanglement for control, and the platform for the highest-percentage heel hook entries.",
     tags:["Leg Entanglement","High Control","Inside Heel Platform"],
     objective:"Break them flat before attacking. A seated opponent can frame and create space to pull the heel.",
     mechanics:"Both legs control one of theirs: inside leg drives across their hip (ashi component), outside leg hooks behind their knee (outside ashi component). Their leg fully trapped between yours. Inside heel cup: palm from below, rotate heel away from their hip toward you.",
@@ -481,13 +482,13 @@ const DB = [
   {
     id:"hip_bump", cat:"sweep",
     name:"Hip Bump Sweep",
-    tagline:"Time it to the moment they're posting a hand. A hand on the mat is a hand not blocking the sweep.",
-    tags:["Closed Guard","2 Points","Setup for Kimura"],
-    objective:"Open the guard before driving — closed guard prevents the hip lift the sweep requires.",
-    mechanics:"Open the guard. Post one foot on the mat, grip behind their neck or shoulder. Drive hip explosively up and toward their posting arm, swinging the leg through to end in mount. No wind-up — the movement IS the commitment.",
-    defense:"Posting the other hand to block. Stepping back to base.",
-    mistake:"Attempting hip bump from closed guard without opening first. The closed legs prevent the hip lift.",
-    drill:"Hip bump timing: from open guard, partner posts their hand, execute within half a second. 10 reps."
+    tagline:"Sit up into them as they posture back. Trap an arm, bump the hips, land in mount.",
+    tags:["Closed Guard","2 Points","Pairs with Kimura"],
+    objective:"Time it to the moment they posture up and sit back — their weight is on their heels and you can sit up into them.",
+    mechanics:"Open the guard and sit up, posting one hand behind you. Reach over their shoulder to trap their arm on that side. Drive your hips up and into them, rolling them toward the trapped arm, and come up in mount.",
+    defense:"Posting the trapped-side hand, leaning back into you, or keeping their weight forward so you can't sit up.",
+    mistake:"Bumping while they lean into you, or forgetting to trap the arm — they just post on that side.",
+    drill:"Hip bump timing: partner postures up on your signal, sit up and bump within half a second. 10 reps each side."
   },
   {
     id:"scissor", cat:"sweep",
@@ -536,12 +537,12 @@ const DB = [
   {
     id:"xg_sweep", cat:"sweep",
     name:"X Guard Back Dump",
-    tagline:"Dump them backward while elevated. No base means no resistance.",
+    tagline:"Dump them backward while they're balanced on one foot — the lifted leg can't post.",
     tags:["X Guard","2 Points","Full Elevation Required"],
-    objective:"Full elevation before the dump. Attempting against a grounded opponent fails.",
-    mechanics:"From full X elevation: extend both hooks forward while pulling ankle grips toward you. They fall backward. Come up over them to mount or follow to top position.",
+    objective:"Lift the controlled leg first. If both their feet are on the mat, the dump fails.",
+    mechanics:"From X guard with the leg lifted: extend your legs to push them backward while holding the controlled leg to your chest. They fall back; come up on top.",
     defense:"Posting a foot. Not allowing full elevation.",
-    mistake:"Attempting dump before full elevation. They post a foot and stay upright.",
+    mistake:"Attempting the dump before the leg is lifted — they keep both feet down and stay standing.",
     drill:"X guard back dump: elevation first, dump second. 10 reps measuring complete elevation before committing."
   },
   // ── TAKEDOWNS ──────────────────────────────────────────────────
@@ -551,7 +552,7 @@ const DB = [
     tagline:"Commit fully to the level change before the opponent can sprawl. Hesitation is what gets shots stuffed.",
     tags:["ADCC Primary","2-4 Points","Doubles/Singles"],
     objective:"Finish past the legs, not into guard. Driving through to a dominant pin doubles the score from 2 to 4.",
-    mechanics:"Level change, penetration step, drive through the hips. Head position: outside their hip, not in their chest. Finish past the legs — drive to far-side crossbody or hip-heist to the back. Don't dump them to guard.",
+    mechanics:"Level change, penetration step, drive through the hips. Head up and tight to their body — never hanging down at their knees. Finish past the legs — drive to far-side crossbody or hip-heist to the back. Don't dump them to guard.",
     defense:"Sprawl (hips back, weight down through their shoulders). Cross-face to front headlock.",
     mistake:"Shooting from too far away or not fully changing levels. A half-committed shot is the easiest one to sprawl.",
     drill:"Penetration step drill: 20 reps focusing on hip-to-heel drive and head position. Partner stationary, then live at 50%."
@@ -570,10 +571,10 @@ const DB = [
   {
     id:"clean_takedown", cat:"takedown",
     name:"Clean Takedown",
-    tagline:"4 points when you drive through to 75%+ back pinned outside guard. Don't settle for 2 when 4 is available.",
+    tagline:"4 points under ADCC when the takedown lands past the guard. Don't settle for 2 when 4 is available.",
     tags:["4 Points","ADCC Maximum","Wrestling/Judo"],
-    objective:"Drive through the legs — not just to the legs. The clean finish requires past the guard and 75%+ back pinned.",
-    mechanics:"Any takedown that ends outside the guard with 75%+ of the opponent's back pinned to the mat. No submission threat from their position. Held 3 seconds. The key difference from standard takedown: you've driven past the legs completely, not dumped them to guard.",
+    objective:"Drive through the legs — not just to the legs. The clean finish lands past the guard, not in it.",
+    mechanics:"Any takedown that lands past the guard and is stabilised for 3 seconds. The key difference from a standard takedown: you've driven past the legs completely rather than dumping them into guard.",
     defense:"Pulling guard before the 3-second count. Rolling to turtle.",
     mistake:"Finishing the takedown at the knees instead of driving through. Scores 2 instead of 4 and leaves the pass still to be won.",
     drill:"10 reps: shot to crossbody pin, partner starts resisting the moment your hand touches the leg."
@@ -672,10 +673,10 @@ const DB = [
   {
     id:"north_south", cat:"position",
     name:"North-South Position",
-    tagline:"A variant of side control that eliminates guard recovery. Face their feet, load your chest onto their face.",
+    tagline:"A variant of side control that kills guard recovery. Chest on chest, your head toward their hips.",
     tags:["Side Control Variant","Pinning","Kimura Entry"],
     objective:"When your opponent is defending side control by framing into your hips, rotating to north-south removes those frames entirely — you're now out of reach of their strongest defensive tools.",
-    mechanics:"From side control: step around toward their head, keeping chest pressure. Your hips face their feet, your head is between their legs. Maintain chest pressure — if you give space they can roll to Turtle. From here: kimura (catch far arm, apply figure-four), north-south choke (no-gi: forearm across throat, hip pressure), or transition back to side control for a submission.",
+    mechanics:"From side control: walk around toward their head, keeping chest pressure. Your chest is on their chest and your head points toward their hips. Maintain the pressure — if you give space they can roll to turtle. From here: kimura (catch the far arm, figure-four), north-south choke (arm around the neck, lat over the side of the neck, drop the hips), or back to side control.",
     defense:"They can bridge and roll toward you (toward north) to recover guard. Keep chest heavy to limit this.",
     mistake:"Lifting your hips to reposition — this gives them the space to recover. Drag your chest across the mat; never create vertical space.",
     drill:"North-south rotation: from side control, rotate to north-south maintaining continuous chest contact. 10 reps each direction."
@@ -684,9 +685,9 @@ const DB = [
     id:"turtle_top", cat:"position",
     name:"Turtle (Top)",
     tagline:"Stay connected, make them carry your weight, and get the seatbelt before they stand up.",
-    tags:["Turtle Attack","Back Take Entry","4 Points"],
+    tags:["Turtle Attack","Back Take Entry","Crucifix Entry"],
     objective:"Get the seatbelt before they stand or roll to guard. A turtled opponent is one transition away from back control — don't waste the position by hesitating.",
-    mechanics:"From the side: establish seatbelt (far underhook + near over-shoulder), then leg-weave around their far hip and insert hooks. From front-headlock position (after sprawl): snap the near arm across, spin behind, insert hooks. Clock choke (gi only) from head-to-head turtle: drive their far arm under their body, walk around their head.",
+    mechanics:"From the side: establish seatbelt (far underhook + near over-shoulder), then leg-weave around their far hip and insert hooks. From front-headlock position (after sprawl): snap the near arm across, spin behind, insert hooks. If they clamp hard against the hooks, trap an arm with your legs for the crucifix.",
     defense:"They will attempt to stand up, roll toward you to get guard, or roll away to reverse. Answer each: stay connected on the stand-up, block the roll with your hip, and ride the reverse into the back.",
     mistake:"Pausing on top of the turtle to decide what to do. In that window they stand up. Have the back-take sequence ready before they turtle — execute immediately on contact.",
     drill:"Turtle-to-back sequence: partner turtles on command, 10 reps to locked seatbelt within 3 seconds from side position."
@@ -708,7 +709,7 @@ const DB = [
     tagline:"A miserable position for your opponent. Use the discomfort to create openings — don't sit in it.",
     tags:["2 Points","Transitional","Submission Platform"],
     objective:"Bank the 2 points, create discomfort, and immediately pursue the attack that discomfort opens. When they push your knee, they've exposed their arm. When they frame their hands, they've opened their neck.",
-    mechanics:"Knee planted mid-stomach (or solar plexus for maximum discomfort). Other foot floats and adjusts to their movements. Most of your bodyweight through the knee — not through your feet. From here: near-side armbar (when they push the knee), far-side spin armbar (when they reach across), collar choke (when their hands push too long), or slide knee across to Mount.",
+    mechanics:"Knee planted mid-stomach (or solar plexus for maximum discomfort). Other foot floats and adjusts to their movements. Most of your bodyweight through the knee — not through your feet. From here: near-side armbar (when they push the knee), far-side spin armbar (when they reach across), americana or kimura on the pushing arm, or slide the knee across to mount.",
     defense:"Frame against the knee before it settles — push it toward their feet. If it's already seated, turn toward them and push the knee toward your hips.",
     mistake:"Putting too much weight on your floating foot. If they can move, you've lost the discomfort effect. All weight through the planted knee.",
     drill:"Knee-on-belly to back chain: 3-second hold, then pursue back take on same rep. 10 reps — don't settle in the position."
@@ -731,16 +732,16 @@ const DB = [
     name:"O-Soto-Gari (Major Outer Reap)",
     tagline:"The most effective foot throw in Judo for wrestling-base grapplers. Works with or without a gi.",
     tags:["Judo","Ashi-Waza","Foot Throw","Outside Reap"],
-    objective:"Break balance until almost all of their weight loads the near leg, then reap that exact leg. A balanced opponent absorbs it; a weight-loaded opponent falls with minimal effort.",
-    mechanics:"Grip: near collar and far sleeve (gi) or head/neck and tricep (no-gi). Kuzushi: pull them forward-right (for right-sided throw) to load their right leg. Entry: step deep with your left foot outside their right, bring your right leg in a large diagonal reaping arc — drive your thigh through and past their right thigh, backward-diagonal. Simultaneously drive your chest through theirs and pull down and back with your grip. Finish face-down with your weight loading their upper back.",
+    objective:"Break their balance to their rear corner so their weight sits on one heel, then reap that exact leg.",
+    mechanics:"Grip: near collar and far sleeve (gi) or head/neck and triceps (no-gi). Kuzushi (right-sided throw): drive them back toward their right rear corner so their weight loads onto their right heel. Entry: step your left foot deep beside their right foot, chest to chest, then swing your right leg past and reap the back of their right leg with the back of your thigh. Keep driving with your chest and grips; they fall backward. Follow them down — in no-gi, land in side control or knee on belly.",
     defense:"Stepping back to avoid the reap. Distributing weight to prevent single-leg loading. Dropping level to change their balance. Counter-throw to the opposite side.",
-    mistake:"Reaping before achieving kuzushi. An upright, balanced opponent blocks the reap with leg strength. The kuzushi is not the setup — it IS the technique; the reap is only the finish.",
+    mistake:"Reaping before the kuzushi. An upright, balanced opponent blocks the reap with leg strength. Break the balance back onto their heel first — the reap only finishes it.",
     drill:"Kuzushi-then-reap: establish kuzushi, execute the reap on signal. If they're still two-legged, abort and re-establish the off-balance. Partner resists at 30% — time the reap to the moment of maximum imbalance. 15 reps each side."
   },
   {
     id:"seoi_nage", cat:"judo",
     name:"Seoi-Nage (Shoulder Throw)",
-    tagline:"The highest-percentage throw in Judo competition history. Works at every level — from beginner to world champion.",
+    tagline:"One of the most successful throws in Judo competition. Works at every level — from beginner to world champion.",
     tags:["Judo","Te-Waza","Shoulder Throw","Ippon & Morote"],
     objective:"Load their weight over your shoulder with their balance broken forward and rotate — your arm is the axle, their body is the wheel. Their gravity does the rest.",
     mechanics:"Kuzushi: pull the sleeve and push the lapel forward to break balance. Entry (tai sabaki): deep step in, pivot so your back faces them, feet shoulder-width, knees bent, hip just below their center of gravity. Ippon variant: release the lapel and drive that arm under their armpit, elbow pointing down. Morote variant: keep the lapel grip, bent elbow tucked under their armpit. Either way: pull the sleeve down as you rotate, folding forward from the waist — not lifting with the legs.",
@@ -754,10 +755,10 @@ const DB = [
     tagline:"Your most versatile takedown from any distance. More entries than any other shot.",
     tags:["Wrestling","Single Leg","Finishes"],
     objective:"Control the leg you've captured through to a finish — don't just grab the leg and hope.",
-    mechanics:"Entry: penetration step to inside of their near leg, wrap both arms around their thigh (high single) or grab the ankle (low single). Head position: outside their hip (not in their chest — inside head gets pancaked). Finishes: lift and trip (drive forward and sweep their posting foot), run the pipe (step around while turning them), or elevate and dump. From a failed shot: transition to front headlock via a hip pop if they sprawl.",
+    mechanics:"Entry: penetration step to their near leg, wrap both arms around the thigh (high single) or take the ankle (low single). Head up and pressed into their body — a dropped head is what gets you guillotined or pancaked. Finishes: lift and trip (drive forward and sweep their posting foot), run the pipe (step around while turning them), or elevate and dump. If they sprawl, address the front headlock before anything else.",
     defense:"Sprawl (hips back, weight on their shoulders). Guillotine from front headlock position. Whizzer (overhook on the arm completing the takedown).",
-    mistake:"Head inside the hip (inside head). An inside head position allows them to whizzer down and kill the takedown. Head outside the hip — always.",
-    drill:"Single leg entry: penetration step to leg capture, head outside, 20 reps. Then add the finish: 10 reps each finish variation."
+    mistake:"Dropping your head and hanging on the leg. Whichever side your coach teaches for the head, keep it up and tight — a low head gives them the whizzer, the front headlock and the guillotine.",
+    drill:"Single leg entry: penetration step to leg capture with the head up and tight, 20 reps. Then add the finish: 10 reps each finish variation."
   },
 
   // ── PRINCIPLES-BASED ENTRIES (from Galibert + Chess books) ──────
@@ -811,7 +812,7 @@ const DB = [
     tagline:"Scrawny beats strong when technique is precise. The window between a sloppy technique and a perfect one is the entire submission.",
     tags:["Efficiency","Fluid BJJ","Pravec","Technique Precision"],
     objective:"Every technique has one detail that makes it work — one grip position, one angle, one timing point. Find that detail and drill it until it's automatic. Without it, you are muscling. With it, you are grappling.",
-    mechanics:"From Karel Pravec's Fluid BJJ (foreword by John Danaher): the key to defeating larger, stronger, younger opponents is not conditioning or attributes — it is the precision of the technique. One grip in the wrong place, one angle off by 20 degrees, one timing beat too early, and the submission fails regardless of strength. The same movement executed precisely succeeds against anyone.",
+    mechanics:"From Karel Pravec's Fluid BJJ: the key to beating larger, stronger, younger opponents is not conditioning or attributes — it is the precision of the technique. One grip in the wrong place, one angle off, one timing beat too early, and the submission fails regardless of strength. The same movement executed precisely succeeds against anyone.",
     defense:"Attributes can compensate for poor technique up to a level. At the level of blue belt and above, attribute-based grappling hits a ceiling. Technique-based grappling has no ceiling.",
     mistake:"Substituting effort for precision. When a technique doesn't work, the solution is almost never to try harder — it is to find the one detail that's wrong and fix it.",
     drill:"Slow-motion drilling: execute any submission at 20% speed, partner gives zero resistance. Focus entirely on position: grip placement, angle, fulcrum position. If it works at 20%, it works at 100%."
@@ -936,9 +937,9 @@ const DB = [
     tagline:"The outside heel trip. Short arc, close range, precise timing. Natural counter to opponents who step back from ouchi-gari.",
     tags:["Judo","Ashi-Waza","Outer Reap","Outside Trip","Combination"],
     objective:"Attack their outside support foot at the moment it bears weight. Smaller arc than o-soto-gari — this is a close-range precision technique, not a power sweep.",
-    mechanics:"Entry: step your right foot to the outside of uke's right foot. Using the ball of your right foot or inside edge, sweep their right heel/ankle in a short backward arc. Simultaneously push their upper body backward with sleeve and collar grips to increase loading on the target leg. The sweep is short and precise — this is not o-soto-gari (different throw). Natural combination: after ouchi-gari attempt, if uke steps backward, they load their back foot → ko-soto-gari that foot. The two throws cover each other's escape routes.",
+    mechanics:"Kuzushi: push them back and to their right so their weight settles on their right heel. Using the sole of your left foot, sweep their right heel from the outside in the direction their toes point, while pushing their upper body back with your grips. The sweep is short and precise — this is not o-soto-gari. Natural combination: after an ouchi-gari attempt, if they step back, their weight loads the retreating foot — ko-soto-gari that foot.",
     defense:"Spreading feet to deny single-leg loading. Transferring weight to the other leg before the sweep lands. Counter-throw to the opposite direction.",
-    mistake:"Sweeping with the heel of your foot (instead of ball or inside edge). Heel sweeps lack arc control. Also: using too large a sweeping arc — that becomes o-soto-gari and requires a different entry position.",
+    mistake:"Sweeping a foot that isn't weighted, or using too large an arc — that becomes a different throw and needs a different entry.",
     drill:"Ko-soto combination: throw ouchi-gari, partner steps back → ko-soto the retreating foot. Then reverse: throw ko-soto, partner steps in → ouchi-gari. 10 reps each direction. The two throws are one technique, not two."
   },
   {
@@ -947,7 +948,7 @@ const DB = [
     tagline:"The hip throw for light, fast opponents. Your right leg springs their leg — you are both the fulcrum and the spring, not just a static hip.",
     tags:["Judo","Koshi-Waza","Hip Throw","Spring Action"],
     objective:"Use the spring action of your right leg to bounce uke off the mat and over your hip. The spring leg hooks theirs and drives upward — without the spring, this is just a weaker o-goshi.",
-    mechanics:"Setup: pull uke forward-right, making them step their right foot forward. Entry: as their right foot steps, step your left foot between their feet (heel first). Turn so your back faces uke, your hip below their center of gravity. Your right leg's outer shin contacts the outside of their right knee or upper thigh. Spring action: simultaneously spring your right leg upward and backward, flipping their leg and body over your hip. Arms pull sleeve down and drive lapel through. The spring and the throw are one movement — not a two-phase action.",
+    mechanics:"Setup: pull them forward-right so their weight comes onto their right foot. Entry: step your left foot between their feet and turn so your hip is below their centre of gravity. Bend your right leg and press the outside of it against the inside front of their right thigh. Spring that leg up and back as you turn, lifting their leg and throwing them over your hip. Arms pull the sleeve down and drive the lapel through. The spring and the turn are one movement.",
     defense:"Wide stance absorbs the spring by distributing weight. Dropping level to get below the hip entry. Stepping around the entry turn before it completes.",
     mistake:"Executing hane-goshi as a static hip throw. Without the spring action it becomes a weak o-goshi that stronger opponents absorb. The spring must be explosive — a coiled right leg releasing all at once through uke's leg.",
     drill:"Spring isolation: practice the right-leg spring action without a partner (mirror or wall). Coil the leg, step in, feel the spring mechanics. 20 reps of the spring alone. Then add partner: 10 full throws."
@@ -1191,7 +1192,7 @@ const DB = [
     objective:"Get to a leg from bottom, come up to your knee and finish the takedown from there.",
     mechanics:"From seated or butterfly guard, grab a leg, post your free hand and come up onto your knee (technical stand-up). Finish as a single leg or by driving through. Ending on top from bottom is typically scored as a sweep in ADCC — confirm how your event calls it.",
     defense:"Sprawl, whizzer, front headlock or guillotine on your exposed head.",
-    mistake:"Coming up with your head down and outside — that's a free guillotine.",
+    mistake:"Coming up with your head down — that's a free guillotine.",
     drill:"10 wrestle-ups from seated guard and 10 from butterfly, partner sprawling at 50%."
   },
   {

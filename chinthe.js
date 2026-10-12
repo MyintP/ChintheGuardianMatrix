@@ -225,6 +225,7 @@
     m("def_side_control",          "Pinned in Side Control");
     m("def_side_to_knees",         "Underhook to Knees");
     m("def_guard_retention",       "Guard Retention");
+    m("bg_back_take",            "Back Take (from Arm Drag)");
 
     // Principles
     p("efficiency", "Maximum Efficiency — Seiryoku Zenyo");
