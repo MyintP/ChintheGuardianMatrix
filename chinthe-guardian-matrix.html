@@ -371,6 +371,30 @@ main { padding: 12px 16px 78px; }
 .tree-edge.lit { stroke-width: calc(3px * var(--focus-scale, 1)); }
 .tree-edge.tree-edge-jump.option-edge { stroke-dasharray: calc(6px * var(--focus-scale, 1)) calc(6px * var(--focus-scale, 1)); }
 
+/* ── Focus view: only the decision in front of you is drawn ── */
+.tree-canvas.focus-view .tree-node:not(.state-current):not(.is-option):not(.is-parent),
+.tree-canvas.focus-view .tree-edge:not(.focus-edge) { display: none; }
+.tree-canvas.focus-view .tree-edge.focus-edge { stroke-dasharray: none; }
+.tree-canvas.focus-view .tree-edge.focus-group { fill: rgba(63,163,131,0.04); stroke: rgba(63,163,131,0.35); stroke-width: 1.5; stroke-dasharray: 6 6; }
+.tree-canvas.focus-view .tree-node.is-parent .tree-node-badge { border-style: dashed; }
+.tree-canvas.focus-view .tree-node.is-parent .tree-node-label { color: var(--chalk-dim); }
+@media (prefers-reduced-motion: no-preference) {
+  .tree-canvas.focus-view .tree-node { transition: left 0.3s cubic-bezier(.2,.8,.2,1), top 0.3s cubic-bezier(.2,.8,.2,1); }
+}
+.view-switch {
+  position: absolute; top: 10px; left: 10px; z-index: 6;
+  display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px;
+  background: rgba(13, 17, 22, 0.88); border: 1px solid var(--line);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.view-switch button {
+  font-family: 'IBM Plex Mono', monospace; font-size: var(--text-xs); letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--chalk-dim); padding: 6px 12px; border-radius: 999px;
+  min-height: 30px;
+}
+.view-switch button.active { background: var(--chalk); color: var(--mat); font-weight: 600; }
+.view-switch button:focus-visible { outline: 2px solid var(--jade-bright); outline-offset: 1px; }
+
 /* ── Options: the moves available from the focused node ── */
 .came-from {
   display: inline-flex; align-items: center; gap: 4px; margin: 0 0 8px;
@@ -874,6 +898,10 @@ footer.brand-footer {
 
   <main>
     <div class="tree-wrap" id="treeWrap">
+      <div class="view-switch" role="group" aria-label="Tree view">
+        <button type="button" data-view="focus">Focus</button>
+        <button type="button" data-view="map">Full map</button>
+      </div>
       <div class="tree-toolbar">
         <button class="tree-tool-btn" id="treeZoomIn" type="button" aria-label="Zoom in">+</button>
         <button class="tree-tool-btn" id="treeZoomOut" type="button" aria-label="Zoom out">−</button>
@@ -2201,6 +2229,14 @@ let panX = 0, panY = 0, zoom = 1;
 let dragState = null, pinchState = null, suppressClick = false, firstRender = true;
 const REDUCE_MOTION = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
 
+// View mode. "focus" (default) lays out only the decision in front of you:
+// the step you came from, the current node, and every option from it.
+// "map" is the full radial constellation — the overview / progress heatmap.
+const VIEW_KEY = "chinthe_matrix_view";
+let viewMode = (function(){ try { return localStorage.getItem(VIEW_KEY) === "map" ? "map" : "focus"; } catch(e){ return "focus"; } })();
+const focusPos = {};
+function posOf(id){ return (viewMode === "focus" && focusPos[id]) || TREE.posById[id]; }
+
 function buildTreeLayout(){
   // Radial constellation layout (PoE-style): hub at the center, each BFS
   // tier on a ring. The old top-down dendrogram put every leaf in its own
@@ -2422,6 +2458,7 @@ function handleTreeNodeClick(id){
 function renderPathConnectors(){
   const svg = document.getElementById("treeEdges");
   svg.querySelectorAll(".tree-edge-jump").forEach(el=>el.remove());
+  if (viewMode === "focus"){ drawFocusEdges(); return; }
   for (let i=0; i<path.length-1; i++){
     const key = path[i]+"→"+path[i+1];
     if (primaryEdgeKeys.has(key)) continue; // already a static tree edge, just gets .lit toggled
@@ -2444,6 +2481,80 @@ function renderPathConnectors(){
     p.setAttribute("d", edgeD(pa, pb));
     svg.appendChild(p);
   });
+}
+
+// Focus layout: current node centred, previous step above, options in a
+// grid below (2–4 columns by count and width) so every label stays
+// full-size. Positions are in canvas units around the canvas centre.
+function applyFocusLayout(){
+  treeCanvas.classList.toggle("focus-view", viewMode === "focus");
+  Object.keys(focusPos).forEach(k=>delete focusPos[k]);
+  if (viewMode === "focus"){
+    const cur = path[path.length-1];
+    const prev = path.length > 1 ? path[path.length-2] : null;
+    const opts = (NODES[cur].children || []).filter(c=>NODES[c] && c !== prev && c !== cur);
+    const cx = TREE.width/2, cy = TREE.height/2;
+    focusPos[cur] = { x: cx, y: cy };
+    if (prev) focusPos[prev] = { x: cx, y: cy - 200 };
+    const n = opts.length;
+    const wide = (treeViewport.clientWidth || 320) >= 760;
+    if (n){
+      const cols = n <= 2 ? n : n <= 4 ? 2 : (wide && n > 6 ? 4 : 3), colW = cols <= 2 ? 160 : 132, rowH = 128;
+      opts.forEach((id, i)=>{
+        const row = Math.floor(i/cols), inRow = Math.min(cols, n - row*cols), col = i % cols;
+        focusPos[id] = { x: cx + (col - (inRow-1)/2) * colW, y: cy + 160 + row*rowH };
+      });
+    }
+  }
+  Object.keys(nodeEls).forEach(id=>{
+    const p = posOf(id);
+    nodeEls[id].style.left = p.x + "px";
+    nodeEls[id].style.top = p.y + "px";
+  });
+  document.querySelectorAll(".view-switch [data-view]").forEach(b=>{
+    const on = b.dataset.view === viewMode;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+function drawFocusEdges(){
+  const svg = document.getElementById("treeEdges");
+  const cur = path[path.length-1];
+  const add = (a, b, cls)=>{
+    const pa = posOf(a), pb = posOf(b);
+    if (!pa || !pb) return;
+    const p = document.createElementNS(SVG_NS, "path");
+    p.setAttribute("class", "tree-edge tree-edge-jump focus-edge " + cls);
+    p.setAttribute("d", edgeD(pa, pb));
+    svg.appendChild(p);
+  };
+  if (path.length > 1) add(path[path.length-2], cur, "lit");
+  const prev = path.length > 1 ? path[path.length-2] : null;
+  const opts = (NODES[cur].children || []).filter(c=>NODES[c] && c !== cur && c !== prev).map(posOf).filter(Boolean);
+  if (!opts.length) return;
+  // One trunk from the node into a frame that groups every option — clearer
+  // than nine crossing lines.
+  const x0 = Math.min(...opts.map(p=>p.x)) - 66, x1 = Math.max(...opts.map(p=>p.x)) + 66;
+  const y0 = Math.min(...opts.map(p=>p.y)) - 62, y1 = Math.max(...opts.map(p=>p.y)) + 62;
+  const c = posOf(cur);
+  const trunk = document.createElementNS(SVG_NS, "path");
+  trunk.setAttribute("class", "tree-edge tree-edge-jump focus-edge option-edge");
+  trunk.setAttribute("d", `M${c.x},${c.y} L${c.x},${y0}`);
+  svg.appendChild(trunk);
+  const box = document.createElementNS(SVG_NS, "rect");
+  box.setAttribute("class", "tree-edge tree-edge-jump focus-edge focus-group");
+  box.setAttribute("x", x0); box.setAttribute("y", y0);
+  box.setAttribute("width", x1 - x0); box.setAttribute("height", y1 - y0);
+  box.setAttribute("rx", 18);
+  svg.appendChild(box);
+  // Options that also lead back to where you came from are drawn at the top
+  if (prev && (NODES[cur].children || []).includes(prev)) add(cur, prev, "option-edge");
+}
+function setViewMode(mode){
+  viewMode = mode === "map" ? "map" : "focus";
+  try { localStorage.setItem(VIEW_KEY, viewMode); } catch(e){}
+  renderTree();
+  centerOnCurrentNode(true);
 }
 
 function renderTree(){
@@ -2471,6 +2582,7 @@ function renderTree(){
     const el = edgeEls[path[i]+"→"+path[i+1]];
     if (el) el.classList.add("lit");
   }
+  applyFocusLayout();
   renderPathConnectors();
 
 }
@@ -2487,14 +2599,10 @@ function applyTransform(animate){
   treeCanvas.style.transform = `translate(${panX}px,${panY}px) scale(${zoom})`;
   treeCanvas.classList.toggle("lod-badges", zoom < LOD_ZOOM);
   // Focus-set nodes keep a readable on-screen size at any zoom
-  treeCanvas.style.setProperty("--focus-scale", Math.min(16, Math.max(1, 0.85/zoom)).toFixed(3));
+  const focusScale = viewMode === "focus" ? 1 : Math.min(16, Math.max(1, 0.85/zoom));
+  treeCanvas.style.setProperty("--focus-scale", focusScale.toFixed(3));
 }
 function dismissHint(){ treeHint.classList.add("faded"); }
-// Center the focused node at a comfortable, always-readable zoom. The radial
-// layout keeps a node's children on the adjacent ring, so they're in view
-// without shrinking the whole map to an unreadable sliver (the old fit-to-
-// bbox could drop to ~0.14 on wide branches). Overview is the pinch/zoom-out
-// gesture, which the level-of-detail heatmap handles.
 // Frame the decision, not just the node: the focused node, every option
 // leading from it, and the step you came from — so "what next" is always on
 // screen. Labels of those nodes counter-scale (see applyTransform) so they
@@ -2502,6 +2610,19 @@ function dismissHint(){ treeHint.classList.add("faded"); }
 function centerOnCurrentNode(animate){
   const vw = treeViewport.clientWidth || 320, vh = treeViewport.clientHeight || 400;
   const curId = path[path.length-1];
+  if (viewMode === "focus"){
+    const pts = Object.values(focusPos);
+    if (!pts.length) return;
+    // Node boxes are ~104 x 100 canvas px around their centre
+    const minX = Math.min(...pts.map(p=>p.x)) - 60, maxX = Math.max(...pts.map(p=>p.x)) + 60;
+    const minY = Math.min(...pts.map(p=>p.y)) - 52, maxY = Math.max(...pts.map(p=>p.y)) + 58;
+    const PAD = 14, PAD_R = vw < 640 ? 14 : 54, PAD_B = 40;   // toolbar on the right, hint pill below
+    zoom = clampZoom(Math.min((vw - PAD - PAD_R)/(maxX - minX), (vh - PAD - PAD_B)/(maxY - minY), 1.1));
+    panX = PAD + (vw - PAD - PAD_R)/2 - ((minX + maxX)/2)*zoom;
+    panY = PAD + (vh - PAD - PAD_B)/2 - ((minY + maxY)/2)*zoom;
+    applyTransform(animate);
+    return;
+  }
   const ids = [curId].concat(NODES[curId].children || []);
   if (path.length > 1) ids.push(path[path.length-2]);
   const pts = ids.map(id=>TREE.posById[id]).filter(Boolean);
@@ -2619,14 +2740,14 @@ function typeLabel(t){
   return {entry:"Entry", position:"Position", submission:"Submission", counter:"If defended", threat:"Threat"}[t] || t;
 }
 function pointsLabel(points){
-  if (points === null || points === undefined) return "";
+  if (points === null || points === undefined || points === 0) return "";   // 0 = no score: show nothing
   if (points === "WIN") return "Finish";
   if (points === "LOSS") return "Tapped";
   if (points < 0) return `${points} pt`;
   return `+${points} pt${points===1?"":"s"}`;
 }
 function pointsBadge(points){
-  if (points === null || points === undefined) return "";
+  if (points === null || points === undefined || points === 0) return "";
   if (points === "WIN") return `<span class="badge pts-win">Finish</span>`;
   if (points === "LOSS") return `<span class="badge pts-loss">Tapped</span>`;
   if (points < 0) return `<span class="badge pts-neg">${points} pt</span>`;
@@ -2816,6 +2937,9 @@ function render(){
 
 document.querySelectorAll(".nav-btn[data-jump]").forEach(btn=>{
   btn.onclick = ()=>jumpTo(btn.dataset.jump);
+});
+document.querySelectorAll(".view-switch [data-view]").forEach(btn=>{
+  btn.onclick = ()=>setViewMode(btn.dataset.view);
 });
 
 // ---- Quick Reference ----

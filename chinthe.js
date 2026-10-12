@@ -4,8 +4,7 @@
   2. Service worker registration.
   3. C.1 Breadcrumbs (all non-home pages).
   4. C.3 Global search modal (nav button, Ctrl+K, or "/").
-  5. C.2 Learn-Next nudge (reads chinthe_mastery_v1 from localStorage).
-  6. Node counts: fills [data-node-count] from the search index.
+  5. Node counts: fills [data-node-count] from the search index.
   Page transitions are CSS-only (@view-transition in chinthe.css).
 */
 (function () {
@@ -81,44 +80,6 @@
       '<span class="bc-current">' + label + '</span>';
     nav.insertAdjacentElement("afterend", bc);
   })();
-
-  // ── C.2 Learn-Next Nudge ─────────────────────────────────────
-  // Runs after IDX is built (see bottom) so the node total is derived, not hard-coded.
-  // Hidden on Compete (mat-side reference — nothing may cover it) and stays
-  // dismissed for a week rather than reappearing every session.
-  var NUDGE_KEY = "ch_lnn_dismissed_until";
-  function renderNudge(total) {
-    var pageName = window.location.pathname.split("/").pop() || "index.html";
-    if (pageName === "index.html" || pageName === "chinthe-guardian-matrix.html" || pageName === "competition.html") return;
-    try { if (Number(localStorage.getItem(NUDGE_KEY)) > Date.now()) return; } catch (e) {}
-
-    var mastery;
-    try { mastery = JSON.parse(localStorage.getItem("chinthe_mastery_v1")) || {}; } catch (e) { mastery = {}; }
-    var mapped = Object.keys(mastery).filter(function (k) { return mastery[k] > 0; }).length;
-
-    var nudge = document.createElement("div");
-    nudge.className = "learn-next-nudge";
-    nudge.setAttribute("role", "complementary");
-    nudge.setAttribute("aria-label", "Matrix progress");
-
-    var statHtml = mapped > 0
-      ? '<span class="lnn-stat"><strong>' + mapped + '</strong> / ' + total + ' nodes mapped</span>'
-      : '<span class="lnn-stat">Track your progress</span>';
-
-    nudge.innerHTML =
-      statHtml +
-      '<a class="lnn-cta" href="chinthe-guardian-matrix.html">' + (mapped > 0 ? 'Continue →' : 'Open Matrix →') + '</a>' +
-      '<button class="lnn-close" aria-label="Dismiss">✕</button>';
-
-    nudge.querySelector(".lnn-close").addEventListener("click", function () {
-      try { localStorage.setItem(NUDGE_KEY, String(Date.now() + 7 * 864e5)); } catch (e) {}
-      nudge.remove();
-      document.body.classList.remove("has-nudge");
-    });
-
-    document.body.appendChild(nudge);
-    document.body.classList.add("has-nudge");
-  }
 
   // ── C.3 Global Search ─────────────────────────────────────────
   // Every result deep-links: the Matrix, Knowledge Base and Principles pages
@@ -536,11 +497,10 @@
     }
   });
 
-  // ── Node counts + nudge (need IDX) ───────────────────────────
+  // ── Node counts (need IDX) ───────────────────────────
   var NODE_TOTAL = IDX.filter(function (item) { return item.c === "M"; }).length;
   document.querySelectorAll("[data-node-count]").forEach(function (el) {
     el.textContent = el.getAttribute("data-node-count").replace("{n}", NODE_TOTAL);
   });
-  renderNudge(NODE_TOTAL);
 
 })();

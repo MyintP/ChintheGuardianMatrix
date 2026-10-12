@@ -16,7 +16,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 
 /* ── PAGE HERO ── */
 .page-hero{
-  padding:80px 40px 60px;
+  padding:44px 40px 32px;
   border-bottom:1px solid var(--line);
   position:relative;overflow:hidden;
 }
@@ -24,10 +24,12 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   background:radial-gradient(ellipse,rgba(15,59,46,0.22) 0%,transparent 70%);pointer-events:none;}
 .page-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.2em;
   color:var(--jade-bright);text-transform:uppercase;margin-bottom:12px;}
-.page-title{font-family:'Oswald',sans-serif;font-size:clamp(48px,7vw,96px);text-transform:uppercase;
-  letter-spacing:0.02em;line-height:0.95;margin-bottom:20px;}
+.page-title{font-family:'Oswald',sans-serif;font-size:clamp(36px,5vw,60px);text-transform:uppercase;
+  letter-spacing:0.02em;line-height:1;margin-bottom:14px;}
 .page-title em{color:var(--gold);font-style:normal;}
-.page-intro{font-size:15px;color:var(--stone-dim);line-height:1.65;max-width:680px;margin-bottom:32px;}
+.page-intro{font-size:15px;color:var(--stone-dim);line-height:1.65;max-width:680px;margin-bottom:18px;}
+.hero-quote{font-family:'Cinzel',serif;font-size:15px;color:var(--stone);line-height:1.5;max-width:720px;margin:0 0 18px;padding-left:14px;border-left:2px solid var(--jade-bright);}
+.hero-quote cite{display:block;margin-top:4px;font-family:'IBM Plex Mono',monospace;font-style:normal;font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);}
 .source-strip{display:flex;gap:8px;flex-wrap:wrap;}
 .source-tag{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.1em;
   text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);padding:4px 10px;border-radius:5px;}
@@ -62,7 +64,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 }
 
 .md-group-label{
-  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;
+  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.2em;
   text-transform:uppercase;color:var(--stone-dim);padding:18px 18px 6px;
   opacity:0.55;border-top:1px solid var(--line);
 }
@@ -79,7 +81,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .md-item.active{background:rgba(200,168,78,0.09);border-left-color:var(--gold);}
 
 .md-item-num{
-  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);
   color:var(--stone-dim);min-width:26px;flex-shrink:0;
 }
 .md-item-name{
@@ -224,7 +226,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   .panel-dist-range{min-width:unset;}
 }
 @media(min-width:1280px){
-  .page-hero{padding:100px 80px 80px;}
+  .page-hero{padding:48px 80px 36px;}
   .philosophy-bar{padding:36px 80px;}
 }
 </style>
@@ -251,8 +253,9 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 <div class="page-hero">
   <div class="hero-glow"></div>
   <div class="page-eyebrow">CHINTHE — Foundation</div>
-  <h1 class="page-title">Principles<br>of <em>Grappling.</em></h1>
+  <h1 class="page-title">Principles of <em>Grappling.</em></h1>
   <p class="page-intro">Techniques are what you do. Principles are why they work. Understanding the physics, mechanics, and strategic logic behind every movement is what separates athletes who drill moves from athletes who understand their art.</p>
+  <blockquote class="hero-quote">"If something is very hard or requires a lot of effort, you are doing it wrong. Find the principle you're missing."<cite>Sylvain Galibert — Principles of Martial Arts</cite></blockquote>
   <div class="source-strip">
     <span class="source-tag">Galibert — Principles of Martial Arts</span>
     <span class="source-tag">Galibert — Chess Principles for MA</span>
@@ -261,10 +264,6 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   </div>
 </div>
 
-<div class="philosophy-bar">
-  <blockquote>"If something is very hard or requires a lot of effort, you are doing it wrong. Find the principle you're missing."</blockquote>
-  <cite>Sylvain Galibert — Principles of Martial Arts</cite>
-</div>
 
 <!-- ── MASTER-DETAIL EXPLORER ── -->
 <div class="principles-explorer">
@@ -434,20 +433,9 @@ const PRINCIPLES = [
   }
 ];
 
-const ACCENT_GRADIENTS = {
-  efficiency:'linear-gradient(90deg,#3FA383,#2ECC71)',
-  ju:'linear-gradient(90deg,#5C7A85,#7BACBA)',
-  timing:'linear-gradient(90deg,#C8A84E,#E8C468)',
-  reaction:'linear-gradient(90deg,#8D2323,#E84040)',
-  drive:'linear-gradient(90deg,#9B59B6,#BB8FCE)',
-  leverage:'linear-gradient(90deg,#E67E22,#F39C12)',
-  weight:'linear-gradient(90deg,#2980B9,#5DADE2)',
-  angles:'linear-gradient(90deg,#1ABC9C,#48C9B0)',
-  balance:'linear-gradient(90deg,#8B6914,#C8A84E)',
-  kuzushi:'linear-gradient(90deg,#8D2323,#C0392B)',
-  position:'linear-gradient(90deg,#3FA383,#0C2820)',
-  frames:'linear-gradient(90deg,#5C7A85,#2E86AB)',
-};
+// One brand accent for every principle and reference section (was a
+// different rainbow gradient per item).
+const BRAND_ACCENT = 'linear-gradient(90deg,var(--jade-bright),var(--gold))';
 
 const REF_SECTIONS = [
   {id:'hierarchy', num:'REF·01', name:'Positional Hierarchy'},
@@ -513,7 +501,7 @@ function showPrinciple(id){
   setActive(id);
   openPanel();
 
-  const grad = ACCENT_GRADIENTS[p.accent] || 'linear-gradient(90deg,var(--jade-bright),var(--gold))';
+  const grad = BRAND_ACCENT;
   const exHtml = (p.examples||[]).map(e =>
     '<div class="panel-example"><strong>' + e.title + '</strong><p>' + e.text + '</p></div>'
   ).join('');
@@ -544,7 +532,7 @@ function showSection(id){
 }
 
 function renderHierarchy(){
-  return '<div class="panel-accent-bar" style="background:linear-gradient(90deg,#0C2820,#3FA383)"></div>' +
+  return '<div class="panel-accent-bar" style="background:' + BRAND_ACCENT + '"></div>' +
     '<div class="panel-eyebrow">Reference · Strategic Foundation</div>' +
     '<h2 class="panel-title">Positional<br>Hierarchy</h2>' +
     '<p class="panel-tagline">BJJ has one strategic spine: get to a better position first. ADCC point values shown.</p>' +
@@ -583,7 +571,7 @@ function renderChess(){
     {title:'Preparatory Moves', chess:'Chess: Set up the combination first', text:'The grip fight before the throw. The posture break before the submission. Most successful techniques are invisible — they were set up three moves earlier. Create the conditions before the technique.'},
     {title:'A Man with a Plan', chess:'Chess: Know your next three moves', text:'If defended, go to Y. If Y is defended, go to Z. Every attack should have a pre-decided secondary outcome. Armbar → triangle → back take. Plan your chain before you start it.'},
   ];
-  return '<div class="panel-accent-bar" style="background:linear-gradient(90deg,#8E44AD,#6C3483)"></div>' +
+  return '<div class="panel-accent-bar" style="background:' + BRAND_ACCENT + '"></div>' +
     '<div class="panel-eyebrow">Reference · Strategic Thinking</div>' +
     '<h2 class="panel-title">Chess Principles<br>Applied to Grappling</h2>' +
     '<p class="panel-tagline">Chess and grappling share the same decision architecture. The tactics that win at chess describe what happens in elite grappling chains.</p>' +
@@ -607,7 +595,7 @@ function renderGrips(){
     {name:'Heel Cup', use:'Inside/outside heel hook, ashi-garami', desc:'Palm against the back of the heel (inside), or outside of heel (outside). The cup direction determines rotation direction. No substitute exists — no cup means a straight ankle lock.'},
     {name:'Idiot Grip', use:'What not to do', desc:'Thumbs wrapped inside the fingers. Named because it risks finger breaks when the opponent yanks free. Never use in live rolling — hook your fingers, keep thumb on the outside.'},
   ];
-  return '<div class="panel-accent-bar" style="background:linear-gradient(90deg,#ADAA9F,#F2EDE2)"></div>' +
+  return '<div class="panel-accent-bar" style="background:' + BRAND_ACCENT + '"></div>' +
     '<div class="panel-eyebrow">Reference · Technical Detail</div>' +
     '<h2 class="panel-title">Grip Taxonomy</h2>' +
     '<p class="panel-tagline">The grip you choose determines force transmission, endurance, and which techniques it enables. From Galibert\'s mechanical analysis.</p>' +
@@ -628,7 +616,7 @@ function renderDistances(){
     {range:'Takedown Range', text:'Penetration step distance. Close enough to shoot or throw. Kuzushi happens here — break the balance before the technique. The fastest path from neutral to back control runs through this range.'},
     {range:'Grappling Range', text:'Ground work, guard passing, submissions. The arena where BJJ dominates. Whoever manages the transition from clinch to ground on their terms controls what happens next.'},
   ];
-  return '<div class="panel-accent-bar" style="background:linear-gradient(90deg,#5C7A85,#5DADE2)"></div>' +
+  return '<div class="panel-accent-bar" style="background:' + BRAND_ACCENT + '"></div>' +
     '<div class="panel-eyebrow">Reference · Range Management</div>' +
     '<h2 class="panel-title">Fighting Distances</h2>' +
     '<p class="panel-tagline">Every technique has a range. Managing distance — entering and exiting at the right time — is as important as the technique itself.</p>' +

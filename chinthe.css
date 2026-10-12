@@ -33,6 +33,14 @@
   --victory:     #E8CA70;   /* brighter amber — finish / win accents */
   --victory-dim: #221806;
 
+  /* Semantic category colours — one meaning each, used site-wide:
+     attack/finish = amber-gold, control/position = jade, defence/threat = red,
+     everything else neutral. Avoids per-category rainbow palettes. */
+  --cat-attack:  var(--victory);
+  --cat-control: var(--jade-bright);
+  --cat-defence: #D0674F;
+  --cat-neutral: #8C99A8;
+
   /* Utility — cool-tinted lines match the blue-black bg */
   --line:        rgba(200, 215, 230, 0.08);
   --line-strong: rgba(200, 215, 230, 0.13);
@@ -607,67 +615,6 @@ a {
 .breadcrumb a:hover { text-decoration: underline; }
 .breadcrumb .bc-sep { opacity: 0.4; }
 .breadcrumb .bc-current { color: var(--stone); }
-
-/* C.2 Learn-Next Nudge ─────────────────────────── */
-.learn-next-nudge {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--surface-2);
-  border: 1px solid var(--line-strong);
-  border-radius: 40px;
-  padding: 9px 14px 9px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 900;
-  font-size: 0.8rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
-  animation: ch-fade-in 0.3s 0.6s ease both;
-}
-.learn-next-nudge .lnn-stat {
-  color: var(--stone-dim);
-  white-space: nowrap;
-}
-.learn-next-nudge .lnn-stat strong {
-  color: var(--jade-bright);
-  font-weight: 600;
-}
-.learn-next-nudge .lnn-cta {
-  background: var(--jade-bright);
-  color: var(--bg);
-  padding: 4px 12px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.76rem;
-  white-space: nowrap;
-  transition: background 0.15s;
-}
-.learn-next-nudge .lnn-cta:hover { background: #53c49a; }
-.learn-next-nudge .lnn-close {
-  background: none;
-  border: none;
-  color: var(--stone-dim);
-  cursor: pointer;
-  padding: 2px;
-  line-height: 1;
-  font-size: 1rem;
-  opacity: 0.6;
-  transition: opacity 0.15s;
-}
-.learn-next-nudge .lnn-close:hover { opacity: 1; }
-
-@media (max-width: 639px) {
-  .learn-next-nudge {
-    bottom: 12px;
-    right: 12px;
-    left: 12px;
-    border-radius: 20px;
-  }
-  /* Reserve room so the fixed nudge never covers the last of the page */
-  body.has-nudge { padding-bottom: 76px; }
-}
 
 /* C.3 Global Search Modal ──────────────────────── */
 .search-overlay {
