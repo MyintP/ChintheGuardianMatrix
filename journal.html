@@ -58,7 +58,9 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
 .save-feedback{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;display:none;align-self:center;}
 
 /* Sessions list */
-.sessions-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sessions-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;margin-bottom:8px;}
+.sessions-actions{display:flex;flex-wrap:wrap;gap:6px;}
+.backup-note{font-size:12px;color:var(--stone-dim);margin:0 0 16px;line-height:1.5;}
 .sessions-title{font-family:'Oswald',sans-serif;font-size:22px;letter-spacing:0.03em;text-transform:uppercase;}
 .sessions-list{display:flex;flex-direction:column;gap:12px;}
 .session-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
@@ -223,8 +225,14 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
   <div class="journal-right">
   <div class="sessions-header">
     <div class="sessions-title">Session History</div>
-    <button class="btn btn-ghost" onclick="exportAll()">↗ Export All</button>
+    <div class="sessions-actions">
+      <button class="btn btn-ghost" onclick="exportAll()" title="Readable Markdown copy">↗ Export</button>
+      <button class="btn btn-ghost" onclick="backupJSON()" title="Full backup file you can restore from">⤓ Backup</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('restoreInput').click()" title="Restore sessions from a backup file">⤒ Restore</button>
+      <input type="file" id="restoreInput" accept="application/json,.json" hidden>
+    </div>
   </div>
+  <p class="backup-note">Sessions are stored only on this device. Download a backup regularly — browsers can clear site data.</p>
   <div class="sessions-list" id="sessionsList"></div>
   </div><!-- /.journal-right -->
 </div>
@@ -233,8 +241,17 @@ nav{position:sticky;top:0;z-index:50;background:rgba(13,0,13,0.92);backdrop-filt
 const JOURNAL_KEY = "chinthe_journal_v1";
 let techTags = [];
 
-// Set today's date
-document.getElementById("fDate").value = new Date().toISOString().slice(0,10);
+// Today's date in the user's own timezone. toISOString() is UTC, which
+// stamps morning sessions with yesterday's date east of Greenwich.
+function localISODate(d){
+  d = d || new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+// Ask the browser not to evict journal data under storage pressure
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+
+document.getElementById("fDate").value = localISODate();
 
 // Tag input
 const techInput = document.getElementById("techTagsInput");
@@ -278,7 +295,8 @@ function loadSessions(){
   try{return JSON.parse(localStorage.getItem(JOURNAL_KEY))||[];}catch(e){return [];}
 }
 function saveSessions(sessions){
-  try{localStorage.setItem(JOURNAL_KEY,JSON.stringify(sessions));}catch(e){}
+  try{localStorage.setItem(JOURNAL_KEY,JSON.stringify(sessions));return true;}
+  catch(e){alert("Could not save — this browser's storage is full or blocked. Download a backup now.");return false;}
 }
 
 function saveSession(){
@@ -298,7 +316,7 @@ function saveSession(){
   };
   const sessions=loadSessions();
   sessions.unshift(session);
-  saveSessions(sessions);
+  if(!saveSessions(sessions))return; // keep the form filled so nothing is lost
   clearForm();
   const fb=document.getElementById("saveFeedback");
   fb.style.display="flex";
@@ -307,7 +325,7 @@ function saveSession(){
 }
 
 function clearForm(){
-  document.getElementById("fDate").value=new Date().toISOString().slice(0,10);
+  document.getElementById("fDate").value=localISODate();
   document.getElementById("fType").value="drilling";
   document.getElementById("fTitle").value="";
   document.getElementById("fWorked").value="";
@@ -442,7 +460,7 @@ function exportAll(){
   sessions.forEach(s=>{
     md+=`## ${fmtDate(s.date)} — ${s.title}\n`;
     md+=`**Type:** ${s.type}\n\n`;
-    if(s.techniques.length)md+=`**Techniques:** ${s.techniques.join(", ")}\n\n`;
+    if((s.techniques||[]).length)md+=`**Techniques:** ${s.techniques.join(", ")}\n\n`;
     if(s.worked)md+=`**Worked:** ${s.worked}\n\n`;
     if(s.needs)md+=`**Needs Work:** ${s.needs}\n\n`;
     if(s.drill)md+=`**Next Drill:** ${s.drill}\n\n`;
@@ -452,9 +470,61 @@ function exportAll(){
   const blob=new Blob([md],{type:"text/markdown"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
-  a.download=`chinthe-journal-${new Date().toISOString().slice(0,10)}.md`;
+  a.download=`chinthe-journal-${localISODate()}.md`;
   a.click();
 }
+
+// ── Backup / restore (JSON) ──────────────────────────────────
+// Markdown export is for reading; this is the file that can rebuild the journal.
+function backupJSON(){
+  const sessions=loadSessions();
+  if(!sessions.length){alert("No sessions to back up.");return;}
+  const payload={app:"chinthe-journal",version:1,exported:new Date().toISOString(),sessions};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=`chinthe-journal-backup-${localISODate()}.json`;
+  a.click();
+}
+
+const SESSION_TYPES=["drilling","sparring","competition","conditioning"];
+function cleanSession(s){
+  if(!s||typeof s!=="object")return null;
+  const str=v=>typeof v==="string"?v:"";
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(str(s.date))||!str(s.title).trim())return null;
+  return {
+    id:str(s.id)||(Date.now().toString()+Math.random().toString(36).slice(2,7)),
+    date:s.date,
+    type:SESSION_TYPES.includes(s.type)?s.type:"drilling",
+    title:s.title.trim(),
+    techniques:Array.isArray(s.techniques)?s.techniques.filter(t=>typeof t==="string"&&t.trim()).map(t=>t.trim()):[],
+    worked:str(s.worked),needs:str(s.needs),drill:str(s.drill),notes:str(s.notes),
+    timestamp:str(s.timestamp)||new Date().toISOString()
+  };
+}
+
+document.getElementById("restoreInput").addEventListener("change",e=>{
+  const file=e.target.files[0];
+  e.target.value="";
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    let data;
+    try{data=JSON.parse(reader.result);}catch(err){alert("That file isn't a valid backup.");return;}
+    const incoming=(Array.isArray(data)?data:(data&&data.sessions)||[]).map(cleanSession).filter(Boolean);
+    if(!incoming.length){alert("No sessions found in that file.");return;}
+    const existing=loadSessions();
+    const ids=new Set(existing.map(s=>s.id));
+    const added=incoming.filter(s=>!ids.has(s.id));
+    if(!added.length){alert("All "+incoming.length+" sessions in that backup are already here.");return;}
+    const merged=existing.concat(added).sort((a,b)=>b.date.localeCompare(a.date)||b.timestamp.localeCompare(a.timestamp));
+    if(saveSessions(merged)){
+      renderAll();
+      alert("Restored "+added.length+" session"+(added.length!==1?"s":"")+(incoming.length>added.length?" ("+(incoming.length-added.length)+" already present).":"."));
+    }
+  };
+  reader.readAsText(file);
+});
 
 renderAll();
 </script>

@@ -89,7 +89,9 @@ body { overflow-x: hidden; }
   display:block;
   width:380px;height:380px;max-width:100%;
   object-fit:contain;position:relative;z-index:1;
-  filter:drop-shadow(0 0 48px rgba(200,168,78,0.30)) drop-shadow(0 0 16px rgba(63,163,131,0.20));
+  /* The 512px mark has an opaque near-black square behind it; lighten drops
+     that square into the page so only the gold lion (and the glow behind) shows */
+  mix-blend-mode:lighten;
 }
 .hero-visual::before{
   content:'';position:absolute;
@@ -357,8 +359,8 @@ footer{
       <h1 class="hero-heading">
         Discipline.<br>Respect.<br><em>Legacy.</em>
       </h1>
-      <p class="hero-sub">Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the Modern Grappler.</p>
-      <div class="hero-myanmar">ခြင်္သေ့ — The Guardian Lion</div>
+      <p class="hero-sub">A competition decision map for no-gi grapplers. Find where you are in the match, see your highest-percentage next move.</p>
+      <div class="hero-myanmar">ခြင်္သေ့ — The Guardian Lion · Rooted in Myanmar, forged through Brazilian Jiu-Jitsu</div>
       <div class="hero-actions">
         <a class="btn btn-primary" href="chinthe-guardian-matrix.html">Open Guardian Matrix →</a>
         <a class="btn btn-secondary" href="knowledge.html">Browse Knowledge Base</a>
@@ -372,7 +374,7 @@ footer{
       </div>
     </div>
     <div class="hero-visual" aria-hidden="true">
-      <img class="hero-lion" src="chinthe-lion.png" alt="Chinthe Guardian Lion">
+      <img class="hero-lion" src="icon-512.png" alt="" width="512" height="512">
     </div>
   </div>
 </section>
@@ -396,7 +398,7 @@ footer{
       <p class="module-desc">The live competition decision engine. Navigate your full game from standing to leg locks — real-time match-context guidance based on phase and scoreboard state.</p>
       <div class="module-meta">
         <span class="module-meta-dot live"></span>
-        Live &nbsp;·&nbsp; ADCC Ruleset &nbsp;·&nbsp; 80+ Nodes
+        Live &nbsp;·&nbsp; ADCC Ruleset &nbsp;·&nbsp; <span data-node-count="{n} Nodes">Decision Map</span>
       </div>
     </a>
     <a class="module-card" href="knowledge.html">
@@ -425,19 +427,6 @@ footer{
         Live &nbsp;·&nbsp; Stored on Device
       </div>
     </a>
-    <a class="module-card coming" href="#" tabindex="-1" aria-disabled="true">
-      <div class="module-accent crimson"></div>
-      <div class="module-icon crimson">◉</div>
-      <div>
-        <div class="module-tag">Coaching</div>
-        <div class="module-name">Guardian Coach</div>
-      </div>
-      <p class="module-desc">Athlete profiles, session review, opponent scouting, and game-plan builder. For coaches working with competitive teams.</p>
-      <div class="module-meta">
-        <span class="module-meta-dot soon"></span>
-        Coming Soon
-      </div>
-    </a>
     <a class="module-card" href="principles.html">
       <div class="module-accent" style="background:linear-gradient(90deg,#8E44AD,#6C3483);"></div>
       <div class="module-icon" style="background:rgba(142,68,173,0.15);">◬</div>
@@ -451,6 +440,19 @@ footer{
         Live &nbsp;·&nbsp; 12 Principles &nbsp;·&nbsp; 4 Sources
       </div>
     </a>
+    <div class="module-card coming" aria-disabled="true">
+      <div class="module-accent crimson"></div>
+      <div class="module-icon crimson">◉</div>
+      <div>
+        <div class="module-tag">Coaching</div>
+        <div class="module-name">Guardian Coach</div>
+      </div>
+      <p class="module-desc">Athlete profiles, session review, opponent scouting, and game-plan builder. For coaches working with competitive teams.</p>
+      <div class="module-meta">
+        <span class="module-meta-dot soon"></span>
+        Coming Soon
+      </div>
+    </div>
   </div>
 </div>
 

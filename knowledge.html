@@ -55,7 +55,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .knowledge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:start;}
 
 /* Cards */
-.tech-card{
+.tech-card{scroll-margin-top:calc(var(--nav-h) + 16px);
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
   cursor:pointer;overflow:hidden;transition:border-color .2s,transform .15s;
   position:relative;
@@ -1035,6 +1035,7 @@ function renderCards(){
   filtered.forEach(t=>{
     const card = document.createElement("div");
     card.className = `tech-card cat-${t.cat}`;
+    card.id = `tech-${t.id}`;
     card.innerHTML = `
       <div class="tech-card-accent"></div>
       <div class="tech-card-body">
@@ -1138,6 +1139,23 @@ document.getElementById("searchInput").addEventListener("input",e=>{
 });
 
 renderCards();
+
+// Deep-link support: knowledge.html#<id> (used by global search) clears any
+// filter hiding the entry, opens its card and scrolls it into view.
+function applyHash(){
+  const id = decodeURIComponent(location.hash.replace(/^#/, ""));
+  if(!id || !DB.some(t=>t.id===id)) return;
+  activeCat = "all"; searchQ = "";
+  document.getElementById("searchInput").value = "";
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.toggle("active", b.dataset.cat==="all"));
+  renderCards();
+  const detail = document.getElementById(`detail-${id}`);
+  if(detail && !detail.classList.contains("open")) toggleCard(id);
+  const card = document.getElementById(`tech-${id}`);
+  if(card) card.scrollIntoView({block:"start", behavior:"smooth"});
+}
+window.addEventListener("hashchange", applyHash);
+applyHash();
 </script>
 <script src="chinthe.js"></script>
 </body>

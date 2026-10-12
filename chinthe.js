@@ -2,10 +2,11 @@
   CHINTHE — shared page behaviour
   1. Mobile nav: injects a hamburger toggle into .site-nav.
   2. Service worker registration.
-  3. C.4 Page transitions (fade-in + View Transitions API).
-  4. C.1 Breadcrumbs (all non-home pages).
+  3. C.1 Breadcrumbs (all non-home pages).
+  4. C.3 Global search modal (nav button, Ctrl+K, or "/").
   5. C.2 Learn-Next nudge (reads chinthe_mastery_v1 from localStorage).
-  6. C.3 Global search modal (Ctrl+K).
+  6. Node counts: fills [data-node-count] from the search index.
+  Page transitions are CSS-only (@view-transition in chinthe.css).
 */
 (function () {
   // ── 1. Mobile Nav ────────────────────────────────────────────
@@ -15,6 +16,22 @@
 
   if (nav && inner && links) {
     if (!links.id) links.id = "siteNavLinks";
+
+    // Visible search trigger — the only way to open search on touch devices
+    var searchBtn = document.createElement("button");
+    searchBtn.type = "button";
+    searchBtn.className = "site-nav-search";
+    searchBtn.setAttribute("aria-label", "Search");
+    searchBtn.setAttribute("title", "Search (Ctrl K)");
+    searchBtn.innerHTML =
+      '<svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+        '<circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>' +
+        '<line x1="11" y1="11" x2="14.5" y2="14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      '</svg>';
+    searchBtn.addEventListener("click", function (e) { e.stopPropagation(); openSearch(); });
+    var cta = inner.querySelector(".site-nav-cta");
+    inner.insertBefore(searchBtn, cta || null);
+
     var toggle = document.createElement("button");
     toggle.type = "button";
     toggle.className = "site-nav-toggle";
@@ -42,22 +59,6 @@
     navigator.serviceWorker.register("./sw.js").catch(function () {});
   }
 
-  // ── C.4 Page Transitions ──────────────────────────────────────
-  document.documentElement.classList.add("page-ready");
-
-  var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!prefersReducedMotion && document.startViewTransition) {
-    document.addEventListener("click", function (e) {
-      var a = e.target.closest("a[href]");
-      if (!a) return;
-      var href = a.getAttribute("href");
-      if (!href || href.charAt(0) === "#" || href.indexOf("http") === 0 || href.indexOf("mailto") === 0) return;
-      if (a.target === "_blank" || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-      e.preventDefault();
-      document.startViewTransition(function () { window.location.href = href; });
-    });
-  }
-
   // ── C.1 Breadcrumbs ───────────────────────────────────────────
   var CRUMB_MAP = {
     "chinthe-guardian-matrix.html": "Guardian Matrix",
@@ -82,15 +83,18 @@
   })();
 
   // ── C.2 Learn-Next Nudge ─────────────────────────────────────
-  (function () {
+  // Runs after IDX is built (see bottom) so the node total is derived, not hard-coded.
+  // Hidden on Compete (mat-side reference — nothing may cover it) and stays
+  // dismissed for a week rather than reappearing every session.
+  var NUDGE_KEY = "ch_lnn_dismissed_until";
+  function renderNudge(total) {
     var pageName = window.location.pathname.split("/").pop() || "index.html";
-    if (pageName === "index.html" || pageName === "chinthe-guardian-matrix.html") return;
-    if (sessionStorage.getItem("ch_lnn_dismissed")) return;
+    if (pageName === "index.html" || pageName === "chinthe-guardian-matrix.html" || pageName === "competition.html") return;
+    try { if (Number(localStorage.getItem(NUDGE_KEY)) > Date.now()) return; } catch (e) {}
 
     var mastery;
     try { mastery = JSON.parse(localStorage.getItem("chinthe_mastery_v1")) || {}; } catch (e) { mastery = {}; }
     var mapped = Object.keys(mastery).filter(function (k) { return mastery[k] > 0; }).length;
-    var total  = 102;
 
     var nudge = document.createElement("div");
     nudge.className = "learn-next-nudge";
@@ -107,19 +111,23 @@
       '<button class="lnn-close" aria-label="Dismiss">✕</button>';
 
     nudge.querySelector(".lnn-close").addEventListener("click", function () {
-      sessionStorage.setItem("ch_lnn_dismissed", "1");
+      try { localStorage.setItem(NUDGE_KEY, String(Date.now() + 7 * 864e5)); } catch (e) {}
       nudge.remove();
+      document.body.classList.remove("has-nudge");
     });
 
     document.body.appendChild(nudge);
-  })();
+    document.body.classList.add("has-nudge");
+  }
 
-  // ── C.3 Global Search (Ctrl+K) ───────────────────────────────
+  // ── C.3 Global Search ─────────────────────────────────────────
+  // Every result deep-links: the Matrix, Knowledge Base and Principles pages
+  // all open the matching item from the URL hash.
   var IDX = (function () {
     var items = [];
-    function m(id, title) { items.push({ c: "M", cl: "c-M", cat: "Matrix",    t: title, u: "chinthe-guardian-matrix.html" }); }
-    function p(id, title) { items.push({ c: "P", cl: "c-P", cat: "Principle", t: title, u: "principles.html" }); }
-    function k(id, title) { items.push({ c: "T", cl: "c-T", cat: "Technique", t: title, u: "knowledge.html" }); }
+    function m(id, title) { items.push({ c: "M", cl: "c-M", cat: "Matrix",    t: title, u: "chinthe-guardian-matrix.html#" + id }); }
+    function p(id, title) { items.push({ c: "P", cl: "c-P", cat: "Principle", t: title, u: "principles.html#" + id }); }
+    function k(id, title) { items.push({ c: "T", cl: "c-T", cat: "Technique", t: title, u: "knowledge.html#" + id }); }
 
     // Matrix nodes
     m("hub",                    "Guardian Matrix");
@@ -239,10 +247,10 @@
     p("position",   "Position Before Submission");
     p("frames",     "Frames");
     // Static principle sections
-    p("pos_hier",   "Positional Hierarchy");
+    p("hierarchy",  "Positional Hierarchy");
     p("chess",      "Chess Principles Applied to Grappling");
     p("grips",      "Grip Taxonomy");
-    p("distance",   "Fighting Distances");
+    p("distances",  "Fighting Distances");
 
     // Knowledge techniques
     k("rnc",                     "Rear Naked Choke (Hadaka-Jime)");
@@ -331,9 +339,17 @@
   function searchQuery(q) {
     if (!q) return [];
     var ql = q.toLowerCase();
-    return IDX.filter(function (item) {
-      return item.t.toLowerCase().indexOf(ql) !== -1;
-    }).slice(0, 10);
+    // Rank: title starts with query > a word starts with it > contains it.
+    // Stable within a rank, so index order (Matrix, Principle, Technique) breaks ties.
+    var wordStart = new RegExp("(^|[^a-z0-9])" + ql.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    return IDX.map(function (item, i) {
+      var t = item.t.toLowerCase();
+      var pos = t.indexOf(ql);
+      if (pos === -1) return null;
+      return { item: item, i: i, rank: pos === 0 ? 0 : wordStart.test(t) ? 1 : 2 };
+    }).filter(Boolean).sort(function (a, b) {
+      return a.rank - b.rank || a.i - b.i;
+    }).slice(0, 20).map(function (r) { return r.item; });
   }
 
   function renderResults(results) {
@@ -381,7 +397,7 @@
           '<line x1="11" y1="11" x2="14.5" y2="14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
         '</svg>' +
         '<input class="search-input" type="search" placeholder="Search techniques, positions, principles…" autocomplete="off" spellcheck="false" aria-label="Search"/>' +
-        '<span class="search-esc" aria-hidden="true">ESC</span>' +
+        '<button type="button" class="search-esc" aria-label="Close search">ESC</button>' +
       '</div>' +
       '<div class="search-body"></div>' +
       '<div class="search-foot">' +
@@ -396,6 +412,7 @@
     searchBody  = modal.querySelector(".search-body");
 
     searchInput.focus();
+    modal.querySelector(".search-esc").addEventListener("click", closeSearch);
 
     var currentResults = [];
 
@@ -416,13 +433,13 @@
         e.preventDefault();
         var items = searchBody.querySelectorAll(".search-result");
         var target = activeIdx >= 0 ? items[activeIdx] : items[0];
-        if (target) { closeSearch(); window.location.href = target.getAttribute("href"); }
+        if (target) { closeSearch(); goTo(target.getAttribute("href")); }
       }
     });
 
     searchBody.addEventListener("click", function (e) {
       var a = e.target.closest(".search-result");
-      if (a) { closeSearch(); window.location.href = a.getAttribute("href"); e.preventDefault(); }
+      if (a) { closeSearch(); goTo(a.getAttribute("href")); e.preventDefault(); }
     });
 
     searchOverlay.addEventListener("click", function (e) {
@@ -439,13 +456,34 @@
     activeIdx     = -1;
   }
 
+  // Same page + same hash fires no hashchange, so re-dispatch it by hand.
+  function goTo(href) {
+    var url = new URL(href, window.location.href);
+    if (url.pathname === window.location.pathname && url.hash === window.location.hash) {
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    } else {
+      window.location.href = url.href;
+    }
+  }
+
   document.addEventListener("keydown", function (e) {
+    var typing = e.target.closest && e.target.closest("input, textarea, select, [contenteditable='true']");
     if ((e.ctrlKey || e.metaKey) && e.key === "k") {
       e.preventDefault();
       if (searchOverlay) { closeSearch(); } else { openSearch(); }
+    } else if (e.key === "/" && !typing && !searchOverlay) {
+      e.preventDefault();
+      openSearch();
     } else if (e.key === "Escape") {
       if (searchOverlay) { closeSearch(); }
     }
   });
+
+  // ── Node counts + nudge (need IDX) ───────────────────────────
+  var NODE_TOTAL = IDX.filter(function (item) { return item.c === "M"; }).length;
+  document.querySelectorAll("[data-node-count]").forEach(function (el) {
+    el.textContent = el.getAttribute("data-node-count").replace("{n}", NODE_TOTAL);
+  });
+  renderNudge(NODE_TOTAL);
 
 })();

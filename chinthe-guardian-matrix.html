@@ -2416,6 +2416,7 @@ document.getElementById("quickRefModal").onclick = (e)=>{
 const searchPanel = document.getElementById("searchPanel");
 const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
+searchInput.placeholder = "⌕  Search " + Object.keys(NODES).length + " positions…"; // never drifts from the data
 function clearSearch(){
   if (searchInput) searchInput.value = "";
   if (searchResults) searchResults.innerHTML = "";
@@ -2508,7 +2509,8 @@ document.getElementById('copyBtn').onclick = ()=>{
 
 document.getElementById('downloadBtn').onclick = ()=>{
   const text = document.getElementById('exportText').value;
-  const date = new Date().toISOString().slice(0,10);
+  const d = new Date();
+  const date = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); // local, not UTC
   const blob = new Blob([text], {type:'text/markdown'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);

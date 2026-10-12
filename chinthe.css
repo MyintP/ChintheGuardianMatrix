@@ -218,6 +218,28 @@ a {
 }
 .site-nav-cta:hover { opacity: 0.88; }
 
+/* Search trigger — injected by chinthe.js, visible at every width */
+.site-nav-search {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  color: var(--stone-dim);
+  transition: color 0.15s, background 0.15s;
+}
+.site-nav-search:hover { color: var(--stone); background: var(--surface-2); }
+.site-nav-search:focus-visible { outline: 2px solid var(--jade-bright); outline-offset: 2px; }
+/* Search + CTA + toggle sit right as one group; at md+ the links get a matching
+   auto margin so they stay centred between brand and that group. */
+.site-nav-search { margin-left: auto; }
+.site-nav-search + .site-nav-cta { margin-left: -8px; }
+@media (min-width: 900px) { .site-nav-links { margin-left: auto; } }
+/* Narrow phones: the CTA duplicates the menu's Matrix link — drop it */
+@media (max-width: 419px) { .site-nav-cta { display: none; } }
+
 /* Mobile menu toggle — injected by chinthe.js, hidden at md+ */
 .site-nav-toggle {
   display: inline-flex;
@@ -554,21 +576,16 @@ a {
 ═══════════════════════════════════════════════════ */
 
 /* C.4 Page Transitions ─────────────────────────── */
-html { opacity: 0; }
-html.page-ready { opacity: 1; transition: opacity 0.18s ease; }
-
-@media (prefers-reduced-motion: reduce) {
-  html, html.page-ready { opacity: 1; transition: none; }
-}
-
+/* Cross-document view transitions: pure CSS, no JS click interception.
+   Browsers without support simply navigate normally, and the page is never
+   hidden waiting on a script. */
 @keyframes ch-fade-in  { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ch-fade-out { from { opacity: 1; } to { opacity: 0; } }
 
-::view-transition-old(root) {
-  animation: ch-fade-out 0.12s ease both;
-}
-::view-transition-new(root) {
-  animation: ch-fade-in  0.18s ease both;
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: ch-fade-out 0.12s ease both; }
+  ::view-transition-new(root) { animation: ch-fade-in  0.18s ease both; }
 }
 
 /* C.1 Breadcrumbs ──────────────────────────────── */
@@ -648,6 +665,8 @@ html.page-ready { opacity: 1; transition: opacity 0.18s ease; }
     left: 12px;
     border-radius: 20px;
   }
+  /* Reserve room so the fixed nudge never covers the last of the page */
+  body.has-nudge { padding-bottom: 76px; }
 }
 
 /* C.3 Global Search Modal ──────────────────────── */
@@ -764,3 +783,5 @@ html.page-ready { opacity: 1; transition: opacity 0.18s ease; }
   color: var(--stone-dim);
   font-family: var(--font-mono);
 }
+/* Keyboard hints mean nothing on touch screens */
+@media (hover: none) and (pointer: coarse) { .search-foot { display: none; } }

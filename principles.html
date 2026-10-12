@@ -639,6 +639,17 @@ function renderDistances(){
 }
 
 init();
+
+// Deep-link support: principles.html#<id> (used by global search) opens that
+// principle or reference section directly.
+function applyHash(){
+  const id = decodeURIComponent(location.hash.replace(/^#/, ''));
+  if(!id) return;
+  if(PRINCIPLES.some(p => p.id === id)) showPrinciple(id);
+  else if(REF_SECTIONS.some(r => r.id === id)) showSection(id);
+}
+window.addEventListener('hashchange', applyHash);
+applyHash();
 </script>
 <script src="chinthe.js"></script>
 </body>
