@@ -1090,8 +1090,8 @@ const NODES = {
   guard_bottom: {
     title: "Bottom Guard — Select Guard Type", type: "entry", points: null,
     objective: "Choose the guard that best matches your gripping situation and the opponent's passing posture — the wrong guard costs more energy than the right guard earns.",
-    mechanics: "Six primary no-gi guards. Seated guard: upright, built for wrestling up and leg entries. Closed guard: posture control and submissions. Half guard: underhook battle. Butterfly: hooks and elevation. Single Leg X: one-leg control platform. X Guard: full elevation. A wrestling base plays best from seated guard, butterfly and half guard, where the underhook battle and the wrestle-up mirror your natural game.",
-    commonMistake: "Defaulting to closed guard in every scramble — closed guard is safe but low-return in no-gi; butterfly and half guard offer more back-take opportunities for a wrestling base.",
+    mechanics: "Six primary no-gi guards. Seated guard: upright, built for wrestling up and leg entries. Closed guard: posture control and submissions. Half guard: underhook battle. Butterfly: hooks and elevation. Single Leg X: one-leg control platform. X Guard: full elevation. Seated guard, butterfly and half guard suit athletes who like to wrestle up and fight for underhooks.",
+    commonMistake: "Defaulting to closed guard in every scramble — closed guard is safe but low-return in no-gi; butterfly and half guard offer more back-take opportunities.",
     drill: "Guard type switching: partner starts passing, identify the guard type available from the scramble and call it before establishing. 10 reps.",
     children: ["guard_seated","guard_closed","guard_half","guard_butterfly","guard_slx","guard_x","def_guard_threat"]
   },
@@ -1292,7 +1292,7 @@ const NODES = {
   },
   pass: {
     title: "Passing Game", type: "entry", points: null,
-    objective: "Select the passing system that matches the guard they're playing — your wrestling base gives you the highest return on pressure-passing systems.",
+    objective: "Select the passing system that matches the guard they're playing — the right pass for their guard beats the best pass for the wrong one.",
     mechanics: "Read the guard type first. Are they playing butterfly or open guard (hooks active)? Half guard (underhook battle)? Full closed guard (posture management)? Each guard type has a highest-EV passing entry. Don't fight their guard on their terms.",
     commonMistake: "Defaulting to the same pass regardless of guard type — a good guard player anticipates a predictable passer and has the counter pre-loaded.",
     drill: "Guard recognition drill: partner cycles through 4 guard types, name the correct passing system before committing. 10 reps.",
@@ -1300,7 +1300,7 @@ const NODES = {
   },
   pass_over_under: {
     title: "Over-Under Pass", type: "entry", points: null,
-    objective: "Use wrestling-base hip drive to kill both legs simultaneously — once the hips are flat with the over-under, the pass is mechanical.",
+    objective: "Use hip drive to kill both legs simultaneously — once the hips are flat with the over-under, the pass is mechanical.",
     mechanics: "Near-side arm goes over their near leg (hooking the hip), far-side arm goes under their far leg (lifting the knee). Chest pressure kills the near leg, elbow drives the far knee to the mat. Drive hips forward to flatten them, then walk toward the over-arm side to clear both legs.",
     commonMistake: "Dropping your level too low on the approach — low posture kills hip drive, which is the engine of this pass.",
     drill: "Over-under breakdown: establish over-under from knees, flatten partner with hip drive, walk to clear. No submission until pass is complete. 10 reps.",
@@ -1327,7 +1327,7 @@ const NODES = {
   },
   pass_body_lock: {
     title: "Body Lock Pass", type: "entry", points: null,
-    objective: "Convert your wrestling clinch strength directly into a guard pass — the body lock eliminates guard framing entirely by controlling the torso.",
+    objective: "Convert clinch control directly into a guard pass — the body lock eliminates guard framing entirely by controlling the torso.",
     mechanics: "From standing clinch or a partially broken guard: wrap both arms around their torso, connect hands behind their back (gable grip). Drive chest through their guard while rotating their hips — the rotation strips the legs without needing to clear them individually. Walk around to the hip as they flatten.",
     commonMistake: "Attempting the body lock before the guard is broken or half-broken — a tight closed guard holds the lock out.",
     drill: "Body lock rotation: establish grip from half guard or open guard, complete the hip rotation to flat position. 10 reps.",
@@ -1413,7 +1413,7 @@ const NODES = {
   backtake_headlock: {
     title: "Back Take (off front headlock)", type: "position", points: 3,
     objective: "Use the front headlock you already hold as a launch point for the back rather than resetting to a choke-only decision.",
-    mechanics: "Snap the near arm across, spin behind, insert hooks. The most repeatable entry for a wrestling base — you live in this position already.",
+    mechanics: "Snap the near arm across, spin behind, insert hooks. One of the most repeatable back-take entries — every sprawl puts you here.",
     commonMistake: "Trying to force the guillotine from bad position instead of banking the back take — loses the higher-value, higher-percentage option.",
     drill: "Sprawl-to-back flow: partner shoots, you sprawl to front headlock, 10 reps finishing at hooks-in, not at the choke.",
     children: ["rnc"]
@@ -1540,7 +1540,7 @@ const NODES = {
     drill: "Guillotine chain: partner postures out; finish the armbar, triangle or back take off the same grip. 10 reps.",
     commonMistake: "Falling back to guard with the choke and staying there after it fails — you give up top position for nothing.",
     objective: "A stuffed guillotine is still a front-headlock position — convert it to the back or a limb attack.",
-    mechanics: "A stuffed guillotine should never be a dead end for a wrestler.",
+    mechanics: "A stuffed guillotine should never be a dead end — the head and arm control is still yours.",
     children: ["armbar_from_guillotine","triangle_from_guillotine","backtake_from_guillotine"]
   },
   armbar_from_guillotine: {
@@ -1714,7 +1714,7 @@ const NODES = {
   },
   def_stood_up: {
     title: "Base Built — Back to Feet", type: "position", points: 0,
-    objective: "Reset the exchange entirely — standing neutralizes their top game advantage and returns you to where your wrestling and judo base is strongest.",
+    objective: "Reset the exchange entirely — standing neutralizes their top game advantage and returns the exchange to neutral, where you can take them down again.",
     mechanics: "Post, frame, and climb back to your feet rather than continuing to fight for guard on the ground. Resets the exchange entirely.",
     commonMistake: "Standing up without first establishing a solid base — getting back down immediately wastes the effort and costs position.",
     drill: "Stand-up drill: from under a pressure passer, post-frame-post sequence to feet, 10 reps against 50% resistance.",
@@ -2066,7 +2066,7 @@ const NODES = {
   },
   gs_wrestle_up: {
     title: "Wrestle Up", type: "entry", points: null,
-    objective: "Come up from the bottom onto a single leg and finish on top — your wrestling base turns bottom position into offense.",
+    objective: "Come up from the bottom onto a single leg and finish on top — it turns bottom position into offense.",
     mechanics: "From seated guard or butterfly, grab a leg (single leg or high crotch), post your free hand and come up onto your knee (technical stand-up). Finish as a single leg or by driving through. Landing on top from bottom position is typically scored as a sweep in ADCC — confirm how your event calls it.",
     commonMistake: "Coming up with your head down and outside — they catch the front headlock or guillotine.",
     drill: "Wrestle-up reps: 10 from seated guard, 10 from butterfly, partner sprawling at 50%.",

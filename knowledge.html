@@ -71,7 +71,6 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .tech-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cat);}
 .tech-card-name{font-family:'Oswald',sans-serif;font-size:20px;letter-spacing:0.02em;text-transform:uppercase;line-height:1;margin-bottom:6px;}
 .tech-card-tagline{font-size:13px;color:var(--stone-dim);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.tech-detail .tech-card-tagline{display:block;-webkit-line-clamp:unset;color:var(--stone);margin-bottom:14px;}
 .tech-card-tags{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px;}
 /* Category sections (All view, no search) */
 .kb-section{grid-column:1/-1;display:flex;align-items:baseline;gap:10px;margin:22px 0 2px;padding-bottom:8px;border-bottom:1px solid var(--line);}
@@ -80,17 +79,49 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
 .kb-section span{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.08em;}
 .tag{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);border-radius:4px;padding:2px 7px;}
 
-/* Expanded detail */
-.tech-detail{display:none;padding:16px 20px 20px;border-top:1px solid var(--line);}
-.tech-detail.open{display:block;}
-/* Separates the disclosure block from the Close button below it. Spacing
-   lives on the block, not the button — button appearance stays owned
-   entirely by the .btn hierarchy in chinthe.css. */
-.tech-detail .disc{margin-bottom:16px;}
-.detail-section{margin-bottom:14px;}
-.detail-label{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;}
-.detail-text{font-size:13.5px;line-height:1.6;color:var(--stone);}
-.detail-text.mistake{color:#E86868;}
+/* Cards are buttons now — the detail lives in one panel, not inside the grid */
+.tech-card{width:100%;text-align:left;font:inherit;color:inherit;padding:0;display:block;}
+.tech-card:focus-visible{outline:2px solid var(--jade-bright);outline-offset:2px;}
+.tech-card.is-selected{border-color:var(--cat);box-shadow:0 0 0 1px var(--cat) inset;}
+
+/* Detail panel: slide-over on desktop, full-screen sheet on phones */
+.kb-backdrop{position:fixed;inset:0;z-index:1000;background:rgba(4,7,10,.6);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);}
+.kb-backdrop[hidden],.kb-panel[hidden]{display:none;}
+.kb-panel{
+  --cat:var(--cat-neutral);
+  position:fixed;z-index:1001;top:0;right:0;bottom:0;width:min(600px,100vw);
+  background:var(--surface);border-left:1px solid var(--line-strong);
+  box-shadow:-24px 0 64px rgba(0,0,0,.5);display:flex;flex-direction:column;
+}
+.kb-panel.cat-submission{--cat:var(--cat-attack);} .kb-panel.cat-position{--cat:var(--cat-control);} .kb-panel.cat-defence{--cat:var(--cat-defence);}
+@media (prefers-reduced-motion:no-preference){
+  .kb-panel{animation:kb-in .22s cubic-bezier(.2,.8,.2,1);}
+  @keyframes kb-in{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+}
+.kb-panel-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);border-top:3px solid var(--cat);flex-shrink:0;}
+.kb-nav,.kb-close{width:40px;height:40px;border-radius:8px;color:var(--stone-dim);font-size:20px;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+.kb-nav:hover,.kb-close:hover{background:var(--surface-2);color:var(--stone);}
+.kb-nav:disabled{opacity:.3;cursor:default;background:none;}
+.kb-nav:focus-visible,.kb-close:focus-visible{outline:2px solid var(--jade-bright);outline-offset:1px;}
+.kb-close{margin-left:auto;font-size:16px;}
+.kb-pos{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:.08em;color:var(--stone-dim);min-width:56px;text-align:center;}
+.kb-panel-body{overflow-y:auto;overscroll-behavior:contain;padding:22px 26px 40px;}
+.kb-panel-body .tech-badge{margin-bottom:10px;}
+.kb-panel-title{font-family:'Oswald',sans-serif;font-weight:400;font-size:clamp(26px,4vw,34px);text-transform:uppercase;letter-spacing:.02em;line-height:1.05;margin:0 0 10px;}
+.kb-tagline{font-size:15px;color:var(--stone);line-height:1.55;margin-bottom:14px;}
+.kb-lead{font-size:15px;line-height:1.6;color:var(--stone);padding:14px 16px;border-left:3px solid var(--cat);background:var(--surface-2);border-radius:0 8px 8px 0;margin:18px 0 6px;}
+.kb-sec{padding:16px 0;border-bottom:1px solid var(--line);}
+.kb-sec:last-child{border-bottom:none;}
+.kb-sec h3{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:8px;}
+.kb-sec p{font-size:14.5px;line-height:1.65;color:var(--stone);}
+.kb-sec.tone-warn p{color:#E8907E;}
+.kb-sec.tone-dim p{color:var(--stone-dim);}
+body.kb-open{overflow:hidden;}
+@media (max-width:640px){
+  .kb-panel{width:100vw;border-left:none;box-shadow:none;}
+  .kb-panel-body{padding:18px 20px 40px;}
+}
+
 
 @media(max-width:640px){
   .nav-links{display:none;}
@@ -154,7 +185,7 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   <div class="page-header">
     <div class="page-eyebrow">CHINTHE Knowledge Base</div>
     <h1 class="page-title">Technique<br>Database</h1>
-    <p class="page-sub">Competition-focused mechanics for every position. Tap any card to expand full detail — objective, mechanics, common mistakes, drill, and defense counters.</p>
+    <p class="page-sub">Competition-focused mechanics for every position. Tap any card for the full breakdown — objective, mechanics, opponent reactions, common mistake and drill.</p>
   </div>
 
   <div class="controls">
@@ -175,6 +206,17 @@ body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-web
   <div class="results-meta" id="resultsMeta"></div>
   <div class="knowledge-grid" id="grid"></div>
 </div>
+
+<div class="kb-backdrop" id="kbBackdrop" hidden></div>
+<aside class="kb-panel" id="kbPanel" role="dialog" aria-modal="true" aria-labelledby="kbPanelTitle" hidden>
+  <div class="kb-panel-bar">
+    <button type="button" class="kb-nav" id="kbPrev" aria-label="Previous technique">‹</button>
+    <span class="kb-pos" id="kbPos"></span>
+    <button type="button" class="kb-nav" id="kbNext" aria-label="Next technique">›</button>
+    <button type="button" class="kb-close" id="kbClose" aria-label="Close">✕</button>
+  </div>
+  <div class="kb-panel-body" id="kbPanelBody"></div>
+</aside>
 
 <script>
 const DB = [
@@ -215,7 +257,7 @@ const DB = [
   {
     id:"guillotine", cat:"submission",
     name:"Guillotine",
-    tagline:"Your highest-value scramble weapon. Lives at the front headlock — where wrestling base puts you constantly.",
+    tagline:"Your highest-value scramble weapon. Lives at the front headlock — where every sprawl and snap down puts you.",
     tags:["Front Headlock","Scramble","No-Gi"],
     objective:"Treat the guillotine as an entry to a decision tree, not a standalone bet. Even a failed attempt should convert.",
     mechanics:"Two variants. Arm-in: their arm is trapped inside your choking arm — weaker choke, higher control, converts to takedown or back take when defended. High-elbow (no arm in): stronger finish, faster tap, more escapable. Default to arm-in unless the grip is already clean and deep. Mechanics: arm under the chin, elbow high, grip wrist or forearm, squeeze elbow toward hip while pulling up and back.",
@@ -404,9 +446,9 @@ const DB = [
   {
     id:"over_under", cat:"pass",
     name:"Over-Under Pass",
-    tagline:"Wrestling-base hip drive kills both legs simultaneously. The engine of this pass is the hips, not the hands.",
-    tags:["Pressure Pass","Wrestling Base","No-Gi"],
-    objective:"Use your wrestling hip drive — this pass was made for a wrestler's base. The arms set the position; the hips do the work.",
+    tagline:"Hip drive kills both legs simultaneously. The engine of this pass is the hips, not the hands.",
+    tags:["Pressure Pass","Hip Drive","No-Gi"],
+    objective:"Use your hip drive — the pass is driven by the hips. The arms set the position; the hips do the work.",
     mechanics:"Near arm over their near leg (hooking the hip). Far arm under their far leg (lifting the knee). Chest pressure kills the near leg. Elbow drives the far knee to the mat. Drive hips forward to flatten, then walk toward the over-arm side to clear both legs.",
     defense:"Hip escape toward the under-side to prevent flattening. Re-guard from the over side. Rolling to turtle.",
     mistake:"Dropping your level too low on the approach. Low posture kills the hip drive that drives this pass.",
@@ -437,7 +479,7 @@ const DB = [
   {
     id:"body_lock", cat:"pass",
     name:"Body Lock Pass",
-    tagline:"Convert your wrestling clinch directly into a guard pass. Eliminates guard framing by controlling the torso.",
+    tagline:"Convert clinch control directly into a guard pass. Eliminates guard framing by controlling the torso.",
     tags:["Wrestling Clinch","Pressure Pass","Half Guard"],
     objective:"The guard must be at least partially broken before the lock goes on. Tight closed guard holds it out.",
     mechanics:"Both arms around their torso, connect hands behind their back (gable grip). Drive chest through guard while rotating their hips — rotation strips legs without clearing them individually. Walk around to the hip as they flatten.",
@@ -582,8 +624,8 @@ const DB = [
   {
     id:"front_headlock_td", cat:"takedown",
     name:"Front Headlock Control",
-    tagline:"Your most repeatable takedown platform given a wrestling base. You live here already.",
-    tags:["Wrestling Base","Back Take Entry","Guillotine Entry"],
+    tagline:"One of the most repeatable platforms in no-gi — every sprawl and snap down lands you here.",
+    tags:["Front Headlock","Back Take Entry","Guillotine Entry"],
     objective:"Treat the front headlock as a position — not just a choke entry. From here: guillotine, back take, or snap down to takedown.",
     mechanics:"Head and arm control from a failed shot or sprawl. Near arm around their head (under the chin), far arm through their armpit. Snap down to drop them to the mat, or switch hips behind them to take the back.",
     defense:"Hip pop to break the grip. Shooting through to a leg.",
@@ -730,7 +772,7 @@ const DB = [
   {
     id:"o_soto_gari", cat:"judo",
     name:"O-Soto-Gari (Major Outer Reap)",
-    tagline:"The most effective foot throw in Judo for wrestling-base grapplers. Works with or without a gi.",
+    tagline:"A powerful foot throw that translates well to no-gi. Works with or without a gi.",
     tags:["Judo","Ashi-Waza","Foot Throw","Outside Reap"],
     objective:"Break their balance to their rear corner so their weight sits on one heel, then reap that exact leg.",
     mechanics:"Grip: near collar and far sleeve (gi) or head/neck and triceps (no-gi). Kuzushi (right-sided throw): drive them back toward their right rear corner so their weight loads onto their right heel. Entry: step your left foot deep beside their right foot, chest to chest, then swing your right leg past and reap the back of their right leg with the back of your thigh. Keep driving with your chest and grips; they fall backward. Follow them down — in no-gi, land in side control or knee on belly.",
@@ -822,7 +864,7 @@ const DB = [
   {
     id:"tai_otoshi", cat:"judo",
     name:"Tai-Otoshi (Body Drop)",
-    tagline:"Phil's signature throw. Minimal body contact, powerful when timed to opponent's forward movement. Works against pushers and rushers.",
+    tagline:"Minimal body contact, powerful when timed to the opponent's forward movement. Works against pushers and rushers.",
     tags:["Judo","Te-Waza","Forward Throw","Body Drop"],
     objective:"Use uke's forward momentum as the throw. You rotate them over your outstretched leg — you don't lift, you redirect.",
     mechanics:"Setup: pull uke's sleeve when they move forward, creating forward imbalance. Tai sabaki: turn to your left, spread your legs, place your right foot outside uke's right foot (the outstretched blocking leg). Pull the sleeve and push the lapel simultaneously, rotating uke over your right leg. Your hands do the work — avoid the temptation to use your hips. Your leg is the trip point, not the lever.",
@@ -1066,7 +1108,7 @@ const DB = [
   {
     id:"seated_guard", cat:"position",
     name:"Seated Guard",
-    tagline:"Upright, active, and built for wrestlers. The launch point for wrestling up and leg entries.",
+    tagline:"Upright and active. The launch point for wrestling up and leg entries.",
     tags:["Guard","Wrestle-Up","Leg Entries","No-Gi"],
     objective:"Stay upright and engaged so you can wrestle up, enter the legs, or play butterfly if they come down.",
     mechanics:"Sit on one hip with a hand posted or reaching for a collar tie. Feet active against their shins or hips. Head forward over your hips. Hand-fight constantly.",
@@ -1187,7 +1229,7 @@ const DB = [
   {
     id:"wrestle_up", cat:"sweep",
     name:"Wrestle Up",
-    tagline:"Come up from bottom on a single leg and finish on top. Your wrestling turns guard into offense.",
+    tagline:"Come up from bottom on a single leg and finish on top. Turns bottom position into offense.",
     tags:["Seated Guard","Butterfly","Single Leg","Technical Stand-Up"],
     objective:"Get to a leg from bottom, come up to your knee and finish the takedown from there.",
     mechanics:"From seated or butterfly guard, grab a leg, post your free hand and come up onto your knee (technical stand-up). Finish as a single leg or by driving through. Ending on top from bottom is typically scored as a sweep in ADCC — confirm how your event calls it.",
@@ -1295,9 +1337,6 @@ function renderCards(){
     return catMatch && textMatch;
   });
   meta.textContent = `${filtered.length} technique${filtered.length!==1?"s":""}`;
-  // Remember which card is expanded so re-rendering (typing, filtering) doesn't collapse it
-  const openEl = document.querySelector(".tech-detail.open");
-  const openId = openEl ? openEl.id.replace("detail-","") : null;
   grid.innerHTML = "";
   // All view with no search: section per category, in study order
   const grouped = activeCat==="all" && !searchQ.trim();
@@ -1313,96 +1352,110 @@ function renderCards(){
       h.innerHTML = `<h2>${LABEL[t.cat]||t.cat}</h2><span>${filtered.filter(x=>x.cat===t.cat).length}</span>`;
       grid.appendChild(h);
     }
-    const card = document.createElement("div");
-    card.className = `tech-card cat-${t.cat}`;
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = `tech-card cat-${t.cat}` + (t.id === openId ? " is-selected" : "");
     card.id = `tech-${t.id}`;
+    card.setAttribute("aria-haspopup","dialog");
     card.innerHTML = `
-      <div class="tech-card-accent"></div>
-      <div class="tech-card-body">
-        <div class="tech-card-meta">
+      <span class="tech-card-accent" style="display:block"></span>
+      <span class="tech-card-body" style="display:block">
+        <span class="tech-card-meta" style="display:flex">
           <span class="tech-badge">${t.cat.charAt(0).toUpperCase()+t.cat.slice(1)}</span>
-        </div>
-        <div class="tech-card-name">${t.name}</div>
-        <div class="tech-card-tagline">${t.tagline}</div>
-      </div>
-      <div class="tech-detail" id="detail-${t.id}">
-        <div class="tech-card-tags">${(t.tags||[]).map(tg=>`<span class="tag">${tg}</span>`).join("")}</div>
-        ${discBlock(t)}
-        <button class="btn btn-secondary" onclick="event.stopPropagation();closeCard('${t.id}')">✕ Close</button>
-      </div>
+        </span>
+        <span class="tech-card-name" style="display:block">${t.name}</span>
+        <span class="tech-card-tagline">${t.tagline}</span>
+      </span>
     `;
-    const body = card.querySelector(".tech-card-body");
-    body.setAttribute("role","button");
-    body.tabIndex = 0;
-    body.setAttribute("aria-controls",`detail-${t.id}`);
-    body.onclick = ()=>toggleCard(t.id);
-    body.onkeydown = e=>{
-      if(e.key==="Enter"||e.key===" "){e.preventDefault();toggleCard(t.id);}
-    };
+    card.onclick = ()=>openPanel(t.id);
     grid.appendChild(card);
   });
-  if(openId){
-    const d = document.getElementById(`detail-${openId}`);
-    if(d) d.classList.add("open");
-  }
-  syncExpanded();
+  visibleIds = filtered.map(t=>t.id);
+  if (openId) updatePanelNav();
 }
 
-function syncExpanded(){
-  document.querySelectorAll(".tech-card-body[aria-controls]").forEach(b=>{
-    const d = document.getElementById(b.getAttribute("aria-controls"));
-    b.setAttribute("aria-expanded", d && d.classList.contains("open") ? "true" : "false");
-  });
-}
+// ── Detail panel ──────────────────────────────────────────────
+// One panel for the whole page (slide-over on desktop, full-screen sheet on
+// phones) instead of expanding cards inside the grid, which stretched a single
+// narrow column and pushed everything else around.
+let openId = null, visibleIds = [], lastFocus = null;
+const panel = document.getElementById("kbPanel");
+const backdrop = document.getElementById("kbBackdrop");
+const LABELS = {position:"Position",submission:"Submission",pass:"Pass",sweep:"Sweep",takedown:"Takedown",judo:"Judo",defence:"Defence",concept:"Concept"};
 
-function toggleCard(id){
-  const detail = document.getElementById(`detail-${id}`);
-  if(!detail) return;
-  const isOpen = detail.classList.contains("open");
-  document.querySelectorAll(".tech-detail.open").forEach(d=>d.classList.remove("open"));
-  if(!isOpen) detail.classList.add("open");
-  syncExpanded();
-}
-function closeCard(id){
-  const d = document.getElementById(`detail-${id}`);
-  if(d) d.classList.remove("open");
-  syncExpanded();
-}
-
-// Progressive disclosure inside an expanded card: Objective is the lead,
-// the rest collapse behind single-open rows (first open by default).
-function discBlock(t){
-  const lead = t.objective ? `<div class="node-lead"><p>${t.objective}</p></div>` : "";
-  const defs = [
+function panelHTML(t){
+  const secs = [
     { label:"Mechanics", text:t.mechanics, tone:"" },
     { label:"Opponent Reactions", text:t.defense, tone:"tone-dim" },
     { label:"Common Mistake", text:t.mistake, tone:"tone-warn" },
     { label:"Drill", text:t.drill, tone:"" }
-  ].filter(d=>d.text);
-  const disc = defs.length ? `<div class="disc">` + defs.map((d,i)=>`
-    <div class="disc-section${i===0?' open':''}">
-      <button type="button" class="disc-head" aria-expanded="${i===0?'true':'false'}">
-        <span>${d.label}</span><span class="disc-caret" aria-hidden="true">▸</span>
-      </button>
-      <div class="disc-body ${d.tone}"><p>${d.text}</p></div>
-    </div>`).join("") + `</div>` : "";
-  return lead + disc;
+  ].filter(x=>x.text);
+  return `
+    <span class="tech-badge">${LABELS[t.cat]||t.cat}</span>
+    <h2 class="kb-panel-title" id="kbPanelTitle">${t.name}</h2>
+    <p class="kb-tagline">${t.tagline}</p>
+    <div class="tech-card-tags">${(t.tags||[]).map(tg=>`<span class="tag">${tg}</span>`).join("")}</div>
+    ${t.objective ? `<div class="kb-lead">${t.objective}</div>` : ""}
+    ${secs.map(x=>`<section class="kb-sec ${x.tone}"><h3>${x.label}</h3><p>${x.text}</p></section>`).join("")}`;
 }
 
-// One delegated handler for every card's accordion (grid persists across
-// re-renders, its children don't — so bind once, here).
-document.getElementById("grid").addEventListener("click", e=>{
-  const head = e.target.closest(".disc-head");
-  if(!head) return;
-  e.stopPropagation();
-  const sec = head.parentElement;
-  const scope = head.closest(".disc");
-  const isOpen = sec.classList.contains("open");
-  scope.querySelectorAll(".disc-section.open").forEach(s=>{
-    s.classList.remove("open");
-    s.querySelector(".disc-head").setAttribute("aria-expanded","false");
-  });
-  if(!isOpen){ sec.classList.add("open"); head.setAttribute("aria-expanded","true"); }
+function updatePanelNav(){
+  const i = visibleIds.indexOf(openId);
+  document.getElementById("kbPrev").disabled = i <= 0;
+  document.getElementById("kbNext").disabled = i < 0 || i >= visibleIds.length - 1;
+  document.getElementById("kbPos").textContent = i < 0 ? "" : `${i+1} / ${visibleIds.length}`;
+}
+
+function openPanel(id, opts){
+  const t = DB.find(x=>x.id===id);
+  if (!t) return;
+  if (!openId) lastFocus = document.activeElement;
+  openId = id;
+  panel.className = "kb-panel cat-" + t.cat;
+  document.getElementById("kbPanelBody").innerHTML = panelHTML(t);
+  document.getElementById("kbPanelBody").scrollTop = 0;
+  panel.hidden = false; backdrop.hidden = false;
+  document.body.classList.add("kb-open");
+  document.querySelectorAll(".tech-card.is-selected").forEach(c=>c.classList.remove("is-selected"));
+  const card = document.getElementById(`tech-${id}`);
+  if (card){ card.classList.add("is-selected"); card.scrollIntoView({block:"nearest"}); }
+  updatePanelNav();
+  if (!(opts && opts.keepHash)) history.replaceState(null, "", "#" + id);
+  document.getElementById("kbClose").focus({preventScroll:true});
+}
+
+function closePanel(){
+  if (!openId) return;
+  openId = null;
+  panel.hidden = true; backdrop.hidden = true;
+  document.body.classList.remove("kb-open");
+  document.querySelectorAll(".tech-card.is-selected").forEach(c=>c.classList.remove("is-selected"));
+  history.replaceState(null, "", location.pathname + location.search);
+  if (lastFocus && document.contains(lastFocus)) lastFocus.focus({preventScroll:true});
+}
+
+function stepPanel(dir){
+  const i = visibleIds.indexOf(openId);
+  const next = visibleIds[i + dir];
+  if (next) openPanel(next);
+}
+
+document.getElementById("kbClose").onclick = closePanel;
+backdrop.onclick = closePanel;
+document.getElementById("kbPrev").onclick = ()=>stepPanel(-1);
+document.getElementById("kbNext").onclick = ()=>stepPanel(1);
+document.addEventListener("keydown", e=>{
+  if (!openId || document.querySelector(".search-overlay")) return;
+  if (e.key === "Escape"){ e.preventDefault(); closePanel(); }
+  else if (e.key === "ArrowLeft" && !e.target.closest("input,textarea")) stepPanel(-1);
+  else if (e.key === "ArrowRight" && !e.target.closest("input,textarea")) stepPanel(1);
+  else if (e.key === "Tab"){
+    // keep focus inside the dialog
+    const f = [...panel.querySelectorAll("button:not([disabled])")];
+    if (!f.length) return;
+    if (e.shiftKey && document.activeElement === f[0]){ e.preventDefault(); f[f.length-1].focus(); }
+    else if (!e.shiftKey && document.activeElement === f[f.length-1]){ e.preventDefault(); f[0].focus(); }
+  }
 });
 
 document.querySelectorAll(".filter-btn").forEach(btn=>{
@@ -1421,7 +1474,7 @@ document.getElementById("searchInput").addEventListener("input",e=>{
 renderCards();
 
 // Deep-link support: knowledge.html#<id> (used by global search) clears any
-// filter hiding the entry, opens its card and scrolls it into view.
+// filter hiding the entry and opens it in the detail panel.
 function applyHash(){
   const id = decodeURIComponent(location.hash.replace(/^#/, ""));
   if(!id || !DB.some(t=>t.id===id)) return;
@@ -1429,10 +1482,7 @@ function applyHash(){
   document.getElementById("searchInput").value = "";
   document.querySelectorAll(".filter-btn").forEach(b=>b.classList.toggle("active", b.dataset.cat==="all"));
   renderCards();
-  const detail = document.getElementById(`detail-${id}`);
-  if(detail && !detail.classList.contains("open")) toggleCard(id);
-  const card = document.getElementById(`tech-${id}`);
-  if(card) card.scrollIntoView({block:"start", behavior:"smooth"});
+  openPanel(id, {keepHash:true});
 }
 window.addEventListener("hashchange", applyHash);
 applyHash();
