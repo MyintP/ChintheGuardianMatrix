@@ -9,6 +9,15 @@
 <meta name="description" content="Log every training session — what worked, what needs work, techniques drilled — stored privately on your device with backup and restore.">
 <title>Training Journal — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-title" content="CHINTHE">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CHINTHE Guardian System">
+<meta property="og:title" content="Training Journal — CHINTHE">
+<meta property="og:description" content="Log every training session — what worked, what needs work, techniques drilled — stored privately on your device with backup and restore.">
+<meta property="og:url" content="https://myintp.github.io/ChintheGuardianMatrix/journal.html">
+<meta property="og:image" content="https://myintp.github.io/ChintheGuardianMatrix/icon-512.png">
+<meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="chinthe-lion.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="chinthe.css">
@@ -200,11 +209,11 @@ body{padding-bottom:0;}
     <div class="form-title">Log New Session</div>
     <div class="form-grid">
       <div class="form-group">
-        <label class="form-label">Date</label>
+        <label class="form-label" for="fDate">Date</label>
         <input class="form-input" type="date" id="fDate">
       </div>
       <div class="form-group">
-        <label class="form-label">Session Type</label>
+        <label class="form-label" for="fType">Session Type</label>
         <select class="form-select" id="fType">
           <option value="drilling">Drilling</option>
           <option value="sparring">Sparring / Rolling</option>
@@ -213,29 +222,29 @@ body{padding-bottom:0;}
         </select>
       </div>
       <div class="form-group full">
-        <label class="form-label">Title / Focus</label>
+        <label class="form-label" for="fTitle">Title / Focus</label>
         <input class="form-input" type="text" id="fTitle" placeholder="e.g. Back control chain + RNC finishing">
       </div>
       <div class="form-group full">
-        <label class="form-label">Techniques Drilled / Used</label>
+        <label class="form-label" for="techTagsInput">Techniques Drilled / Used</label>
         <div class="tags-input-wrap" id="techTagsWrap">
           <input class="tags-text-input" id="techTagsInput" placeholder="Type technique, press Enter…">
         </div>
       </div>
       <div class="form-group full">
-        <label class="form-label">What Worked</label>
+        <label class="form-label" for="fWorked">What Worked</label>
         <textarea class="form-textarea" id="fWorked" placeholder="Techniques or decisions that landed well…"></textarea>
       </div>
       <div class="form-group full">
-        <label class="form-label">What Needs Work</label>
+        <label class="form-label" for="fNeeds">What Needs Work</label>
         <textarea class="form-textarea" id="fNeeds" placeholder="Gaps, mistakes, transitions that broke down…"></textarea>
       </div>
       <div class="form-group full">
-        <label class="form-label">Drill Focus for Next Session</label>
+        <label class="form-label" for="fDrill">Drill Focus for Next Session</label>
         <textarea class="form-textarea" id="fDrill" placeholder="Specific drill targets based on this session…" style="min-height:70px;"></textarea>
       </div>
       <div class="form-group full">
-        <label class="form-label">Notes</label>
+        <label class="form-label" for="fNotes">Notes</label>
         <textarea class="form-textarea" id="fNotes" placeholder="Anything else — sparring partner notes, competition prep, observations…" style="min-height:70px;"></textarea>
       </div>
     </div>

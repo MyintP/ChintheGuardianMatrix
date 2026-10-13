@@ -20,6 +20,7 @@ node tests/run.js tests/shots   # main suite (199 checks) — screenshots land i
 node tests/frame-all.js         # every Matrix node framed in view, Focus + Full map, at 1440 / 1024 / 390 px
 node tests/sw-test.js           # service worker: network-first freshness + offline fallback
 node tests/audit.js             # static content audit (fields, scoring claims, page meta); writes tests/dump-*.txt
+node tests/a11y-audit.js        # accessibility: labels, names, WCAG contrast (both themes), phone tap targets, overflow
 ```
 
 Delete the Chrome profile folder between runs if you change `sw.js`, or the old service worker may serve cached pages.
@@ -32,4 +33,5 @@ Delete the Chrome profile folder between runs if you change `sw.js`, or the old 
 | `frame-all.js` | Jumps to all Matrix nodes in both views and asserts the node and all its options are inside the tree viewport. |
 | `sw-test.js` | Page controlled by the current SW; a changed file is served fresh on the next request; offline falls back to cache. |
 | `audit.js` | Missing/thin fields, point-value mentions, duplicate titles, dead ends, page meta, broken links. |
+| `a11y-audit.js` | Every page at 390 and 1440 px in dark and light: unnamed controls, unlabeled fields, WCAG AA text contrast, tap targets under 32px on phones, one h1, no horizontal overflow. Gradient backgrounds aren't read, so the homepage philosophy band is a known false positive. |
 | `shoot.js` | Helper: `node tests/shoot.js <url> <w> <h> <out.png> [1=fullpage] [js-before-shot]`. |

@@ -101,14 +101,14 @@
   --stone-dim:   #5A6068;
   --jade:        #DDF0E8;
   --jade-bright: #1D7558;
-  --gold:        #8A6A12;   /* brand gold, darkened for text contrast on white */
+  --gold:        #7D600F;   /* brand gold, darkened for text contrast on white and gold tints */
   --gold-dim:    #F4EBD3;
   --crimson:     #9B2C2C;
   --steel:       #66707D;
   --danger:      #B23A22;
   --danger-dim:  #FBE7E1;
   --danger-text: #B23A22;
-  --victory:     #8F6B0F;
+  --victory:     #7D5E0C;
   --victory-dim: #F6EDD3;
   --on-accent:   #FFFFFF;
   --line:        rgba(20, 28, 38, 0.10);
@@ -130,14 +130,14 @@
     --stone-dim:   #5A6068;
     --jade:        #DDF0E8;
     --jade-bright: #1D7558;
-    --gold:        #8A6A12;   /* brand gold, darkened for text contrast on white */
+    --gold:        #7D600F;   /* brand gold, darkened for text contrast on white and gold tints */
     --gold-dim:    #F4EBD3;
     --crimson:     #9B2C2C;
     --steel:       #66707D;
     --danger:      #B23A22;
     --danger-dim:  #FBE7E1;
     --danger-text: #B23A22;
-    --victory:     #8F6B0F;
+    --victory:     #7D5E0C;
     --victory-dim: #F6EDD3;
     --on-accent:   #FFFFFF;
     --line:        rgba(20, 28, 38, 0.10);
@@ -560,7 +560,7 @@ a {
 .disc-section.open > .disc-body { display: block; }
 .disc-body p { margin: 0; font-size: var(--text-body); line-height: 1.6; color: var(--stone); }
 .disc-body.tone-dim p  { color: var(--stone-dim); }
-.disc-body.tone-warn p { color: var(--danger); }
+.disc-body.tone-warn p { color: var(--danger-text); }
 
 /* ═══════════════════════════════════════════════════
    12. MODAL / OVERLAY (shared)

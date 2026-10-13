@@ -123,6 +123,32 @@ One rule for every page: information gets deeper, and the panel wider, from left
 - Homepage lion always on its brand tile (fixes a visible square on the new panel colour).
 - 199/199 browser checks (new: reading panel widest on all six pages, identical middle width, Principles groups, Journal card → reading panel); all 135 Matrix nodes still framed in Focus and Full map; SW cache v25.
 
+#### Pass 11 — Soft-launch audit (product, design, test)
+Audience: wrestling, judo, BJJ and MMA practitioners, daily use.
+**Fixed:**
+- Journal: all 8 form fields now have programmatic labels, so screen readers and tap-to-focus on the label both work.
+- Contrast (WCAG AA): light-theme gold `#8A6A12 → #7D600F` and victory `#8F6B0F → #7D5E0C` (active items, Intermediate chip, verify flag). Opponent score label, the −1 penalty and "Trailing" guidance now use the text-safe red.
+- Phone tap targets: Knowledge level filters and Matrix Focus / Full map raised to 40px.
+- Sharing: Open Graph and Twitter tags on all six pages, so links shared in WhatsApp, Instagram or Messenger show the title, description and lion.
+- Install: apple-touch-icon and app title, so iPhone "Add to Home Screen" uses the lion. The manifest uses the brand night colour, and the icons are no longer declared maskable (which cropped them).
+- Safety: a "learn under a coach, apply slowly, tap early" notice in the homepage footer and the Knowledge database panel.
+- New `tests/a11y-audit.js`.
+
+**Verified clean:**
+- No unnamed controls.
+- No horizontal overflow at 390 or 1440 in either theme.
+- One h1 per page.
+- Every page under 55 KB gzipped.
+- No external links or trackers.
+- No ebooks or work files in the repo or its history.
+- 199/199 checks; all 135 Matrix nodes framed; SW v26 offline and freshness checks pass.
+
+**Open, owner decisions (not built):**
+1. No in-app feedback channel. Testers need one obvious way to report issues (form or email). Needs the owner's choice of channel.
+2. Scope vs audience: rulesets are ADCC, IBJJF and NAGA only. There's no judo (IJF), wrestling (UWW or folkstyle) or MMA scoring, and no striking, cage or ground-and-pound content. Wrestling and judo technique coverage is real: Standing & Clinch 13, Judo Throws 18.
+3. Data lives only on each device, with a backup reminder. Testers who clear their browser lose their journal.
+4. No usage measurement. The soft launch can only be judged by what testers report.
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.
