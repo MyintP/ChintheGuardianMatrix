@@ -12,12 +12,12 @@
 <link rel="icon" type="image/png" href="chinthe-lion.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="chinthe.css">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Cinzel:wght@400;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Cinzel:wght@600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* Principles = shared app shell (chinthe.css §17) + reading components below. */
 body{padding-bottom:0;}
 .pr-intro{font-size:13.5px;line-height:1.55;color:var(--stone-dim);}
-.pr-quote{font-family:'Cinzel',serif;font-size:14px;line-height:1.5;color:var(--stone);margin:0 0 12px;}
+.pr-quote{font-family:var(--font-serif);font-size:14px;line-height:1.5;color:var(--stone);margin:0 0 12px;}
 .pr-quote cite{display:block;margin-top:6px;font-family:var(--font-mono);font-style:normal;font-size:var(--text-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--stone-dim);}
 .pr-sources{display:flex;flex-direction:column;gap:4px;}
 .pr-sources span{font-size:12.5px;color:var(--stone-dim);line-height:1.45;}
@@ -36,8 +36,8 @@ body{padding-bottom:0;}
 .panel-section-text{font-size:15px;line-height:1.7;color:var(--stone);max-width:720px;}
 .panel-section-text.jade{padding:14px 16px;border-left:3px solid var(--jade-bright);border-radius:0 8px 8px 0;background:var(--surface-2);}
 .panel-examples{display:grid;gap:10px;}
-@media(min-width:1100px){.panel-examples{grid-template-columns:1fr 1fr;}}
-.panel-example{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+
+.panel-example{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
 .panel-example strong{display:block;font-family:var(--font-display);font-weight:400;font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--stone);margin-bottom:6px;}
 .panel-example p{font-size:14px;line-height:1.6;color:var(--stone-dim);}
 
@@ -90,7 +90,7 @@ body{padding-bottom:0;}
   </div>
 </nav>
 
-<div class="app-shell">
+<div class="app-shell has-aside">
   <aside class="app-nav" aria-label="Principles and reference">
     <div class="app-nav-head">
       <div class="app-eyebrow">CHINTHE Foundation</div>
@@ -106,18 +106,12 @@ body{padding-bottom:0;}
     </nav>
     <div class="app-nav-foot">
       <blockquote class="pr-quote">"If something is very hard or requires a lot of effort, you are doing it wrong. Find the principle you're missing."<cite>Sylvain Galibert</cite></blockquote>
-      <div class="block-label">Sources</div>
-      <div class="pr-sources">
-        <span>Galibert — Principles of Martial Arts</span>
-        <span>Galibert — Chess Principles for Martial Arts</span>
-        <span>Kesting — A Roadmap for BJJ</span>
-        <span>Kesting — Unblocking BJJ</span>
-      </div>
     </div>
   </aside>
   <main class="app-main" id="mdPanel">
     <article class="app-reading" id="mdContent"></article>
   </main>
+  <aside class="app-aside" id="prAside" aria-label="Examples, related moves and sources"></aside>
 </div>
 
 <script>
@@ -319,6 +313,18 @@ function render(html){
   document.getElementById('mdPanel').scrollTop = 0;
   if (window.innerWidth < 900) window.scrollTo({top: 0});
 }
+const RELATED = {"efficiency":[["fluid_efficiency","Fluid Technique — Efficiency Over Power"],["hip_movement","Hip Movement"],["kuzushi_application","Kuzushi in Passing"]],"ju":[["tomoe_nage","Tomoe-Nage"],["chain_attacks","The Attack Chain"],["action_reaction_entries","Set-Up and Reaction Entries"]],"timing":[["butterfly_sweep","Butterfly Elevator Sweep"],["hip_bump","Hip Bump Sweep"],["ko_uchi_gari","Ko-Uchi-Gari"]],"reaction":[["action_reaction_entries","Set-Up and Reaction Entries"],["chain_attacks","The Attack Chain"],["armbar","Armbar"]],"drive":[["o_soto_gari","O-Soto-Gari"],["knee_slice","Knee Slice"],["over_under","Over-Under Pass"]],"leverage":[["armbar","Armbar"],["kimura","Kimura"],["double_leg","Double Leg"]],"weight":[["side_control","Side Control"],["kesa_gatame","Kesa-Gatame"],["smash_pass","Smash Pass"]],"angles":[["torreando","Torreando Pass"],["knee_slice","Knee Slice"],["heel_hook_inside","Inside Heel Hook"]],"balance":[["kuzushi_application","Kuzushi in Passing"],["harai_goshi","Harai-Goshi"],["sprawl","Sprawl Defence"]],"kuzushi":[["kumi_kata","Kumi-Kata (Grip Fighting)"],["o_soto_gari","O-Soto-Gari"],["uchi_mata","Uchi-Mata"]],"position":[["back_control","Back Control"],["mount","Mount"],["chain_attacks","The Attack Chain"]],"frames":[["side_control_escape","Side Control Escape"],["mount_escape","Mount Escape"],["guard_retention","Guard Retention"]],"hierarchy":[["back_control","Back Control"],["mount","Mount"],["adcc_match_strategy","ADCC Match Strategy"]],"chess":[["chain_attacks","The Attack Chain"],["action_reaction_entries","Set-Up and Reaction Entries"]],"grips":[["kumi_kata","Kumi-Kata (Grip Fighting)"],["hand_fighting","Hand Fighting & Ties"],["rnc","Rear Naked Choke"]],"distances":[["clinch_entry","Standup Entry to Clinch"],["hand_fighting","Hand Fighting & Ties"],["wrestling_shot","Wrestling Shot"]],"glossary":[]};
+const SOURCES = ["Galibert — Principles of Martial Arts", "Galibert — Chess Principles for Martial Arts", "Kesting — A Roadmap for BJJ", "Kesting — Unblocking BJJ"];
+function renderAside(id, examplesHtml){
+  const rel = RELATED[id] || [];
+  document.getElementById('prAside').innerHTML =
+    (examplesHtml ? '<div class="aside-block"><div class="aside-title">Examples</div><div class="panel-examples">' + examplesHtml + '</div></div>' : '') +
+    (rel.length ? '<div class="aside-block"><div class="aside-title">See it in technique</div><div class="aside-list">' +
+      rel.map(([k, name]) => '<a class="aside-link" href="knowledge.html#' + k + '">' + name + '</a>').join('') + '</div></div>'
+      : '<div class="aside-block"><div class="aside-title">Use it</div><p class="aside-text">Every term here is used across the <a href="chinthe-guardian-matrix.html" style="color:var(--jade-bright)">Matrix</a> and <a href="knowledge.html" style="color:var(--jade-bright)">Knowledge Base</a>.</p></div>') +
+    '<div class="aside-block"><div class="aside-title">Sources</div><div class="aside-list">' + SOURCES.map(x => '<p class="aside-text">' + x + '</p>').join('') + '</div></div>';
+  document.getElementById('prAside').scrollTop = 0;
+}
 function showPrinciple(id){
   const p = PRINCIPLES.find(x => x.id === id);
   if(!p) return;
@@ -332,14 +338,15 @@ function showPrinciple(id){
     '<p class="panel-tagline">' + p.tagline + '</p>' +
     '<div class="panel-section"><div class="panel-section-label">Explanation</div><p class="panel-section-text">' + p.overview + '</p></div>' +
     (p.applications ? '<div class="panel-section"><div class="panel-section-label">Application</div><p class="panel-section-text jade">' + p.applications + '</p></div>' : '') +
-    (p.mat ? '<div class="panel-section"><div class="panel-section-label">On the Mat</div><p class="panel-section-text">' + p.mat + '</p></div>' : '') +
-    (exHtml ? '<div class="panel-section"><div class="panel-section-label">Examples</div><div class="panel-examples">' + exHtml + '</div></div>' : ''));
+    (p.mat ? '<div class="panel-section"><div class="panel-section-label">On the Mat</div><p class="panel-section-text">' + p.mat + '</p></div>' : ''));
+  renderAside(id, exHtml);
 }
 function showSection(id){
   setActive(id);
   const renders = {hierarchy:renderHierarchy, chess:renderChess, grips:renderGrips, distances:renderDistances, glossary:renderGlossary};
   const fn = renders[id];
   if(fn) render(fn());
+  renderAside(id, '');
 }
 
 function renderHierarchy(){

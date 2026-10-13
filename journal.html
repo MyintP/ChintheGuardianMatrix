@@ -12,34 +12,25 @@
 <link rel="icon" type="image/png" href="chinthe-lion.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="chinthe.css">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Cinzel:wght@600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* Design tokens (--bg, --surface, --gold, --stone, --line, --radius, …) come
    from chinthe.css — single source of truth, no per-page palette copies. */
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--stone);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:100px;}
-nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 92%, transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);}
+body{padding-bottom:0;}
 /* Nav styles in chinthe.css */
 
-.wrap{max-width:1240px;margin:0 auto;padding:0 20px 56px;}
-.page-head{grid-column:1/-1;margin-bottom:24px;}
-
-/* Stats strip */
-.stats-strip{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
-.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;flex:1;min-width:120px;}
-.stat-value{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:var(--gold);line-height:1;}
-.stat-label{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);margin-top:4px;}
 
 /* New session form */
-.form-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-bottom:32px;}
-.form-title{font-family:'Oswald',sans-serif;font-size:22px;letter-spacing:0.03em;text-transform:uppercase;margin-bottom:20px;}
+.form-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;max-width:820px;}
+.form-title{display:none;}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
 .form-group{display:flex;flex-direction:column;gap:6px;}
 .form-group.full{grid-column:1/-1;}
-.form-label{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);}
+.form-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);}
 .form-input,.form-select,.form-textarea{
   background:var(--surface-2);border:1px solid var(--line);border-radius:8px;
-  color:var(--stone);font-family:'Inter',sans-serif;font-size:14px;
+  color:var(--stone);font-family:var(--font-body);font-size:14px;
   padding:10px 12px;outline:none;width:100%;
 }
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--jade-bright);}
@@ -49,13 +40,13 @@ nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 92%
 /* Tags input */
 .tags-input-wrap{display:flex;flex-wrap:wrap;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;cursor:text;}
 .tags-input-wrap:focus-within{border-color:var(--jade-bright);}
-.tag-pill{display:flex;align-items:center;gap:4px;background:var(--jade);color:var(--jade-bright);font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.06em;padding:3px 8px;border-radius:5px;}
+.tag-pill{display:flex;align-items:center;gap:4px;background:var(--jade);color:var(--jade-bright);font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.06em;padding:3px 8px;border-radius:5px;}
 .tag-pill button{background:none;border:none;color:var(--jade-bright);cursor:pointer;font-size:11px;padding:0;line-height:1;}
-.tags-text-input{background:none;border:none;outline:none;color:var(--stone);font-family:'Inter',sans-serif;font-size:13px;min-width:120px;flex:1;}
+.tags-text-input{background:none;border:none;outline:none;color:var(--stone);font-family:var(--font-body);font-size:13px;min-width:120px;flex:1;}
 
 /* Submit row */
 .submit-row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;}
-.save-feedback{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;display:none;align-self:center;}
+.save-feedback{font-family:var(--font-mono);font-size:11px;color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;display:none;align-self:center;}
 
 /* Sessions list */
 .sessions-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;margin-bottom:8px;}
@@ -66,15 +57,15 @@ nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 92%
 .br-sub{font-size:12.5px;color:var(--stone-dim);margin-top:2px;line-height:1.45;}
 .br-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .backup-note{font-size:12px;color:var(--stone-dim);margin:0 0 16px;line-height:1.5;}
-.sessions-title{font-family:'Oswald',sans-serif;font-size:22px;letter-spacing:0.03em;text-transform:uppercase;}
+.sessions-title{font-family:var(--font-display);font-size:22px;letter-spacing:0.03em;text-transform:uppercase;}
 .sessions-list{display:flex;flex-direction:column;gap:12px;}
 .session-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
 .session-header{padding:16px 18px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;cursor:pointer;}
 .session-header:hover{background:var(--surface-2);}
-.session-date{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
-.session-title{font-family:'Oswald',sans-serif;font-size:20px;letter-spacing:0.02em;text-transform:uppercase;line-height:1;}
-.session-meta{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;}
-.session-badge{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:4px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0;}
+.session-date{font-family:var(--font-mono);font-size:11px;color:var(--jade-bright);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+.session-title{font-family:var(--font-display);font-size:20px;letter-spacing:0.02em;text-transform:uppercase;line-height:1;}
+.session-meta{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;}
+.session-badge{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:4px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0;}
 .badge-drilling{background:var(--jade);color:var(--jade-bright);}
 .badge-sparring{background:color-mix(in srgb, var(--victory) 15%, transparent);color:var(--gold);}
 .badge-competition{background:color-mix(in srgb, var(--crimson) 18%, transparent);color:var(--danger-text);}
@@ -82,62 +73,39 @@ nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 92%
 .session-body{display:none;padding:0 18px 18px;border-top:1px solid var(--line);}
 .session-body.open{display:block;padding-top:16px;}
 .session-field{margin-bottom:12px;}
-.session-field-label{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:4px;}
+.session-field-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:4px;}
 .session-field-text{font-size:13.5px;line-height:1.55;color:var(--stone);}
 .session-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
-.session-tag{font-family:'IBM Plex Mono',monospace;font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);border-radius:4px;padding:2px 7px;}
+.session-tag{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);border-radius:4px;padding:2px 7px;}
 .session-actions{display:flex;gap:8px;margin-top:14px;}
 
 .empty-state{text-align:center;padding:60px 20px;color:var(--stone-dim);}
 .empty-icon{font-size:40px;margin-bottom:16px;}
-.empty-text{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;}
+.empty-text{font-family:var(--font-mono);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;}
 
 @media(max-width:640px){
   .nav-links{display:none;}
   .form-grid{grid-template-columns:1fr;}
-  .stats-strip{flex-direction:row;}
 }
 
-/* ── DESKTOP IMPROVEMENTS ── */
-@media(min-width:960px){
-  .nav-inner{padding:16px 40px;}
-  .nav-wordmark{font-size:22px;}
-  .nav-link{font-size:12px;padding:8px 16px;}
-
-  .wrap{padding:0 32px 64px;}
-
-  .stats-strip{gap:16px;}
-  .stat-value{font-size:32px;}
-  .stat-label{font-size:11px;}
-
-  .form-card{padding:32px 36px;}
-  .form-title{font-size:26px;}
-  .form-grid{grid-template-columns:1fr 1fr;gap:16px;}
-  .form-input,.form-select{font-size:15px;padding:12px 16px;}
-  .form-textarea{font-size:15px;padding:12px 16px;}
-
-  .session-card{border-radius:12px;}
-  .session-title{font-size:22px;}
-  .session-header{padding:20px 24px;}
-  .session-body.open{padding:20px 24px 24px;}
-  .session-field-text{font-size:14.5px;line-height:1.6;}
-}
-
-@media(min-width:1100px){
-  .wrap{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-    column-gap:40px;
-    align-items:start;
-  }
-}
-
-@media(min-width:1280px){
-  .wrap{padding:0 48px 64px;}
+/* ── Layout: shared app shell (chinthe.css §17) ── */
+.new-session-btn{width:100%;justify-content:center;}
+.session-item-date{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--stone-dim);white-space:nowrap;}
+.session-view{max-width:820px;}
+.session-view .session-field{margin-bottom:18px;}
+.session-view .session-field-text{font-size:15px;line-height:1.65;}
+.session-view .session-actions{margin-top:22px;}
+.aside-actions{display:flex;flex-wrap:wrap;gap:6px;}
+.backup-reminder{margin:0;}
+.mobile-only{display:block;}
+@media (min-width:900px){
+  .mobile-only{display:none;}
+  .form-grid{gap:14px;}
+  .form-input,.form-select,.form-textarea{font-size:15px;}
 }
 </style>
 </head>
-<body>
+<body class="app-page">
 
 <nav class="site-nav">
   <div class="site-nav-inner">
@@ -156,32 +124,25 @@ nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 92%
   </div>
 </nav>
 
-<div class="wrap">
-  <header class="page-head">
-    <div class="app-eyebrow">CHINTHE Training Journal</div>
-    <h1 class="page-head-title">Training Journal</h1>
-    <p class="page-head-sub">Log every session — what worked, what needs work, what to drill next. Stored privately on this device.</p>
-  </header>
-  <div class="journal-left">
-
-  <div class="stats-strip" id="statsStrip">
-    <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Sessions Logged</div></div>
-    <div class="stat-card"><div class="stat-value" id="statThisWeek">0</div><div class="stat-label">This Week</div></div>
-    <div class="stat-card"><div class="stat-value" id="statTopTech">—</div><div class="stat-label">Most Logged</div></div>
-  </div>
-
-  <div class="backup-reminder" id="backupReminder" role="status" hidden>
-    <div class="br-text">
-      <div class="br-title" id="brTitle"></div>
-      <div class="br-sub" id="brSub"></div>
+<div class="app-shell has-aside">
+  <aside class="app-nav" aria-label="Session history">
+    <div class="app-nav-head">
+      <div class="app-eyebrow">CHINTHE Training Journal</div>
+      <h1 class="app-title">Journal</h1>
+      <p class="app-head-sub" style="font-size:13.5px">Log every session. Stored privately on this device.</p>
+      <button type="button" class="btn btn-primary new-session-btn" id="newSessionBtn">+ New session</button>
     </div>
-    <div class="br-actions">
-      <button type="button" class="btn btn-primary" id="brBackup">⤓ Back up now</button>
-      <button type="button" class="btn btn-ghost" id="brLater">Later</button>
-    </div>
-  </div>
+    <nav class="app-nav-list" id="navSessions" aria-label="Sessions"></nav>
+  </aside>
 
-  <div class="form-card">
+  <main class="app-main">
+    <header class="app-head">
+      <div class="app-eyebrow" id="jEyebrow">Log</div>
+      <h2 class="app-head-title" id="jTitle">New session</h2>
+      <p class="app-head-sub" id="jSub">What worked, what needs work, and what to drill next.</p>
+    </header>
+    <div id="formWrap">
+      <div class="form-card">
     <div class="form-title">Log New Session</div>
     <div class="form-grid">
       <div class="form-group">
@@ -226,25 +187,48 @@ nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 92%
     </div>
     <div class="submit-row">
       <span class="save-feedback" id="saveFeedback">✓ Saved</span>
-      <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
-      <button class="btn btn-primary" onclick="saveSession()">Save Session</button>
+      <button class="btn btn-secondary" type="button" onclick="clearForm()">Clear</button>
+      <button class="btn btn-primary" type="button" onclick="saveSession()">Save session</button>
     </div>
   </div>
-  </div><!-- /.journal-left -->
+    </div>
+    <div class="session-view" id="sessionView" hidden></div>
+  </main>
 
-  <div class="journal-right">
-  <div class="sessions-header">
-    <div class="sessions-title">Session History</div>
-    <div class="sessions-actions">
-      <button class="btn btn-ghost" onclick="exportAll()" title="Readable Markdown copy">↗ Export</button>
-      <button class="btn btn-ghost" onclick="backupJSON()" title="Full backup file you can restore from">⤓ Backup</button>
-      <button class="btn btn-ghost" onclick="document.getElementById('restoreInput').click()" title="Restore sessions from a backup file">⤒ Restore</button>
-      <input type="file" id="restoreInput" accept="application/json,.json" hidden>
+  <aside class="app-aside" aria-label="Stats and backup">
+    <div class="aside-block">
+      <div class="aside-title">Your training</div>
+      <div class="stat-grid">
+        <div class="stat-tile"><b id="statTotal">0</b><span>Sessions</span></div>
+        <div class="stat-tile"><b id="statThisWeek">0</b><span>This week</span></div>
+        <div class="stat-tile" style="grid-column:1/-1"><b id="statTopTech">—</b><span>Most logged technique</span></div>
+      </div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-title">Backup</div>
+      <div class="backup-reminder" id="backupReminder" role="status" hidden>
+    <div class="br-text">
+      <div class="br-title" id="brTitle"></div>
+      <div class="br-sub" id="brSub"></div>
+    </div>
+    <div class="br-actions">
+      <button type="button" class="btn btn-primary" id="brBackup">⤓ Back up now</button>
+      <button type="button" class="btn btn-ghost" id="brLater">Later</button>
     </div>
   </div>
-  <p class="backup-note">Stored only on this device · <span id="lastBackupText">Never backed up</span></p>
-  <div class="sessions-list" id="sessionsList"></div>
-  </div><!-- /.journal-right -->
+      <p class="aside-text" style="margin:10px 0">Stored only on this device · <span id="lastBackupText">Never backed up</span></p>
+      <div class="aside-actions">
+        <button class="btn btn-ghost" type="button" onclick="backupJSON()" title="Full backup file you can restore from">⤓ Backup</button>
+        <button class="btn btn-ghost" type="button" onclick="document.getElementById('restoreInput').click()" title="Restore sessions from a backup file">⤒ Restore</button>
+        <button class="btn btn-ghost" type="button" onclick="exportAll()" title="Readable Markdown copy">↗ Export</button>
+        <input type="file" id="restoreInput" accept="application/json,.json" hidden>
+      </div>
+    </div>
+    <div class="aside-block mobile-only">
+      <div class="aside-title">Session history</div>
+      <div class="sessions-list" id="sessionsList"></div>
+    </div>
+  </aside>
 </div>
 
 <script>
@@ -345,10 +329,81 @@ function clearForm(){
   techTags=[];renderTags();
 }
 
+// ── Middle panel: new-session form or a selected session ─────
+let viewingId = null;
+const TYPE_LABEL = {drilling:"Drilling",sparring:"Sparring",competition:"Competition",conditioning:"Conditioning"};
+function showNew(){
+  viewingId = null;
+  document.getElementById("formWrap").hidden = false;
+  document.getElementById("sessionView").hidden = true;
+  document.getElementById("jEyebrow").textContent = "Log";
+  document.getElementById("jTitle").textContent = "New session";
+  document.getElementById("jSub").textContent = "What worked, what needs work, and what to drill next.";
+  markActive();
+}
+function showSession(id){
+  const s = loadSessions().find(x=>x.id===id);
+  if (!s) return showNew();
+  viewingId = id;
+  document.getElementById("formWrap").hidden = true;
+  const v = document.getElementById("sessionView");
+  v.hidden = false; v.innerHTML = "";
+  document.getElementById("jEyebrow").textContent = fmtDate(s.date) + " · " + (TYPE_LABEL[s.type] || s.type);
+  document.getElementById("jTitle").textContent = s.title;
+  document.getElementById("jSub").textContent = "";
+  const field = (label, text, color)=>{
+    if (!text) return;
+    const f = el("div","session-field");
+    f.appendChild(el("div","session-field-label",label));
+    const t = el("div","session-field-text",text);
+    if (color) t.style.color = color;
+    f.appendChild(t); v.appendChild(f);
+  };
+  if ((s.techniques||[]).length){
+    const f = el("div","session-field");
+    f.appendChild(el("div","session-field-label","Techniques"));
+    const tags = el("div","session-tags");
+    s.techniques.forEach(t=>tags.appendChild(el("span","session-tag",t)));
+    f.appendChild(tags); v.appendChild(f);
+  }
+  field("What worked", s.worked);
+  field("Needs work", s.needs, "var(--danger-text)");
+  field("Next drill focus", s.drill);
+  field("Notes", s.notes, "var(--stone-dim)");
+  const actions = el("div","session-actions");
+  const del = el("button","btn btn-danger","Delete session"); del.type = "button";
+  del.addEventListener("click", ()=>deleteSession(id));
+  actions.appendChild(del); v.appendChild(actions);
+  markActive();
+  if (window.innerWidth < 900) window.scrollTo({top:0});
+}
+function markActive(){
+  document.querySelectorAll("#navSessions .app-nav-item").forEach(b=>b.classList.toggle("active", b.dataset.sid===viewingId));
+}
+function renderNavSessions(sessions){
+  const nav = document.getElementById("navSessions");
+  nav.innerHTML = "";
+  if (!sessions.length){ nav.innerHTML = '<p class="aside-text" style="padding:12px 20px">No sessions yet.</p>'; return; }
+  let lastMonth = null;
+  sessions.forEach(s=>{
+    const month = new Date(s.date+"T00:00:00").toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+    if (month !== lastMonth){ lastMonth = month; nav.appendChild(el("div","app-nav-group",month)); }
+    const b = el("button","app-nav-item");
+    b.type = "button"; b.dataset.sid = s.id;
+    b.appendChild(el("span",null,s.title));
+    b.appendChild(el("span","session-item-date",new Date(s.date+"T00:00:00").toLocaleDateString('en-GB',{day:'2-digit',month:'short'})));
+    b.addEventListener("click", ()=>showSession(s.id));
+    nav.appendChild(b);
+  });
+  markActive();
+}
+document.getElementById("newSessionBtn").addEventListener("click", ()=>{ showNew(); document.getElementById("fTitle").focus(); });
+
 function deleteSession(id){
   if(!confirm("Delete this session? Cannot be undone."))return;
   const sessions=loadSessions().filter(s=>s.id!==id);
   saveSessions(sessions);
+  if (viewingId === id) showNew();
   renderAll();
 }
 
@@ -372,6 +427,7 @@ function renderAll(){
   const topTech=Object.entries(techCount).sort((a,b)=>b[1]-a[1])[0];
 
   renderBackupReminder();
+  renderNavSessions(sessions);
   document.getElementById("statTotal").textContent=sessions.length;
   document.getElementById("statThisWeek").textContent=thisWeek;
   document.getElementById("statTopTech").textContent=topTech?topTech[0]:"—";

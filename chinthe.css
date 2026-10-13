@@ -66,7 +66,7 @@
   /* Typefaces — Oswald headlines, Cinzel accents (brand system) */
   --font-display: 'Oswald', sans-serif;
   --font-serif:   'Cinzel', serif;
-  --font-body:    'Inter', 'IBM Plex Sans', sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
   --font-mono:    'IBM Plex Mono', monospace;
   --font-myanmar: 'Noto Sans Myanmar', sans-serif;
 
@@ -865,18 +865,58 @@ a {
 .app-head-sub { font-size: 15px; line-height: 1.55; color: var(--stone-dim); max-width: 760px; }
 .app-reading { max-width: 780px; }
 
+/* Right-hand panel ("aside"): supporting information for what's in the middle */
+.app-aside { padding: 4px 20px 48px; min-width: 0; }
+.aside-block { padding: 16px 0; border-top: 1px solid var(--line); }
+.aside-block:first-child { border-top: none; padding-top: 4px; }
+.aside-title {
+  font-family: var(--font-mono); font-weight: 600; font-size: var(--text-xs); letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--jade-bright); margin-bottom: 10px;
+}
+.aside-list { display: grid; gap: 6px; }
+.aside-link {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 9px 12px; border-radius: 8px; border: 1px solid var(--line-strong);
+  background: var(--surface-2); color: var(--stone); font-size: 14px; text-align: left; width: 100%;
+}
+.aside-link:hover { border-color: var(--jade-bright); }
+.aside-link::after { content: "›"; color: var(--stone-dim); font-size: 16px; }
+.aside-text { font-size: 14px; line-height: 1.6; color: var(--stone-dim); }
+.stat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.stat-tile { padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); min-width: 0; }
+.stat-tile b { display: block; font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.1; color: var(--stone); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stat-tile span { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone-dim); }
+
+/* Tablet / small laptop: sticky left panel; content and aside stack in column 2 */
 @media (min-width: 900px) {
-  body.app-page { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-  body.app-page > .site-nav, body.app-page > .breadcrumb { flex-shrink: 0; }
-  .app-shell { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 270px minmax(0, 1fr); }
-  .app-nav { border-bottom: none; border-right: 1px solid var(--line); overflow-y: auto; min-height: 0; }
+  .app-shell { display: grid; grid-template-columns: 270px minmax(0, 1fr); align-items: start; }
+  .app-nav {
+    position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); overflow-y: auto;
+    border-bottom: none; border-right: 1px solid var(--line);
+    grid-row: 1 / span 2;   /* spans content + stacked aside, so it never stretches row 1 */
+  }
   .app-select { display: none; }
   .app-nav-list { display: block; padding-bottom: 12px; }
-  .app-main { overflow-y: auto; min-height: 0; padding: 26px 32px 56px; }
+  .app-main { grid-column: 2; padding: 26px 32px 32px; }
+  .app-aside { grid-column: 2; padding: 0 32px 56px; }
+}
+/* Desktop: the full three-panel frame, each panel scrolling on its own */
+@media (min-width: 1200px) {
+  body.app-page { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  body.app-page > .site-nav, body.app-page > .breadcrumb { flex-shrink: 0; }
+  body.app-page .app-shell { flex: 1 1 auto; min-height: 0; align-items: stretch; }
+  .app-shell.has-aside { grid-template-columns: 270px minmax(0, 1fr) minmax(340px, 30vw); }
+  body.app-page .app-nav { position: static; height: auto; min-height: 0; }
+  body.app-page .app-main { overflow-y: auto; min-height: 0; padding: 26px 32px 56px; }
+  .app-shell.has-aside .app-aside {
+    grid-column: 3; grid-row: 1; overflow-y: auto; min-height: 0;
+    background: var(--surface); border-left: 1px solid var(--line); padding: 24px 24px 48px;
+  }
 }
 @media (min-width: 1600px) {
   .app-shell { grid-template-columns: 300px minmax(0, 1fr); }
-  .app-main { padding: 32px 48px 64px; }
+  .app-shell.has-aside { grid-template-columns: 300px minmax(0, 1fr) 440px; }
+  body.app-page .app-main { padding: 32px 48px 64px; }
 }
 
 /* Document pages: one header style */

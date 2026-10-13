@@ -209,10 +209,41 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   ok('[d1440] Principles uses the same shell: list left, reading column right', await d.ev(`(()=>{const n=document.querySelector('.app-nav').getBoundingClientRect(),m=document.getElementById('mdPanel').getBoundingClientRect();return n.right<=m.left+1 && getComputedStyle(document.getElementById('prSelect')).display==='none' && document.querySelector('.app-nav-item.active').id==='si-efficiency'})()`));
   ok('[d1440] Principles list labels are left-aligned', await d.ev(`(()=>{const it=document.querySelector('#si-timing span:not(.app-nav-num)');const b=document.getElementById('si-timing').getBoundingClientRect();return it.getBoundingClientRect().left - b.left < 80})()`));
   // Same header component across document pages
-  for (const p of ['competition.html', 'journal.html']) {
-    await d.go(BASE + p);
-    ok(`[d1440] ${p}: uses the shared page header`, await d.ev(`!!document.querySelector('.page-head .page-head-title') && getComputedStyle(document.querySelector('.page-head-title')).fontFamily.includes('Oswald')`));
+  // Every page: unique left panel | information in the middle | right panel, same fonts and widths
+  const FRAME = {
+    'index.html':                   ['.app-nav', '.app-main', '.app-aside'],
+    'chinthe-guardian-matrix.html': ['.wrap > header', '.tree-wrap', '#detailPane'],
+    'competition.html':             ['.app-nav', '.app-main', '.app-aside'],
+    'knowledge.html':               ['.app-nav', '#kbMid', '#kbPanel'],
+    'principles.html':              ['.app-nav', '.app-main', '.app-aside'],
+    'journal.html':                 ['.app-nav', '.app-main', '.app-aside']
+  };
+  const widths = {};
+  for (const [p, [l, m, r]] of Object.entries(FRAME)) {
+    await d.go(BASE + p); await sleep(300);
+    const g = await d.ev(`(()=>{const L=document.querySelector('${l}').getBoundingClientRect(),M=document.querySelector('${m}').getBoundingClientRect(),R=document.querySelector('${r}').getBoundingClientRect();
+      const title=document.querySelector('.app-title');
+      return {order: L.right<=M.left+1 && M.right<=R.left+1 && R.width>300 && L.width>=260, left:Math.round(L.width), right:Math.round(R.right-R.left),
+        body:getComputedStyle(document.body).fontFamily, title: title?getComputedStyle(title).fontFamily:'none'}})()`);
+    widths[p] = g.left;
+    ok(`[d1440] ${p}: left panel | middle | right panel`, g.order, JSON.stringify(g));
+    ok(`[d1440] ${p}: shared fonts (Inter body, Oswald titles)`, g.body.startsWith('Inter') && g.title.includes('Oswald'), g.body + ' / ' + g.title);
   }
+  ok('[d1440] Left panel is the same width on every page', new Set(Object.values(widths)).size === 1, JSON.stringify(widths));
+  const fontLinks = await d.ev(`Promise.all(${JSON.stringify(Object.keys(FRAME))}.map(f=>fetch(f).then(r=>r.text()).then(t=>(t.match(/fonts\\.googleapis\\.com\\/css2\\?[^"]*/)||[''])[0])))`);
+  ok('Every page loads the identical font set', new Set(fontLinks).size === 1, JSON.stringify([...new Set(fontLinks)]));
+  await d.go(BASE + 'journal.html');
+  await d.ev(`localStorage.setItem('chinthe_journal_v1', JSON.stringify([{id:'j1',date:'2026-10-10',type:'sparring',title:'Open mat',techniques:['Kimura'],worked:'Kimura trap',needs:'',drill:'',notes:'',timestamp:'2026-10-10T10:00:00Z'}]))`);
+  await d.go(BASE + 'journal.html');
+  await d.ev(`document.querySelector('#navSessions [data-sid="j1"]').click()`);
+  ok('[d1440] Journal: history on the left opens the session in the middle', await d.ev(`!document.getElementById('sessionView').hidden && document.getElementById('jTitle').textContent==='Open mat' && document.getElementById('formWrap').hidden`));
+  await d.ev(`document.getElementById('newSessionBtn').click()`);
+  ok('[d1440] Journal: "New session" returns to the form', await d.ev(`!document.getElementById('formWrap').hidden && document.getElementById('sessionView').hidden`));
+  await d.ev(`localStorage.removeItem('chinthe_journal_v1')`);
+  await d.go(BASE + 'competition.html');
+  await d.ev(`document.querySelector('.ruleset-btn[data-rs="ibjjf"]').click()`);
+  ok('[d1440] Compete: ruleset list on the left drives the middle and right panels', await d.ev(`document.getElementById('rulesetTitle').textContent==='IBJJF' && document.getElementById('scoringTitle').textContent.includes('IBJJF')`));
+  await d.ev(`document.querySelector('.ruleset-btn[data-rs="adcc"]').click()`);
   // Themes
   await d.go(BASE + 'index.html');
   await d.ev(`localStorage.removeItem('chinthe_theme')`);

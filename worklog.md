@@ -92,6 +92,21 @@ Patterns adopted (structure only, no content copied) from bjjequipment.com, thef
 - Knowledge as three panels: database (search, 13 position groups, types) | move tiles | docked detail.
 - Principles rebuilt on the shared shell (list left, reading column right, picker on phones).
 
+#### Pass 9 — One three-panel frame on every page (see git log: "Uniform three-panel frame")
+Every page now uses the same layout: a page-specific panel on the left, information in the middle, supporting information on the right.
+| Page | Left | Middle | Right |
+|---|---|---|---|
+| Home | "Start here" path (5 steps + reference) | Hero, modules, philosophy | Your progress (from device data), quick actions, data note |
+| Matrix | Areas, tools, search, path (same list style) | Tree | Selected position |
+| Compete | Rulesets + core positions | Ruleset header, score tracker, clock guidance | Scoring table |
+| Knowledge | Database (positions, types) | Move tiles | Move detail |
+| Principles | Principles + reference list | Reading column | Examples, related techniques, sources |
+| Journal | Session history + New session | Log form or selected session | Stats, backup |
+- Shared frame in `chinthe.css` §17: ≥1200px three fixed panels each scrolling on its own; 900–1199px sticky left panel with content and side panel stacked; phones single column (picker in the header, side panel after content).
+- Fonts unified: identical font set loaded on every page; all font names replaced by tokens (Inter body, Oswald titles/lists, IBM Plex Mono labels, Cinzel quotes). The Matrix previously used IBM Plex Sans.
+- Fixed while verifying: tree area overflowing under the Matrix detail panel; Principles row gap at tablet width; a stray global `nav{}` rule in Journal; homepage hero centring.
+- 192/192 browser checks (new: frame order, identical left width, fonts and font links on all six pages; Journal history → middle; Compete ruleset → middle + right).
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.
