@@ -651,6 +651,31 @@
     k("suloev_stretch", "Suloev Stretch");
     k("flying_armbar", "Flying Armbar");
     k("flying_triangle", "Flying Triangle");
+    k("muay_thai_stance", "Muay Thai Stance");
+    k("wai_kru", "Wai Kru Ram Muay");
+    k("muay_thai_scoring", "How Muay Thai Is Scored");
+    k("long_guard", "Long Guard");
+    k("switch_kick", "Switch Kick");
+    k("diagonal_knee", "Diagonal Knee");
+    k("uppercut_elbow", "Uppercut Elbow");
+    k("chopping_elbow", "Chopping Elbow");
+    k("clinch_fighting", "Clinch Fighting: Position, Knees and Turns");
+    k("clinch_dump", "Clinch Dump");
+    k("catch_and_sweep", "Catch and Sweep");
+    k("counter_kick", "Check and Counter Kick");
+    k("thai_pads", "Training on Thai Pads");
+    k("muay_thai_conditioning", "Conditioning for Striking");
+    k("lethwei_rules", "Lethwei: Rules and Nine Limbs");
+    k("lethwei_ritual", "Lekkha Moun and Lethwei Yay");
+    k("lethwei_stance", "Lethwei Stance & Guard");
+    k("bare_knuckle_punching", "Bare-Knuckle Punching");
+    k("headbutt", "Headbutt");
+    k("clinch_headbutt", "Clinch Headbutt");
+    k("headbutt_defence", "Headbutt Defence");
+    k("lethwei_clinch", "Lethwei Clinch");
+    k("lethwei_throws", "Throws and Sweeps in Lethwei");
+    k("bare_knuckle_defence", "Defence Without Gloves");
+    k("bando", "Bando and Banshay: Burmese Martial Roots");
     // KB:END
 
     return items;

@@ -180,6 +180,13 @@ Verified: 198/198 checks (Home leaves the frame checks and gains landing-page ch
 **UI:** renamed to Encyclopedia across nav, breadcrumb, title and home; an **A–Z index**; Transitions and Strikes types; the panel shows the format (Gi, No-Gi, Wrestling, Judo, MMA) and video search uses the right discipline. The home page describes all four disciplines with deep links.
 Verified: 204/204 checks (new: 350+ complete entries, every entry levelled and grouped, every link resolves, the six new sections, A–Z index, format chip and video search); accessibility audit clean; SW v28 precaches `encyclopedia.js` (63 KB gzipped).
 
+#### Pass 14 — Muay Thai and Lethwei (368 → 393 entries)
+- New **Muay Thai: Art of Eight Limbs** section: Thai stance, Wai Kru Ram Muay, how fights are scored, long guard, switch kick, diagonal knee, uppercut and chopping elbows, clinch fighting, clinch dumps, catch-and-sweep, check-and-counter, Thai pad training, conditioning. Linked to the existing teep, kicks, knees, elbows and Thai clinch, with no duplicates.
+- New **Lethwei: Burmese Boxing** section: rules and the nine limbs (bare knuckle, headbutts, KO-only tradition, injury time-out), Lekkha Moun and Lethwei Yay, stance, bare-knuckle punching and hand safety, headbutt and clinch headbutt (pads only), headbutt defence, the Lethwei clinch, throws and sweeps, defence without gloves, and Bando and Banshay as Myanmar's martial roots.
+- New formats Muay Thai and Lethwei (chip and video search). Home: two new audience cards, "Built for fighters", three-column grid; the encyclopedia is renamed **Fighting Encyclopedia**.
+- Rules details vary by promotion (Muay Thai scoring, modern Lethwei judging); entries say so rather than state one rulebook.
+- 204/204 checks (section checks now include Muay Thai and Lethwei); SW v29.
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.

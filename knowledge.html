@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
-<meta name="description" content="The CHINTHE grappling encyclopedia: BJJ (gi and no-gi), wrestling, judo and MMA — positions, takedowns, throws, passes, sweeps, submissions, escapes and strikes, each with mechanics, reactions, common mistakes and drills.">
+<meta name="description" content="The CHINTHE encyclopedia: BJJ (gi and no-gi), wrestling, judo, MMA, Muay Thai and Lethwei — positions, takedowns, throws, passes, sweeps, submissions, escapes and strikes, each with mechanics, reactions, common mistakes and drills.">
 <title>Encyclopedia — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-title" content="CHINTHE">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CHINTHE Guardian System">
-<meta property="og:title" content="Grappling Encyclopedia — CHINTHE">
-<meta property="og:description" content="The CHINTHE grappling encyclopedia: BJJ (gi and no-gi), wrestling, judo and MMA — positions, takedowns, throws, passes, sweeps, submissions, escapes and strikes, each with mechanics, reactions, common mistakes and drills.">
+<meta property="og:title" content="Fighting Encyclopedia — CHINTHE">
+<meta property="og:description" content="The CHINTHE encyclopedia: BJJ (gi and no-gi), wrestling, judo, MMA, Muay Thai and Lethwei — positions, takedowns, throws, passes, sweeps, submissions, escapes and strikes, each with mechanics, reactions, common mistakes and drills.">
 <meta property="og:url" content="https://myintp.github.io/ChintheGuardianMatrix/knowledge.html">
 <meta property="og:image" content="https://myintp.github.io/ChintheGuardianMatrix/icon-512.png">
 <meta name="twitter:card" content="summary">
@@ -221,7 +221,7 @@ body{padding-bottom:0;}
 <div class="app-shell kb-app" id="kbApp">
   <aside class="app-nav" aria-label="Browse the database">
     <div class="app-nav-head">
-      <div class="app-eyebrow">CHINTHE Grappling Encyclopedia</div>
+      <div class="app-eyebrow">CHINTHE Fighting Encyclopedia</div>
       <h1 class="app-title">Encyclopedia</h1>
       <input class="app-search" type="search" id="searchInput" placeholder="Search moves or aliases…" autocomplete="off" aria-label="Search techniques">
       <select class="app-select" id="navSelect" aria-label="Browse by position or type"></select>
@@ -1563,7 +1563,7 @@ function panelHTML(t){
   ].join("");
   const rel = (m.rel||[]).map(byId).filter(Boolean);
   const inGroups = GROUPS.filter(g=>g.ids.includes(t.id));
-  const VIDEO_SUFFIX = { "Judo":" judo", "Wrestling":" wrestling", "MMA":" mma", "Gi":" bjj gi", "Gi & No-Gi":" bjj", "No-Gi":" no gi bjj" };
+  const VIDEO_SUFFIX = { "Judo":" judo", "Wrestling":" wrestling", "MMA":" mma", "Muay Thai":" muay thai", "Lethwei":" lethwei", "Gi":" bjj gi", "Gi & No-Gi":" bjj", "No-Gi":" no gi bjj" };
   const video = "https://www.youtube.com/results?search_query=" + encodeURIComponent(plain + (t.cat==="judo" && !m.fmt ? " judo" : (VIDEO_SUFFIX[m.fmt] || " no gi bjj")));
   return `
     <span class="tech-badge">${LABELS[t.cat]||t.cat}</span>

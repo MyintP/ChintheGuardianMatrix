@@ -38,7 +38,7 @@ for (const f of files) {
 const errors = [], warnings = [];
 const CATS = ['position', 'submission', 'sweep', 'pass', 'takedown', 'judo', 'transition', 'strike', 'defence', 'concept'];
 const LVLS = ['F', 'I', 'A'];
-const FMTS = ['No-Gi', 'Gi', 'Gi & No-Gi', 'Wrestling', 'Judo', 'MMA'];
+const FMTS = ['No-Gi', 'Gi', 'Gi & No-Gi', 'Wrestling', 'Judo', 'MMA', 'Muay Thai', 'Lethwei'];
 const TEXT = ['tagline', 'objective', 'mechanics', 'defense', 'mistake', 'drill'];
 const coreIds = new Set(DB.map(d => d.id));
 const allIds = new Set(coreIds);

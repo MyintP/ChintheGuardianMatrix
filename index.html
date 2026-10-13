@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
-<meta name="description" content="A free grappling encyclopedia and training system: BJJ gi and no-gi, wrestling, judo and MMA. Find where you are in a match, see your best options, learn each technique and log what works.">
+<meta name="description" content="A free fighting encyclopedia and training system: BJJ gi and no-gi, wrestling, judo, MMA, Muay Thai and Lethwei. Find where you are in a match, see your best options, learn each technique and log what works.">
 <title>CHINTHE — Know Your Next Move</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -14,7 +14,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CHINTHE Guardian System">
 <meta property="og:title" content="CHINTHE — Know Your Next Move">
-<meta property="og:description" content="A free grappling encyclopedia and training system: BJJ gi and no-gi, wrestling, judo and MMA. Find where you are in a match, see your best options, learn each technique and log what works.">
+<meta property="og:description" content="A free fighting encyclopedia and training system: BJJ gi and no-gi, wrestling, judo, MMA, Muay Thai and Lethwei. Find where you are in a match, see your best options, learn each technique and log what works.">
 <meta property="og:url" content="https://myintp.github.io/ChintheGuardianMatrix/">
 <meta property="og:image" content="https://myintp.github.io/ChintheGuardianMatrix/icon-512.png">
 <meta name="twitter:card" content="summary">
@@ -104,7 +104,7 @@ a.mod:hover { border-color: var(--gold); transform: translateY(-2px); }
 /* ── Who it's for ── */
 .who { display: grid; grid-template-columns: 1fr; gap: 16px; }
 @media (min-width: 720px) { .who { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1080px) { .who { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1080px) { .who { grid-template-columns: repeat(3, 1fr); } }
 .who-card { padding: 26px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line-strong); }
 .who-card h3 { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: 24px; margin: 0 0 6px; color: var(--stone); }
 .who-for { font-size: 14px; color: var(--jade-bright); margin: 0 0 12px; }
@@ -217,7 +217,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
 <div class="wrap-w">
   <div class="stats" aria-label="What's in CHINTHE">
     <div class="stat"><b data-node-count="{n}">135</b><span>Positions mapped</span></div>
-    <div class="stat"><b id="techCount">368</b><span>Encyclopedia entries</span></div>
+    <div class="stat"><b id="techCount">393</b><span>Encyclopedia entries</span></div>
     <div class="stat"><b>12</b><span>Core principles</span></div>
     <div class="stat"><b>3</b><span>Competition rulesets</span></div>
   </div>
@@ -240,9 +240,9 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
       </a>
       <a class="mod" href="knowledge.html">
         <div class="mod-tag">Encyclopedia</div>
-        <div class="mod-name">Grappling Encyclopedia</div>
+        <div class="mod-name">Fighting Encyclopedia</div>
         <p>Every technique broken down: how it works, how they react, the common mistake, and a drill.</p>
-        <ul><li>BJJ gi and no-gi, wrestling, judo and MMA</li><li>The full judo throwing syllabus, mat wrestling, cage work and striking</li><li>Browse by position, by type, or A–Z</li></ul>
+        <ul><li>BJJ gi and no-gi, wrestling, judo, MMA, Muay Thai and Lethwei</li><li>The full judo throwing syllabus, mat wrestling, cage work and striking</li><li>Browse by position, by type, or A–Z</li></ul>
         <span class="mod-go">Open the encyclopedia →</span>
       </a>
       <a class="mod" href="principles.html">
@@ -295,8 +295,8 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
   <div class="wrap-w">
     <div class="band-head">
       <div class="kicker">Who it's for</div>
-      <h2 class="h2">Built for grapplers.</h2>
-      <p class="lede">One encyclopedia for every grappler: BJJ in the gi and without it, wrestling, judo, and the grappling and striking of MMA.</p>
+      <h2 class="h2">Built for fighters.</h2>
+      <p class="lede">One encyclopedia for fighters: BJJ in the gi and without it, wrestling, judo, MMA, Muay Thai and Lethwei — Myanmar's own art of nine limbs.</p>
     </div>
     <div class="who">
       <div class="who-card">
@@ -325,6 +325,20 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
         <p>Stance, punches, kicks, knees and elbows, cage wrestling, getting back up, ground-and-pound and submissions.</p>
         <a href="knowledge.html#fighting_stance">Striking →</a>
         <a href="knowledge.html#cage_clinch">Cage &amp; ground →</a>
+      </div>
+      <div class="who-card">
+        <h3>Muay Thai</h3>
+        <p class="who-for">The art of eight limbs</p>
+        <p>The Thai stance, kicks, knees and elbows, the clinch, catching kicks and sweeps — and how fights are scored.</p>
+        <a href="knowledge.html#muay_thai_stance">Muay Thai →</a>
+        <a href="knowledge.html#clinch_fighting">The clinch →</a>
+      </div>
+      <div class="who-card">
+        <h3>Lethwei</h3>
+        <p class="who-for">Burmese boxing · the art of nine limbs</p>
+        <p>Myanmar's bare-knuckle art: headbutts and their defence, the clinch and throws, bare-knuckle punching and the tradition behind it.</p>
+        <a href="knowledge.html#lethwei_rules">Lethwei →</a>
+        <a href="knowledge.html#bando">Burmese martial roots →</a>
       </div>
     </div>
   </div>
