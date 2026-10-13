@@ -49,6 +49,9 @@
   --brand-ink:   #F2EDE2;
   --brand-band:  #0C2820;
   --brand-night: #0A0E13;
+  --brand-gold:  #C8A84E;   /* fixed: marks on brand-coloured surfaces */
+  --brand-black: #000000;   /* the lion artwork ground */
+  --brand-band-deep: #0A2216;
 
   /* Semantic category colours — one meaning each, used site-wide:
      attack/finish = amber-gold, control/position = jade, defence/threat = red,

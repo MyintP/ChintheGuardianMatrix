@@ -149,6 +149,24 @@ Audience: wrestling, judo, BJJ and MMA practitioners, daily use.
 3. Data lives only on each device, with a backup reminder. Testers who clear their browser lose their journal.
 4. No usage measurement. The soft launch can only be judged by what testers report.
 
+#### Pass 12 — Home is the brand front door again
+**Owner feedback:** Pass 10 turned Home into a working tool screen. It didn't tell a new visitor what CHINTHE is.
+**Rule now:** Home is a full-width brand landing page, using the pattern of the reference sites (BJJ University, The BJJ Atlas). The three-panel frame is for the five tool pages only.
+Sections, top to bottom:
+1. Hero: "Know your next move.", a one-sentence explanation of what CHINTHE is, two calls to action, and the trust line (free, no sign-up, offline, private). The lion sits on a single black tile.
+2. Welcome-back strip with the athlete's progress (shown only when there is data on the device).
+3. Proof numbers.
+4. What's inside (6 module cards).
+5. How it works (4 steps).
+6. Who it's for: BJJ, wrestling, judo and MMA, each with honest scope and deep links.
+7. Philosophy band.
+8. Four values.
+9. Origin story (Chinthe, Myanmar).
+10. Closing call to action.
+11. Footer with links and the safety notice.
+Also: new page title and share description; brand colours tokenised (, , ).
+Verified: 198/198 checks (Home leaves the frame checks and gains landing-page checks); accessibility audit clean on Home; SW v27.
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.

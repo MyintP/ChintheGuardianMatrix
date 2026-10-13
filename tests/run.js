@@ -124,8 +124,8 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   // 6. Homepage
   await t.go(BASE + 'index.html');
   const nc = await t.ev(`document.querySelector('[data-node-count]').textContent`);
-  ok('Homepage node count matches matrix', nc === mIds.length + ' positions', nc);
-  ok('Coming Soon card is not a link', await t.ev(`!!document.querySelector('div.list-card-soon') && !document.querySelector('a.list-card-soon')`));
+  ok('Homepage node count matches matrix', nc === String(mIds.length), nc);
+  ok('Coming Soon card is not a link', await t.ev(`!!document.querySelector('div.mod-soon') && !document.querySelector('a.mod-soon')`));
 
   // 7. Journal date under UTC+11
   await t.send('Emulation.setTimezoneOverride', { timezoneId: 'Australia/Sydney' });
@@ -212,7 +212,6 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   // Same header component across document pages
   // Every page: unique left panel | information in the middle | right panel, same fonts and widths
   const FRAME = {
-    'index.html':                   ['.app-nav', '.app-list', '.app-detail'],
     'chinthe-guardian-matrix.html': ['.wrap > header', '.tree-wrap', '#detailPane'],
     'competition.html':             ['.app-nav', '.app-list', '.app-detail'],
     'knowledge.html':               ['.app-nav', '#kbMid', '#kbPanel'],
@@ -234,7 +233,7 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   }
   ok('[d1440] Left panel is the same width on every page', new Set(Object.values(widths)).size === 1, JSON.stringify(widths));
   ok('[d1440] Middle panel is the same width on every page', new Set(Object.values(mids)).size === 1, JSON.stringify(mids));
-  const fontLinks = await d.ev(`Promise.all(${JSON.stringify(Object.keys(FRAME))}.map(f=>fetch(f).then(r=>r.text()).then(t=>(t.match(/fonts\\.googleapis\\.com\\/css2\\?[^"]*/)||[''])[0])))`);
+  const fontLinks = await d.ev(`Promise.all(${JSON.stringify(['index.html',...Object.keys(FRAME)])}.map(f=>fetch(f).then(r=>r.text()).then(t=>(t.match(/fonts\\.googleapis\\.com\\/css2\\?[^"]*/)||[''])[0])))`);
   ok('Every page loads the identical font set', new Set(fontLinks).size === 1, JSON.stringify([...new Set(fontLinks)]));
   await d.go(BASE + 'journal.html');
   await d.ev(`localStorage.setItem('chinthe_journal_v1', JSON.stringify([{id:'j1',date:'2026-10-10',type:'sparring',title:'Open mat',techniques:['Kimura'],worked:'Kimura trap',needs:'',drill:'',notes:'',timestamp:'2026-10-10T10:00:00Z'}]))`);
@@ -276,7 +275,9 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   const raw = await d.ev(`Promise.all(['index.html','chinthe-guardian-matrix.html','competition.html','knowledge.html','principles.html','journal.html'].map(f=>fetch(f).then(r=>r.text()).then(t=>[f,((t.match(/<style>[\\s\\S]*?<\\/style>/g)||[]).join('').replace(/\\.philosophy\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy::before\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy-mark\\{[\\s\\S]*?\\}/,'').match(/#[0-9a-fA-F]{6}\\b|rgba?\\(/g)||[]).length])))`);
   ok('No hard-coded colours left in page styles (brand band excepted)', raw.every(([, n]) => n === 0), JSON.stringify(raw));
   await d.go(BASE + 'index.html');
-  ok('Homepage: 6 module cards incl. Compete', await d.ev(`document.querySelectorAll('.app-list .list-card').length===6 && !!document.querySelector('.list-card[href="competition.html"]')`));
+  ok('Homepage: 6 module cards incl. Compete', await d.ev(`document.querySelectorAll('#inside .mod').length===6 && !!document.querySelector('.mod[href="competition.html"]')`));
+  ok('Homepage is a full-width brand page: says what CHINTHE is, who it is for, and its values', await d.ev(`!document.querySelector('.app-shell') && /training system for grapplers/.test(document.querySelector('.hero-sub').textContent) && document.querySelectorAll('#who .who-card').length===4 && document.querySelectorAll('#values .value').length===4`));
+  ok('Homepage: progress strip hidden for first-time visitors', await d.ev(`document.getElementById('welcome').hidden === !(localStorage.getItem('chinthe_journal_v1')||localStorage.getItem('chinthe_mastery_v1'))`));
   await d.go(BASE + 'competition.html');
   ok('Compete ADCC: clean takedown 4, clean sweep 4, guard pull −1', await d.ev(`(()=>{const a=RULESETS.adcc;const f=n=>a.positive.find(x=>x.action.startsWith(n))?.pts;return f('Clean takedown')===4&&f('Clean sweep')===4&&f('Back control')===3&&a.other[0].pts==='−1'})()`));
   await d.go(BASE + 'principles.html#hierarchy');

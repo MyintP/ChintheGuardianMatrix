@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
-<meta name="description" content="CHINTHE — The Guardian System. Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the Modern Grappler.">
-<title>CHINTHE — Guardian System</title>
+<meta name="description" content="A free training system for grapplers: find where you are in a match, see your best options and the points at stake, learn each technique and log what works. BJJ, no-gi, wrestling, judo and MMA.">
+<title>CHINTHE — Know Your Next Move</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-title" content="CHINTHE">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CHINTHE Guardian System">
-<meta property="og:title" content="CHINTHE — Guardian System">
-<meta property="og:description" content="CHINTHE — The Guardian System. Rooted in Myanmar. Forged through Brazilian Jiu-Jitsu. Built for the Modern Grappler.">
+<meta property="og:title" content="CHINTHE — Know Your Next Move">
+<meta property="og:description" content="A free training system for grapplers: find where you are in a match, see your best options and the points at stake, learn each technique and log what works. BJJ, no-gi, wrestling, judo and MMA.">
 <meta property="og:url" content="https://myintp.github.io/ChintheGuardianMatrix/">
 <meta property="og:image" content="https://myintp.github.io/ChintheGuardianMatrix/icon-512.png">
 <meta name="twitter:card" content="summary">
@@ -23,312 +23,140 @@
 <link rel="stylesheet" href="chinthe.css">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Cinzel:wght@600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ── Tokens, reset, nav → chinthe.css ── */
+/* ── Tokens, reset, nav, buttons → chinthe.css. Home is the brand front door:
+   full-width sections, not the three-panel tool frame. ── */
 html { scroll-behavior: smooth; }
 body { overflow-x: hidden; }
+.wrap-w { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.band { padding: 88px 0; }
+.band-alt { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--jade-bright); margin-bottom: 14px; }
+.h2 { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: .01em; font-size: clamp(30px, 4.2vw, 48px); line-height: 1.05; color: var(--stone); margin: 0; }
+.lede { font-size: 17px; line-height: 1.65; color: var(--stone-dim); max-width: 640px; margin: 16px 0 0; }
+.band-head { margin-bottom: 44px; }
 
-/* ════════════════════════════════
-   HERO
-════════════════════════════════ */
-.hero{
-  min-height:calc(100vh - var(--nav-h));
-  display:flex;flex-direction:column;justify-content:center;
-  position:relative;overflow:hidden;
-  padding:80px 20px 60px;
-}
-.hero-glow{
-  position:absolute;top:-10%;left:30%;transform:translateX(-50%);
-  width:900px;height:900px;
-  background:radial-gradient(ellipse at center,color-mix(in srgb, var(--jade-bright) 38%, transparent) 0%,transparent 68%);
-  pointer-events:none;
-}
-.hero-grid{
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(var(--line) 1px,transparent 1px),
-    linear-gradient(90deg,var(--line) 1px,transparent 1px);
-  background-size:64px 64px;
-  mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);
-  pointer-events:none;
-}
-.hero-inner{
-  max-width:1200px;margin:0 auto;position:relative;
-  display:grid;grid-template-columns:1fr;gap:48px;align-items:center;
-}
-.hero-content{position:relative;}
-.hero-visual{display:none;}
+/* ── Hero ── */
+.hero { position: relative; overflow: hidden; padding: 96px 0 88px; }
+.hero::before { content: ''; position: absolute; top: -30%; left: -10%; width: 900px; height: 900px; pointer-events: none;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--jade-bright) 22%, transparent) 0%, transparent 65%); }
+.hero-grid { position: relative; display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center; }
+.hero-motto { font-family: var(--font-mono); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
+.hero h1 { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: clamp(46px, 7.4vw, 92px); line-height: .95; letter-spacing: -.005em; margin: 0; color: var(--stone); }
+.hero h1 em { font-style: normal; color: var(--gold); }
+.hero-sub { font-size: clamp(17px, 1.6vw, 20px); line-height: 1.6; color: var(--stone-dim); max-width: 600px; margin: 24px 0 0; }
+.hero-sub b { color: var(--stone); font-weight: 600; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.hero-actions .btn { padding: 14px 24px; }
+.hero-trust { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 30px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--stone-dim); }
+.hero-trust span::before { content: '✓ '; color: var(--jade-bright); }
+.hero-mark { justify-self: center; text-align: center; }
+.hero-tile { width: min(340px, 72vw); aspect-ratio: 1; border-radius: 28px; background: var(--brand-night); display: grid; place-items: center;
+  box-shadow: 0 30px 70px color-mix(in srgb, var(--shadow) 30%, transparent); border: 1px solid color-mix(in srgb, var(--brand-gold) 22%, transparent); }
+/* the icon art sits on a near-black square; a slight contrast lift takes it to pure black so it merges with the tile */
+.hero-tile { background: var(--brand-black); overflow: hidden; }
+.hero-tile img { width: 118%; max-width: none; height: auto; filter: contrast(1.25); }
+.hero-mark-cap { margin-top: 16px; font-family: var(--font-myanmar); font-size: 15px; color: var(--stone-dim); }
+.hero-mark-cap b { display: block; font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-top: 6px; }
+@media (min-width: 960px) { .hero-grid { grid-template-columns: 1.35fr 1fr; } }
 
-.hero-eyebrow{
-  font-family:var(--font-mono);font-size:11px;
-  letter-spacing:0.2em;color:var(--jade-bright);
-  text-transform:uppercase;margin-bottom:20px;
-}
-.hero-heading{
-  font-family:var(--font-display);font-weight:400;
-  font-size:clamp(64px,10vw,130px);line-height:0.92;
-  text-transform:uppercase;letter-spacing:0.01em;
-  margin-bottom:28px;
-}
-.hero-heading em{color:var(--gold);font-style:normal;}
-.hero-sub{
-  font-size:clamp(15px,1.8vw,18px);color:var(--stone-dim);
-  line-height:1.6;max-width:520px;margin-bottom:40px;
-}
-.hero-myanmar{
-  font-family:var(--font-myanmar);
-  font-size:14px;color:var(--jade-bright);
-  margin-bottom:44px;letter-spacing:0.04em;
-}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+/* ── Returning athlete strip (shown only when there is data on this device) ── */
+.welcome { border-top: 1px solid var(--line); background: var(--surface); }
+.welcome .wrap-w { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 32px; padding-top: 18px; padding-bottom: 18px; }
+.welcome-title { font-family: var(--font-display); font-size: 18px; text-transform: uppercase; color: var(--stone); }
+.welcome-stats { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14px; color: var(--stone-dim); }
+.welcome-stats b { color: var(--stone); font-family: var(--font-mono); font-weight: 600; }
+.welcome-links { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+.welcome-links .btn { padding: 9px 16px; }
 
-.hero-badges{
-  display:flex;gap:8px;flex-wrap:wrap;margin-top:52px;
-  padding-top:24px;border-top:1px solid var(--line);
-}
-.hero-badge{
-  font-family:var(--font-mono);font-size:var(--text-xs);
-  letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--stone-dim);
-  border:1px solid var(--line-strong);
-  padding:5px 12px;border-radius:999px;
-  transition:border-color .2s,color .2s;
-}
-.hero-badge:hover{border-color:var(--gold);color:var(--gold);}
+/* ── Numbers ── */
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stat { padding: 30px 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stat b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 44px; line-height: 1; color: var(--gold); }
+.stat span { display: block; margin-top: 8px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--stone-dim); }
+@media (min-width: 800px) { .stats { grid-template-columns: repeat(4, 1fr); } .stat { border-bottom: 0; } .stat:last-child { border-right: 0; } }
 
-/* ── Hero lion image ── */
-.hero-lion{
-  display:block;
-  width:380px;height:380px;max-width:100%;
-  object-fit:contain;position:relative;z-index:1;
-  /* The 512px mark has an opaque near-black square behind it; lighten drops
-     that square into the page so only the gold lion (and the glow behind) shows */
-  mix-blend-mode:lighten;
-}
-.hero-visual::before{
-  content:'';position:absolute;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  width:460px;height:460px;
-  background:radial-gradient(ellipse at center,color-mix(in srgb, var(--jade-bright) 55%, transparent) 0%,color-mix(in srgb, var(--gold) 6%, transparent) 45%,transparent 72%);
-  pointer-events:none;border-radius:50%;
-}
-@media(min-width:1280px){.hero-lion{width:420px;height:420px;}}
-/* The lion mark is always shown on its night-black brand tile (as in the nav logo),
-   so it reads identically in both themes and on any panel colour. */
-.hero-visual{isolation:isolate;background:var(--brand-night);border-radius:24px;padding:20px;box-shadow:0 18px 48px color-mix(in srgb, var(--shadow) 28%, transparent);}
-.hero-visual::before{display:none;}
+/* ── What's inside ── */
+.mods { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 720px) { .mods { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1080px) { .mods { grid-template-columns: repeat(3, 1fr); } }
+.mod { display: flex; flex-direction: column; padding: 28px; border: 1px solid var(--line-strong); border-radius: 14px; background: var(--bg); color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; }
+a.mod:hover { border-color: var(--gold); transform: translateY(-2px); }
+.mod-tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--jade-bright); }
+.mod-name { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: 26px; color: var(--stone); margin: 10px 0 8px; }
+.mod p { font-size: 15px; line-height: 1.6; color: var(--stone-dim); margin: 0 0 16px; }
+.mod ul { list-style: none; padding: 0; margin: 0 0 22px; display: grid; gap: 7px; }
+.mod li { font-size: 14px; color: var(--stone); padding-left: 18px; position: relative; }
+.mod li::before { content: '—'; position: absolute; left: 0; color: var(--gold); }
+.mod-go { margin-top: auto; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.mod-soon { border-style: dashed; }
+.mod-soon .mod-go { color: var(--stone-dim); }
 
-/* ════════════════════════════════
-   MODULES SECTION
-════════════════════════════════ */
-.section{max-width:1200px;margin:0 auto;padding:80px 20px;}
-.section-header{
-  display:flex;flex-direction:column;gap:16px;
-  margin-bottom:48px;
-}
-.section-label{
-  font-family:var(--font-mono);font-size:var(--text-xs);
-  letter-spacing:0.2em;color:var(--jade-bright);
-  text-transform:uppercase;margin-bottom:10px;
-}
-.section-title{
-  font-family:var(--font-display);font-weight:400;
-  font-size:clamp(36px,6vw,56px);text-transform:uppercase;
-  letter-spacing:0.02em;line-height:1;margin-bottom:0;
-}
-.section-sub{
-  font-size:15px;color:var(--stone-dim);line-height:1.65;
-  max-width:480px;margin-bottom:0;
-  align-self:flex-end;
-}
+/* ── How it works ── */
+.steps { display: grid; grid-template-columns: 1fr; gap: 0; counter-reset: s; }
+@media (min-width: 900px) { .steps { grid-template-columns: repeat(4, 1fr); } }
+.step { padding: 26px 24px 26px 0; border-top: 2px solid var(--line-strong); }
+.step:first-child { border-top-color: var(--gold); }
+.step-n { font-family: var(--font-mono); font-size: 13px; color: var(--gold); letter-spacing: .1em; }
+.step h3 { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: 22px; margin: 10px 0 8px; color: var(--stone); }
+.step p { font-size: 15px; line-height: 1.6; color: var(--stone-dim); margin: 0; }
+.step a { color: var(--gold); }
 
-.modules-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:16px;
-}
-.module-card{
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:28px;
-  text-decoration:none;
-  color:var(--stone);
-  display:flex;flex-direction:column;gap:16px;
-  position:relative;overflow:hidden;
-  transition:border-color .2s,transform .18s,box-shadow .2s;
-}
-.module-card:hover{
-  border-color:color-mix(in srgb, var(--gold) 28%, transparent);
-  transform:translateY(-3px);
-  box-shadow:0 8px 32px color-mix(in srgb, var(--shadow) 32%, transparent);
-}
-.module-card.coming{opacity:0.42;pointer-events:none;}
-/* One brand accent for every module (was jade/gold/steel/crimson/purple) —
-   the icon and name do the differentiating. */
-.module-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--jade-bright),var(--gold));opacity:.55;transition:opacity .2s;}
-.module-card:hover .module-accent{opacity:1;}
-.module-icon{
-  width:44px;height:44px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;
-}
-.module-icon{background:var(--surface-2);color:var(--gold);}
-.module-tag{
-  font-family:var(--font-mono);font-size:var(--text-xs);
-  letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);
-  margin-bottom:4px;
-}
-.module-name{
-  font-family:var(--font-display);font-weight:400;
-  font-size:24px;letter-spacing:0.03em;text-transform:uppercase;
-  line-height:1;
-}
-.module-desc{font-size:13.5px;color:var(--stone-dim);line-height:1.6;}
-.module-meta{
-  font-family:var(--font-mono);font-size:var(--text-xs);
-  letter-spacing:0.06em;text-transform:uppercase;color:var(--stone-dim);
-  display:flex;align-items:center;gap:6px;margin-top:auto;
-}
-.module-meta-dot{width:6px;height:6px;border-radius:50%;}
-.module-meta-dot.live{background:var(--jade-bright);}
-.module-meta-dot.soon{background:var(--stone-dim);}
+/* ── Who it's for ── */
+.who { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 720px) { .who { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1080px) { .who { grid-template-columns: repeat(4, 1fr); } }
+.who-card { padding: 26px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line-strong); }
+.who-card h3 { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: 24px; margin: 0 0 6px; color: var(--stone); }
+.who-for { font-size: 14px; color: var(--jade-bright); margin: 0 0 12px; }
+.who-card p { font-size: 14.5px; line-height: 1.6; color: var(--stone-dim); margin: 0 0 14px; }
+.who-card a { font-size: 14px; color: var(--gold); text-decoration: none; display: block; padding: 10px 0; }
+.who-card a:hover { text-decoration: underline; }
 
-/* ════════════════════════════════
-   PHILOSOPHY STRIP
-════════════════════════════════ */
-.philosophy{
-  /* Brand band: fixed deep jade in both themes */
-  background:linear-gradient(135deg,var(--brand-band) 0%,#0A2216 100%);
-  border-top:1px solid rgba(63,163,131,.22);
-  border-bottom:1px solid rgba(63,163,131,.22);
-  padding:72px 20px;text-align:center;
-  position:relative;overflow:hidden;
-}
-.philosophy::before{
-  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:600px;height:300px;
-  background:radial-gradient(ellipse,rgba(63,163,131,.10) 0%,transparent 70%);
-  pointer-events:none;
-}
-.philosophy-mark{
-  font-family:var(--font-mono);
-  font-size:22px;color:#C8A84E;opacity:0.55;
-  margin-bottom:28px;letter-spacing:0.2em;
-}
-.philosophy-quote{
-  font-family:var(--font-serif);font-weight:600;
-  font-size:clamp(22px,3.5vw,42px);
-  text-transform:uppercase;letter-spacing:0.05em;
-  color:var(--brand-ink);line-height:1.25;
-  max-width:760px;margin:0 auto 18px;
-  position:relative;
-}
-.philosophy-attr{
-  font-family:var(--font-mono);font-size:11px;
-  color:color-mix(in srgb, var(--brand-ink) 50%, transparent);letter-spacing:0.14em;text-transform:uppercase;
-}
+/* ── Brand: philosophy band + values + origin (fixed brand colours in both themes) ── */
+.philosophy { background: linear-gradient(135deg, var(--brand-band) 0%, var(--brand-band-deep) 100%); text-align: center; padding: 96px 24px; position: relative; overflow: hidden; }
+.philosophy-mark { font-family: var(--font-mono); font-size: 22px; color: var(--brand-gold); opacity: .6; margin-bottom: 26px; letter-spacing: .2em; }
+.philosophy-quote { font-family: var(--font-serif); font-weight: 600; font-size: clamp(24px, 3.6vw, 44px); text-transform: uppercase; letter-spacing: .05em; color: var(--brand-ink); line-height: 1.25; max-width: 820px; margin: 0 auto 18px; }
+.philosophy-attr { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: color-mix(in srgb, var(--brand-ink) 60%, transparent); margin: 0; }
+.values { display: grid; grid-template-columns: 1fr; gap: 32px; }
+@media (min-width: 720px) { .values { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1080px) { .values { grid-template-columns: repeat(4, 1fr); } }
+.value-n { font-family: var(--font-mono); font-size: 12px; color: var(--gold); letter-spacing: .12em; }
+.value h3 { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: 26px; margin: 8px 0 10px; color: var(--stone); }
+.value p { font-size: 15px; line-height: 1.65; color: var(--stone-dim); margin: 0; }
+.origin { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
+@media (min-width: 900px) { .origin { grid-template-columns: 1fr 1.3fr; } }
+.origin-word { font-family: var(--font-myanmar); font-size: clamp(64px, 10vw, 120px); color: var(--gold); line-height: 1.1; }
+.origin-word small { display: block; font-family: var(--font-mono); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--stone-dim); margin-top: 10px; }
+.origin p { font-size: 17px; line-height: 1.7; color: var(--stone-dim); margin: 0 0 16px; }
+.origin p b { color: var(--stone); font-weight: 600; }
 
-/* ════════════════════════════════
-   PILLARS
-════════════════════════════════ */
-.pillars{
-  border-top:1px solid var(--line);
-  margin-top:20px;
-}
-.pillars-inner{max-width:1200px;margin:0 auto;padding:80px 20px;}
-.pillars-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:0;margin-top:40px;
-}
-.pillars-grid > div{
-  padding:32px 32px 32px 0;
-  border-top:1px solid var(--line);
-  position:relative;
-}
-.pillar-num{
-  font-family:var(--font-mono);font-size:11px;
-  color:var(--gold);letter-spacing:0.12em;margin-bottom:12px;
-}
-.pillar-name{
-  font-family:var(--font-display);font-size:24px;
-  letter-spacing:0.03em;text-transform:uppercase;
-  margin-bottom:12px;color:var(--stone);
-}
-.pillar-desc{font-size:14px;color:var(--stone-dim);line-height:1.65;}
+/* ── Closing CTA ── */
+.cta { text-align: center; }
+.cta .lede { margin-left: auto; margin-right: auto; }
+.cta .hero-actions { justify-content: center; }
 
-/* ── FOOTER ── */
-footer{
-  border-top:1px solid var(--line);
-  padding:40px 20px;
-}
-.footer-inner{
-  max-width:1200px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:20px;
-}
-.footer-brand{
-  font-family:var(--font-display);font-size:18px;
-  letter-spacing:0.12em;color:var(--stone);
-}
-.footer-myanmar{
-  font-family:var(--font-myanmar);
-  font-size:13px;color:var(--stone-dim);
-}
-.footer-safety{max-width:1100px;margin:14px auto 0;font-size:12.5px;line-height:1.5;color:var(--stone-dim);}
-.footer-tagline{
-  font-family:var(--font-mono);font-size:var(--text-xs);
-  letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);
-}
+/* ── Footer ── */
+footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
+.footer-inner { display: flex; flex-wrap: wrap; gap: 20px 40px; justify-content: space-between; align-items: flex-start; }
+.footer-brand { font-family: var(--font-display); font-weight: 600; letter-spacing: .14em; font-size: 18px; color: var(--stone); }
+.footer-myanmar { font-family: var(--font-myanmar); color: var(--stone-dim); margin-top: 4px; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.footer-links a { color: var(--stone-dim); text-decoration: none; font-size: 14px; padding: 10px 0; }
+.footer-links a:hover { color: var(--gold); }
+.footer-tagline { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--stone-dim); }
+.footer-safety { margin: 24px 0 0; font-size: 13px; line-height: 1.55; color: var(--stone-dim); max-width: 760px; }
 
-/* ════════════════════════════════
-   LAYOUT — shared app shell (chinthe.css §17)
-   Home content sits in the middle column, so it sizes to the column
-   (container queries), not to the window.
-════════════════════════════════ */
-.home-main{container-type:inline-size;}
-.hero{min-height:0;padding:8px 0 28px;overflow:hidden;}
-.hero-glow{width:620px;height:620px;top:-30%;left:35%;}
-.hero-inner{max-width:none;width:100%;margin:0;grid-template-columns:1fr;gap:28px;}
-.hero-heading{font-size:clamp(46px,11cqi,96px);margin-bottom:20px;}
-.hero-sub{font-size:16px;max-width:560px;}
-.hero-badges{margin-top:24px;}
-.section{max-width:none;padding:28px 0;}
-.section-header{margin-bottom:24px;gap:10px;}
-.section-header .section-sub{align-self:auto;}
-.section-title{font-size:clamp(28px,5cqi,44px);}
-.modules-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
-.philosophy{padding:44px 24px;border-radius:16px;margin:8px 0 0;}
-.philosophy-quote{font-size:clamp(20px,3.6cqi,34px);}
-.pillars{border-top:none;margin-top:0;}
-.pillars-inner{max-width:none;padding:28px 0;}
-.pillars-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin-top:16px;}
-.pillars-grid > div{padding:20px 20px 20px 0;}
-footer{padding:24px 0 8px;}
-.footer-inner{max-width:none;}
-@container (min-width: 600px){
-  .hero-inner{grid-template-columns:1fr 200px;gap:28px;}
-  .hero-visual{display:flex;align-items:center;justify-content:center;position:relative;}
-  .hero-lion{width:200px;height:200px;}
-  .hero-visual::before{width:260px;height:260px;}
-  .section-header{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:32px;}
-  .section-header .section-sub{max-width:340px;}
-}
-/* Home's left panel: the starting path (shown on phones too, after the hero) */
-.home-step-desc{display:block;font-family:var(--font-body);font-size:12.5px;text-transform:none;letter-spacing:0;color:var(--stone-dim);margin-top:2px;}
-.home-shell .app-nav-item{align-items:flex-start;}
-.list-card-soon{opacity:.5;}
-.app-list .stat-tile b{font-size:22px;}
-@media (max-width:899px){
-  .home-shell{display:flex;flex-direction:column;}
-  .home-shell .app-detail{order:1;}
-  .home-shell .app-list{order:2;border-top:1px solid var(--line);}
-  .home-shell .app-nav{order:3;border-top:1px solid var(--line);}
-  .home-shell .app-nav-list{display:block;}
+@media (max-width: 640px) {
+  .band { padding: 64px 0; }
+  .hero { padding: 56px 0 64px; }
+  .hero-actions .btn { flex: 1 1 100%; text-align: center; }
+  .welcome-links { margin-left: 0; }
+  .hero-tile { width: 200px; border-radius: 22px; }
+  .hero-grid { gap: 36px; }
 }
 </style>
 </head>
-<body class="app-page">
+<body>
 
 <nav class="site-nav">
   <div class="site-nav-inner">
@@ -348,179 +176,251 @@ footer{padding:24px 0 8px;}
   </div>
 </nav>
 
-<div class="app-shell home-shell">
-  <aside class="app-nav" aria-label="Start here">
-    <div class="app-nav-head">
-      <div class="app-eyebrow">CHINTHE Guardian System</div>
-      <div class="app-title">Start here</div>
-      <p class="app-head-sub" style="font-size:13.5px">A path through the system for your first weeks.</p>
-    </div>
-    <nav class="app-nav-list">
-      <div class="app-nav-group">The path</div>
-      <a class="app-nav-item" href="knowledge.html"><span class="app-nav-num">01</span><span>Learn the fundamentals<span class="home-step-desc">51 fundamental moves, by position</span></span></a>
-      <a class="app-nav-item" href="chinthe-guardian-matrix.html"><span class="app-nav-num">02</span><span>Map your game<span class="home-step-desc">Mark what you're learning on the Matrix</span></span></a>
-      <a class="app-nav-item" href="principles.html"><span class="app-nav-num">03</span><span>Understand why<span class="home-step-desc">The principles behind every technique</span></span></a>
-      <a class="app-nav-item" href="journal.html"><span class="app-nav-num">04</span><span>Log your training<span class="home-step-desc">What worked, what to drill next</span></span></a>
-      <a class="app-nav-item" href="competition.html"><span class="app-nav-num">05</span><span>Compete<span class="home-step-desc">Scoring and decisions mat-side</span></span></a>
-      <div class="app-nav-group">Reference</div>
-      <a class="app-nav-item" href="principles.html#glossary"><span class="app-nav-num">R</span><span>Glossary</span></a>
-      <a class="app-nav-item" href="principles.html#hierarchy"><span class="app-nav-num">R</span><span>Positional hierarchy</span></a>
-      <a class="app-nav-item" href="competition.html"><span class="app-nav-num">R</span><span>ADCC scoring</span></a>
-    </nav>
-  </aside>
-
-  <section class="app-list" aria-label="Your progress and the modules">
-    <div class="list-head">
-      <div class="app-eyebrow">Your progress</div>
-      <div class="list-head-title">At a glance</div>
-    </div>
-      <div class="stat-grid">
-        <div class="stat-tile"><b id="hMapped">0</b><span>Positions mapped</span></div>
-        <div class="stat-tile"><b id="hGot">0</b><span>Got it</span></div>
-        <div class="stat-tile"><b id="hSessions">0</b><span>Sessions logged</span></div>
-        <div class="stat-tile"><b id="hWeek">0</b><span>This week</span></div>
-      </div>
-      <p class="aside-text" id="hNote" style="margin-top:10px"></p>
-
-    <div class="list-group-label" style="margin-top:14px">Modules</div>
-    <div class="list-stack">
-      <a class="list-card" href="chinthe-guardian-matrix.html"><span class="list-card-meta"><span>Competition</span><span><span data-node-count="{n} positions">Decision map</span></span></span><span class="list-card-title">Guardian Matrix</span><span class="list-card-sub">Your whole game as a decision map — every position, its options, the points at stake and how to drill it.</span></a>
-      <a class="list-card" href="competition.html"><span class="list-card-meta"><span>Mat-side</span><span>3 rulesets</span></span><span class="list-card-title">Compete</span><span class="list-card-sub">ADCC, IBJJF and NAGA scoring, a score tracker, and what to do when you're ahead, level or behind.</span></a>
-      <a class="list-card" href="knowledge.html"><span class="list-card-meta"><span>Study</span><span><span id="techCount">Technique database</span></span></span><span class="list-card-title">Knowledge Base</span><span class="list-card-sub">Fundamental to advanced techniques by position — mechanics, mistakes, drills and a training plan.</span></a>
-      <a class="list-card" href="principles.html"><span class="list-card-meta"><span>Foundation</span><span>12 principles</span></span><span class="list-card-title">Principles</span><span class="list-card-sub">The physics and strategy behind every technique, plus a glossary.</span></a>
-      <a class="list-card" href="journal.html"><span class="list-card-meta"><span>Review</span><span>On device</span></span><span class="list-card-title">Training Journal</span><span class="list-card-sub">Log what worked and what to drill next. Private, on this device.</span></a>
-      <div class="list-card list-card-soon" aria-disabled="true"><span class="list-card-meta"><span>Coaching</span><span>Coming soon</span></span><span class="list-card-title">Guardian Coach</span><span class="list-card-sub">Athlete profiles, session review, opponent scouting and game plans.</span></div>
-    </div>
-    <div class="list-group-label" style="margin-top:14px">Quick actions</div>
-    <div class="aside-list">
-      <button class="aside-link" type="button" id="hSearch">Search everything</button>
-      <a class="aside-link" href="journal.html">Log a session</a>
-    </div>
-    <p class="aside-text" style="margin-top:12px;font-size:13px">Progress and journal live only on this device — <span id="hBackup">never backed up</span>.</p>
-  </section>
-
-  <main class="app-detail home-main">
+<main>
 <section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-inner">
-    <div class="hero-content">
-      <div class="hero-eyebrow">CHINTHE — Guardian System · Alpha</div>
-      <h1 class="hero-heading">
-        Discipline.<br>Respect.<br><em>Legacy.</em>
-      </h1>
-      <p class="hero-sub">A competition decision map for no-gi grapplers. Find where you are in the match, see your highest-percentage next move.</p>
-      <div class="hero-myanmar">ခြင်္သေ့ — The Guardian Lion · Rooted in Myanmar, forged through Brazilian Jiu-Jitsu</div>
+  <div class="wrap-w hero-grid">
+    <div>
+      <div class="hero-motto">CHINTHE · Discipline · Respect · Legacy</div>
+      <h1>Know your<br><em>next move.</em></h1>
+      <p class="hero-sub">CHINTHE is a free training system for grapplers. <b>Find where you are in a match, see your best options and the points at stake</b>, learn the technique behind each one, and log what works in training.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="chinthe-guardian-matrix.html">Open Guardian Matrix →</a>
-        <a class="btn btn-secondary" href="knowledge.html">Browse Knowledge Base</a>
+        <a class="btn btn-primary" href="chinthe-guardian-matrix.html">Open the Guardian Matrix →</a>
+        <a class="btn btn-secondary" href="knowledge.html">Browse the techniques</a>
       </div>
-      <div class="hero-badges">
-        <span class="hero-badge">ADCC Ruleset</span>
-        <span class="hero-badge">No-Gi</span>
-        <span class="hero-badge">Blue Belt+</span>
-        <span class="hero-badge">Offline Capable</span>
-        <span class="hero-badge">Alpha Build</span>
-      </div>
+      <div class="hero-trust"><span>Free</span><span>No sign-up</span><span>Works offline</span><span>Your data stays on your device</span></div>
     </div>
-    <div class="hero-visual" aria-hidden="true">
-      <img class="hero-lion" src="icon-512.png" alt="" width="512" height="512">
+    <div class="hero-mark" aria-hidden="true">
+      <div class="hero-tile"><img src="icon-512.png" alt="" width="512" height="512"></div>
+      <div class="hero-mark-cap">ခြင်္သေ့<b>The Guardian Lion</b></div>
     </div>
   </div>
 </section>
 
-<div class="section">
-  <div class="section-header">
-    <div>
-      <div class="section-label">The System</div>
-      <h2 class="section-title">Everything answers<br>one question.</h2>
+<section class="welcome" id="welcome" hidden aria-label="Your progress">
+  <div class="wrap-w">
+    <div class="welcome-title">Welcome back</div>
+    <div class="welcome-stats">
+      <span><b id="hMapped">0</b> positions mapped</span>
+      <span><b id="hGot">0</b> got it</span>
+      <span><b id="hSessions">0</b> sessions logged</span>
+      <span><b id="hWeek">0</b> this week</span>
+      <span id="hNote"></span>
+      <span>Data on this device, <span id="hBackup">never backed up</span>.</span>
     </div>
-    <p class="section-sub">Given my current state, what is the highest expected-value decision? The CHINTHE Guardian System is built around that question.</p>
+    <div class="welcome-links">
+      <a class="btn btn-primary" href="journal.html">Log a session</a>
+      <button class="btn btn-secondary" type="button" id="hSearch">Search</button>
+    </div>
+  </div>
+</section>
+
+<div class="wrap-w">
+  <div class="stats" aria-label="What's in CHINTHE">
+    <div class="stat"><b data-node-count="{n}">135</b><span>Positions mapped</span></div>
+    <div class="stat"><b id="techCount">98</b><span>Techniques explained</span></div>
+    <div class="stat"><b>12</b><span>Core principles</span></div>
+    <div class="stat"><b>3</b><span>Competition rulesets</span></div>
   </div>
 </div>
 
-<div class="philosophy">
+<section class="band" id="inside">
+  <div class="wrap-w">
+    <div class="band-head">
+      <div class="kicker">What's inside</div>
+      <h2 class="h2">One system, five tools.</h2>
+      <p class="lede">Everything is built around one question: from where I am right now, what's my highest-percentage next move?</p>
+    </div>
+    <div class="mods">
+      <a class="mod" href="chinthe-guardian-matrix.html">
+        <div class="mod-tag">Decision map</div>
+        <div class="mod-name">Guardian Matrix</div>
+        <p>Your whole game as a map. Pick where you are and see every option from there.</p>
+        <ul><li>Standing, top, bottom and defence</li><li>Points at stake for each move</li><li>Mark what you're learning and what you've got</li></ul>
+        <span class="mod-go">Open the Matrix →</span>
+      </a>
+      <a class="mod" href="knowledge.html">
+        <div class="mod-tag">Technique library</div>
+        <div class="mod-name">Knowledge Base</div>
+        <p>Every technique broken down: how it works, how they react, the common mistake, and a drill.</p>
+        <ul><li>Fundamental to advanced</li><li>Sorted by position</li><li>Takedowns, judo throws, passes, sweeps, submissions, escapes</li></ul>
+        <span class="mod-go">Browse techniques →</span>
+      </a>
+      <a class="mod" href="principles.html">
+        <div class="mod-tag">Foundation</div>
+        <div class="mod-name">Principles</div>
+        <p>Why techniques work: leverage, balance, timing, frames and positional hierarchy.</p>
+        <ul><li>Carries across every grappling style</li><li>Real examples for each principle</li><li>Glossary of terms</li></ul>
+        <span class="mod-go">Read the principles →</span>
+      </a>
+      <a class="mod" href="competition.html">
+        <div class="mod-tag">Mat-side</div>
+        <div class="mod-name">Compete</div>
+        <p>Know the scoring and what to do when you're ahead, level or behind on the clock.</p>
+        <ul><li>ADCC, IBJJF and NAGA scoring</li><li>Tap-to-add score tracker</li><li>Clock strategy</li></ul>
+        <span class="mod-go">Open Compete →</span>
+      </a>
+      <a class="mod" href="journal.html">
+        <div class="mod-tag">Daily habit</div>
+        <div class="mod-name">Training Journal</div>
+        <p>Log each session in a minute: what worked, what broke down, and what to drill next.</p>
+        <ul><li>Private, on your device</li><li>Backup and restore</li><li>Your most-drilled techniques</li></ul>
+        <span class="mod-go">Start logging →</span>
+      </a>
+      <div class="mod mod-soon" aria-disabled="true">
+        <div class="mod-tag">Coming soon</div>
+        <div class="mod-name">Guardian Coach</div>
+        <p>For coaches and teams: athlete profiles, session review, opponent scouting and game plans.</p>
+        <span class="mod-go">In development</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band band-alt" id="how">
+  <div class="wrap-w">
+    <div class="band-head">
+      <div class="kicker">How it works</div>
+      <h2 class="h2">Train with a plan, every day.</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-n">01</div><h3>Find your position</h3><p>Open the <a href="chinthe-guardian-matrix.html">Matrix</a> at the position you keep ending up in.</p></div>
+      <div class="step"><div class="step-n">02</div><h3>See your options</h3><p>Every way out, up or forward, with the points at stake and where it leads next.</p></div>
+      <div class="step"><div class="step-n">03</div><h3>Learn and drill it</h3><p>Open the technique for the mechanics, the common mistake and a drill to run tonight.</p></div>
+      <div class="step"><div class="step-n">04</div><h3>Log what worked</h3><p>Two minutes in the <a href="journal.html">Journal</a> after training. Your next session starts with a plan.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="who">
+  <div class="wrap-w">
+    <div class="band-head">
+      <div class="kicker">Who it's for</div>
+      <h2 class="h2">Built for grapplers.</h2>
+      <p class="lede">CHINTHE's core is no-gi submission grappling. Wrestlers, judoka and MMA fighters get the parts of the system that carry over to their sport.</p>
+    </div>
+    <div class="who">
+      <div class="who-card">
+        <h3>BJJ &amp; no-gi</h3>
+        <p class="who-for">The full system</p>
+        <p>Guard, passing, leg entanglements, back control and finishes, with ADCC, IBJJF and NAGA scoring.</p>
+        <a href="chinthe-guardian-matrix.html">Map your game →</a>
+      </div>
+      <div class="who-card">
+        <h3>Wrestling</h3>
+        <p class="who-for">Takedowns, front headlock, rides</p>
+        <p>Shots and finishes, front headlock and turtle attacks, and turning top control into submissions.</p>
+        <a href="knowledge.html#wrestling_shot">Standing &amp; clinch →</a>
+        <a href="knowledge.html#front_headlock_td">Front headlock &amp; turtle →</a>
+      </div>
+      <div class="who-card">
+        <h3>Judo</h3>
+        <p class="who-for">Throws into the ground game</p>
+        <p>18 throws with kuzushi and entries, plus what to do the moment you land on top.</p>
+        <a href="knowledge.html#judo_throw">Judo throws →</a>
+        <a href="principles.html#kuzushi">Kuzushi principle →</a>
+      </div>
+      <div class="who-card">
+        <h3>MMA</h3>
+        <p class="who-for">The grappling half of the fight</p>
+        <p>Takedowns, getting back up, escapes, and back control to the rear naked choke.</p>
+        <a href="knowledge.html#guard_recovery">Escapes &amp; survival →</a>
+        <a href="knowledge.html#back_control">Back control →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="philosophy" aria-label="Philosophy">
   <div class="philosophy-mark">◈</div>
   <p class="philosophy-quote">"Build with athletes, not for athletes."</p>
   <p class="philosophy-attr">CHINTHE Core Principle</p>
-</div>
+</section>
 
-<div class="pillars">
-  <div class="pillars-inner">
-    <div class="section-label">Core Philosophy</div>
-    <h2 class="section-title">Four Principles</h2>
-    <div class="pillars-grid">
-      <div>
-        <div class="pillar-num">01</div>
-        <div class="pillar-name">Discipline</div>
-        <p class="pillar-desc">We train the mind as much as the body. Every decision on the mat follows a system — not instinct, not habit, a trained response to a known state.</p>
-      </div>
-      <div>
-        <div class="pillar-num">02</div>
-        <div class="pillar-name">Respect</div>
-        <p class="pillar-desc">For our art, our partners, and our roots. The Chinthe guardian stands watch because it understands what it's protecting.</p>
-      </div>
-      <div>
-        <div class="pillar-num">03</div>
-        <div class="pillar-name">Perseverance</div>
-        <p class="pillar-desc">Through every challenge, we grow. The system is designed to improve with every session — feedback drives evolution, not opinion.</p>
-      </div>
-      <div>
-        <div class="pillar-num">04</div>
-        <div class="pillar-name">Legacy</div>
-        <p class="pillar-desc">We represent more than ourselves. Rooted in Myanmar, competing worldwide — the guardian lion travels far from home but never loses its purpose.</p>
-      </div>
+<section class="band" id="values">
+  <div class="wrap-w">
+    <div class="band-head">
+      <div class="kicker">What we stand for</div>
+      <h2 class="h2">Four values.</h2>
+    </div>
+    <div class="values">
+      <div class="value"><div class="value-n">01</div><h3>Discipline</h3><p>Every decision on the mat follows a system: not instinct, not habit, but a trained response to a known position.</p></div>
+      <div class="value"><div class="value-n">02</div><h3>Respect</h3><p>For the art, for training partners and for our roots. The guardian stands watch because it knows what it protects.</p></div>
+      <div class="value"><div class="value-n">03</div><h3>Perseverance</h3><p>Improve with every session. Feedback from the mat drives the system, not opinion.</p></div>
+      <div class="value"><div class="value-n">04</div><h3>Legacy</h3><p>Rooted in Myanmar, competing worldwide. The guardian lion travels far from home and never loses its purpose.</p></div>
     </div>
   </div>
-</div>
+</section>
+
+<section class="band band-alt" id="origin">
+  <div class="wrap-w origin">
+    <div class="origin-word">ခြင်္သေ့<small>Chinthe · The Guardian Lion</small></div>
+    <div>
+      <div class="kicker">Our story</div>
+      <h2 class="h2" style="margin-bottom:20px">Rooted in Myanmar. Forged through jiu-jitsu.</h2>
+      <p>The <b>Chinthe</b> is the guardian lion that stands in pairs at the gates of Myanmar's pagodas. It doesn't attack. It protects what matters and holds its ground.</p>
+      <p>That's how we see grappling: <b>calm, positional, and always one step ahead</b>. CHINTHE turns that idea into a system any grappler can train with, wherever they're from.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band cta">
+  <div class="wrap-w">
+    <div class="kicker">Start today</div>
+    <h2 class="h2">Find your position. Know your move.</h2>
+    <p class="lede">Free, no account needed. Add it to your home screen and it works at the gym, even without signal.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="chinthe-guardian-matrix.html">Open the Guardian Matrix →</a>
+      <a class="btn btn-secondary" href="journal.html">Log your first session</a>
+    </div>
+  </div>
+</section>
+</main>
 
 <footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-brand">CHINTHE JIU-JITSU</div>
-      <div class="footer-myanmar">ခြင်္သေ့</div>
+  <div class="wrap-w">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">CHINTHE JIU-JITSU</div>
+        <div class="footer-myanmar">ခြင်္သေ့</div>
+      </div>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="chinthe-guardian-matrix.html">Matrix</a>
+        <a href="knowledge.html">Knowledge</a>
+        <a href="principles.html">Principles</a>
+        <a href="competition.html">Compete</a>
+        <a href="journal.html">Journal</a>
+      </nav>
+      <div class="footer-tagline">Rooted in Myanmar · Built for the World · Alpha</div>
     </div>
-    <div class="footer-tagline">Rooted in Myanmar · Built for the World · Alpha</div>
+    <p class="footer-safety">Educational reference, not a substitute for a qualified coach. Learn submissions and leg locks under supervision, apply them slowly, and tap early.</p>
   </div>
-  <p class="footer-safety">Educational reference, not a substitute for a qualified coach. Learn submissions and leg locks under supervision, apply them slowly, and tap early.</p>
 </footer>
 
 <script src="chinthe.js"></script>
-  </main>
-
-</div>
-
 <script>
-// Derive the technique count from the Knowledge Base so the two can never diverge.
-// Counts the id:"…" keys of the DB entries in knowledge.html; falls back to the
-// generic label if the fetch fails (e.g. first visit while offline).
-// Progress summary (right panel): read-only view of the Matrix + Journal stores.
+// Returning athletes: show their progress strip (read-only view of the Matrix + Journal stores).
 (function(){
   const read = k => { try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } };
   const mastery = read('chinthe_mastery_v1') || {};
   const levels = Object.values(mastery);
+  const sessions = read('chinthe_journal_v1') || [];
   document.getElementById('hMapped').textContent = levels.filter(v => v > 0).length;
   document.getElementById('hGot').textContent = levels.filter(v => v === 3).length;
-  const sessions = read('chinthe_journal_v1') || [];
   document.getElementById('hSessions').textContent = sessions.length;
   const now = new Date(), weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay()); weekStart.setHours(0,0,0,0);
   document.getElementById('hWeek').textContent = sessions.filter(x => new Date(x.date + 'T00:00:00') >= weekStart).length;
   const last = sessions.map(x => x.date).sort().pop();
-  document.getElementById('hNote').textContent = last
-    ? 'Last session: ' + new Date(last + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'}) + '.'
-    : 'Nothing logged yet — start with step 01 or 04.';
+  if (last) document.getElementById('hNote').textContent = 'Last session ' + new Date(last + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric', month:'short'}) + '.';
   const b = read('chinthe_journal_backup_v1');
   if (b && b.at) document.getElementById('hBackup').textContent = 'last backup ' + new Date(b.at).toLocaleDateString('en-GB', {day:'numeric', month:'short'});
+  document.getElementById('welcome').hidden = !(levels.some(v => v > 0) || sessions.length);
   document.getElementById('hSearch').addEventListener('click', () =>
     document.dispatchEvent(new KeyboardEvent('keydown', {key: 'k', ctrlKey: true, bubbles: true})));
 })();
-
+// Technique count comes from the Knowledge Base so the two can never diverge.
 fetch('knowledge.html')
   .then(r => r.ok ? r.text() : Promise.reject())
-  .then(html => {
-    const count = (html.match(/\bid:"/g) || []).length;
-    if (count) document.getElementById('techCount').textContent = count + ' Techniques';
-  })
+  .then(html => { const n = (html.match(/\bid:"/g) || []).length; if (n) document.getElementById('techCount').textContent = n; })
   .catch(() => {});
 </script>
 </body>
