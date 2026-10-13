@@ -16,12 +16,14 @@ node tests/serve.js .
   --user-data-dir="$TEMP/chinthe-test-profile" --no-first-run --disable-gpu about:blank
 
 # 3. The suites
-node tests/run.js tests/shots   # main suite (198 checks) — screenshots land in tests/shots/
+node tests/run.js tests/shots   # main suite (204 checks) — screenshots land in tests/shots/
 node tests/frame-all.js         # every Matrix node framed in view, Focus + Full map, at 1440 / 1024 / 390 px
 node tests/sw-test.js           # service worker: network-first freshness + offline fallback
 node tests/audit.js             # static content audit (fields, scoring claims, page meta); writes tests/dump-*.txt
 node tests/a11y-audit.js        # accessibility: labels, names, WCAG contrast (both themes), phone tap targets, overflow
 ```
+
+After editing any `kb/*.js` file, rebuild first: `node tools/build-kb.js` (it validates every entry and fails on errors).
 
 Delete the Chrome profile folder between runs if you change `sw.js`, or the old service worker may serve cached pages.
 

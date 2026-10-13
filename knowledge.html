@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
-<meta name="description" content="98 no-gi technique entries — positions, submissions, passes, sweeps, takedowns, judo and defence — each with mechanics, opponent reactions, common mistakes and drills.">
-<title>Knowledge Base — CHINTHE</title>
+<meta name="description" content="The CHINTHE grappling encyclopedia: BJJ (gi and no-gi), wrestling, judo and MMA — positions, takedowns, throws, passes, sweeps, submissions, escapes and strikes, each with mechanics, reactions, common mistakes and drills.">
+<title>Encyclopedia — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-title" content="CHINTHE">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CHINTHE Guardian System">
-<meta property="og:title" content="Knowledge Base — CHINTHE">
-<meta property="og:description" content="98 no-gi technique entries — positions, submissions, passes, sweeps, takedowns, judo and defence — each with mechanics, opponent reactions, common mistakes and drills.">
+<meta property="og:title" content="Grappling Encyclopedia — CHINTHE">
+<meta property="og:description" content="The CHINTHE grappling encyclopedia: BJJ (gi and no-gi), wrestling, judo and MMA — positions, takedowns, throws, passes, sweeps, submissions, escapes and strikes, each with mechanics, reactions, common mistakes and drills.">
 <meta property="og:url" content="https://myintp.github.io/ChintheGuardianMatrix/knowledge.html">
 <meta property="og:image" content="https://myintp.github.io/ChintheGuardianMatrix/icon-512.png">
 <meta name="twitter:card" content="summary">
@@ -211,7 +211,7 @@ body{padding-bottom:0;}
       <a class="site-nav-link" href="index.html">Home</a>
       <a class="site-nav-link" href="chinthe-guardian-matrix.html">Matrix</a>
       <a class="site-nav-link" href="competition.html">Compete</a>
-      <a class="site-nav-link  active" href="knowledge.html">Knowledge</a>
+      <a class="site-nav-link  active" href="knowledge.html">Encyclopedia</a>
       <a class="site-nav-link" href="principles.html">Principles</a>
       <a class="site-nav-link" href="journal.html">Journal</a>
     </div>
@@ -221,8 +221,8 @@ body{padding-bottom:0;}
 <div class="app-shell kb-app" id="kbApp">
   <aside class="app-nav" aria-label="Browse the database">
     <div class="app-nav-head">
-      <div class="app-eyebrow">CHINTHE Knowledge Base</div>
-      <h1 class="app-title">Technique Database</h1>
+      <div class="app-eyebrow">CHINTHE Grappling Encyclopedia</div>
+      <h1 class="app-title">Encyclopedia</h1>
       <input class="app-search" type="search" id="searchInput" placeholder="Search moves or aliases…" autocomplete="off" aria-label="Search techniques">
       <select class="app-select" id="navSelect" aria-label="Browse by position or type"></select>
     </div>
@@ -266,6 +266,7 @@ body{padding-bottom:0;}
 </div>
 <div class="kb-backdrop" id="kbBackdrop" hidden></div>
 
+<script src="encyclopedia.js"></script>
 <script>
 const DB = [
   // ── SUBMISSIONS ──────────────────────────────────────────────────
@@ -1398,13 +1399,14 @@ function renderNav(){
   const item = (v, name, count)=>`<button type="button" class="app-nav-item${view===v?" active":""}" data-view="${v}" aria-current="${view===v}"><span>${name}</span><span class="app-nav-count">${count}</span></button>`;
   document.getElementById("navList").innerHTML =
     item("all", "All techniques", DB.length) +
-    `<div class="app-nav-group">By position</div>` +
+    item("az", "A–Z index", DB.length) +
+    `<div class="app-nav-group">By position &amp; discipline</div>` +
     GROUPS.map(g=>item("g:"+g.id, g.name, g.ids.length)).join("") +
     `<div class="app-nav-group">By type</div>` +
     TYPE_ORDER.map(t=>item("t:"+t, TYPE_LABEL[t], DB.filter(d=>d.cat===t).length)).join("");
   const sel = document.getElementById("navSelect");
-  sel.innerHTML = `<option value="all">All techniques (${DB.length})</option>` +
-    `<optgroup label="By position">${GROUPS.map(g=>`<option value="g:${g.id}">${g.name} (${g.ids.length})</option>`).join("")}</optgroup>` +
+  sel.innerHTML = `<option value="all">All techniques (${DB.length})</option><option value="az">A–Z index</option>` +
+    `<optgroup label="By position &amp; discipline">${GROUPS.map(g=>`<option value="g:${g.id}">${g.name} (${g.ids.length})</option>`).join("")}</optgroup>` +
     `<optgroup label="By type">${TYPE_ORDER.map(t=>`<option value="t:${t}">${TYPE_LABEL[t]}</option>`).join("")}</optgroup>`;
   sel.value = view;
 }
@@ -1446,17 +1448,23 @@ function renderCards(){
     eyebrow = "Search"; title = `“${searchQ.trim()}”`; sub = "Matches across the whole database.";
   } else if (view.startsWith("g:")){
     const g = GROUPS.find(x=>"g:"+x.id===view);
-    items = g.ids.map(byId); eyebrow = "Position"; title = g.name; sub = g.desc;
+    items = g.ids.map(byId); eyebrow = "Section"; title = g.name; sub = g.desc;
   } else if (view.startsWith("t:")){
     const t = view.slice(2);
     items = DB.filter(d=>d.cat===t); eyebrow = "Type"; title = TYPE_LABEL[t]; sub = "";
+  } else if (view === "az"){
+    items = DB.slice(); eyebrow = "Index"; title = "A–Z"; sub = "Every entry in the encyclopedia, alphabetically.";
   } else {
     items = DB.slice(); eyebrow = "Browse"; title = "All techniques"; sub = "Pick a position to see every move from it, or browse everything here.";
   }
   if (activeLvl !== "all") items = items.filter(t=>(META[t.id]||{}).lvl===activeLvl);
   // Group by type; within a position group the position entry itself leads
   const anchor = view.startsWith("g:") && !q ? GROUPS.find(x=>"g:"+x.id===view).anchor : null;
-  items.sort((a,b)=> (b.id===anchor)-(a.id===anchor) || TYPE_ORDER.indexOf(a.cat)-TYPE_ORDER.indexOf(b.cat));
+  const az = view === "az" && !q;
+  const sortName = t => t.name.replace(/^[^A-Za-z0-9]+/, "");
+  if (az) items.sort((a,b)=> sortName(a).localeCompare(sortName(b)));
+  else items.sort((a,b)=> (b.id===anchor)-(a.id===anchor) || TYPE_ORDER.indexOf(a.cat)-TYPE_ORDER.indexOf(b.cat));
+  const secOf = t => az ? sortName(t).charAt(0).toUpperCase() : t.cat;
 
   document.getElementById("midEyebrow").textContent = eyebrow;
   document.getElementById("midTitle").textContent = title;
@@ -1469,14 +1477,14 @@ function renderCards(){
   if (!items.length){
     grid.innerHTML = `<div class="empty-state-block" style="grid-column:1/-1"><span class="mark">◈</span>Nothing here at this level.<br>Try “All” levels or another position.</div>`;
   }
-  const types = new Set(items.map(t=>t.cat));
+  const types = new Set(items.map(secOf));
   let lastCat = null;
   items.forEach(t=>{
-    if (types.size > 1 && t.cat !== lastCat){
-      lastCat = t.cat;
+    if (types.size > 1 && secOf(t) !== lastCat){
+      lastCat = secOf(t);
       const h = document.createElement("div");
       h.className = "kb-section";
-      h.innerHTML = `<h2>${TYPE_LABEL[t.cat]||t.cat}</h2><span>${items.filter(x=>x.cat===t.cat).length}</span>`;
+      h.innerHTML = `<h2>${az ? lastCat : (TYPE_LABEL[t.cat]||t.cat)}</h2><span>${items.filter(x=>secOf(x)===lastCat).length}</span>`;
       grid.appendChild(h);
     }
     const card = document.createElement("button");
@@ -1516,6 +1524,28 @@ const SPAR = {
   defence:"Start in the bad position. You escape, they hold or attack. Reset on an escape or a tap.",
   concept:"Pick one position and run rounds where only this idea scores."
 };
+// ── Encyclopedia: entries from encyclopedia.js (built from kb/*.js) ──────────
+TYPE_ORDER.splice(TYPE_ORDER.indexOf("defence"), 0, "transition", "strike");
+Object.assign(TYPE_LABEL, { transition:"Transitions & Back Takes", strike:"Strikes" });
+Object.assign(LABELS, { transition:"Transition", strike:"Strike" });
+Object.assign(SPAR, {
+  transition:"Start one step before the transition. You complete it, they block it. Reset on either.",
+  strike:"Pads first, then light technical sparring with gloves and agreed contact. Reset every 30 seconds."
+});
+(function(KB){
+  if (!KB) return;
+  KB.groups.forEach(g=>{
+    const at = g.after ? GROUPS.findIndex(x=>x.id===g.after) + 1 : GROUPS.length;
+    GROUPS.splice(at || GROUPS.length, 0, { id:g.id, name:g.name, anchor:g.anchor, desc:g.desc, ids:g.include.slice() });
+  });
+  KB.entries.forEach(e=>{
+    DB.push({ id:e.id, cat:e.cat, name:e.name, tagline:e.tagline, tags:e.tags, objective:e.objective,
+              mechanics:e.mechanics, defense:e.defense, mistake:e.mistake, drill:e.drill });
+    META[e.id] = e.meta;
+    e.groups.forEach(gid=>{ const g = GROUPS.find(x=>x.id===gid); if (g && !g.ids.includes(e.id)) g.ids.push(e.id); });
+  });
+})(window.CHINTHE_KB);
+
 function panelHTML(t){
   const m = META[t.id] || {};
   const ms = masteryOf(t.id);
@@ -1533,7 +1563,8 @@ function panelHTML(t){
   ].join("");
   const rel = (m.rel||[]).map(byId).filter(Boolean);
   const inGroups = GROUPS.filter(g=>g.ids.includes(t.id));
-  const video = "https://www.youtube.com/results?search_query=" + encodeURIComponent(plain + (t.cat==="judo" ? " judo" : " no gi bjj"));
+  const VIDEO_SUFFIX = { "Judo":" judo", "Wrestling":" wrestling", "MMA":" mma", "Gi":" bjj gi", "Gi & No-Gi":" bjj", "No-Gi":" no gi bjj" };
+  const video = "https://www.youtube.com/results?search_query=" + encodeURIComponent(plain + (t.cat==="judo" && !m.fmt ? " judo" : (VIDEO_SUFFIX[m.fmt] || " no gi bjj")));
   return `
     <span class="tech-badge">${LABELS[t.cat]||t.cat}</span>
     <h2 class="kb-panel-title" id="kbPanelTitle">${t.name}</h2>

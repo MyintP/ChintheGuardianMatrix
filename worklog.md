@@ -167,6 +167,19 @@ Sections, top to bottom:
 Also: new page title and share description; brand colours tokenised (`--brand-gold`, `--brand-black`, `--brand-band-deep`).
 Verified: 198/198 checks (Home leaves the frame checks and gains landing-page checks); accessibility audit clean on Home; SW v27.
 
+#### Pass 13 — The encyclopedia: 98 → 368 entries
+**Owner feedback:** every earlier pass added a handful of moves; the owner asked for a full encyclopedia across wrestling, judo, BJJ and MMA, using the reference sites.
+**Sources for the taxonomy:** open-bjj.com, thefortjiujitsu.com, bjjequipment.com (techniques and jiu-jitsu-moves), Wikipedia's lists of judo techniques and BJJ techniques, judoinfo.com, mmawiki.org and fightencyclopedia.com. Names and structure only; every entry is original writing. The z-library books in the working folder were not used: the tool's safety check blocked reading them, and they are a copyright risk for a public site.
+**What was added (270 entries, each with tagline, objective, mechanics, opponent reactions, common mistake, drill, level, format, aliases and related moves):**
+- Wrestling: stance, ties (collar, Russian, underhooks, whizzer), 15 takedowns and finishes, trips, and a new **Mat Work & Rides** section (referee's position, stand-up, sit-out, switch, Granby, Peterson, breakdowns, half nelson, cradles, spiral ride, leg ride, tilt, gut wrench, leg lace).
+- Judo: the Kodokan throwing syllabus (te-, koshi-, ashi-, ma-sutemi- and yoko-sutemi-waza, including counters and wraps, with banned throws marked as reference only), combinations and counters, and a new **Pins & Ne-Waza** section (all osaekomi, the formal chokes, the ude-hishigi armlocks).
+- BJJ: a new **Gi Guards & Grips** section (spider, lasso, De La Riva, RDLR, collar-sleeve, worm, squid, sweeps), plus additions to closed, half and open guard, passing (HQ, long step, X-pass, leg weave, backstep, folding, float), top positions, leg entanglements (outside ashi, 50/50, butterfly ashi, false reap, truck), submissions and escapes.
+- A new **Back Takes & Transitions** section, and new concepts (distance, base and posture, inside position, breathing, training methods, leg-lock rules by ruleset).
+- MMA: new **Striking** (stance, footwork, punches, kicks, knees, elbows, clinch, defence) and **Cage & Ground** sections (cage clinch, wall walk, fence takedowns and defence, ground-and-pound posture, MMA guard and back control, priorities).
+**How it's built:** sources in `kb/*.js`; `node tools/build-kb.js` validates them (unique ids and names, valid groups and related links, required fields, no markup) and writes `encyclopedia.js` plus the global-search block in `chinthe.js`. The Knowledge page merges the data at load.
+**UI:** renamed to Encyclopedia across nav, breadcrumb, title and home; an **A–Z index**; Transitions and Strikes types; the panel shows the format (Gi, No-Gi, Wrestling, Judo, MMA) and video search uses the right discipline. The home page describes all four disciplines with deep links.
+Verified: 204/204 checks (new: 350+ complete entries, every entry levelled and grouped, every link resolves, the six new sections, A–Z index, format chip and video search); accessibility audit clean; SW v28 precaches `encyclopedia.js` (63 KB gzipped).
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.

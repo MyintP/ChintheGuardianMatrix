@@ -201,7 +201,7 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   ok('[d1440] Knowledge: three panels side by side (database | moves | detail)', cols.ok, JSON.stringify(cols));
   ok('[d1440] Detail panel shows a placeholder until a move is chosen', await d.ev(`document.getElementById('kbPanel').classList.contains('is-empty') && document.getElementById('kbPanelBody').textContent.includes('Select a move')`));
   await d.ev(`document.querySelector('.app-nav-item[data-view="g:closed"]').click()`); await sleep(200);
-  ok('[d1440] Choosing a position lists its moves and opens the position itself', await d.ev(`document.getElementById('midTitle').textContent==='Closed Guard' && document.querySelectorAll('.tech-card').length===9 && document.getElementById('kbPanelTitle').textContent==='Closed Guard'`));
+  ok('[d1440] Choosing a position lists its moves and opens the position itself', await d.ev(`document.getElementById('midTitle').textContent==='Closed Guard' && document.querySelectorAll('.tech-card').length===GROUPS.find(g=>g.id==='closed').ids.length && GROUPS.find(g=>g.id==='closed').ids.length>15 && document.getElementById('kbPanelTitle').textContent==='Closed Guard'`));
   await d.ev(`document.getElementById('tech-kimura').click()`); await sleep(150);
   ok('[d1440] Clicking a move updates the docked detail (no overlay)', await d.ev(`document.getElementById('kbPanelTitle').textContent==='Kimura' && document.getElementById('kbBackdrop').hidden && !document.body.classList.contains('kb-open')`));
   ok('[d1440] Detail "Found in" links back to position groups', await d.ev(`[...document.querySelectorAll('[data-goto]')].map(b=>b.textContent).includes('Side Control & North-South')`));
@@ -291,7 +291,16 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
     ok(`${p}: no floating progress overlay`, await t2.ev(`!document.querySelector('.learn-next-nudge') && [...document.querySelectorAll('body *')].filter(e=>getComputedStyle(e).position==='fixed' && e.offsetParent!==null && !e.closest('.site-nav')).length===0`));
   }
   await t2.go(BASE + 'knowledge.html');
-  ok('Knowledge All view grouped into 8 category sections', await t2.ev(`document.querySelectorAll('.kb-section').length===8`));
+  ok('Encyclopedia: 350+ entries, every one with tagline, objective, mechanics, reactions, mistake and drill', await t2.ev(`DB.length>=350 && DB.every(d=>['tagline','objective','mechanics','defense','mistake','drill'].every(k=>(d[k]||'').length>=25))`), await t2.ev('DB.length'));
+  ok('Encyclopedia: every entry has a level and sits in at least one group', await t2.ev(`DB.every(d=>META[d.id]&&META[d.id].lvl&&GROUPS.some(g=>g.ids.includes(d.id)))`), await t2.ev(`JSON.stringify(DB.filter(d=>!GROUPS.some(g=>g.ids.includes(d.id))).map(d=>d.id))`));
+  ok('Encyclopedia: wrestling, judo, gi, MMA and transition sections exist', await t2.ev(`['wrestling_mat','judo_ground','gi_guard','striking','mma','transitions'].every(id=>GROUPS.find(g=>g.id===id&&g.ids.length>=8))`));
+  ok('Encyclopedia: every related link and group anchor resolves', await t2.ev(`Object.values(META).every(m=>(m.rel||[]).every(r=>byId(r))) && GROUPS.every(g=>byId(g.anchor)&&g.ids.every(byId))`));
+  await t2.ev(`document.querySelector('[data-view="az"]').click()`); await sleep(250);
+  ok('Encyclopedia: A-Z index lists every entry under letter headings', await t2.ev(`document.querySelectorAll('.tech-card').length===DB.length && [...document.querySelectorAll('.kb-section h2')].every(h=>/^[A-Z0-9]$/.test(h.textContent)) && document.querySelectorAll('.kb-section').length>=20`));
+  await t2.ev(`openPanel('jab')`); await sleep(150);
+  ok('Encyclopedia: entries show their discipline (MMA) and search videos for it', await t2.ev(`document.getElementById('kbPanelBody').textContent.includes('MMA') && document.querySelector('.kb-link.ext').href.includes('mma')`));
+  await t2.ev(`document.querySelector('[data-view="all"]').click()`); await sleep(200);
+  ok('Knowledge All view grouped into 10 category sections', await t2.ev(`document.querySelectorAll('.kb-section').length===10`));
   ok('Knowledge cards: no tag chips on cards (tags live in the panel)', await t2.ev(`[...document.querySelectorAll('.tech-card-tags')].every(t=>t.closest('#kbPanel'))`));
   // Detail panel behaviour
   await t2.ev(`document.getElementById('searchInput').value='';document.getElementById('searchInput').dispatchEvent(new Event('input'))`);
