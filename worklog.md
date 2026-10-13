@@ -164,7 +164,7 @@ Sections, top to bottom:
 9. Origin story (Chinthe, Myanmar).
 10. Closing call to action.
 11. Footer with links and the safety notice.
-Also: new page title and share description; brand colours tokenised (, , ).
+Also: new page title and share description; brand colours tokenised (`--brand-gold`, `--brand-black`, `--brand-band-deep`).
 Verified: 198/198 checks (Home leaves the frame checks and gains landing-page checks); accessibility audit clean on Home; SW v27.
 
 #### How every pass was verified
