@@ -124,8 +124,8 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   // 6. Homepage
   await t.go(BASE + 'index.html');
   const nc = await t.ev(`document.querySelector('[data-node-count]').textContent`);
-  ok('Homepage node count matches matrix', nc === mIds.length + ' Nodes', nc);
-  ok('Coming Soon card is not a link', await t.ev(`!document.querySelector('a.module-card.coming') && !!document.querySelector('div.module-card.coming')`));
+  ok('Homepage node count matches matrix', nc === mIds.length + ' positions', nc);
+  ok('Coming Soon card is not a link', await t.ev(`!!document.querySelector('div.list-card-soon') && !document.querySelector('a.list-card-soon')`));
 
   // 7. Journal date under UTC+11
   await t.send('Emulation.setTimezoneOverride', { timezoneId: 'Australia/Sydney' });
@@ -142,7 +142,7 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   await t.ev(restore(backup)); await sleep(400);
   const after = await t.ev(`loadSessions().map(s=>s.id+':'+s.type)`);
   ok('Restore merges new, skips duplicates + invalid, normalises fields', after.length === 3 && after.includes('x1:sparring') && after.includes('x2:drilling'), JSON.stringify(after) + ' alerts=' + JSON.stringify(await t.ev('window.__alerts')));
-  ok('Restored HTML in titles renders as text', await t.ev(`!document.querySelector('#sessionsList img') && document.getElementById('sessionsList').textContent.includes('<img src=x')`));
+  ok('Restored HTML in titles renders as text', await t.ev(`!document.querySelector('#sessionList img') && document.getElementById('sessionList').textContent.includes('<img src=x')`));
   ok('Restore sorted newest first', await t.ev(`(()=>{const d=loadSessions().map(s=>s.date);return d.join()===[...d].sort().reverse().join()})()`));
   await t.ev(restore(backup)); await sleep(300);
   ok('Re-restoring same backup adds nothing', await t.ev(`loadSessions().length===3 && window.__alerts.at(-1).includes('already here')`), await t.ev('window.__alerts.at(-1)'));
@@ -206,37 +206,41 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   ok('[d1440] Clicking a move updates the docked detail (no overlay)', await d.ev(`document.getElementById('kbPanelTitle').textContent==='Kimura' && document.getElementById('kbBackdrop').hidden && !document.body.classList.contains('kb-open')`));
   ok('[d1440] Detail "Found in" links back to position groups', await d.ev(`[...document.querySelectorAll('[data-goto]')].map(b=>b.textContent).includes('Side Control & North-South')`));
   await d.go(BASE + 'principles.html'); await sleep(300);
-  ok('[d1440] Principles uses the same shell: list left, reading column right', await d.ev(`(()=>{const n=document.querySelector('.app-nav').getBoundingClientRect(),m=document.getElementById('mdPanel').getBoundingClientRect();return n.right<=m.left+1 && getComputedStyle(document.getElementById('prSelect')).display==='none' && document.querySelector('.app-nav-item.active').id==='si-efficiency'})()`));
-  ok('[d1440] Principles list labels are left-aligned', await d.ev(`(()=>{const it=document.querySelector('#si-timing span:not(.app-nav-num)');const b=document.getElementById('si-timing').getBoundingClientRect();return it.getBoundingClientRect().left - b.left < 80})()`));
+  ok('[d1440] Principles uses the same shell: list left, reading column right', await d.ev(`(()=>{const n=document.querySelector('.app-nav').getBoundingClientRect(),m=document.getElementById('mdPanel').getBoundingClientRect();return n.right<=m.left+1 && getComputedStyle(document.getElementById('prSelect')).display==='none' && document.querySelector('.app-nav-item.active').dataset.group==='all' && document.querySelector('#prList .list-card.active').id==='si-efficiency'})()`));
+  await d.ev(`document.querySelector('[data-group="mechanics"]').click()`);
+  ok('[d1440] Principles: a group filters the cards and opens its first principle', await d.ev(`document.querySelectorAll('#prList .list-card').length===5 && document.querySelector('.panel-title').textContent.startsWith('Drive')`));
   // Same header component across document pages
   // Every page: unique left panel | information in the middle | right panel, same fonts and widths
   const FRAME = {
-    'index.html':                   ['.app-nav', '.app-main', '.app-aside'],
+    'index.html':                   ['.app-nav', '.app-list', '.app-detail'],
     'chinthe-guardian-matrix.html': ['.wrap > header', '.tree-wrap', '#detailPane'],
-    'competition.html':             ['.app-nav', '.app-main', '.app-aside'],
+    'competition.html':             ['.app-nav', '.app-list', '.app-detail'],
     'knowledge.html':               ['.app-nav', '#kbMid', '#kbPanel'],
-    'principles.html':              ['.app-nav', '.app-main', '.app-aside'],
-    'journal.html':                 ['.app-nav', '.app-main', '.app-aside']
+    'principles.html':              ['.app-nav', '.app-list', '.app-detail'],
+    'journal.html':                 ['.app-nav', '.app-list', '.app-detail']
   };
-  const widths = {};
+  const widths = {}, mids = {};
   for (const [p, [l, m, r]] of Object.entries(FRAME)) {
     await d.go(BASE + p); await sleep(300);
     const g = await d.ev(`(()=>{const L=document.querySelector('${l}').getBoundingClientRect(),M=document.querySelector('${m}').getBoundingClientRect(),R=document.querySelector('${r}').getBoundingClientRect();
       const title=document.querySelector('.app-title');
-      return {order: L.right<=M.left+1 && M.right<=R.left+1 && R.width>300 && L.width>=260, left:Math.round(L.width), right:Math.round(R.right-R.left),
+      return {order: L.right<=M.left+1 && M.right<=R.left+1 && L.width>=260, widest: R.width > M.width && R.width > L.width, left:Math.round(L.width), middle:Math.round(M.width), right:Math.round(R.right-R.left),
         body:getComputedStyle(document.body).fontFamily, title: title?getComputedStyle(title).fontFamily:'none'}})()`);
     widths[p] = g.left;
-    ok(`[d1440] ${p}: left panel | middle | right panel`, g.order, JSON.stringify(g));
+    ok(`[d1440] ${p}: WHERE | WHAT | READ order`, g.order, JSON.stringify(g));
+    ok(`[d1440] ${p}: the reading panel is the widest`, g.widest, JSON.stringify(g));
+    mids[p] = g.middle;
     ok(`[d1440] ${p}: shared fonts (Inter body, Oswald titles)`, g.body.startsWith('Inter') && g.title.includes('Oswald'), g.body + ' / ' + g.title);
   }
   ok('[d1440] Left panel is the same width on every page', new Set(Object.values(widths)).size === 1, JSON.stringify(widths));
+  ok('[d1440] Middle panel is the same width on every page', new Set(Object.values(mids)).size === 1, JSON.stringify(mids));
   const fontLinks = await d.ev(`Promise.all(${JSON.stringify(Object.keys(FRAME))}.map(f=>fetch(f).then(r=>r.text()).then(t=>(t.match(/fonts\\.googleapis\\.com\\/css2\\?[^"]*/)||[''])[0])))`);
   ok('Every page loads the identical font set', new Set(fontLinks).size === 1, JSON.stringify([...new Set(fontLinks)]));
   await d.go(BASE + 'journal.html');
   await d.ev(`localStorage.setItem('chinthe_journal_v1', JSON.stringify([{id:'j1',date:'2026-10-10',type:'sparring',title:'Open mat',techniques:['Kimura'],worked:'Kimura trap',needs:'',drill:'',notes:'',timestamp:'2026-10-10T10:00:00Z'}]))`);
   await d.go(BASE + 'journal.html');
-  await d.ev(`document.querySelector('#navSessions [data-sid="j1"]').click()`);
-  ok('[d1440] Journal: history on the left opens the session in the middle', await d.ev(`!document.getElementById('sessionView').hidden && document.getElementById('jTitle').textContent==='Open mat' && document.getElementById('formWrap').hidden`));
+  await d.ev(`document.querySelector('#sessionList [data-sid="j1"]').click()`);
+  ok('[d1440] Journal: a session card opens it in the reading panel', await d.ev(`!document.getElementById('sessionView').hidden && document.getElementById('jTitle').textContent==='Open mat' && document.getElementById('formWrap').hidden`));
   await d.ev(`document.getElementById('newSessionBtn').click()`);
   ok('[d1440] Journal: "New session" returns to the form', await d.ev(`!document.getElementById('formWrap').hidden && document.getElementById('sessionView').hidden`));
   await d.ev(`localStorage.removeItem('chinthe_journal_v1')`);
@@ -272,7 +276,7 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   const raw = await d.ev(`Promise.all(['index.html','chinthe-guardian-matrix.html','competition.html','knowledge.html','principles.html','journal.html'].map(f=>fetch(f).then(r=>r.text()).then(t=>[f,((t.match(/<style>[\\s\\S]*?<\\/style>/g)||[]).join('').replace(/\\.philosophy\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy::before\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy-mark\\{[\\s\\S]*?\\}/,'').match(/#[0-9a-fA-F]{6}\\b|rgba?\\(/g)||[]).length])))`);
   ok('No hard-coded colours left in page styles (brand band excepted)', raw.every(([, n]) => n === 0), JSON.stringify(raw));
   await d.go(BASE + 'index.html');
-  ok('Homepage: 6 cards incl. Compete', await d.ev(`document.querySelectorAll('.module-card').length===6 && !!document.querySelector('.module-card[href="competition.html"]')`));
+  ok('Homepage: 6 module cards incl. Compete', await d.ev(`document.querySelectorAll('.app-list .list-card').length===6 && !!document.querySelector('.list-card[href="competition.html"]')`));
   await d.go(BASE + 'competition.html');
   ok('Compete ADCC: clean takedown 4, clean sweep 4, guard pull −1', await d.ev(`(()=>{const a=RULESETS.adcc;const f=n=>a.positive.find(x=>x.action.startsWith(n))?.pts;return f('Clean takedown')===4&&f('Clean sweep')===4&&f('Back control')===3&&a.other[0].pts==='−1'})()`));
   await d.go(BASE + 'principles.html#hierarchy');

@@ -98,6 +98,21 @@ body{padding-bottom:0;}
 .aside-actions{display:flex;flex-wrap:wrap;gap:6px;}
 .backup-reminder{margin:0;}
 .mobile-only{display:block;}
+.list-card .session-badge{padding:2px 7px;}
+.app-nav-foot .stat-tile b{font-size:22px;}
+.app-nav-foot .aside-block{padding:12px 0;}
+.app-nav-foot .aside-block:first-child{padding-top:0;}
+.app-nav-foot .aside-actions .btn{padding:8px 12px;}
+@media (max-width:899px){
+  .journal-shell{display:flex;flex-direction:column;}
+  .journal-shell .app-nav{order:0;}
+  .journal-shell .app-detail{order:1;}
+  .journal-shell .app-list{order:2;}
+  /* the left panel dissolves on phones so its parts can be reordered: head, form, history, then stats/backup */
+  .journal-shell .app-nav{display:contents;}
+  .journal-shell .app-nav-head{order:0;background:var(--surface);border-bottom:1px solid var(--line);}
+  .journal-shell .app-nav-foot{display:block;order:3;background:var(--surface);}
+}
 @media (min-width:900px){
   .mobile-only{display:none;}
   .form-grid{gap:14px;}
@@ -124,18 +139,57 @@ body{padding-bottom:0;}
   </div>
 </nav>
 
-<div class="app-shell has-aside">
+<div class="app-shell journal-shell">
   <aside class="app-nav" aria-label="Session history">
     <div class="app-nav-head">
       <div class="app-eyebrow">CHINTHE Training Journal</div>
       <h1 class="app-title">Journal</h1>
       <p class="app-head-sub" style="font-size:13.5px">Log every session. Stored privately on this device.</p>
       <button type="button" class="btn btn-primary new-session-btn" id="newSessionBtn">+ New session</button>
+    <select class="app-select" id="jFilterSelect" aria-label="Filter sessions"></select>
     </div>
-    <nav class="app-nav-list" id="navSessions" aria-label="Sessions"></nav>
+    <nav class="app-nav-list" id="jFilters" aria-label="Filter sessions"></nav>
+    <div class="app-nav-foot">
+      <div class="aside-block">
+        <div class="aside-title">Your training</div>
+        <div class="stat-grid">
+          <div class="stat-tile"><b id="statTotal">0</b><span>Sessions</span></div>
+          <div class="stat-tile"><b id="statThisWeek">0</b><span>This week</span></div>
+          <div class="stat-tile" style="grid-column:1/-1"><b id="statTopTech">—</b><span>Most logged technique</span></div>
+        </div>
+      </div>
+        <div class="aside-block">
+        <div class="aside-title">Backup</div>
+        <div class="backup-reminder" id="backupReminder" role="status" hidden>
+      <div class="br-text">
+        <div class="br-title" id="brTitle"></div>
+        <div class="br-sub" id="brSub"></div>
+      </div>
+      <div class="br-actions">
+        <button type="button" class="btn btn-primary" id="brBackup">⤓ Back up now</button>
+        <button type="button" class="btn btn-ghost" id="brLater">Later</button>
+      </div>
+    </div>
+        <p class="aside-text" style="margin:10px 0">Stored only on this device · <span id="lastBackupText">Never backed up</span></p>
+        <div class="aside-actions">
+          <button class="btn btn-ghost" type="button" onclick="backupJSON()" title="Full backup file you can restore from">⤓ Backup</button>
+          <button class="btn btn-ghost" type="button" onclick="document.getElementById('restoreInput').click()" title="Restore sessions from a backup file">⤒ Restore</button>
+          <button class="btn btn-ghost" type="button" onclick="exportAll()" title="Readable Markdown copy">↗ Export</button>
+          <input type="file" id="restoreInput" accept="application/json,.json" hidden>
+        </div>
+      </div>
+      </div>
   </aside>
 
-  <main class="app-main">
+  <section class="app-list" aria-label="Sessions">
+    <div class="list-head">
+      <div class="app-eyebrow">History</div>
+      <div class="list-head-title" id="jListTitle">All sessions</div>
+    </div>
+    <div class="list-stack" id="sessionList"></div>
+  </section>
+
+  <main class="app-detail">
     <header class="app-head">
       <div class="app-eyebrow" id="jEyebrow">Log</div>
       <h2 class="app-head-title" id="jTitle">New session</h2>
@@ -195,40 +249,6 @@ body{padding-bottom:0;}
     <div class="session-view" id="sessionView" hidden></div>
   </main>
 
-  <aside class="app-aside" aria-label="Stats and backup">
-    <div class="aside-block">
-      <div class="aside-title">Your training</div>
-      <div class="stat-grid">
-        <div class="stat-tile"><b id="statTotal">0</b><span>Sessions</span></div>
-        <div class="stat-tile"><b id="statThisWeek">0</b><span>This week</span></div>
-        <div class="stat-tile" style="grid-column:1/-1"><b id="statTopTech">—</b><span>Most logged technique</span></div>
-      </div>
-    </div>
-    <div class="aside-block">
-      <div class="aside-title">Backup</div>
-      <div class="backup-reminder" id="backupReminder" role="status" hidden>
-    <div class="br-text">
-      <div class="br-title" id="brTitle"></div>
-      <div class="br-sub" id="brSub"></div>
-    </div>
-    <div class="br-actions">
-      <button type="button" class="btn btn-primary" id="brBackup">⤓ Back up now</button>
-      <button type="button" class="btn btn-ghost" id="brLater">Later</button>
-    </div>
-  </div>
-      <p class="aside-text" style="margin:10px 0">Stored only on this device · <span id="lastBackupText">Never backed up</span></p>
-      <div class="aside-actions">
-        <button class="btn btn-ghost" type="button" onclick="backupJSON()" title="Full backup file you can restore from">⤓ Backup</button>
-        <button class="btn btn-ghost" type="button" onclick="document.getElementById('restoreInput').click()" title="Restore sessions from a backup file">⤒ Restore</button>
-        <button class="btn btn-ghost" type="button" onclick="exportAll()" title="Readable Markdown copy">↗ Export</button>
-        <input type="file" id="restoreInput" accept="application/json,.json" hidden>
-      </div>
-    </div>
-    <div class="aside-block mobile-only">
-      <div class="aside-title">Session history</div>
-      <div class="sessions-list" id="sessionsList"></div>
-    </div>
-  </aside>
 </div>
 
 <script>
@@ -375,28 +395,54 @@ function showSession(id){
   del.addEventListener("click", ()=>deleteSession(id));
   actions.appendChild(del); v.appendChild(actions);
   markActive();
-  if (window.innerWidth < 900) window.scrollTo({top:0});
+  if (window.innerWidth < 1100) document.querySelector(".app-detail").scrollIntoView({behavior:"smooth", block:"start"});
 }
 function markActive(){
-  document.querySelectorAll("#navSessions .app-nav-item").forEach(b=>b.classList.toggle("active", b.dataset.sid===viewingId));
+  document.querySelectorAll("#sessionList .list-card").forEach(b=>{
+    const on = b.dataset.sid===viewingId;
+    b.classList.toggle("active", on); b.setAttribute("aria-current", on ? "true" : "false");
+  });
 }
-function renderNavSessions(sessions){
-  const nav = document.getElementById("navSessions");
-  nav.innerHTML = "";
-  if (!sessions.length){ nav.innerHTML = '<p class="aside-text" style="padding:12px 20px">No sessions yet.</p>'; return; }
+let jFilter = "all";
+const FILTERS = [["all","All sessions"],["drilling","Drilling"],["sparring","Sparring"],["competition","Competition"],["conditioning","Conditioning"]];
+function renderFilters(sessions){
+  const count = k => k==="all" ? sessions.length : sessions.filter(x=>x.type===k).length;
+  document.getElementById("jFilters").innerHTML = '<div class="app-nav-group">Filter</div>' + FILTERS.map(([k,l]) =>
+    '<button type="button" class="app-nav-item'+(k===jFilter?' active':'')+'" data-filter="'+k+'" aria-current="'+(k===jFilter)+'"><span>'+l+'</span><span class="app-nav-count">'+count(k)+'</span></button>').join("");
+  const sel = document.getElementById("jFilterSelect");
+  sel.innerHTML = FILTERS.map(([k,l]) => '<option value="'+k+'">'+l+' ('+count(k)+')</option>').join("");
+  sel.value = jFilter;
+}
+// Session cards (textContent only — journal text is user input)
+function renderSessionList(all){
+  renderFilters(all);
+  const sessions = jFilter==="all" ? all : all.filter(x=>x.type===jFilter);
+  document.getElementById("jListTitle").textContent = (FILTERS.find(f=>f[0]===jFilter)||FILTERS[0])[1];
+  const list = document.getElementById("sessionList");
+  list.innerHTML = "";
+  if (!sessions.length){
+    list.innerHTML = '<div class="empty-state-block"><span class="mark">◎</span>' + (all.length ? "No sessions of this type yet." : "No sessions logged yet.<br>Log your first one.") + '</div>';
+    return;
+  }
   let lastMonth = null;
   sessions.forEach(s=>{
     const month = new Date(s.date+"T00:00:00").toLocaleDateString('en-GB',{month:'long',year:'numeric'});
-    if (month !== lastMonth){ lastMonth = month; nav.appendChild(el("div","app-nav-group",month)); }
-    const b = el("button","app-nav-item");
-    b.type = "button"; b.dataset.sid = s.id;
-    b.appendChild(el("span",null,s.title));
-    b.appendChild(el("span","session-item-date",new Date(s.date+"T00:00:00").toLocaleDateString('en-GB',{day:'2-digit',month:'short'})));
+    if (month !== lastMonth){ lastMonth = month; list.appendChild(el("div","list-group-label",month)); }
+    const b = el("button","list-card"); b.type = "button"; b.dataset.sid = s.id;
+    const meta = el("span","list-card-meta");
+    meta.appendChild(el("span",null,fmtDate(s.date)));
+    meta.appendChild(el("span","session-badge badge-"+s.type,TYPE_LABEL[s.type]||s.type));
+    b.appendChild(meta);
+    b.appendChild(el("span","list-card-title",s.title));
+    const t = (s.techniques||[]).join(" · ");
+    if (t) b.appendChild(el("span","list-card-sub",t));
     b.addEventListener("click", ()=>showSession(s.id));
-    nav.appendChild(b);
+    list.appendChild(b);
   });
   markActive();
 }
+document.getElementById("jFilters").addEventListener("click", e=>{ const b=e.target.closest("[data-filter]"); if(b){ jFilter=b.dataset.filter; renderSessionList(loadSessions()); }});
+document.getElementById("jFilterSelect").addEventListener("change", e=>{ jFilter=e.target.value; renderSessionList(loadSessions()); });
 document.getElementById("newSessionBtn").addEventListener("click", ()=>{ showNew(); document.getElementById("fTitle").focus(); });
 
 function deleteSession(id){
@@ -427,82 +473,11 @@ function renderAll(){
   const topTech=Object.entries(techCount).sort((a,b)=>b[1]-a[1])[0];
 
   renderBackupReminder();
-  renderNavSessions(sessions);
   document.getElementById("statTotal").textContent=sessions.length;
   document.getElementById("statThisWeek").textContent=thisWeek;
   document.getElementById("statTopTech").textContent=topTech?topTech[0]:"—";
 
-  // List
-  const list=document.getElementById("sessionsList");
-  if(!sessions.length){
-    list.innerHTML=`<div class="empty-state"><div class="empty-icon">◎</div><div class="empty-text">No sessions logged yet.<br>Start above.</div></div>`;
-    return;
-  }
-  list.innerHTML="";
-  sessions.forEach(s=>{
-    const card=el("div","session-card");
-    const typeLabel={drilling:"Drilling",sparring:"Sparring",competition:"Competition",conditioning:"Conditioning"}[s.type]||s.type;
-    const techniques=s.techniques||[];
-
-    // Header — keyboard-operable expander
-    const header=el("div","session-header");
-    header.setAttribute("role","button");
-    header.tabIndex=0;
-    header.setAttribute("aria-controls",`sb-${s.id}`);
-    header.setAttribute("aria-expanded","false");
-    const activate=()=>{
-      toggleSession(s.id);
-      const b=document.getElementById(`sb-${s.id}`);
-      header.setAttribute("aria-expanded",b&&b.classList.contains("open")?"true":"false");
-    };
-    header.addEventListener("click",activate);
-    header.addEventListener("keydown",e=>{
-      if(e.key==="Enter"||e.key===" "){e.preventDefault();activate();}
-    });
-    const headLeft=el("div");
-    headLeft.appendChild(el("div","session-date",fmtDate(s.date)));
-    headLeft.appendChild(el("div","session-title",s.title));
-    const metaText=techniques.length
-      ? techniques.slice(0,3).join(" · ")+(techniques.length>3?" +"+(techniques.length-3)+" more":"")
-      : "";
-    headLeft.appendChild(el("div","session-meta",metaText));
-    header.appendChild(headLeft);
-    header.appendChild(el("span",`session-badge badge-${s.type}`,typeLabel));
-    card.appendChild(header);
-
-    // Body
-    const body=el("div","session-body");
-    body.id=`sb-${s.id}`;
-    const field=(label,text,color)=>{
-      const f=el("div","session-field");
-      f.appendChild(el("div","session-field-label",label));
-      const txt=el("div","session-field-text",text);
-      if(color)txt.style.color=color;
-      f.appendChild(txt);
-      body.appendChild(f);
-    };
-    if(techniques.length){
-      const f=el("div","session-field");
-      f.appendChild(el("div","session-field-label","Techniques"));
-      const tags=el("div","session-tags");
-      techniques.forEach(t=>tags.appendChild(el("span","session-tag",t)));
-      f.appendChild(tags);
-      body.appendChild(f);
-    }
-    if(s.worked)field("What Worked",s.worked);
-    if(s.needs)field("Needs Work",s.needs,"var(--danger-text)");
-    if(s.drill)field("Next Drill Focus",s.drill);
-    if(s.notes)field("Notes",s.notes,"var(--stone-dim)");
-    const actions=el("div","session-actions");
-    const delBtn=el("button","btn btn-danger","Delete session");
-    delBtn.type="button";
-    delBtn.addEventListener("click",()=>deleteSession(s.id));
-    actions.appendChild(delBtn);
-    body.appendChild(actions);
-    card.appendChild(body);
-
-    list.appendChild(card);
-  });
+  renderSessionList(sessions);
 }
 
 // Small DOM helper — builds an element with optional class and textContent

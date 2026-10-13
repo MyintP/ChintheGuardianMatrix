@@ -106,6 +106,22 @@ Every page now uses the same layout: a page-specific panel on the left, informat
 - Fonts unified: identical font set loaded on every page; all font names replaced by tokens (Inter body, Oswald titles/lists, IBM Plex Mono labels, Cinzel quotes). The Matrix previously used IBM Plex Sans.
 - Fixed while verifying: tree area overflowing under the Matrix detail panel; Principles row gap at tablet width; a stray global `nav{}` rule in Journal; homepage hero centring.
 - 192/192 browser checks (new: frame order, identical left width, fonts and font links on all six pages; Journal history → middle; Compete ruleset → middle + right).
+- **Owner feedback:** the panel with the most information was the smallest, and the right panel meant different things on different pages — not uniform. Superseded by Pass 10.
+
+#### Pass 10 — WHERE | WHAT | READ: the reading panel is always the widest
+One rule for every page: information gets deeper, and the panel wider, from left to right.
+- **WHERE** (left, 260px): navigate. **WHAT** (middle, 400px): pick an item. **READ** (right, the rest, ~780px at 1440): the full detail.
+| Page | WHERE | WHAT | READ (widest) |
+|---|---|---|---|
+| Home | Start-here path | Your progress, modules, quick actions | Overview: hero, philosophy, pillars |
+| Matrix | Areas, tools, search | Decision tree | Position detail + options |
+| Compete | Rulesets, core positions | Score tracker | Rules: key rule, scoring table, clock guidance |
+| Knowledge | Positions & types | Moves (compact cards) | Move breakdown |
+| Principles | Groups: Strategy & Mindset, Mechanics, Balance, Reference | Principle cards | Full principle: explanation, application, examples, related moves, sources |
+| Journal | New session, type filters (with counts), stats, backup | Session cards by month | Log form or the selected session |
+- Shared in `chinthe.css` §17: `.app-nav` / `.app-list` / `.app-detail` and one `.list-card` component for every pickable item. ≥1100px three panels; 900–1099px WHERE beside WHAT-then-READ; phones single column (Journal shows the form before history, Home shows the overview first).
+- Homepage lion always on its brand tile (fixes a visible square on the new panel colour).
+- 199/199 browser checks (new: reading panel widest on all six pages, identical middle width, Principles groups, Journal card → reading panel); all 135 Matrix nodes still framed in Focus and Full map; SW cache v25.
 
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.

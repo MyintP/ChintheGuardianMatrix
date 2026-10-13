@@ -103,13 +103,10 @@ body { overflow-x: hidden; }
   pointer-events:none;border-radius:50%;
 }
 @media(min-width:1280px){.hero-lion{width:420px;height:420px;}}
-/* The lion mark is drawn on night black. In light mode it sits on its own
-   brand tile so the mark (and its blend) reads exactly as in dark mode. */
-.hero-visual{isolation:isolate;}
-:root[data-theme="light"] .hero-glow{opacity:.45;}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .hero-glow{opacity:.45;}}
-:root[data-theme="light"] .hero-visual{background:var(--brand-night);border-radius:28px;padding:28px;box-shadow:0 24px 60px color-mix(in srgb, var(--shadow) 30%, transparent);}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .hero-visual{background:var(--brand-night);border-radius:28px;padding:28px;box-shadow:0 24px 60px color-mix(in srgb, var(--shadow) 30%, transparent);}}
+/* The lion mark is always shown on its night-black brand tile (as in the nav logo),
+   so it reads identically in both themes and on any panel colour. */
+.hero-visual{isolation:isolate;background:var(--brand-night);border-radius:24px;padding:20px;box-shadow:0 18px 48px color-mix(in srgb, var(--shadow) 28%, transparent);}
+.hero-visual::before{display:none;}
 
 /* ════════════════════════════════
    MODULES SECTION
@@ -310,11 +307,13 @@ footer{padding:24px 0 8px;}
 /* Home's left panel: the starting path (shown on phones too, after the hero) */
 .home-step-desc{display:block;font-family:var(--font-body);font-size:12.5px;text-transform:none;letter-spacing:0;color:var(--stone-dim);margin-top:2px;}
 .home-shell .app-nav-item{align-items:flex-start;}
+.list-card-soon{opacity:.5;}
+.app-list .stat-tile b{font-size:22px;}
 @media (max-width:899px){
   .home-shell{display:flex;flex-direction:column;}
-  .home-shell .app-main{order:1;}
-  .home-shell .app-nav{order:2;border-top:1px solid var(--line);}
-  .home-shell .app-aside{order:3;}
+  .home-shell .app-detail{order:1;}
+  .home-shell .app-list{order:2;border-top:1px solid var(--line);}
+  .home-shell .app-nav{order:3;border-top:1px solid var(--line);}
   .home-shell .app-nav-list{display:block;}
 }
 </style>
@@ -339,7 +338,7 @@ footer{padding:24px 0 8px;}
   </div>
 </nav>
 
-<div class="app-shell has-aside home-shell">
+<div class="app-shell home-shell">
   <aside class="app-nav" aria-label="Start here">
     <div class="app-nav-head">
       <div class="app-eyebrow">CHINTHE Guardian System</div>
@@ -360,7 +359,37 @@ footer{padding:24px 0 8px;}
     </nav>
   </aside>
 
-  <main class="app-main home-main">
+  <section class="app-list" aria-label="Your progress and the modules">
+    <div class="list-head">
+      <div class="app-eyebrow">Your progress</div>
+      <div class="list-head-title">At a glance</div>
+    </div>
+      <div class="stat-grid">
+        <div class="stat-tile"><b id="hMapped">0</b><span>Positions mapped</span></div>
+        <div class="stat-tile"><b id="hGot">0</b><span>Got it</span></div>
+        <div class="stat-tile"><b id="hSessions">0</b><span>Sessions logged</span></div>
+        <div class="stat-tile"><b id="hWeek">0</b><span>This week</span></div>
+      </div>
+      <p class="aside-text" id="hNote" style="margin-top:10px"></p>
+
+    <div class="list-group-label" style="margin-top:14px">Modules</div>
+    <div class="list-stack">
+      <a class="list-card" href="chinthe-guardian-matrix.html"><span class="list-card-meta"><span>Competition</span><span><span data-node-count="{n} positions">Decision map</span></span></span><span class="list-card-title">Guardian Matrix</span><span class="list-card-sub">Your whole game as a decision map — every position, its options, the points at stake and how to drill it.</span></a>
+      <a class="list-card" href="competition.html"><span class="list-card-meta"><span>Mat-side</span><span>3 rulesets</span></span><span class="list-card-title">Compete</span><span class="list-card-sub">ADCC, IBJJF and NAGA scoring, a score tracker, and what to do when you're ahead, level or behind.</span></a>
+      <a class="list-card" href="knowledge.html"><span class="list-card-meta"><span>Study</span><span><span id="techCount">Technique database</span></span></span><span class="list-card-title">Knowledge Base</span><span class="list-card-sub">Fundamental to advanced techniques by position — mechanics, mistakes, drills and a training plan.</span></a>
+      <a class="list-card" href="principles.html"><span class="list-card-meta"><span>Foundation</span><span>12 principles</span></span><span class="list-card-title">Principles</span><span class="list-card-sub">The physics and strategy behind every technique, plus a glossary.</span></a>
+      <a class="list-card" href="journal.html"><span class="list-card-meta"><span>Review</span><span>On device</span></span><span class="list-card-title">Training Journal</span><span class="list-card-sub">Log what worked and what to drill next. Private, on this device.</span></a>
+      <div class="list-card list-card-soon" aria-disabled="true"><span class="list-card-meta"><span>Coaching</span><span>Coming soon</span></span><span class="list-card-title">Guardian Coach</span><span class="list-card-sub">Athlete profiles, session review, opponent scouting and game plans.</span></div>
+    </div>
+    <div class="list-group-label" style="margin-top:14px">Quick actions</div>
+    <div class="aside-list">
+      <button class="aside-link" type="button" id="hSearch">Search everything</button>
+      <a class="aside-link" href="journal.html">Log a session</a>
+    </div>
+    <p class="aside-text" style="margin-top:12px;font-size:13px">Progress and journal live only on this device — <span id="hBackup">never backed up</span>.</p>
+  </section>
+
+  <main class="app-detail home-main">
 <section class="hero">
   <div class="hero-glow"></div>
   <div class="hero-grid"></div>
@@ -397,86 +426,6 @@ footer{padding:24px 0 8px;}
       <h2 class="section-title">Everything answers<br>one question.</h2>
     </div>
     <p class="section-sub">Given my current state, what is the highest expected-value decision? The CHINTHE Guardian System is built around that question.</p>
-  </div>
-  <div class="modules-grid">
-    <a class="module-card" href="chinthe-guardian-matrix.html">
-      <div class="module-accent jade"></div>
-      <div class="module-icon jade">◎</div>
-      <div>
-        <div class="module-tag">Competition</div>
-        <div class="module-name">Guardian Matrix</div>
-      </div>
-      <p class="module-desc">Your whole game as a decision map, from standing to leg locks. Open any position to see your options, the points at stake, and how to drill it.</p>
-      <div class="module-meta">
-        <span class="module-meta-dot live"></span>
-        Live &nbsp;·&nbsp; ADCC Ruleset &nbsp;·&nbsp; <span data-node-count="{n} Nodes">Decision Map</span>
-      </div>
-    </a>
-    <a class="module-card" href="competition.html">
-      <div class="module-accent crimson"></div>
-      <div class="module-icon crimson">⚑</div>
-      <div>
-        <div class="module-tag">Mat-side</div>
-        <div class="module-name">Compete</div>
-      </div>
-      <p class="module-desc">Scoring for ADCC, IBJJF and NAGA, a tap-to-add score tracker, and what to do when you're ahead, level or behind on the clock.</p>
-      <div class="module-meta">
-        <span class="module-meta-dot live"></span>
-        Live &nbsp;·&nbsp; 3 Rulesets &nbsp;·&nbsp; Score Tracker
-      </div>
-    </a>
-    <a class="module-card" href="knowledge.html">
-      <div class="module-accent gold"></div>
-      <div class="module-icon gold">◈</div>
-      <div>
-        <div class="module-tag">Study</div>
-        <div class="module-name">Knowledge Base</div>
-      </div>
-      <p class="module-desc">98 techniques from fundamental to advanced — each with mechanics, common mistakes, a drill, a positional-sparring plan, related moves and a link into the Matrix.</p>
-      <div class="module-meta">
-        <span class="module-meta-dot live"></span>
-        Live &nbsp;·&nbsp; <span id="techCount">Technique Database</span> &nbsp;·&nbsp; 3 Levels
-      </div>
-    </a>
-    <a class="module-card" href="journal.html">
-      <div class="module-accent steel"></div>
-      <div class="module-icon steel">◷</div>
-      <div>
-        <div class="module-tag">Review</div>
-        <div class="module-name">Training Journal</div>
-      </div>
-      <p class="module-desc">Session logging for competitive grapplers. Track what worked, what failed, which techniques need drilling, and build a weekly review cycle.</p>
-      <div class="module-meta">
-        <span class="module-meta-dot live"></span>
-        Live &nbsp;·&nbsp; Stored on Device
-      </div>
-    </a>
-    <a class="module-card" href="principles.html">
-      <div class="module-accent"></div>
-      <div class="module-icon">◬</div>
-      <div>
-        <div class="module-tag">Foundation</div>
-        <div class="module-name">Principles</div>
-      </div>
-      <p class="module-desc">The physics, mechanics and strategic logic behind every technique. Leverage, timing, kuzushi, angles, grip taxonomy, and chess tactics applied to grappling.</p>
-      <div class="module-meta">
-        <span class="module-meta-dot live"></span>
-        Live &nbsp;·&nbsp; 12 Principles &nbsp;·&nbsp; Glossary
-      </div>
-    </a>
-    <div class="module-card coming" aria-disabled="true">
-      <div class="module-accent crimson"></div>
-      <div class="module-icon crimson">◉</div>
-      <div>
-        <div class="module-tag">Coaching</div>
-        <div class="module-name">Guardian Coach</div>
-      </div>
-      <p class="module-desc">Athlete profiles, session review, opponent scouting, and game-plan builder. For coaches working with competitive teams.</p>
-      <div class="module-meta">
-        <span class="module-meta-dot soon"></span>
-        Coming Soon
-      </div>
-    </div>
   </div>
 </div>
 
@@ -528,31 +477,6 @@ footer{padding:24px 0 8px;}
 <script src="chinthe.js"></script>
   </main>
 
-  <aside class="app-aside" aria-label="Your progress">
-    <div class="aside-block">
-      <div class="aside-title">Your progress</div>
-      <div class="stat-grid">
-        <div class="stat-tile"><b id="hMapped">0</b><span>Positions mapped</span></div>
-        <div class="stat-tile"><b id="hGot">0</b><span>Got it</span></div>
-        <div class="stat-tile"><b id="hSessions">0</b><span>Sessions logged</span></div>
-        <div class="stat-tile"><b id="hWeek">0</b><span>This week</span></div>
-      </div>
-      <p class="aside-text" id="hNote" style="margin-top:10px"></p>
-    </div>
-    <div class="aside-block">
-      <div class="aside-title">Quick actions</div>
-      <div class="aside-list">
-        <a class="aside-link" href="chinthe-guardian-matrix.html">Open the Matrix</a>
-        <a class="aside-link" href="journal.html">Log a session</a>
-        <a class="aside-link" href="knowledge.html">Browse techniques</a>
-        <button class="aside-link" type="button" id="hSearch">Search everything</button>
-      </div>
-    </div>
-    <div class="aside-block">
-      <div class="aside-title">Your data</div>
-      <p class="aside-text">Progress and journal live only on this device — <span id="hBackup">never backed up</span>. Back up from the Journal.</p>
-    </div>
-  </aside>
 </div>
 
 <script>

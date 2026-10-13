@@ -72,6 +72,9 @@
 .verify-flag { color: var(--victory); }
 .ruleset-btn[aria-selected="true"], .ruleset-btn.active { border-left-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
 .mobile-only { display: block; }
+.app-detail .compete-section { max-width: 820px; }
+.app-list .tracker { padding: 16px 12px 14px; }
+.app-list .tracker-value { font-size: 64px; }
 @media (min-width: 900px) {
   .mobile-only { display: none; }
   .tracker-adds { gap: 20px; }
@@ -97,7 +100,7 @@
   </div>
 </nav>
 
-<div class="app-shell has-aside">
+<div class="app-shell">
   <aside class="app-nav" aria-label="Ruleset and core positions">
     <div class="app-nav-head">
       <div class="app-eyebrow">CHINTHE Mat-side</div>
@@ -119,54 +122,53 @@
     </nav>
   </aside>
 
-  <main class="app-main">
+  <section class="app-list" aria-label="Your match">
+    <div class="list-head">
+      <div class="app-eyebrow">Your match</div>
+      <div class="list-head-title">Score</div>
+      <p class="list-head-sub">Tap to add as points happen. Stays put if you leave and come back.</p>
+    </div>
+    <div class="tracker">
+      <div class="tracker-scores">
+        <div class="tracker-col you">
+          <div class="tracker-label">You</div>
+          <div class="tracker-value" id="youScore">0</div>
+        </div>
+        <div class="tracker-diff" id="trackerDiff">NET<strong>0</strong></div>
+        <div class="tracker-col opp">
+          <div class="tracker-label">Opponent</div>
+          <div class="tracker-value" id="oppScore">0</div>
+        </div>
+      </div>
+      <div class="tracker-adds">
+        <div class="tracker-add-col you-col" id="youAdds"></div>
+        <div class="tracker-add-col opp-col" id="oppAdds"></div>
+      </div>
+      <button class="btn btn-ghost tracker-reset" type="button" id="resetScore">Reset score</button>
+    </div>
+  </section>
+
+  <main class="app-detail" aria-label="Rules">
     <header class="app-head">
       <div class="app-eyebrow">Ruleset</div>
       <h2 class="app-head-title" id="rulesetTitle">ADCC</h2>
       <p class="app-head-sub" id="rulesetNote"></p>
     </header>
-
     <section class="compete-section">
-      <div class="section-head">Score</div>
-      <p class="section-note">Tap to add as points happen. Stays put if you leave and come back.</p>
-      <div class="tracker">
-        <div class="tracker-scores">
-          <div class="tracker-col you">
-            <div class="tracker-label">You</div>
-            <div class="tracker-value" id="youScore">0</div>
-          </div>
-          <div class="tracker-diff" id="trackerDiff">NET<strong>0</strong></div>
-          <div class="tracker-col opp">
-            <div class="tracker-label">Opponent</div>
-            <div class="tracker-value" id="oppScore">0</div>
-          </div>
-        </div>
-        <div class="tracker-adds">
-          <div class="tracker-add-col you-col" id="youAdds"></div>
-          <div class="tracker-add-col opp-col" id="oppAdds"></div>
-        </div>
-        <button class="btn btn-ghost tracker-reset" type="button" id="resetScore">Reset score</button>
-      </div>
+      <div class="section-head" id="scoringTitle">Scoring</div>
+      <p class="section-note"><span class="verify-flag">⚑ Verify against the current official rulebook before you rely on it.</span></p>
+      <div class="score-table" id="scoreTable"></div>
     </section>
-
     <section class="compete-section">
       <div class="section-head">If the clock's running…</div>
       <p class="section-note">Tap your scoreboard situation.</p>
       <div class="disc" id="guidance"></div>
     </section>
-  </main>
-
-  <aside class="app-aside" aria-label="Scoring">
-    <div class="aside-block">
-      <div class="aside-title" id="scoringTitle">Scoring</div>
-      <p class="aside-text" style="margin-bottom:12px"><span class="verify-flag">⚑ Verify against the current official rulebook before you rely on it.</span></p>
-      <div class="score-table" id="scoreTable"></div>
-    </div>
-    <div class="aside-block mobile-only">
-      <div class="aside-title">Core positions</div>
+    <section class="compete-section mobile-only">
+      <div class="section-head">Core positions</div>
       <div class="aside-list" id="qjumpAside"></div>
-    </div>
-  </aside>
+    </section>
+  </main>
 </div>
 
 <script>
@@ -277,7 +279,7 @@ function renderRuleset(){
   });
   document.getElementById("rulesetNote").textContent = rs.note;
   document.getElementById("rulesetTitle").textContent = rs.name;
-  document.getElementById("scoringTitle").textContent = "Scoring · " + rs.name;
+  document.getElementById("scoringTitle").textContent = "Scoring — " + rs.name;
   document.getElementById("rulesetSelect").value = state.ruleset;
 
   // Scoring table

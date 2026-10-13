@@ -16,7 +16,7 @@ node tests/serve.js .
   --user-data-dir="$TEMP/chinthe-test-profile" --no-first-run --disable-gpu about:blank
 
 # 3. The suites
-node tests/run.js tests/shots   # main suite (177 checks) — screenshots land in tests/shots/
+node tests/run.js tests/shots   # main suite (199 checks) — screenshots land in tests/shots/
 node tests/frame-all.js         # every Matrix node framed in view, Focus + Full map, at 1440 / 1024 / 390 px
 node tests/sw-test.js           # service worker: network-first freshness + offline fallback
 node tests/audit.js             # static content audit (fields, scoring claims, page meta); writes tests/dump-*.txt

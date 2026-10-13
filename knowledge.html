@@ -166,13 +166,25 @@ body{padding-bottom:0;}
 .tech-card-name{font-size:18px;}
 .kb-panel-bar [hidden]{display:none;}
 .kb-panel.is-empty .kb-panel-bar{display:none;}
-/* Wide: the detail is docked as the third panel */
-@media (min-width:1200px){
-  .app-shell.kb-app{grid-template-columns:270px minmax(0,1fr) minmax(340px,30vw);}
-  .kb-panel,.kb-panel[hidden]{position:static;display:flex;width:auto;min-height:0;box-shadow:none;border-left:1px solid var(--line);animation:none;z-index:auto;}
+/* Desktop: the detail is the READ panel (widest); below 1100px it slides over */
+@media (min-width:1100px){
+  .kb-panel,.kb-panel[hidden]{position:static;display:flex;width:auto;min-height:0;box-shadow:none;border-left:none;animation:none;z-index:auto;background:var(--bg);padding:0;}
+  .kb-panel .kb-panel-bar{padding:12px 40px;}
+  .kb-panel .kb-panel-body{padding:24px 40px 64px;}
   .kb-backdrop{display:none !important;}
 }
-@media (min-width:1600px){ .app-shell.kb-app{grid-template-columns:300px minmax(0,1fr) 440px;} }
+@media (min-width:1600px){ .kb-panel .kb-panel-bar{padding:14px 64px;} .kb-panel .kb-panel-body{padding:32px 64px 72px;} }
+/* WHAT panel: moves as one compact column of cards (same look as every list) */
+.knowledge-grid{grid-template-columns:1fr;gap:8px;}
+.tech-card{background:var(--surface-2);border-radius:10px;}
+.tech-card:hover{transform:none;}
+.tech-card-accent{display:none !important;}
+.tech-card-body{padding:12px 14px;}
+.tech-card-name{font-size:17px;line-height:1.15;}
+.kb-section{margin:14px 0 0;padding-bottom:4px;}
+.kb-section h2{font-size:15px;}
+.start-here{padding:12px 14px;}
+.start-sub{display:none;}
 </style>
 </head>
 <body class="app-page">
@@ -205,7 +217,7 @@ body{padding-bottom:0;}
     <nav class="app-nav-list" id="navList"></nav>
   </aside>
 
-  <main class="app-main" id="kbMid">
+  <section class="app-list" id="kbMid" aria-label="Moves">
     <header class="app-head">
       <div class="app-eyebrow" id="midEyebrow">Browse</div>
       <h2 class="app-head-title" id="midTitle">All techniques</h2>
@@ -227,9 +239,9 @@ body{padding-bottom:0;}
     </div>
     <div class="results-meta" id="resultsMeta"></div>
     <div class="knowledge-grid" id="grid"></div>
-  </main>
+  </section>
 
-  <aside class="kb-panel" id="kbPanel" aria-labelledby="kbPanelTitle" hidden>
+  <aside class="kb-panel app-detail" id="kbPanel" aria-labelledby="kbPanelTitle" hidden>
     <div class="kb-panel-bar">
       <button type="button" class="kb-nav-btn" id="kbPrev" aria-label="Previous move">‹</button>
       <span class="kb-pos" id="kbPos"></span>
@@ -1366,7 +1378,7 @@ let view = "all";          // "all" | "g:<group>" | "t:<type>"
 let activeLvl = "all";
 let searchQ = "";
 let openId = null, visibleIds = [], lastFocus = null;
-const docked = ()=> window.matchMedia("(min-width:1200px)").matches;
+const docked = ()=> window.matchMedia("(min-width:1100px)").matches;
 
 // ── Left panel: the database ──────────────────────────────────
 function renderNav(){
@@ -1650,7 +1662,7 @@ document.getElementById("searchInput").addEventListener("input", e=>{
   searchQ = e.target.value;
   renderCards();
 });
-window.matchMedia("(min-width:1200px)").addEventListener("change", ()=>{ applyPanelMode(); updatePanelNav(); });
+window.matchMedia("(min-width:1100px)").addEventListener("change", ()=>{ applyPanelMode(); updatePanelNav(); });
 
 renderNav();
 renderCards();
