@@ -287,6 +287,13 @@ All copy, anchors and IDs are unchanged.
 - **Today band:** the brief doesn't list it. It sits between the tools and How it works.
 - **Returning-athlete strip:** shown under the hero, only when there is data on the device.
 
+**Verified:**
+- Main suite: 274 checks. New ones cover the shared header and footer on every page at 360, 390 and 1280px, the current-page marker, the unfiltered emblem, no gradients, and the home section order.
+- All 7 pages clean on 8 devices.
+- Accessibility clean in both themes.
+- All 135 Matrix nodes framed.
+- Service worker and offline both pass.
+
 **Also:**
 - Running text in the reading panels is 16px.
 - `prefers-reduced-motion` turns off all transitions.
