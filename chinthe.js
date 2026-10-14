@@ -18,6 +18,54 @@ window.chintheFeedback = function (title, body) {
   return FEEDBACK_URL;
 };
 
+// ── Shared header and footer ─────────────────────────────────────
+// One source for every page: each page has an empty <nav class="site-nav">,
+// and the footer is added at the end of <body>. No build step needed.
+var CHINTHE_TOOLS = [
+  ["chinthe-guardian-matrix.html", "Matrix"],
+  ["competition.html", "Compete"],
+  ["knowledge.html", "Encyclopedia"],
+  ["principles.html", "Principles"],
+  ["gameplan.html", "Game Plan"],
+  ["journal.html", "Journal"]
+];
+(function () {
+  var here = location.pathname.split("/").pop() || "index.html";
+  var nav = document.querySelector(".site-nav");
+  if (nav && !nav.querySelector(".site-nav-inner")) {
+    if (!nav.getAttribute("aria-label")) nav.setAttribute("aria-label", "Main");
+    nav.innerHTML =
+      '<div class="site-nav-inner">' +
+        '<a class="site-nav-brand" href="index.html" aria-label="CHINTHE home"' + (here === "index.html" ? ' aria-current="page"' : '') + '>' +
+          '<img class="site-nav-lion" src="chinthe-lion.png" alt="" width="32" height="32">' +
+          '<span class="site-nav-wordmark">CHINTHE</span>' +
+        '</a>' +
+        '<div class="site-nav-links" id="siteNavLinks">' +
+          CHINTHE_TOOLS.map(function (t) {
+            var on = t[0] === here;
+            return '<a class="site-nav-link' + (on ? ' active' : '') + '" href="' + t[0] + '"' + (on ? ' aria-current="page"' : '') + '>' + t[1] + '</a>';
+          }).join("") +
+        '</div>' +
+        '<a class="site-nav-cta btn btn-primary" href="chinthe-guardian-matrix.html">Open Matrix <span aria-hidden="true">→</span></a>' +
+      '</div>';
+  }
+  if (!document.querySelector(".site-footer")) {
+    var f = document.createElement("footer");
+    f.className = "site-footer";
+    f.innerHTML =
+      '<div class="site-footer-inner">' +
+        '<div class="site-footer-brand"><img src="chinthe-lion.png" alt="" width="40" height="40">' +
+          '<div><div class="site-footer-name">CHINTHE</div><div class="site-footer-myanmar" lang="my">ခြင်္သေ့</div></div></div>' +
+        '<nav class="site-footer-links" aria-label="Tools">' +
+          CHINTHE_TOOLS.map(function (t) { return '<a href="' + t[0] + '">' + t[1] + '</a>'; }).join("") +
+        '</nav>' +
+        '<p class="site-footer-tagline">Rooted in Myanmar · Built for the World · Alpha</p>' +
+        '<p class="site-footer-safety">Educational reference, not a substitute for a qualified coach. Learn submissions and leg locks under supervision, apply them slowly, and tap early.</p>' +
+      '</div>';
+    document.body.appendChild(f);
+  }
+})();
+
 (function () {
   // ── 1. Mobile Nav ────────────────────────────────────────────
   var nav    = document.querySelector(".site-nav");
@@ -58,7 +106,7 @@ window.chintheFeedback = function (title, body) {
       else document.documentElement.setAttribute("data-theme", t);
       document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
         if (!m.dataset.orig) m.dataset.orig = m.getAttribute("content");
-        m.setAttribute("content", t === "system" ? m.dataset.orig : (t === "light" ? "#F5F3EE" : "#0A0E13"));
+        m.setAttribute("content", t === "system" ? m.dataset.orig : (t === "light" ? "#F3EFE6" : "#13110F"));
       });
       themeBtn.innerHTML = THEME_ICONS[t];
       themeBtn.setAttribute("aria-label", "Theme: " + THEME_NAME[t] + " (switch to " + THEME_NAME[THEME_NEXT[t]] + ")");
@@ -106,7 +154,10 @@ window.chintheFeedback = function (title, body) {
     links.addEventListener("click", function (e) { if (e.target.closest("a")) setOpen(false); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !document.querySelector(".search-overlay")) setOpen(false); });
     document.addEventListener("click", function (e) { if (nav.classList.contains("menu-open") && !nav.contains(e.target)) setOpen(false); });
-    window.addEventListener("resize", function () { if (window.innerWidth >= 900) setOpen(false); });
+    window.addEventListener("resize", function () { if (window.innerWidth >= 1024) setOpen(false); });
+    // A soft shadow once the page scrolls, so the sticky header stays distinct
+    var onScroll = function () { nav.classList.toggle("is-scrolled", window.scrollY > 4); };
+    window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
   }
 
   // ── 2. Service Worker ─────────────────────────────────────────

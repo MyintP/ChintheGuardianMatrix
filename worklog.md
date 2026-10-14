@@ -247,6 +247,51 @@ A design review found the site looked amateur for site-wide reasons, not page-by
   - The logo and path pills reach the 32px tap height.
 - SW v33.
 
+#### Pass 19 — Lacquer and Gold: palette, type, shared header and footer, home layout
+The owner's redesign brief, applied to pass 18.
+
+**Direction:** Burmese lacquerware (yun-de): black lacquer, cinnabar red and gold leaf. The light theme reads like palm-leaf manuscript paper.
+- **Palette:**
+  - Light: paper `#F3EFE6`, ink `#1C1915`, cinnabar `#8F2D22` for primary actions and the current page.
+  - Dark: lacquer `#13110F` with cinnabar `#B8432F` buttons.
+  - Gold is kept for numerals, rules and the emblem, so the emblem stays the brightest gold on the page.
+  - Jade only means "scored" or "got it".
+- **Type:** Newsreader (serif) for headings, in sentence case. IBM Plex Sans for body and interface text. Noto Sans Myanmar unchanged. Inter, Oswald and Cinzel are no longer loaded.
+- **Shape:** 4px corners and hairline rules. No coloured side bars, no gradients, no emoji.
+- Every token is in `chinthe.css`. New tokens: `--accent`, `--accent-dim`, `--content-max`, `--gutter`, `--space-12/16/24`. `--brand-black` is now the emblem's own ground (`#0D000D`), so the emblem is shown without a filter.
+
+**Shared header and footer:** `chinthe.js` builds both on every page. Pages keep an empty `<nav class="site-nav">`.
+- **Header:**
+  - Logo and wordmark, then Matrix · Compete · Encyclopedia · Principles · Game Plan · Journal, then search, theme, feedback and **Open Matrix →**.
+  - The current page has `aria-current="page"` and a cinnabar underline.
+  - Below 1024px the links collapse into a 44px menu button with 52px rows. Below 720px the Open Matrix button moves into the menu.
+  - All targets are 44px. The sticky header gains a soft shadow on scroll.
+- **Footer:** tool links, "Rooted in Myanmar · Built for the World · Alpha", and the safety disclaimer.
+- **App pages:** the three-panel frame fills the screen under the header, and the footer sits below it.
+
+**Home, in the brief's order:**
+1. Hero, left-aligned, with the emblem on the right (below the copy on phones).
+2. Stat row.
+3. Six tools as numbered full-width rows, with Guardian Coach as a muted "Coming soon" row.
+4. How it works.
+5. Built for fighters (3 × 2, 2 × 3, 1 column).
+6. Pull quote on solid lacquer.
+7. Four values.
+8. Our story: heading left, paragraphs right.
+9. Closing call to action.
+
+All copy, anchors and IDs are unchanged.
+
+**Deliberate deviations from the brief:**
+- **Game Plan:** it is in the nav and is the sixth tool, because it was built after the brief was written.
+- **Today band:** the brief doesn't list it. It sits between the tools and How it works.
+- **Returning-athlete strip:** shown under the hero, only when there is data on the device.
+
+**Also:**
+- Running text in the reading panels is 16px.
+- `prefers-reduced-motion` turns off all transitions.
+- SW v34.
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.

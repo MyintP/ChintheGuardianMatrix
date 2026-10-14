@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <script>/* theme before first paint: avoids a flash of the wrong theme */try{var t=localStorage.getItem("chinthe_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#13110F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3EFE6" media="(prefers-color-scheme: light)">
 <meta name="description" content="Build your game plan: a Plan A and Plan B for every stage of the match, from the first grip to the finish, linked to the encyclopedia and stored privately on your device.">
 <title>Game Plan — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
@@ -21,7 +21,7 @@
 <link rel="icon" type="image/png" href="chinthe-lion.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="chinthe.css">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Cinzel:wght@600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* Design tokens come from chinthe.css. Layout: the shared three-panel frame (chinthe.css §17). */
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -29,12 +29,12 @@
 .form-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;max-width:820px;}
 .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
 .form-label{font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--stone);}
-.form-input,.form-textarea{background:var(--card);border:1px solid var(--line-strong);border-radius:8px;color:var(--stone);font-family:var(--font-body);font-size:14px;padding:10px 12px;outline:none;width:100%;}
+.form-input,.form-textarea{background:var(--card);border:1px solid var(--line-strong);border-radius: var(--radius);color:var(--stone);font-family:var(--font-body);font-size:14px;padding:10px 12px;outline:none;width:100%;}
 .form-input:focus,.form-textarea:focus{border-color:var(--gold);}
 .form-textarea{min-height:76px;resize:vertical;line-height:1.5;}
 .form-hint{font-size:12.5px;line-height:1.5;color:var(--stone-dim);}
 .disc-pick{display:flex;flex-wrap:wrap;gap:8px;}
-.disc-pick button{font-family:var(--font-ui);font-size:14px;font-weight:500;color:var(--stone-dim);background:var(--card);border:1px solid var(--line-strong);border-radius:999px;padding:9px 14px;min-height:40px;cursor:pointer;}
+.disc-pick button{font-family:var(--font-ui);font-size:14px;font-weight:500;color:var(--stone-dim);background:var(--card);border:1px solid var(--line-strong);border-radius: var(--radius);padding:9px 14px;min-height:40px;cursor:pointer;}
 .disc-pick button[aria-pressed="true"]{color:var(--on-fill);background:var(--accent-fill);border-color:var(--accent-fill);}
 .row-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
 .row-actions.end{justify-content:flex-end;}
@@ -51,7 +51,7 @@
 .pv-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
 .pv-links .btn{padding:7px 12px;}
 .suggest{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-.suggest button{font-size:13.5px;color:var(--stone);background:var(--card);border:1px solid var(--line-strong);border-radius:999px;padding:7px 12px;min-height:36px;cursor:pointer;}
+.suggest button{font-size:13.5px;color:var(--stone);background:var(--card);border:1px solid var(--line-strong);border-radius: var(--radius);padding:7px 12px;min-height:36px;cursor:pointer;}
 .suggest button:hover{border-color:var(--gold);}
 .stage-nav{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;max-width:820px;margin-top:8px;}
 
@@ -72,9 +72,9 @@
 .pf-edit:hover{color:var(--stone);}
 .section-label{font-family:var(--font-ui);font-weight:600;font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);margin:28px 0 10px;}
 .drill-list{list-style:none;display:grid;gap:10px;max-width:820px;}
-.drill-list li{padding:12px 14px;border:1px solid var(--line-strong);border-radius:10px;background:var(--card);font-size:14px;line-height:1.55;color:var(--stone-dim);}
+.drill-list li{padding:12px 14px;border:1px solid var(--line-strong);border-radius: var(--radius);background:var(--card);font-size:14px;line-height:1.55;color:var(--stone-dim);}
 .drill-list b{display:block;font-weight:600;font-size:15.5px;color:var(--stone);margin-bottom:2px;}
-.gap-callout{max-width:820px;margin-bottom:18px;border-left-color:var(--gold);}
+.gap-callout{max-width:820px;margin-bottom:18px;}
 .list-card .st-status{color:var(--jade-bright);}
 .list-card .st-status.gap{color:var(--danger-text);}
 .list-card.empty .list-card-title{color:var(--stone-dim);}
@@ -102,23 +102,7 @@
 </head>
 <body class="app-page">
 
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a class="site-nav-brand" href="index.html">
-      <img class="site-nav-lion" src="chinthe-lion.png" alt="" width="28" height="28">
-      <span class="site-nav-wordmark">CHINTHE</span>
-    </a>
-    <div class="site-nav-links">
-      <a class="site-nav-link" href="index.html">Home</a>
-      <a class="site-nav-link" href="chinthe-guardian-matrix.html">Matrix</a>
-      <a class="site-nav-link" href="competition.html">Compete</a>
-      <a class="site-nav-link" href="knowledge.html">Encyclopedia</a>
-      <a class="site-nav-link" href="principles.html">Principles</a>
-      <a class="site-nav-link active" href="gameplan.html">Game Plan</a>
-      <a class="site-nav-link" href="journal.html">Journal</a>
-    </div>
-  </div>
-</nav>
+<nav class="site-nav" aria-label="Main"></nav>
 
 <div class="app-shell gp-shell">
   <aside class="app-nav" aria-label="Your game plans">

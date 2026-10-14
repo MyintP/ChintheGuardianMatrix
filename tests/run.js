@@ -48,6 +48,9 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
       const sb = await t.ev(`(()=>{const b=document.querySelector('.site-nav-search');if(!b)return null;const r=b.getBoundingClientRect();return {l:r.left,r:r.right,w:r.width,vis:getComputedStyle(b).display!=='none'}})()`);
       ok(`[${tag}] ${p}: search button visible in nav`, sb && sb.vis && sb.w > 0 && sb.r <= w && sb.l >= 0, JSON.stringify(sb));
       ok(`[${tag}] ${p}: page not hidden (html opacity)`, (await t.ev('getComputedStyle(document.documentElement).opacity')) === '1');
+      const hf = await t.ev(`(()=>{const links=[...document.querySelectorAll('.site-nav-links a')].map(a=>a.textContent).join('|');const cur=document.querySelectorAll('.site-nav [aria-current="page"]');const f=document.querySelector('.site-footer');
+        return {links, cur:cur.length, curHref:cur[0]&&cur[0].getAttribute('href'), cta:!!document.querySelector('.site-nav-cta[href="chinthe-guardian-matrix.html"]'), footer:!!f && f.textContent.includes('Rooted in Myanmar · Built for the World · Alpha') && f.textContent.includes('tap early') && f.querySelectorAll('a').length===6}})()`);
+      ok(`[${tag}] ${p}: shared header (six tools, Open Matrix, current page marked) and footer`, hf.links === 'Matrix|Compete|Encyclopedia|Principles|Game Plan|Journal' && hf.cur === 1 && hf.curHref === p && hf.cta && hf.footer, JSON.stringify(hf));
       if (tag !== 'm390') await t.shot(tag + '-' + p.replace('.html', ''));
     }
     await t.close();
@@ -233,7 +236,7 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
     ok(`[d1440] ${p}: WHERE | WHAT | READ order`, g.order, JSON.stringify(g));
     ok(`[d1440] ${p}: the reading panel is the widest`, g.widest, JSON.stringify(g));
     mids[p] = g.middle;
-    ok(`[d1440] ${p}: shared fonts (Inter body, Oswald titles)`, g.body.startsWith('Inter') && g.title.includes('Oswald'), g.body + ' / ' + g.title);
+    ok(`[d1440] ${p}: shared fonts (IBM Plex Sans body, Newsreader titles)`, g.body.includes('IBM Plex Sans') && g.title.includes('Newsreader'), g.body + ' / ' + g.title);
   }
   ok('[d1440] Left panel is the same width on every page', new Set(Object.values(widths)).size === 1, JSON.stringify(widths));
   ok('[d1440] Middle panel is the same width on every page', new Set(Object.values(mids)).size === 1, JSON.stringify(mids));
@@ -259,12 +262,12 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   ok('Theme defaults to System (no override stored)', await d.ev(`!document.documentElement.hasAttribute('data-theme') && document.querySelector('.site-nav-theme').getAttribute('aria-label').startsWith('Theme: System')`));
   await d.ev(`document.querySelector('.site-nav-theme').click()`);
   const lightBg = await d.ev(`getComputedStyle(document.body).backgroundColor`);
-  ok('Toggle → Light applies the light palette', await d.ev(`document.documentElement.getAttribute('data-theme')==='light'`) && lightBg === 'rgb(245, 243, 238)', lightBg);
+  ok('Toggle → Light applies the light palette', await d.ev(`document.documentElement.getAttribute('data-theme')==='light'`) && lightBg === 'rgb(243, 239, 230)', lightBg);
   const cLight = await d.ev(contrast);
   ok('Light theme body text contrast ≥ 7:1', cLight >= 7, String(cLight));
   await d.ev(`document.querySelector('.site-nav-theme').click()`);
   const darkBg = await d.ev(`getComputedStyle(document.body).backgroundColor`);
-  ok('Toggle → Dark applies the dark palette', await d.ev(`document.documentElement.getAttribute('data-theme')==='dark'`) && darkBg === 'rgb(10, 14, 19)', darkBg);
+  ok('Toggle → Dark applies the dark palette', await d.ev(`document.documentElement.getAttribute('data-theme')==='dark'`) && darkBg === 'rgb(19, 17, 15)', darkBg);
   const cDark = await d.ev(contrast);
   ok('Dark theme body text contrast ≥ 7:1', cDark >= 7, String(cDark));
   await d.go(BASE + 'knowledge.html');
@@ -272,15 +275,17 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   await d.ev(`document.querySelector('.site-nav-theme').click()`);
   ok('Toggle → back to System clears the override', await d.ev(`!document.documentElement.hasAttribute('data-theme') && localStorage.getItem('chinthe_theme')===null`));
   await d.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'dark' }] });
-  ok('System mode follows the device: dark', await d.ev(`getComputedStyle(document.body).backgroundColor==='rgb(10, 14, 19)'`));
+  ok('System mode follows the device: dark', await d.ev(`getComputedStyle(document.body).backgroundColor==='rgb(19, 17, 15)'`));
   await d.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'light' }] });
-  ok('System mode follows the device: light', await d.ev(`getComputedStyle(document.body).backgroundColor==='rgb(245, 243, 238)'`));
+  ok('System mode follows the device: light', await d.ev(`getComputedStyle(document.body).backgroundColor==='rgb(243, 239, 230)'`));
   await d.send('Emulation.setEmulatedMedia', { features: [] });
   const raw = await d.ev(`Promise.all(['index.html','chinthe-guardian-matrix.html','competition.html','knowledge.html','principles.html','journal.html','gameplan.html'].map(f=>fetch(f).then(r=>r.text()).then(t=>[f,((t.match(/<style>[\\s\\S]*?<\\/style>/g)||[]).join('').replace(/\\.philosophy\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy::before\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy-mark\\{[\\s\\S]*?\\}/,'').match(/#[0-9a-fA-F]{6}\\b|rgba?\\(/g)||[]).length])))`);
   ok('No hard-coded colours left in page styles (brand band excepted)', raw.every(([, n]) => n === 0), JSON.stringify(raw));
   await d.go(BASE + 'index.html');
   ok('Homepage: 7 module cards incl. Compete and Game Plan', await d.ev(`document.querySelectorAll('#inside .mod').length===7 && !!document.querySelector('.mod[href="competition.html"]') && !!document.querySelector('.mod[href="gameplan.html"]')`));
   ok('Homepage is a full-width brand page: says what CHINTHE is, who it is for, and its values', await d.ev(`!document.querySelector('.app-shell') && /training system for grapplers/.test(document.querySelector('.hero-sub').textContent) && document.querySelectorAll('#who .who-card').length===6 && document.querySelectorAll('#values .value').length===4`));
+  ok('Homepage: emblem shown unfiltered, no gradient backgrounds', await d.ev(`(()=>{const img=document.querySelector('.hero-tile img');const all=[...document.querySelectorAll('body *')];return getComputedStyle(img).filter==='none' && all.every(e=>!/gradient/.test(getComputedStyle(e).backgroundImage))})()`));
+  ok('Homepage: sections in order (hero, stats, tools, how, fighters, quote, values, story, call to action)', await d.ev(`(()=>{const ids=[...document.querySelectorAll('main > section')].map(x=>x.id||x.className.split(' ')[0]);const want=['hero','stats-band','inside','how','who','philosophy','values','origin','band'];let i=0;ids.forEach(x=>{if(x===want[i])i++});return i===want.length})()`), await d.ev(`[...document.querySelectorAll('main > section')].map(x=>x.id||x.className).join(',')`));
   ok('Homepage: progress strip hidden for first-time visitors', await d.ev(`document.getElementById('welcome').hidden === !(localStorage.getItem('chinthe_journal_v1')||localStorage.getItem('chinthe_mastery_v1'))`));
   await d.go(BASE + 'competition.html');
   ok('Compete ADCC: clean takedown 4, clean sweep 4, guard pull −1', await d.ev(`(()=>{const a=RULESETS.adcc;const f=n=>a.positive.find(x=>x.action.startsWith(n))?.pts;return f('Clean takedown')===4&&f('Clean sweep')===4&&f('Back control')===3&&a.other[0].pts==='−1'})()`));
@@ -317,10 +322,10 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   ok('Compete Lethwei: no points, draw unless stopped', await t2.ev(`document.getElementById('trackerDiff').textContent.includes('Draw unless stopped') && document.getElementById('scoringTitle').textContent.includes('Lethwei')`));
   await t2.ev(`setRuleset('adcc')`);
   await t2.go(BASE + 'principles.html');
-  const sansCheck = `(()=>{const cs=q=>getComputedStyle(document.querySelector(q));return {nav:cs('.site-nav-link').fontFamily.startsWith('Inter')&&cs('.site-nav-link').textTransform==='none', card:cs('.list-card-title').fontFamily.startsWith('Inter')&&cs('.list-card-title').textTransform==='none', title:cs('.app-title').fontFamily.includes('Oswald'), crumb:!document.querySelector('.breadcrumb')}})()`;
+  const sansCheck = `(()=>{const cs=q=>getComputedStyle(document.querySelector(q));return {nav:cs('.site-nav-link').fontFamily.includes('IBM Plex Sans')&&cs('.site-nav-link').textTransform==='none', card:cs('.list-card-title').fontFamily.includes('IBM Plex Sans')&&cs('.list-card-title').textTransform==='none', title:cs('.app-title').fontFamily.includes('Newsreader'), crumb:!document.querySelector('.breadcrumb')}})()`;
   const sc = await t2.ev(sansCheck);
   await t2.go(BASE + 'journal.html');
-  const btnSans = await t2.ev(`getComputedStyle(document.querySelector('.btn')).fontFamily.startsWith('Inter') && getComputedStyle(document.querySelector('.btn')).textTransform==='none'`);
+  const btnSans = await t2.ev(`getComputedStyle(document.querySelector('.btn')).fontFamily.includes('IBM Plex Sans') && getComputedStyle(document.querySelector('.btn')).textTransform==='none'`);
   ok('Design: nav, buttons and list titles in the sans, sentence case; page titles keep the display face; no breadcrumb bar', sc.nav && sc.card && sc.title && sc.crumb && btnSans, JSON.stringify(sc) + ' btn=' + btnSans);
   ok('Feedback: one tap from the nav on every page, pointing at the feedback channel', await t2.ev(`(()=>{const a=document.querySelector('.site-nav-feedback');return !!a && a.href.startsWith('https://github.com/MyintP/ChintheGuardianMatrix/issues/new') && a.target==='_blank'})()`));
   await t2.ev(`localStorage.removeItem('chinthe_discipline')`);

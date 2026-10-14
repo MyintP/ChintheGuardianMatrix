@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <script>/* theme before first paint: avoids a flash of the wrong theme */try{var t=localStorage.getItem("chinthe_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#13110F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3EFE6" media="(prefers-color-scheme: light)">
 <meta name="description" content="Twelve grappling principles — efficiency, leverage, kuzushi, frames and more — plus positional hierarchy with ADCC points, chess strategy, grip taxonomy and fighting distances.">
 <title>Principles — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
@@ -21,7 +21,7 @@
 <link rel="icon" type="image/png" href="chinthe-lion.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="chinthe.css">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Cinzel:wght@600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* Principles = shared app shell (chinthe.css §17) + reading components below. */
 body{padding-bottom:0;}
@@ -36,27 +36,27 @@ body{padding-bottom:0;}
 /* Reading column */
 .panel-accent-bar{display:none;}
 .panel-eyebrow{font-family:var(--font-ui);font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--label);margin-bottom:6px;}
-.panel-title{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.2vw,36px);line-height:1.05;text-transform:uppercase;letter-spacing:.02em;color:var(--stone);margin-bottom:8px;}
+.panel-title{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,3.2vw,36px);line-height:1.05;letter-spacing: -0.01em;color:var(--stone);margin-bottom:8px;}
 .panel-title br{display:none;}
 .panel-tagline{font-size:16px;line-height:1.55;color:var(--stone);max-width:720px;padding-bottom:18px;margin-bottom:22px;border-bottom:1px solid var(--line);}
 .panel-section{margin-bottom:24px;}
 .panel-section:last-child{margin-bottom:0;}
 .panel-section-label{font-family:var(--font-ui);font-weight:600;font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);margin-bottom:8px;}
-.panel-section-text{font-size:15px;line-height:1.7;color:var(--stone);max-width:720px;}
-.panel-section-text.jade{padding:14px 16px;border-left:3px solid var(--gold);border-radius:0 8px 8px 0;background:var(--surface-2);}
+.panel-section-text{font-size:16px;line-height:1.7;color:var(--stone);max-width:720px;}
+.panel-section-text.jade{padding:16px 18px;border:1px solid var(--line-strong);border-radius:var(--radius);background:var(--surface-2);}
 .panel-examples{display:grid;gap:10px;}
 @container (min-width: 640px){ .panel-examples{grid-template-columns:1fr 1fr;} .pr-related{grid-template-columns:1fr 1fr 1fr;} }
 .pr-sources-block{padding-top:16px;border-top:1px solid var(--line);}
 .app-reading{max-width:880px;}
 
-.panel-example{background:var(--card);border:1px solid var(--line-strong);border-radius:10px;padding:14px 16px;}
+.panel-example{background:var(--card);border:1px solid var(--line-strong);border-radius: var(--radius);padding:14px 16px;}
 .panel-example strong{display:block;font-family:var(--font-ui);font-weight:600;font-size:15px;color:var(--stone);margin-bottom:6px;}
 .panel-example p{font-size:14px;line-height:1.6;color:var(--stone-dim);}
 
 /* Reference: positional hierarchy */
 .panel-hierarchy{display:flex;flex-direction:column;gap:4px;max-width:560px;}
 .hier-label-row{font-family:var(--font-ui);font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:.1em;text-transform:uppercase;padding:8px 2px 4px;}
-.hier-row{display:flex;align-items:center;gap:14px;padding:11px 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);}
+.hier-row{display:flex;align-items:center;gap:14px;padding:11px 16px;border-radius: var(--radius);border:1px solid var(--line);background:var(--surface);}
 .hier-row.best{background:color-mix(in srgb, var(--jade-bright) 14%, var(--surface));border-color:color-mix(in srgb, var(--jade-bright) 55%, transparent);}
 .hier-row.good{background:color-mix(in srgb, var(--jade-bright) 6%, var(--surface));border-color:color-mix(in srgb, var(--jade-bright) 25%, transparent);}
 .hier-row.neutral{background:var(--surface);}
@@ -70,14 +70,14 @@ body{padding-bottom:0;}
 /* Reference: card grids (chess, grips) */
 .panel-chess-grid,.panel-grips-grid{display:grid;grid-template-columns:1fr;gap:10px;}
 @media(min-width:760px){.panel-chess-grid,.panel-grips-grid{grid-template-columns:1fr 1fr;}}
-.panel-chess-card,.panel-grip-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+.panel-chess-card,.panel-grip-card{background:var(--surface);border:1px solid var(--line);border-radius: var(--radius);padding:16px 18px;}
 .panel-chess-title,.panel-grip-name{font-family:var(--font-ui);font-weight:600;font-size:16px;color:var(--stone);margin-bottom:4px;}
 .panel-chess-sub,.panel-grip-use{font-family:var(--font-ui);font-size:var(--text-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--label);margin-bottom:8px;}
 .panel-chess-text,.panel-grip-desc{font-size:14px;line-height:1.6;color:var(--stone-dim);}
 
 /* Reference: distances + glossary */
 .panel-distances,.glossary{display:grid;gap:8px;margin:0;max-width:820px;}
-.panel-dist-row,.gl-row{display:grid;grid-template-columns:180px 1fr;gap:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;}
+.panel-dist-row,.gl-row{display:grid;grid-template-columns:180px 1fr;gap:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius: var(--radius);}
 .panel-dist-range,.gl-row dt{font-family:var(--font-ui);font-weight:600;font-size:15px;color:var(--stone);}
 .panel-dist-text,.gl-row dd{margin:0;font-size:14px;line-height:1.6;color:var(--stone-dim);}
 @media(max-width:760px){.panel-dist-row,.gl-row{grid-template-columns:1fr;gap:4px;}}
@@ -85,23 +85,7 @@ body{padding-bottom:0;}
 </head>
 <body class="app-page">
 
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a class="site-nav-brand" href="index.html">
-      <img class="site-nav-lion" src="chinthe-lion.png" alt="" width="28" height="28">
-      <span class="site-nav-wordmark">CHINTHE</span>
-    </a>
-    <div class="site-nav-links">
-      <a class="site-nav-link" href="index.html">Home</a>
-      <a class="site-nav-link" href="chinthe-guardian-matrix.html">Matrix</a>
-      <a class="site-nav-link" href="competition.html">Compete</a>
-      <a class="site-nav-link" href="knowledge.html">Encyclopedia</a>
-      <a class="site-nav-link active" href="principles.html">Principles</a>
-      <a class="site-nav-link" href="gameplan.html">Game Plan</a>
-      <a class="site-nav-link" href="journal.html">Journal</a>
-    </div>
-  </div>
-</nav>
+<nav class="site-nav" aria-label="Main"></nav>
 
 <div class="app-shell">
   <aside class="app-nav" aria-label="Principle groups">
@@ -279,7 +263,7 @@ const PRINCIPLES = [
 
 // One brand accent for every principle and reference section (was a
 // different rainbow gradient per item).
-const BRAND_ACCENT = 'linear-gradient(90deg,var(--jade-bright),var(--gold))';
+const BRAND_ACCENT = 'var(--gold)';
 
 const REF_SECTIONS = [
   {id:'hierarchy', num:'REF·01', name:'Positional Hierarchy'},

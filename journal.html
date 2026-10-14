@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <script>/* theme before first paint: avoids a flash of the wrong theme */try{var t=localStorage.getItem("chinthe_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#13110F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3EFE6" media="(prefers-color-scheme: light)">
 <meta name="description" content="Log every training session — what worked, what needs work, techniques drilled — stored privately on your device with backup and restore.">
 <title>Training Journal — CHINTHE</title>
 <link rel="manifest" href="manifest.json">
@@ -21,7 +21,7 @@
 <link rel="icon" type="image/png" href="chinthe-lion.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="chinthe.css">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Cinzel:wght@600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* Design tokens (--bg, --surface, --gold, --stone, --line, --radius, …) come
    from chinthe.css — single source of truth, no per-page palette copies. */
@@ -38,7 +38,7 @@ body{padding-bottom:0;}
 .form-group.full{grid-column:1/-1;}
 .form-label{font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--stone);}
 .form-input,.form-select,.form-textarea{
-  background:var(--card);border:1px solid var(--line-strong);border-radius:8px;
+  background:var(--card);border:1px solid var(--line-strong);border-radius: var(--radius);
   color:var(--stone);font-family:var(--font-body);font-size:14px;
   padding:10px 12px;outline:none;width:100%;
 }
@@ -47,7 +47,7 @@ body{padding-bottom:0;}
 .form-select option{background:var(--surface-2);}
 
 /* Tags input */
-.tags-input-wrap{display:flex;flex-wrap:wrap;gap:6px;background:var(--card);border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;cursor:text;}
+.tags-input-wrap{display:flex;flex-wrap:wrap;gap:6px;background:var(--card);border:1px solid var(--line-strong);border-radius: var(--radius);padding:8px 10px;cursor:text;}
 .tags-input-wrap:focus-within{border-color:var(--gold);}
 .tag-pill{display:flex;align-items:center;gap:4px;background:var(--jade);color:var(--jade-bright);font-family:var(--font-ui);font-size:var(--text-xs);letter-spacing:0.06em;padding:3px 8px;border-radius:5px;}
 .tag-pill button{background:none;border:none;color:var(--jade-bright);cursor:pointer;font-size:11px;padding:0;line-height:1;}
@@ -60,19 +60,19 @@ body{padding-bottom:0;}
 /* Sessions list */
 .sessions-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;margin-bottom:8px;}
 .sessions-actions{display:flex;flex-wrap:wrap;gap:6px;}
-.backup-reminder{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;margin:0 0 20px;padding:14px 16px;border:1px solid color-mix(in srgb, var(--victory) 45%, transparent);border-left:4px solid var(--gold);border-radius:var(--radius);background:color-mix(in srgb, var(--victory) 7%, transparent);}
+.backup-reminder{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;margin:0 0 20px;padding:14px 16px;border:1px solid color-mix(in srgb, var(--victory) 45%, transparent);border-radius:var(--radius);background:color-mix(in srgb, var(--victory) 7%, transparent);}
 .backup-reminder[hidden]{display:none;}
 .br-title{font-weight:600;color:var(--stone);font-size:14px;}
 .br-sub{font-size:12.5px;color:var(--stone-dim);margin-top:2px;line-height:1.45;}
 .br-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .backup-note{font-size:12px;color:var(--stone-dim);margin:0 0 16px;line-height:1.5;}
-.sessions-title{font-family:var(--font-display);font-size:22px;letter-spacing:0.03em;text-transform:uppercase;}
+.sessions-title{font-family:var(--font-display);font-size:22px;letter-spacing: -0.01em;}
 .sessions-list{display:flex;flex-direction:column;gap:12px;}
 .session-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
 .session-header{padding:16px 18px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;cursor:pointer;}
 .session-header:hover{background:var(--surface-2);}
 .session-date{font-family:var(--font-ui);font-size:11px;color:var(--label);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
-.session-title{font-family:var(--font-display);font-size:20px;letter-spacing:0.02em;text-transform:uppercase;line-height:1;}
+.session-title{font-family:var(--font-display);font-size:20px;letter-spacing: -0.01em;line-height:1;}
 .session-meta{font-family:var(--font-ui);font-size:var(--text-xs);color:var(--stone-dim);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;}
 .session-badge{font-family:var(--font-ui);font-size:var(--text-xs);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:4px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0;}
 .badge-drilling{background:var(--jade);color:var(--jade-bright);}
@@ -102,7 +102,7 @@ body{padding-bottom:0;}
 .session-item-date{font-family:var(--font-ui);font-size:var(--text-xs);color:var(--stone-dim);white-space:nowrap;}
 .session-view{max-width:820px;}
 .session-view .session-field{margin-bottom:18px;}
-.session-view .session-field-text{font-size:15px;line-height:1.65;}
+.session-view .session-field-text{font-size:16px;line-height:1.65;}
 .session-view .session-actions{margin-top:22px;}
 .aside-actions{display:flex;flex-wrap:wrap;gap:6px;}
 .backup-reminder{margin:0;}
@@ -133,23 +133,7 @@ a.session-tag-link:hover{text-decoration:underline;}
 </head>
 <body class="app-page">
 
-<nav class="site-nav">
-  <div class="site-nav-inner">
-    <a class="site-nav-brand" href="index.html">
-      <img class="site-nav-lion" src="chinthe-lion.png" alt="" width="28" height="28">
-      <span class="site-nav-wordmark">CHINTHE</span>
-    </a>
-    <div class="site-nav-links">
-      <a class="site-nav-link" href="index.html">Home</a>
-      <a class="site-nav-link" href="chinthe-guardian-matrix.html">Matrix</a>
-      <a class="site-nav-link" href="competition.html">Compete</a>
-      <a class="site-nav-link" href="knowledge.html">Encyclopedia</a>
-      <a class="site-nav-link" href="principles.html">Principles</a>
-      <a class="site-nav-link" href="gameplan.html">Game Plan</a>
-      <a class="site-nav-link  active" href="journal.html">Journal</a>
-    </div>
-  </div>
-</nav>
+<nav class="site-nav" aria-label="Main"></nav>
 
 <div class="app-shell journal-shell">
   <aside class="app-nav" aria-label="Session history">
