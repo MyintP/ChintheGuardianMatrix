@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* theme before first paint: avoids a flash of the wrong theme */try{var t=localStorage.getItem("chinthe_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0A0E13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5F3EE" media="(prefers-color-scheme: light)">
+<meta name="description" content="Build your game plan: a Plan A and Plan B for every stage of the match, from the first grip to the finish, linked to the encyclopedia and stored privately on your device.">
+<title>Game Plan — CHINTHE</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-title" content="CHINTHE">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CHINTHE Guardian System">
+<meta property="og:title" content="Game Plan — CHINTHE">
+<meta property="og:description" content="Build your game plan: a Plan A and Plan B for every stage of the match, from the first grip to the finish.">
+<meta property="og:url" content="https://myintp.github.io/ChintheGuardianMatrix/gameplan.html">
+<meta property="og:image" content="https://myintp.github.io/ChintheGuardianMatrix/icon-512.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="chinthe-lion.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="chinthe.css">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Cinzel:wght@600&family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Design tokens come from chinthe.css. Layout: the shared three-panel frame (chinthe.css §17). */
+*{box-sizing:border-box;margin:0;padding:0;}
+.new-plan-btn{width:100%;justify-content:center;}
+.form-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;max-width:820px;}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.form-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-dim);}
+.form-input,.form-textarea{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;color:var(--stone);font-family:var(--font-body);font-size:14px;padding:10px 12px;outline:none;width:100%;}
+.form-input:focus,.form-textarea:focus{border-color:var(--jade-bright);}
+.form-textarea{min-height:76px;resize:vertical;line-height:1.5;}
+.form-hint{font-size:12.5px;line-height:1.5;color:var(--stone-dim);}
+.disc-pick{display:flex;flex-wrap:wrap;gap:8px;}
+.disc-pick button{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--stone-dim);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:9px 14px;min-height:40px;cursor:pointer;}
+.disc-pick button[aria-pressed="true"]{color:var(--on-accent);background:var(--gold);border-color:var(--gold);}
+.row-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+.row-actions.end{justify-content:flex-end;}
+.saved-note{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--jade-bright);align-self:center;min-height:1em;}
+
+/* Stage editor */
+.pick{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px;max-width:820px;}
+.pick-label{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;}
+.pick-letter{font-family:var(--font-display);font-size:22px;line-height:1;color:var(--gold);}
+.pick-preview{margin-top:10px;font-size:14px;line-height:1.55;color:var(--stone-dim);}
+.pick-preview .pv-name{font-family:var(--font-display);font-size:16px;letter-spacing:0.02em;text-transform:uppercase;color:var(--stone);}
+.pick-preview .pv-chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px;}
+.chip-s{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.06em;text-transform:uppercase;color:var(--stone-dim);border:1px solid var(--line);border-radius:4px;padding:2px 7px;}
+.pv-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.pv-links .btn{padding:7px 12px;}
+.suggest{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.suggest button{font-size:13px;color:var(--stone);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:999px;padding:7px 12px;min-height:36px;cursor:pointer;}
+.suggest button:hover{border-color:var(--jade-bright);}
+.stage-nav{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;max-width:820px;margin-top:8px;}
+
+/* Overview */
+.plan-flow{list-style:none;display:grid;gap:0;max-width:820px;counter-reset:st;}
+.plan-flow li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 14px;padding:14px 0;border-top:1px solid var(--line);}
+.plan-flow li:first-child{border-top:none;padding-top:4px;}
+.pf-num{font-family:var(--font-mono);font-size:12px;color:var(--stone-dim);padding-top:3px;}
+.pf-stage{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.12em;text-transform:uppercase;color:var(--jade-bright);}
+.pf-main{font-family:var(--font-display);font-size:19px;letter-spacing:0.02em;text-transform:uppercase;color:var(--stone);margin-top:2px;}
+.pf-main a,.drill-list a{color:var(--gold);text-decoration:none;}
+.pf-main a:hover,.drill-list a:hover{text-decoration:underline;}
+.pf-alt{font-size:14px;color:var(--stone-dim);margin-top:2px;}
+.pf-alt a{color:var(--stone);}
+.pf-note{font-size:14px;line-height:1.55;color:var(--stone);margin-top:6px;font-style:italic;}
+.pf-gap{color:var(--danger-text);font-size:14px;}
+.pf-edit{grid-column:2;justify-self:start;font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-dim);background:none;border:none;padding:6px 0;min-height:36px;cursor:pointer;}
+.pf-edit:hover{color:var(--stone);}
+.section-label{font-family:var(--font-mono);font-weight:600;font-size:var(--text-xs);letter-spacing:0.12em;text-transform:uppercase;color:var(--stone-dim);margin:28px 0 10px;}
+.drill-list{list-style:none;display:grid;gap:10px;max-width:820px;}
+.drill-list li{padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px;line-height:1.55;color:var(--stone-dim);}
+.drill-list b{display:block;font-family:var(--font-display);font-weight:400;font-size:16px;letter-spacing:0.02em;text-transform:uppercase;color:var(--stone);margin-bottom:2px;}
+.gap-callout{max-width:820px;margin-bottom:18px;border-left-color:var(--gold);}
+.list-card .st-status{color:var(--jade-bright);}
+.list-card .st-status.gap{color:var(--danger-text);}
+.list-card.empty .list-card-title{color:var(--stone-dim);}
+.app-nav-foot .aside-actions{display:flex;flex-wrap:wrap;gap:6px;}
+.app-nav-foot .aside-actions .btn{padding:8px 12px;}
+.app-nav-foot .aside-block{padding:12px 0;}
+.app-nav-foot .aside-block:first-child{padding-top:0;}
+@media print{
+  .site-nav,.breadcrumb,.app-nav,.app-list,.row-actions,.pf-edit,.section-actions{display:none !important;}
+  body.app-page{height:auto;overflow:visible;display:block;}
+  body.app-page .app-detail{overflow:visible;padding:0;}
+}
+</style>
+</head>
+<body class="app-page">
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-brand" href="index.html">
+      <img class="site-nav-lion" src="chinthe-lion.png" alt="" width="28" height="28">
+      <span class="site-nav-wordmark">CHINTHE</span>
+    </a>
+    <div class="site-nav-links">
+      <a class="site-nav-link" href="index.html">Home</a>
+      <a class="site-nav-link" href="chinthe-guardian-matrix.html">Matrix</a>
+      <a class="site-nav-link" href="competition.html">Compete</a>
+      <a class="site-nav-link" href="knowledge.html">Encyclopedia</a>
+      <a class="site-nav-link" href="principles.html">Principles</a>
+      <a class="site-nav-link active" href="gameplan.html">Game Plan</a>
+      <a class="site-nav-link" href="journal.html">Journal</a>
+    </div>
+  </div>
+</nav>
+
+<div class="app-shell gp-shell">
+  <aside class="app-nav" aria-label="Your game plans">
+    <div class="app-nav-head">
+      <div class="app-eyebrow">CHINTHE Game Plan</div>
+      <h1 class="app-title">Game Plan</h1>
+      <p class="app-head-sub" style="font-size:13.5px">A Plan A and a Plan B for every stage of the match. Stored privately on this device.</p>
+      <button type="button" class="btn btn-primary new-plan-btn" id="newPlanBtn">+ New plan</button>
+      <select class="app-select" id="planSelect" aria-label="Choose a game plan"></select>
+    </div>
+    <nav class="app-nav-list" id="planNav" aria-label="Your game plans"></nav>
+    <div class="app-nav-foot">
+      <div class="aside-block">
+        <div class="aside-title">How to use it</div>
+        <p class="aside-text">Pick one move per stage and drill those first. Plan B is what you go to when Plan A is stopped. Test the plan in positional sparring, then adjust it in your journal notes.</p>
+      </div>
+      <div class="aside-block">
+        <div class="aside-title">Backup</div>
+        <p class="aside-text" style="margin:0 0 10px">Stored only on this device.</p>
+        <div class="aside-actions">
+          <button class="btn btn-ghost" type="button" id="backupBtn" title="Full backup file you can restore from">⤓ Backup</button>
+          <button class="btn btn-ghost" type="button" id="restoreBtn" title="Restore plans from a backup file">⤒ Restore</button>
+          <input type="file" id="restoreInput" accept="application/json,.json" hidden>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <section class="app-list" aria-label="Stages">
+    <div class="list-head">
+      <div class="app-eyebrow" id="listEyebrow">Stages</div>
+      <div class="list-head-title" id="listTitle">No plan yet</div>
+    </div>
+    <div class="list-stack" id="stageList"></div>
+  </section>
+
+  <main class="app-detail" id="detail">
+    <header class="app-head">
+      <div class="app-eyebrow" id="dEyebrow">Game plan</div>
+      <h2 class="app-head-title" id="dTitle">New plan</h2>
+      <p class="app-head-sub" id="dSub"></p>
+    </header>
+    <div id="dBody"></div>
+  </main>
+</div>
+
+<script src="encyclopedia.js"></script>
+<script>
+// ── The encyclopedia, flattened: core entries + kb entries ─────────────────
+const KB = window.CHINTHE_KB || { core: [], entries: [], groups: [] };
+const ALL = (KB.core || []).concat(KB.entries.map(e => ({
+  id: e.id, cat: e.cat, name: e.name, tagline: e.tagline, drill: e.drill, tags: e.tags,
+  groups: e.groups, lvl: e.meta.lvl, fmt: e.meta.fmt
+}))).map(e => {
+  // Kb sections can claim core entries (group "include" lists)
+  const g = new Set(e.groups || []);
+  KB.groups.forEach(x => { if ((x.include || []).includes(e.id)) g.add(x.id); });
+  return Object.assign({}, e, { groups: [...g], tags: e.tags || [] });
+}).filter(e => !e.tags.includes("Banned"));
+const LVL = { F: "Fundamental", I: "Intermediate", A: "Advanced" };
+const LVL_ORDER = { F: 0, I: 1, A: 2 };
+const plainName = n => n.replace(/\s*\(.*?\)/g, "").trim();
+function findTech(t){
+  const q = (t || "").trim().toLowerCase();
+  if (!q) return null;
+  // Exact name, then without the bracketed part, then either half of "Knee Slice / Knee Cut"
+  return ALL.find(x => x.name.toLowerCase() === q) || ALL.find(x => plainName(x.name).toLowerCase() === q) ||
+    ALL.find(x => plainName(x.name).toLowerCase().split(" / ").includes(q)) || null;
+}
+
+// ── Stages per discipline ──────────────────────────────────────────────────
+// Each stage's `pool` picks the encyclopedia entries offered for it. Anything
+// else can still be typed in: a pool is a suggestion list, not a rule.
+const inG = (e, ...g) => e.groups.some(x => g.includes(x));
+const isId = (e, ...ids) => ids.includes(e.id);
+const BJJ = [
+  { key:"stand", name:"Standing", ask:"How the match hits the mat: your takedown, throw or guard pull.",
+    pool: e => ["takedown","judo"].includes(e.cat) || isId(e,"guard_pull","snap_down","front_headlock_td","arm_drag_standing","collar_drag") },
+  { key:"guard", name:"Your guard", ask:"The guard you play when you end up on the bottom.",
+    pool: e => e.cat === "position" && inG(e,"closed","half","open","gi_guard","legs") },
+  { key:"attack", name:"From your guard", ask:"Your main sweep or submission from that guard.",
+    pool: e => ["sweep","submission","transition"].includes(e.cat) && inG(e,"closed","half","open","gi_guard","legs","transitions") },
+  { key:"pass", name:"Passing", ask:"How you get past their legs when you're on top.",
+    pool: e => e.cat === "pass" || isId(e,"headquarters","half_guard_top","standing_guard_break","knee_shield_pass","pressure_passing") },
+  { key:"control", name:"Pin and advance", ask:"Where you settle after the pass, and how you move up to mount or the back.",
+    pool: e => (e.cat === "position" && inG(e,"side","mount","back","headlock")) || e.cat === "transition" },
+  { key:"finish", name:"Finish", ask:"Your highest-percentage submission from your best position.",
+    pool: e => e.cat === "submission" },
+  { key:"escape", name:"When it goes wrong", ask:"Your first escape when you're pinned or attacked.",
+    pool: e => e.cat === "defence" }
+];
+const WRESTLING = [
+  { key:"ties", name:"Ties and set-ups", ask:"The tie you fight for, and how you make them react.",
+    pool: e => (inG(e,"standing") && !["takedown","defence"].includes(e.cat)) || isId(e,"collar_tie","russian_tie","underhooks_pummel","snap_down","hand_fighting","inside_position") },
+  { key:"shot", name:"Main shot", ask:"Your best takedown: the one you hit most often in live goes.",
+    pool: e => e.cat === "takedown" },
+  { key:"chain", name:"Back-up and chains", ask:"What you go to when the first shot is stopped.",
+    pool: e => e.cat === "takedown" || isId(e,"snap_down","front_headlock_td","spin_behind","mat_return") },
+  { key:"defend", name:"Takedown defence", ask:"Your answer when they shoot.",
+    pool: e => (e.cat === "defence" && inG(e,"standing","headlock")) || isId(e,"sprawl","whizzer","single_leg_defence","front_headlock_defence","shuck") },
+  { key:"top", name:"Top", ask:"How you break them down and turn them.",
+    pool: e => inG(e,"wrestling_mat") && e.cat !== "defence" },
+  { key:"bottom", name:"Bottom", ask:"How you get out from underneath: escape or reverse.",
+    pool: e => (inG(e,"wrestling_mat") && ["defence","transition"].includes(e.cat)) || isId(e,"stand_up","sit_out","switch","granby_roll") }
+];
+const JUDO = [
+  { key:"grips", name:"Grips", ask:"Your grip, and the grip fight you win.",
+    pool: e => isId(e,"kumi_kata","grip_breaks","hand_fighting","inside_position") || (inG(e,"judo") && e.cat === "concept") },
+  { key:"throw", name:"Main throw (tokui-waza)", ask:"The throw you build everything around.",
+    pool: e => e.cat === "judo" },
+  { key:"combo", name:"Combination (renraku-waza)", ask:"The second throw when they block the first.",
+    pool: e => e.cat === "judo" },
+  { key:"counter", name:"Counter (kaeshi-waza)", ask:"Your answer when they attack.",
+    pool: e => e.cat === "judo" },
+  { key:"newaza", name:"Into ne-waza", ask:"How you follow a throw, or a failed attack, to the mat.",
+    pool: e => (inG(e,"judo_ground") && ["position","transition"].includes(e.cat)) || isId(e,"judo_bjj_bridge","turtle_top","judo_sankaku") },
+  { key:"finish", name:"Pin or submission", ask:"How you finish on the ground: a hold-down, a choke or an armlock.",
+    pool: e => inG(e,"judo_ground") && ["position","submission"].includes(e.cat) }
+];
+const MMA = [
+  { key:"range", name:"Striking range", ask:"Your main strike, and how you get to the clinch safely.",
+    pool: e => e.cat === "strike" && inG(e,"striking") },
+  { key:"entry", name:"Clinch and takedown", ask:"How you close the distance and take them down.",
+    pool: e => inG(e,"mma","standing") && ["takedown","position","transition"].includes(e.cat) },
+  { key:"getup", name:"Defence and getting up", ask:"Stopping their takedown, and getting up off your back.",
+    pool: e => (e.cat === "defence" && inG(e,"mma","standing")) || isId(e,"wall_walk","technical_standup","butterfly_wall","mma_scramble","fence_defence","sprawl") },
+  { key:"top", name:"Top control", ask:"Where you hold them, and how you keep them down.",
+    pool: e => (inG(e,"mma") && e.cat === "position") || isId(e,"ground_and_pound","mma_top_control","mma_back","side_control","mount","back_control") },
+  { key:"finish", name:"Finish", ask:"The submission or strikes that end it.",
+    pool: e => e.cat === "submission" || isId(e,"ground_and_pound","hammerfist","downward_elbow") }
+];
+const striking = g => [
+  { key:"weapon", name:"Main weapon", ask:"The strike you build around.",
+    pool: e => e.cat === "strike" && inG(e,g) },
+  { key:"setup", name:"Set-up", ask:"What you throw first so the main weapon lands.",
+    pool: e => e.cat === "strike" && inG(e,g) },
+  { key:"clinch", name:"Clinch", ask:"What you do when they tie you up.",
+    pool: e => inG(e,g) && /clinch|knee|throw|sweep|dump/i.test(e.name + " " + e.tags.join(" ")) },
+  { key:"defence", name:"Defence", ask:"Your first defence against their best weapon.",
+    pool: e => (inG(e,g) && e.cat === "defence") || isId(e,"blocking_covering","checking_kicks","head_movement","headbutt_defence","bare_knuckle_defence","footwork_striking","distance_management") },
+  { key:"counter", name:"Counter", ask:"What you fire back with when they attack.",
+    pool: e => (e.cat === "strike" && inG(e,g)) || isId(e,"counter_kick","counterstriking","catch_and_sweep") }
+];
+const DISC = [
+  { id:"nogi", name:"BJJ No-Gi", fmts:["No-Gi","Gi & No-Gi","Wrestling"], stages:BJJ },
+  { id:"gi", name:"BJJ Gi", fmts:["Gi","Gi & No-Gi","No-Gi","Judo"], stages:BJJ },
+  { id:"wrestling", name:"Wrestling", fmts:["Wrestling","No-Gi","Gi & No-Gi"], stages:WRESTLING },
+  { id:"judo", name:"Judo", fmts:["Judo","Gi & No-Gi","Gi"], stages:JUDO },
+  { id:"mma", name:"MMA", fmts:["MMA","No-Gi","Gi & No-Gi","Wrestling"], stages:MMA },
+  { id:"muaythai", name:"Muay Thai", fmts:null, stages:striking("muay_thai") },
+  { id:"lethwei", name:"Lethwei", fmts:null, stages:striking("lethwei") }
+];
+const discOf = p => DISC.find(d => d.id === p.disc) || DISC[0];
+const poolCache = {};
+function poolFor(disc, stage){
+  const k = disc.id + ":" + stage.key;
+  if (!poolCache[k]) {
+    let list = ALL.filter(e => stage.pool(e) && (!disc.fmts || disc.fmts.includes(e.fmt)));
+    if (!list.length) list = ALL.filter(stage.pool);
+    poolCache[k] = list.sort((a,b) => LVL_ORDER[a.lvl] - LVL_ORDER[b.lvl] || a.name.localeCompare(b.name));
+  }
+  return poolCache[k];
+}
+
+// ── Storage ────────────────────────────────────────────────────────────────
+const KEY = "chinthe_gameplan_v1", LAST_KEY = "chinthe_gameplan_last";
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{});
+function loadPlans(){ try { const p = JSON.parse(localStorage.getItem(KEY)); return Array.isArray(p) ? p : []; } catch(e){ return []; } }
+function savePlans(plans){
+  try { localStorage.setItem(KEY, JSON.stringify(plans)); return true; }
+  catch(e){ alert("Could not save — this browser's storage is full or blocked. Download a backup now."); return false; }
+}
+function getPlan(id){ return loadPlans().find(p => p.id === id) || null; }
+function putPlan(plan){
+  const plans = loadPlans(), i = plans.findIndex(p => p.id === plan.id);
+  plan.updated = new Date().toISOString();
+  if (i < 0) plans.unshift(plan); else plans[i] = plan;
+  return savePlans(plans);
+}
+const stageOf = (plan, key) => (plan.stages && plan.stages[key]) || { a:"", b:"", note:"" };
+const filled = plan => discOf(plan).stages.filter(s => stageOf(plan, s.key).a).length;
+
+// ── State ──────────────────────────────────────────────────────────────────
+let planId = null;          // open plan
+let stageKey = null;        // open stage, or null for the overview
+let newDisc = "nogi";
+
+const $ = id => document.getElementById(id);
+function el(tag, cls, text){
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text !== undefined && text !== null && text !== "") n.textContent = text;
+  return n;
+}
+function techLink(name, cls){
+  const hit = findTech(name);
+  if (!hit) return el("span", cls, name);
+  const a = el("a", cls, name); a.href = "knowledge.html#" + hit.id; a.title = "Open in the encyclopedia";
+  return a;
+}
+function head(eyebrow, title, sub){ $("dEyebrow").textContent = eyebrow; $("dTitle").textContent = title; $("dSub").textContent = sub || ""; }
+function toDetail(){ if (window.innerWidth < 1100) $("detail").scrollIntoView({ behavior:"smooth", block:"start" }); }
+
+// ── Left panel: plans ──────────────────────────────────────────────────────
+function renderNav(){
+  const plans = loadPlans();
+  const nav = $("planNav");
+  nav.innerHTML = "";
+  nav.appendChild(el("div", "app-nav-group", "Your plans"));
+  if (!plans.length) nav.appendChild(el("p", "aside-text", "No plans yet.")).style.padding = "4px 18px";
+  plans.forEach(p => {
+    const b = el("button", "app-nav-item" + (p.id === planId ? " active" : "")); b.type = "button";
+    b.setAttribute("aria-current", String(p.id === planId));
+    b.appendChild(el("span", null, p.name));
+    b.appendChild(el("span", "app-nav-count", filled(p) + "/" + discOf(p).stages.length));
+    b.addEventListener("click", () => openPlan(p.id));
+    nav.appendChild(b);
+  });
+  const sel = $("planSelect");
+  sel.innerHTML = "";
+  plans.forEach(p => { const o = el("option", null, p.name + " (" + discOf(p).name + ")"); o.value = p.id; sel.appendChild(o); });
+  const o = el("option", null, "+ New plan"); o.value = ""; sel.appendChild(o);
+  sel.value = planId || "";
+}
+$("planSelect").addEventListener("change", e => { if (e.target.value) openPlan(e.target.value); else showNew(); });
+$("newPlanBtn").addEventListener("click", () => { showNew(); $("npName").focus(); });
+
+// ── Middle panel: the stages of the open plan ──────────────────────────────
+function renderStages(){
+  const list = $("stageList");
+  list.innerHTML = "";
+  const plan = planId && getPlan(planId);
+  if (!plan) {
+    $("listEyebrow").textContent = "Stages";
+    $("listTitle").textContent = "No plan open";
+    list.innerHTML = '<div class="empty-state-block"><span class="mark">◎</span>Create a plan and its stages appear here,<br>from the first grip to the finish.</div>';
+    return;
+  }
+  const disc = discOf(plan);
+  $("listEyebrow").textContent = disc.name;
+  $("listTitle").textContent = plan.name;
+  const ov = el("button", "list-card" + (stageKey === null ? " active" : "")); ov.type = "button";
+  ov.setAttribute("aria-current", String(stageKey === null));
+  const om = el("span", "list-card-meta"); om.appendChild(el("span", null, "Overview")); om.appendChild(el("span", "st-status", filled(plan) + " of " + disc.stages.length + " set"));
+  ov.appendChild(om);
+  ov.appendChild(el("span", "list-card-title", "The whole plan"));
+  ov.appendChild(el("span", "list-card-sub", "Every stage on one page, the gaps, and your drill list."));
+  ov.addEventListener("click", () => { stageKey = null; render(); toDetail(); });
+  list.appendChild(ov);
+  disc.stages.forEach((s, i) => {
+    const st = stageOf(plan, s.key), on = stageKey === s.key;
+    const b = el("button", "list-card" + (on ? " active" : "") + (st.a ? "" : " empty")); b.type = "button";
+    b.dataset.stage = s.key; b.setAttribute("aria-current", String(on));
+    const m = el("span", "list-card-meta");
+    m.appendChild(el("span", null, String(i + 1).padStart(2, "0") + " · " + s.name));
+    m.appendChild(el("span", "st-status" + (st.a ? "" : " gap"), st.a ? (st.b ? "A + B" : "Plan A") : "Gap"));
+    b.appendChild(m);
+    b.appendChild(el("span", "list-card-title", st.a || "Not set"));
+    b.appendChild(el("span", "list-card-sub", st.b ? "Plan B: " + st.b : s.ask));
+    b.addEventListener("click", () => { stageKey = s.key; render(); toDetail(); });
+    list.appendChild(b);
+  });
+}
+
+// ── Right panel: new plan form ─────────────────────────────────────────────
+function showNew(){
+  planId = null; stageKey = null;
+  try { localStorage.removeItem(LAST_KEY); } catch(e){}
+  head("Game plan", "New plan", "Name it for an event or a phase of training, then pick the discipline. Each discipline has its own stages.");
+  const body = $("dBody"); body.innerHTML = "";
+  const card = el("div", "form-card");
+  const g1 = el("div", "form-group");
+  const l1 = el("label", "form-label", "Plan name"); l1.htmlFor = "npName";
+  const name = el("input", "form-input"); name.id = "npName"; name.type = "text"; name.maxLength = 60; name.placeholder = "e.g. Spring open, no-gi blue belt";
+  g1.appendChild(l1); g1.appendChild(name); card.appendChild(g1);
+  const g2 = el("div", "form-group");
+  g2.appendChild(el("div", "form-label", "Discipline"));
+  const pick = el("div", "disc-pick"); pick.setAttribute("role", "group"); pick.setAttribute("aria-label", "Discipline");
+  const hint = el("p", "form-hint");
+  const drawPick = () => {
+    pick.innerHTML = "";
+    DISC.forEach(d => {
+      const b = el("button", null, d.name); b.type = "button"; b.dataset.disc = d.id;
+      b.setAttribute("aria-pressed", String(d.id === newDisc));
+      b.addEventListener("click", () => { newDisc = d.id; drawPick(); });
+      pick.appendChild(b);
+    });
+    hint.textContent = "Stages: " + DISC.find(d => d.id === newDisc).stages.map(s => s.name).join(" → ");
+  };
+  drawPick();
+  g2.appendChild(pick); g2.appendChild(hint); card.appendChild(g2);
+  const acts = el("div", "row-actions end");
+  const create = el("button", "btn btn-primary", "Create plan"); create.type = "button"; create.id = "npCreate";
+  create.addEventListener("click", () => createPlan(name.value));
+  name.addEventListener("keydown", e => { if (e.key === "Enter") createPlan(name.value); });
+  acts.appendChild(create); card.appendChild(acts);
+  body.appendChild(card);
+  renderNav(); renderStages();
+}
+function createPlan(name){
+  const disc = DISC.find(d => d.id === newDisc);
+  const plan = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: (name || "").trim().slice(0, 60) || disc.name + " game plan",
+                 disc: disc.id, stages: {}, created: new Date().toISOString() };
+  if (!putPlan(plan)) return;
+  planId = plan.id; stageKey = disc.stages[0].key;
+  render();
+  const first = document.querySelector("#dBody .form-input"); if (first) first.focus();
+}
+
+function openPlan(id){
+  if (!getPlan(id)) return showNew();
+  planId = id; stageKey = null;
+  render(); toDetail();
+}
+
+// ── Right panel: one stage ─────────────────────────────────────────────────
+let savedTimer = null;
+function flashSaved(){
+  const n = $("savedNote"); if (!n) return;
+  n.textContent = "✓ Saved"; clearTimeout(savedTimer); savedTimer = setTimeout(() => { n.textContent = ""; }, 1400);
+}
+function setField(key, field, value){
+  const plan = getPlan(planId); if (!plan) return;
+  plan.stages = plan.stages || {};
+  plan.stages[key] = Object.assign({ a:"", b:"", note:"" }, plan.stages[key], { [field]: value });
+  if (putPlan(plan)) { flashSaved(); renderNav(); renderStages(); }
+}
+function preview(box, name){
+  box.innerHTML = "";
+  if (!name.trim()) return;
+  const hit = findTech(name);
+  if (!hit) { box.textContent = "Your own move: it isn't in the encyclopedia, so there's no breakdown to link."; return; }
+  box.appendChild(el("div", "pv-name", hit.name));
+  const chips = el("div", "pv-chips");
+  [hit.fmt, LVL[hit.lvl]].forEach(t => t && chips.appendChild(el("span", "chip-s", t)));
+  box.appendChild(chips);
+  box.appendChild(el("div", null, hit.tagline));
+  const links = el("div", "pv-links");
+  const open = el("a", "btn btn-secondary", "Open the breakdown →"); open.href = "knowledge.html#" + hit.id;
+  const log = el("a", "btn btn-ghost", "Log it"); log.href = "journal.html?tech=" + encodeURIComponent(plainName(hit.name));
+  links.appendChild(open); links.appendChild(log); box.appendChild(links);
+}
+function showStage(plan, key){
+  const disc = discOf(plan), i = disc.stages.findIndex(s => s.key === key), s = disc.stages[i];
+  const st = stageOf(plan, key);
+  head("Stage " + (i + 1) + " of " + disc.stages.length + " · " + plan.name, s.name, s.ask);
+  const body = $("dBody"); body.innerHTML = "";
+  const pool = poolFor(disc, s);
+  const dl = el("datalist"); dl.id = "pool-" + key;
+  pool.forEach(e => { const o = el("option"); o.value = e.name; dl.appendChild(o); });
+  body.appendChild(dl);
+
+  const inputs = {};
+  [["a", "A", "Plan A", "Your first choice here."], ["b", "B", "Plan B", "What you go to when Plan A is stopped."]].forEach(([f, letter, label, hint]) => {
+    const card = el("div", "pick");
+    const lab = el("label", "pick-label"); lab.htmlFor = "f-" + f;
+    lab.appendChild(el("span", "pick-letter", letter));
+    lab.appendChild(el("span", "form-label", label + " — " + hint));
+    const inp = el("input", "form-input"); inp.id = "f-" + f; inp.type = "text"; inp.maxLength = 80; inp.autocomplete = "off";
+    inp.setAttribute("list", dl.id); inp.placeholder = "Type or pick a technique…"; inp.value = st[f] || "";
+    const pv = el("div", "pick-preview"); pv.setAttribute("aria-live", "polite");
+    inp.addEventListener("input", () => { setField(key, f, inp.value.trim()); preview(pv, inp.value); drawSuggest(); });
+    card.appendChild(lab); card.appendChild(inp); card.appendChild(pv);
+    preview(pv, inp.value);
+    inputs[f] = { inp, pv };
+    body.appendChild(card);
+  });
+
+  // Quick picks: the fundamentals of this stage, to fill the empty slot
+  const sug = el("div", "pick");
+  sug.appendChild(el("div", "form-label", "Quick picks — fundamentals for this stage"));
+  const chips = el("div", "suggest"); sug.appendChild(chips);
+  function drawSuggest(){
+    chips.innerHTML = "";
+    const taken = [inputs.a.inp.value, inputs.b.inp.value].map(v => v.trim().toLowerCase());
+    const base = pool.filter(e => e.lvl === "F");
+    const picks = (base.length >= 4 ? base : pool).filter(e => !taken.includes(e.name.toLowerCase())).slice(0, 8);
+    picks.forEach(e => {
+      const b = el("button", null, e.name); b.type = "button"; b.title = e.tagline;
+      b.addEventListener("click", () => {
+        const slot = !inputs.a.inp.value.trim() ? "a" : "b";
+        inputs[slot].inp.value = e.name;
+        inputs[slot].inp.dispatchEvent(new Event("input"));
+      });
+      chips.appendChild(b);
+    });
+    sug.hidden = !picks.length;
+  }
+  drawSuggest();
+  body.appendChild(sug);
+
+  const noteCard = el("div", "pick");
+  const nl = el("label", "form-label", "If–then — what you do when they defend it"); nl.htmlFor = "f-note";
+  const note = el("textarea", "form-textarea"); note.id = "f-note"; note.maxLength = 600; note.value = st.note || "";
+  note.placeholder = "e.g. If they sprawl on my double, I snap down to front headlock.";
+  note.addEventListener("input", () => setField(key, "note", note.value));
+  noteCard.appendChild(nl); noteCard.appendChild(note);
+  body.appendChild(noteCard);
+
+  const nav = el("div", "stage-nav");
+  const prev = el("button", "btn btn-secondary", i ? "← " + disc.stages[i - 1].name : "← Overview"); prev.type = "button";
+  prev.addEventListener("click", () => { stageKey = i ? disc.stages[i - 1].key : null; render(); });
+  const saved = el("span", "saved-note"); saved.id = "savedNote"; saved.setAttribute("role", "status");
+  const next = el("button", "btn btn-primary", i < disc.stages.length - 1 ? disc.stages[i + 1].name + " →" : "See the whole plan →"); next.type = "button"; next.id = "nextStage";
+  next.addEventListener("click", () => { stageKey = i < disc.stages.length - 1 ? disc.stages[i + 1].key : null; render(); $("detail").scrollTop = 0; });
+  nav.appendChild(prev); nav.appendChild(saved); nav.appendChild(next);
+  body.appendChild(nav);
+}
+
+// ── Right panel: the whole plan ────────────────────────────────────────────
+function showOverview(plan){
+  const disc = discOf(plan);
+  const n = filled(plan);
+  head(disc.name + " · " + n + " of " + disc.stages.length + " stages set", plan.name, "Your plan from the first grip to the finish. Drill Plan A at every stage first.");
+  const body = $("dBody"); body.innerHTML = "";
+  const gaps = disc.stages.filter(s => !stageOf(plan, s.key).a);
+  if (gaps.length) {
+    const c = el("div", "callout gap-callout");
+    c.appendChild(el("b", null, gaps.length === disc.stages.length ? "Start with stage 1. " : "Gaps: "));
+    c.appendChild(document.createTextNode(gaps.length === disc.stages.length
+      ? "Pick one move per stage. A plan with a gap is a position where you have no answer."
+      : gaps.map(s => s.name).join(", ") + ". These are the moments where you have no answer yet."));
+    body.appendChild(c);
+  }
+  const ol = el("ol", "plan-flow");
+  disc.stages.forEach((s, i) => {
+    const st = stageOf(plan, s.key);
+    const li = el("li");
+    li.appendChild(el("div", "pf-num", String(i + 1).padStart(2, "0")));
+    const box = el("div");
+    box.appendChild(el("div", "pf-stage", s.name));
+    if (st.a) {
+      const main = el("div", "pf-main"); main.appendChild(techLink(st.a)); box.appendChild(main);
+      if (st.b) { const alt = el("div", "pf-alt", "Plan B: "); alt.appendChild(techLink(st.b)); box.appendChild(alt); }
+    } else box.appendChild(el("div", "pf-gap", "Not set yet"));
+    if (st.note) box.appendChild(el("div", "pf-note", st.note));
+    li.appendChild(box);
+    const edit = el("button", "pf-edit", st.a ? "Edit stage" : "Set this stage →"); edit.type = "button";
+    edit.setAttribute("aria-label", (st.a ? "Edit " : "Set ") + s.name);
+    edit.addEventListener("click", () => { stageKey = s.key; render(); });
+    li.appendChild(edit);
+    ol.appendChild(li);
+  });
+  body.appendChild(ol);
+
+  // Drill list: the encyclopedia drill for every Plan A
+  const drills = disc.stages.map(s => ({ s, hit: findTech(stageOf(plan, s.key).a) })).filter(x => x.hit);
+  if (drills.length) {
+    body.appendChild(el("div", "section-label", "Drill list — Plan A at every stage"));
+    const ul = el("ul", "drill-list");
+    drills.forEach(({ s, hit }) => {
+      const li = el("li");
+      const b = el("b"); const a = el("a", null, hit.name); a.href = "knowledge.html#" + hit.id; b.appendChild(a);
+      li.appendChild(el("div", "pf-stage", s.name)); li.appendChild(b);
+      li.appendChild(document.createTextNode(hit.drill));
+      ul.appendChild(li);
+    });
+    body.appendChild(ul);
+  }
+
+  body.appendChild(el("div", "section-label", "This plan"));
+  const rn = el("div", "form-group"); rn.style.maxWidth = "520px";
+  const rl = el("label", "form-label", "Plan name"); rl.htmlFor = "planName";
+  const ri = el("input", "form-input"); ri.id = "planName"; ri.type = "text"; ri.maxLength = 60; ri.value = plan.name;
+  ri.addEventListener("change", () => {
+    const p = getPlan(planId); const v = ri.value.trim().slice(0, 60);
+    if (!p || !v) { ri.value = p ? p.name : ""; return; }
+    p.name = v; if (putPlan(p)) render();
+  });
+  rn.appendChild(rl); rn.appendChild(ri); body.appendChild(rn);
+  const acts = el("div", "row-actions section-actions");
+  const exp = el("button", "btn btn-secondary", "↗ Export as text"); exp.type = "button"; exp.addEventListener("click", () => exportPlan(planId));
+  const pr = el("button", "btn btn-ghost", "Print"); pr.type = "button"; pr.addEventListener("click", () => window.print());
+  const del = el("button", "btn btn-danger", "Delete plan"); del.type = "button"; del.addEventListener("click", () => deletePlan(planId));
+  acts.appendChild(exp); acts.appendChild(pr); acts.appendChild(del);
+  body.appendChild(acts);
+}
+
+function render(){
+  const plan = planId && getPlan(planId);
+  if (!plan) return showNew();
+  try { localStorage.setItem(LAST_KEY, plan.id); } catch(e){}
+  if (stageKey && !discOf(plan).stages.some(s => s.key === stageKey)) stageKey = null;
+  if (stageKey) showStage(plan, stageKey); else showOverview(plan);
+  renderNav(); renderStages();
+}
+
+function deletePlan(id){
+  if (!confirm("Delete this game plan? Cannot be undone.")) return;
+  savePlans(loadPlans().filter(p => p.id !== id));
+  const rest = loadPlans();
+  if (rest.length) openPlan(rest[0].id); else showNew();
+}
+
+// ── Export, backup and restore ─────────────────────────────────────────────
+function localISODate(d){ d = d || new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+function download(text, type, name){
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type }));
+  a.download = name; a.click();
+}
+function planMarkdown(plan){
+  const disc = discOf(plan);
+  let md = "# " + plan.name + "\n" + disc.name + " game plan · CHINTHE\n\n";
+  disc.stages.forEach((s, i) => {
+    const st = stageOf(plan, s.key);
+    md += "## " + (i + 1) + ". " + s.name + "\n";
+    md += st.a ? "**Plan A:** " + st.a + "\n" : "_Not set yet_\n";
+    if (st.b) md += "**Plan B:** " + st.b + "\n";
+    if (st.note) md += "**If–then:** " + st.note + "\n";
+    md += "\n";
+  });
+  return md;
+}
+function exportPlan(id){
+  const plan = getPlan(id); if (!plan) return;
+  const slug = plan.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "plan";
+  download(planMarkdown(plan), "text/markdown", "chinthe-gameplan-" + slug + ".md");
+}
+$("backupBtn").addEventListener("click", () => {
+  const plans = loadPlans();
+  if (!plans.length) { alert("No plans to back up."); return; }
+  download(JSON.stringify({ app:"chinthe-gameplan", version:1, exported:new Date().toISOString(), plans }, null, 2),
+    "application/json", "chinthe-gameplan-backup-" + localISODate() + ".json");
+});
+$("restoreBtn").addEventListener("click", () => $("restoreInput").click());
+function cleanPlan(p){
+  if (!p || typeof p !== "object") return null;
+  const str = (v, n) => typeof v === "string" ? v.slice(0, n) : "";
+  const disc = DISC.find(d => d.id === p.disc);
+  if (!disc || !str(p.name, 60).trim()) return null;
+  const stages = {};
+  disc.stages.forEach(s => {
+    const st = p.stages && p.stages[s.key];
+    if (st && typeof st === "object") stages[s.key] = { a: str(st.a, 80).trim(), b: str(st.b, 80).trim(), note: str(st.note, 600) };
+  });
+  return { id: str(p.id, 40) || Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: p.name.trim().slice(0, 60),
+           disc: disc.id, stages, created: str(p.created, 40), updated: str(p.updated, 40) || new Date().toISOString() };
+}
+$("restoreInput").addEventListener("change", e => {
+  const file = e.target.files[0]; e.target.value = "";
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    let data;
+    try { data = JSON.parse(reader.result); } catch(err){ alert("That file isn't a valid backup."); return; }
+    const incoming = (Array.isArray(data) ? data : (data && data.plans) || []).map(cleanPlan).filter(Boolean);
+    if (!incoming.length) { alert("No game plans found in that file."); return; }
+    const existing = loadPlans(), ids = new Set(existing.map(p => p.id));
+    const added = incoming.filter(p => !ids.has(p.id));
+    if (!added.length) { alert("All " + incoming.length + " plans in that backup are already here."); return; }
+    if (savePlans(existing.concat(added))) {
+      openPlan(added[0].id);
+      alert("Restored " + added.length + " plan" + (added.length !== 1 ? "s" : "") + ".");
+    }
+  };
+  reader.readAsText(file);
+});
+
+// ── Start: reopen the last plan on this device ─────────────────────────────
+(function(){
+  let last = null;
+  try { last = localStorage.getItem(LAST_KEY); } catch(e){}
+  const plans = loadPlans();
+  const start = plans.find(p => p.id === last) || plans[0];
+  if (start) { planId = start.id; render(); } else showNew();
+})();
+</script>
+<script src="chinthe.js"></script>
+</body>
+</html>

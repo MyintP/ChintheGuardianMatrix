@@ -2,7 +2,7 @@
 const fs = require('fs');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const BASE = 'http://localhost:8790/';
-const PAGES = ['index.html', 'chinthe-guardian-matrix.html', 'competition.html', 'knowledge.html', 'principles.html', 'journal.html'];
+const PAGES = ['index.html', 'chinthe-guardian-matrix.html', 'competition.html', 'knowledge.html', 'principles.html', 'journal.html', 'gameplan.html'];
 
 const SCAN = `(() => {
   const out = { unnamed: [], unlabeled: [], lowContrast: [], smallTargets: [], h1: 0, headings: [], overflow: 0 };

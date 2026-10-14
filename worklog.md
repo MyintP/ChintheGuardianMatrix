@@ -211,6 +211,17 @@ The owner will share one link with friends on phones, tablets and desktops. A ne
 - **Fixed:** the Compete "Undo last round" button was squashed on tablets and small phones.
 - Result: all 6 pages are clean on all 8 devices (no sideways scroll, no zooming fields, no cut-off panels). The feedback channel stays GitHub Issues, by the owner's choice.
 
+#### Pass 17 — Game plan builder
+A new page, `gameplan.html`, in the same three-panel frame: your plans on the left, the plan's stages in the middle, the open stage on the right.
+- **Stages per discipline:** BJJ no-gi and gi (standing, your guard, from your guard, passing, pin and advance, finish, when it goes wrong), wrestling, judo (grips, tokui-waza, renraku-waza, kaeshi-waza, into ne-waza, pin or submission), MMA, Muay Thai and Lethwei.
+- **Each stage:** Plan A, Plan B and an if–then note. Picks autocomplete from the encyclopedia, filtered to that stage and discipline. Fundamentals are offered as quick picks, and each pick previews its entry with "Open the breakdown" and "Log it". Moves that aren't in the encyclopedia are kept as plain text.
+- **Overview:** every stage on one page, the gaps named, and a drill list built from the encyclopedia drill for each Plan A. Export as text, print, rename, delete.
+- **Storage:** on the device, with backup and restore that validates and cleans the file. The last plan reopens on return.
+- **Data:** `tools/build-kb.js` now adds a short index of the 98 core entries to `encyclopedia.js`, so the picker covers all 393 techniques.
+- Linked from the nav on every page, the home page (a new card, "six tools") and the footer. SW v32.
+- Fixed while testing: the home page entry count read the new index twice (showed 491); it counts only the encyclopedia entries again (393).
+Verified: 15 new checks (stage pools for every discipline, saving, quick picks, gaps, drill list, reload, export, restore validation, delete).
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.
@@ -226,5 +237,5 @@ The owner will share one link with friends on phones, tablets and desktops. A ne
 
 #### Current Project Status
 - **Stage 1 (MVP):** 100% — stable, tested, deployed.
-- **Stage 2 (MLP):** ~60% — design system, themes, content depth and learning paths done; remaining: coach-verified content, a game-plan builder, a journal technique picker.
+- **Stage 2 (MLP):** ~70% — design system, themes, content depth, learning paths and the game plan builder done; remaining: coach-verified content and a professional design finish.
 - **Stage 3 (Commercial):** 0%.

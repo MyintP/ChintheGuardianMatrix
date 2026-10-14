@@ -3,7 +3,7 @@
 // readable body text, tap targets, and nothing cut off by the app frame.
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const BASE = 'http://localhost:8790/';
-const PAGES = ['index.html', 'chinthe-guardian-matrix.html', 'competition.html', 'knowledge.html', 'principles.html', 'journal.html'];
+const PAGES = ['index.html', 'chinthe-guardian-matrix.html', 'competition.html', 'knowledge.html', 'principles.html', 'journal.html', 'gameplan.html'];
 const DEVICES = [
   ['iPhone SE', 320, 568, true], ['Android small', 360, 780, true], ['iPhone 15', 393, 852, true], ['iPhone Pro Max', 430, 932, true],
   ['iPad mini portrait', 768, 1024, true], ['iPad Air portrait', 820, 1180, true], ['iPad landscape', 1180, 820, true], ['iPad Pro landscape', 1366, 1024, true],

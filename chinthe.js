@@ -121,6 +121,7 @@ window.chintheFeedback = function (title, body) {
     "knowledge.html":               "Encyclopedia",
     "principles.html":              "Principles",
     "journal.html":                 "Training Journal",
+    "gameplan.html":                "Game Plan",
     "competition.html":             "Compete"
   };
 

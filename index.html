@@ -112,6 +112,7 @@ a.mod:hover { border-color: var(--gold); transform: translateY(-2px); }
 .mod li::before { content: '—'; position: absolute; left: 0; color: var(--gold); }
 .mod-go { margin-top: auto; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
 .mod-soon { border-style: dashed; }
+@media (min-width: 720px) { .mod-soon { grid-column: 1 / -1; } }
 .mod-soon .mod-go { color: var(--stone-dim); }
 
 /* ── How it works ── */
@@ -193,6 +194,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
       <a class="site-nav-link" href="competition.html">Compete</a>
       <a class="site-nav-link" href="knowledge.html">Encyclopedia</a>
       <a class="site-nav-link" href="principles.html">Principles</a>
+      <a class="site-nav-link" href="gameplan.html">Game Plan</a>
       <a class="site-nav-link" href="journal.html">Journal</a>
     </div>
     <a class="site-nav-cta" href="chinthe-guardian-matrix.html">Open Matrix →</a>
@@ -266,7 +268,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
   <div class="wrap-w">
     <div class="band-head">
       <div class="kicker">What's inside</div>
-      <h2 class="h2">One system, five tools.</h2>
+      <h2 class="h2">One system, six tools.</h2>
       <p class="lede">Everything is built around one question: from where I am right now, what's my highest-percentage next move?</p>
     </div>
     <div class="mods">
@@ -297,6 +299,13 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
         <p>Know the scoring and what to do when you're ahead, level or behind on the clock.</p>
         <ul><li>BJJ, judo, wrestling, MMA, Muay Thai and Lethwei rules</li><li>A score tracker for each: points, waza-ari, round cards</li><li>What to do ahead, level or behind</li></ul>
         <span class="mod-go">Open Compete →</span>
+      </a>
+      <a class="mod" href="gameplan.html">
+        <div class="mod-tag">Strategy</div>
+        <div class="mod-name">Game Plan</div>
+        <p>A Plan A and a Plan B for every stage of the match, from the first grip to the finish.</p>
+        <ul><li>Stages for BJJ, wrestling, judo, MMA, Muay Thai and Lethwei</li><li>Every pick links to its breakdown</li><li>Shows the gaps and builds your drill list</li></ul>
+        <span class="mod-go">Build your plan →</span>
       </a>
       <a class="mod" href="journal.html">
         <div class="mod-tag">Daily habit</div>
@@ -441,6 +450,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
         <a href="knowledge.html">Encyclopedia</a>
         <a href="principles.html">Principles</a>
         <a href="competition.html">Compete</a>
+        <a href="gameplan.html">Game Plan</a>
         <a href="journal.html">Journal</a>
       </nav>
       <div class="footer-tagline">Rooted in Myanmar · Built for the World · Alpha</div>
@@ -555,7 +565,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
 // core entries in knowledge.html plus the encyclopedia entries.
 Promise.all(['knowledge.html', 'encyclopedia.js'].map(u => fetch(u).then(r => r.ok ? r.text() : Promise.reject())))
   .then(([html, ency]) => {
-    const n = (html.match(/\bid:"/g) || []).length + (ency.match(/"cat":"/g) || []).length;
+    const n = (html.match(/\bid:"/g) || []).length + (ency.match(/"entries":\[.*?\],"core"/s) || [""])[0].split('"cat":"').length - 1;
     if (n) document.getElementById('techCount').textContent = n;
   })
   .catch(() => {});

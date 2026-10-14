@@ -35,7 +35,7 @@ async function newTab() {
 const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i.value=${JSON.stringify(q)};i.dispatchEvent(new Event('input'))})()`;
 
 (async () => {
-  const PAGES = ['index.html', 'chinthe-guardian-matrix.html', 'competition.html', 'knowledge.html', 'principles.html', 'journal.html'];
+  const PAGES = ['index.html', 'chinthe-guardian-matrix.html', 'competition.html', 'knowledge.html', 'principles.html', 'journal.html', 'gameplan.html'];
 
   // 1. Every page at 360 / 390 / 1280: no JS errors, no overflow, search button visible, page not hidden
   for (const [w, h, mob, tag] of [[360, 740, true, 'm360'], [390, 844, true, 'm390'], [1280, 800, false, 'd1280']]) {
@@ -216,7 +216,8 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
     'competition.html':             ['.app-nav', '.app-list', '.app-detail'],
     'knowledge.html':               ['.app-nav', '#kbMid', '#kbPanel'],
     'principles.html':              ['.app-nav', '.app-list', '.app-detail'],
-    'journal.html':                 ['.app-nav', '.app-list', '.app-detail']
+    'journal.html':                 ['.app-nav', '.app-list', '.app-detail'],
+    'gameplan.html':                ['.app-nav', '.app-list', '.app-detail']
   };
   const widths = {}, mids = {};
   for (const [p, [l, m, r]] of Object.entries(FRAME)) {
@@ -272,10 +273,10 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   await d.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'light' }] });
   ok('System mode follows the device: light', await d.ev(`getComputedStyle(document.body).backgroundColor==='rgb(245, 243, 238)'`));
   await d.send('Emulation.setEmulatedMedia', { features: [] });
-  const raw = await d.ev(`Promise.all(['index.html','chinthe-guardian-matrix.html','competition.html','knowledge.html','principles.html','journal.html'].map(f=>fetch(f).then(r=>r.text()).then(t=>[f,((t.match(/<style>[\\s\\S]*?<\\/style>/g)||[]).join('').replace(/\\.philosophy\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy::before\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy-mark\\{[\\s\\S]*?\\}/,'').match(/#[0-9a-fA-F]{6}\\b|rgba?\\(/g)||[]).length])))`);
+  const raw = await d.ev(`Promise.all(['index.html','chinthe-guardian-matrix.html','competition.html','knowledge.html','principles.html','journal.html','gameplan.html'].map(f=>fetch(f).then(r=>r.text()).then(t=>[f,((t.match(/<style>[\\s\\S]*?<\\/style>/g)||[]).join('').replace(/\\.philosophy\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy::before\\{[\\s\\S]*?\\}/,'').replace(/\\.philosophy-mark\\{[\\s\\S]*?\\}/,'').match(/#[0-9a-fA-F]{6}\\b|rgba?\\(/g)||[]).length])))`);
   ok('No hard-coded colours left in page styles (brand band excepted)', raw.every(([, n]) => n === 0), JSON.stringify(raw));
   await d.go(BASE + 'index.html');
-  ok('Homepage: 6 module cards incl. Compete', await d.ev(`document.querySelectorAll('#inside .mod').length===6 && !!document.querySelector('.mod[href="competition.html"]')`));
+  ok('Homepage: 7 module cards incl. Compete and Game Plan', await d.ev(`document.querySelectorAll('#inside .mod').length===7 && !!document.querySelector('.mod[href="competition.html"]') && !!document.querySelector('.mod[href="gameplan.html"]')`));
   ok('Homepage is a full-width brand page: says what CHINTHE is, who it is for, and its values', await d.ev(`!document.querySelector('.app-shell') && /training system for grapplers/.test(document.querySelector('.hero-sub').textContent) && document.querySelectorAll('#who .who-card').length===6 && document.querySelectorAll('#values .value').length===4`));
   ok('Homepage: progress strip hidden for first-time visitors', await d.ev(`document.getElementById('welcome').hidden === !(localStorage.getItem('chinthe_journal_v1')||localStorage.getItem('chinthe_mastery_v1'))`));
   await d.go(BASE + 'competition.html');
@@ -286,7 +287,7 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
 
   const t2 = await newTab(); await t2.vp(390, 844, true);
   // 9. No floating overlays; knowledge grouping; focus view
-  for (const p of ['knowledge.html', 'principles.html', 'journal.html', 'competition.html']) {
+  for (const p of ['knowledge.html', 'principles.html', 'journal.html', 'competition.html', 'gameplan.html']) {
     await t2.go(BASE + p);
     ok(`${p}: no floating progress overlay`, await t2.ev(`!document.querySelector('.learn-next-nudge') && [...document.querySelectorAll('body *')].filter(e=>getComputedStyle(e).position==='fixed' && e.offsetParent!==null && !e.closest('.site-nav')).length===0`));
   }
@@ -398,6 +399,41 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   ok('Every related link resolves', relBad.length === 0, JSON.stringify(relBad));
   await t2.go(BASE + 'principles.html#glossary'); await sleep(300);
   ok('Glossary reference section opens with 30+ terms', await t2.ev(`document.querySelectorAll('.gl-row').length>=30`));
+
+  // 11. Game plan builder
+  await t2.go(BASE + 'gameplan.html');
+  await t2.ev(`localStorage.removeItem('chinthe_gameplan_v1');localStorage.removeItem('chinthe_gameplan_last');window.alert=m=>{window.__alerts=(window.__alerts||[]).concat(m)};window.confirm=()=>true`);
+  await t2.go(BASE + 'gameplan.html');
+  ok('Game plan: first visit opens the new-plan form', await t2.ev(`!!document.getElementById('npName') && document.querySelectorAll('.disc-pick button').length===7`));
+  ok('Game plan: every stage of every discipline offers 4+ encyclopedia techniques', await t2.ev(`DISC.every(d=>d.stages.every(s=>poolFor(d,s).length>=4))`), await t2.ev(`JSON.stringify(DISC.flatMap(d=>d.stages.map(s=>d.id+':'+s.key+'='+poolFor(d,s).length)))`));
+  ok('Game plan: the picker covers the core entries too (kimura, knee slice)', await t2.ev(`ALL.length>=380 && !!findTech('Kimura') && !!findTech('Knee Slice')`), await t2.ev('ALL.length'));
+  await t2.ev(`(()=>{document.getElementById('npName').value='Spring open';[...document.querySelectorAll('.disc-pick button')].find(b=>b.dataset.disc==='nogi').click();document.getElementById('npCreate').click()})()`);
+  ok('Game plan: creating a plan opens stage 1', await t2.ev(`loadPlans().length===1 && loadPlans()[0].name==='Spring open' && document.getElementById('dTitle').textContent==='Standing' && document.querySelectorAll('#stageList .list-card').length===8`));
+  await t2.ev(`(()=>{const i=document.getElementById('f-a');i.value='Double Leg';i.dispatchEvent(new Event('input'))})()`);
+  ok('Game plan: Plan A saves as you type and previews the encyclopedia entry', await t2.ev(`loadPlans()[0].stages.stand.a==='Double Leg' && document.querySelector('.pick-preview a').getAttribute('href')==='knowledge.html#double_leg'`));
+  await t2.ev(`document.querySelector('.suggest button').click()`);
+  ok('Game plan: a quick pick fills the empty Plan B', await t2.ev(`!!loadPlans()[0].stages.stand.b && document.getElementById('f-b').value===loadPlans()[0].stages.stand.b`));
+  await t2.ev(`(()=>{const n=document.getElementById('f-note');n.value='If they sprawl, I snap down.';n.dispatchEvent(new Event('input'))})()`);
+  await t2.ev(`document.getElementById('nextStage').click()`);
+  ok('Game plan: Next moves to the following stage', await t2.ev(`document.getElementById('dTitle').textContent==='Your guard'`));
+  await t2.ev(`(()=>{const i=document.getElementById('f-a');i.value='<img src=x onerror=alert(1)>';i.dispatchEvent(new Event('input'))})()`);
+  ok('Game plan: a move not in the encyclopedia is kept, shown as text', await t2.ev(`loadPlans()[0].stages.guard.a.startsWith('<img') && !document.querySelector('#stageList img') && document.querySelector('.pick-preview').textContent.includes('Your own move')`));
+  await t2.ev(`document.querySelector('#stageList .list-card').click()`);
+  ok('Game plan: overview lists every stage and names the gaps', await t2.ev(`document.querySelectorAll('.plan-flow li').length===7 && document.querySelector('.gap-callout').textContent.includes('Passing') && !document.querySelector('.gap-callout').textContent.includes('Standing')`));
+  ok('Game plan: overview links picks to the encyclopedia and builds the drill list', await t2.ev(`document.querySelector('.plan-flow a').getAttribute('href')==='knowledge.html#double_leg' && document.querySelectorAll('.drill-list li').length===1 && document.querySelector('.pf-note').textContent.includes('snap down')`));
+  await t2.go(BASE + 'gameplan.html');
+  ok('Game plan: reopens the last plan after a reload', await t2.ev(`document.getElementById('listTitle').textContent==='Spring open'`));
+  await t2.ev(`window.alert=m=>{window.__alerts=(window.__alerts||[]).concat(m)};window.confirm=()=>true;HTMLAnchorElement.prototype.click=function(){window.__dl=(window.__dl||[]).concat(this.download)}`);
+  await t2.ev(`exportPlan(loadPlans()[0].id)`);
+  ok('Game plan: exports as a text file', await t2.ev(`window.__dl.at(-1)==='chinthe-gameplan-spring-open.md' && planMarkdown(loadPlans()[0]).includes('**Plan A:** Double Leg')`));
+  const gpBackup = await t2.ev(`JSON.stringify({app:'chinthe-gameplan',version:1,plans:loadPlans().concat([{id:'g2',name:'Judo nationals',disc:'judo',stages:{throw:{a:'Uchi-Mata',b:7,note:'x'},bogus:{a:'y'}}},{id:'g3',name:'',disc:'nogi'},{id:'g4',name:'Bad',disc:'karate'}])})`);
+  await t2.ev(restore(gpBackup)); await sleep(400);
+  ok('Game plan: restore adds new plans, skips duplicates and invalid ones, cleans fields', await t2.ev(`(()=>{const p=loadPlans();const j=p.find(x=>x.id==='g2');return p.length===2 && j && j.stages.throw.a==='Uchi-Mata' && j.stages.throw.b==='' && !j.stages.bogus})()`), await t2.ev(`JSON.stringify(loadPlans().map(p=>p.id))+' '+JSON.stringify(window.__alerts)`));
+  ok('Game plan: restored plan opens with judo stages', await t2.ev(`document.getElementById('listEyebrow').textContent==='Judo' && document.querySelectorAll('#stageList .list-card').length===7`));
+  await t2.ev(`document.querySelector('.btn-danger').click()`);
+  ok('Game plan: delete removes the plan and opens the next one', await t2.ev(`loadPlans().length===1 && document.getElementById('listTitle').textContent==='Spring open'`));
+  await t2.shot('gameplan-mobile');
+  await t2.ev(`localStorage.removeItem('chinthe_gameplan_v1');localStorage.removeItem('chinthe_gameplan_last')`);
   await t2.close();
 
   fs.writeFileSync(OUT + '/results.json', JSON.stringify(results, null, 1));
