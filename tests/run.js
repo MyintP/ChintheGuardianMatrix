@@ -171,6 +171,66 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   ok('"Later" snoozes across reloads', await t.ev(`document.getElementById('backupReminder').hidden`));
   await t.shot('journal-reminder');
 
+  // 8b2. Keeping journal data safe on iOS: persist on first save, stale-backup prompt, Home Screen tip
+  await t.ev(`localStorage.removeItem('chinthe_journal_backup_v1');localStorage.removeItem('chinthe_journal_v1')`);
+  await t.go(BASE + 'journal.html');
+  ok('Journal: does not ask for persistent storage on page load', await t.ev(`!JSON.parse(localStorage.getItem('chinthe_journal_backup_v1')||'{}').persist`));
+  await t.ev(`window.__persistCalls=0;navigator.storage.persist=()=>{window.__persistCalls++;return Promise.resolve(true)}`);
+  await t.ev(`(()=>{document.getElementById('fTitle').value='First roll';saveSession();})()`); await sleep(150);
+  ok('Journal: first save asks for persistent storage and records the answer', await t.ev(`(()=>{const p=JSON.parse(localStorage.getItem('chinthe_journal_backup_v1')).persist;return window.__persistCalls===1 && p.result==='granted' && !!p.at})()`), await t.ev(`localStorage.getItem('chinthe_journal_backup_v1')`));
+  await t.ev(`(()=>{document.getElementById('fTitle').value='Second roll';saveSession();})()`); await sleep(150);
+  ok('Journal: later saves do not ask again', await t.ev(`window.__persistCalls===1`));
+  await t.ev(`localStorage.removeItem('chinthe_journal_backup_v1');window.__persistCalls=0;navigator.storage.persist=()=>{window.__persistCalls++;return Promise.resolve(false)};document.getElementById('fTitle').value='Third roll';saveSession();`); await sleep(150);
+  ok('Journal: a refusal is recorded too', await t.ev(`JSON.parse(localStorage.getItem('chinthe_journal_backup_v1')).persist.result==='denied'`));
+  // Stale-backup prompt: 5+ entries and no backup in 14+ days, even when every entry is in that backup
+  const seed = (n, daysAgo) => `(()=>{const s=[];for(let i=0;i<${n};i++)s.push({id:'s'+i,date:'2026-09-0'+(i%9+1),type:'drilling',title:'Roll '+i,techniques:[],worked:'',needs:'',drill:'',notes:'',timestamp:'2026-09-01T10:00:00Z'});
+    localStorage.setItem('chinthe_journal_v1',JSON.stringify(s));
+    localStorage.setItem('chinthe_journal_backup_v1',JSON.stringify(${daysAgo === null ? '{}' : `{at:new Date(Date.now()-${daysAgo}*864e5).toISOString(),ids:s.map(x=>x.id)}`}));})()`;
+  const reminderShown = `!document.getElementById('backupReminder').hidden`;
+  await t.ev(seed(5, 15)); await t.go(BASE + 'journal.html');
+  ok('Journal: 5 entries, last backup 15 days ago (all in it): "Back up your journal" shows', await t.ev(`${reminderShown} && document.getElementById('brTitle').textContent==='Back up your journal' && document.getElementById('brSub').textContent.includes('15 days ago')`), await t.ev(`document.getElementById('brTitle').textContent+' / '+document.getElementById('brSub').textContent`));
+  ok('Journal: the prompt sits at the top of the page, with the backup button', await t.ev(`!!document.querySelector('.app-nav-head #backupReminder #brBackup') && document.getElementById('backupReminder').getBoundingClientRect().top < document.getElementById('formWrap').getBoundingClientRect().top`));
+  await t.ev(`HTMLAnchorElement.prototype.click=function(){window.__dl=(window.__dl||[]).concat(this.download)}`);
+  await t.ev(`document.getElementById('brBackup').click()`);
+  ok('Journal: the prompt links to the existing backup, which clears it', await t.ev(`/chinthe-journal-backup-/.test((window.__dl||[]).at(-1)) && document.getElementById('backupReminder').hidden`));
+  await t.ev(seed(5, 13)); await t.go(BASE + 'journal.html');
+  ok('Journal: 5 entries backed up 13 days ago: no prompt', await t.ev(`!(${reminderShown})`));
+  await t.ev(seed(4, 20)); await t.go(BASE + 'journal.html');
+  ok('Journal: 4 entries backed up 20 days ago: no prompt', await t.ev(`!(${reminderShown})`));
+  await t.ev(seed(5, null)); await t.go(BASE + 'journal.html');
+  ok('Journal: 5 entries never backed up: prompt shows', await t.ev(reminderShown));
+  await t.ev(`document.getElementById('brLater').click()`);
+  await t.go(BASE + 'journal.html');
+  ok('Journal: the prompt is dismissible and stays dismissed', await t.ev(`!(${reminderShown}) && JSON.parse(localStorage.getItem('chinthe_journal_backup_v1')).snoozeUntil > Date.now()`));
+  // Home Screen tip: the rule itself, for each kind of device
+  const SAFARI_IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1';
+  const tipRule = await t.ev(`(()=>{const n=(ua,extra)=>Object.assign({userAgent:ua,maxTouchPoints:5},extra||{});return {
+    iphone: needsInstallTip(n(${JSON.stringify(SAFARI_IPHONE)})),
+    ipad: needsInstallTip(n('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15')),
+    installed: needsInstallTip(n(${JSON.stringify(SAFARI_IPHONE)},{standalone:true})),
+    chromeIOS: needsInstallTip(n('Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/138.0 Mobile/15E148 Safari/604.1')),
+    mac: needsInstallTip(n('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15',{maxTouchPoints:0})),
+    android: needsInstallTip(n('Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0 Mobile Safari/537.36')),
+    here: needsInstallTip()}})()`);
+  ok('Journal: Home Screen tip only for iPhone/iPad Safari that is not installed', tipRule.iphone && tipRule.ipad && !tipRule.installed && !tipRule.chromeIOS && !tipRule.mac && !tipRule.android && !tipRule.here, JSON.stringify(tipRule));
+  ok('Journal: no Home Screen tip in this (non-iOS) browser', await t.ev(`document.getElementById('installTip').hidden`));
+  {
+    const ios = await newTab(); await ios.vp(390, 844, true);
+    await ios.send('Emulation.setUserAgentOverride', { userAgent: SAFARI_IPHONE, platform: 'iPhone' });
+    await ios.go(BASE + 'journal.html');
+    await ios.ev(`(()=>{const st=JSON.parse(localStorage.getItem('chinthe_journal_backup_v1')||'{}');delete st.installTip;localStorage.setItem('chinthe_journal_backup_v1',JSON.stringify(st))})()`);
+    await ios.go(BASE + 'journal.html');
+    ok('Journal (iPhone Safari): the Home Screen tip shows, with the exact wording', await ios.ev(`!document.getElementById('installTip').hidden && document.querySelector('#installTip b').textContent==='Add to Home Screen to keep your journal safe.'`));
+    await ios.shot('journal-ios-tip');
+    await ios.ev(`document.getElementById('installTipClose').click()`);
+    ok('Journal (iPhone Safari): "Got it" dismisses it', await ios.ev(`document.getElementById('installTip').hidden`));
+    await ios.go(BASE + 'journal.html');
+    ok('Journal (iPhone Safari): the tip is shown only once', await ios.ev(`document.getElementById('installTip').hidden && !!JSON.parse(localStorage.getItem('chinthe_journal_backup_v1')).installTip`));
+    await ios.close();
+  }
+  ok('Journal: existing storage keys unchanged', await t.ev(`['chinthe_journal_v1','chinthe_journal_backup_v1'].every(k=>localStorage.getItem(k)!==null) && Object.keys(localStorage).filter(k=>k.startsWith('chinthe_journal')).sort().join()==='chinthe_journal_backup_v1,chinthe_journal_v1'`), await t.ev(`Object.keys(localStorage).join()`));
+  await t.ev(`localStorage.removeItem('chinthe_journal_v1');localStorage.removeItem('chinthe_journal_backup_v1')`);
+
   // 8c. Matrix decision panel + layout
   await t.go(BASE + 'chinthe-guardian-matrix.html#guard_closed'); await sleep(600);
   ok('Panel lists every option from the node', await t.ev(`[...document.querySelectorAll('#detailCard [data-go]')].map(b=>b.dataset.go).join()===NODES.guard_closed.children.join()`));

@@ -321,6 +321,33 @@ New `tests/qa-live.js` runs every page on 10 devices (iPhone SE 320 to 1920 desk
 
 **Not covered:** real Safari/WebKit and real hardware. Every run is Chrome with device emulation. iOS storage eviction and real touch gestures still need a person on an iPhone.
 
+#### Pass 21 — Keeping the journal safe on iOS
+iOS Safari can clear a website's storage, and the journal lives only in that storage. Three safeguards were added, with no new dependencies and no new storage keys. The extra fields live in the existing `chinthe_journal_backup_v1` object.
+- **Persistent storage on first save:** `navigator.storage.persist()` used to run on every page load, and its answer was ignored. It now runs on the first save, because Safari needs a user action before it will grant it. The answer is recorded as `persist: {result: granted | denied | unsupported | error, at}` and the question is asked once.
+- **"Back up your journal" prompt:** it now also appears when there are 5+ entries and no backup in 14+ days (or never), even if every entry is in the last backup. The existing rules are kept: 3+ never backed up, 5+ not in the last backup, or any new entry and 14+ days.
+  - The prompt moved from the bottom of the phone layout to the top of the Journal, under "New session".
+  - "Back up now" runs the existing backup.
+  - "Later" dismisses it for 3 days.
+- **One-time Home Screen tip:** "Add to Home Screen to keep your journal safe. Tap Share, then 'Add to Home Screen'."
+  - It shows only in iPhone and iPad Safari when the site isn't running from the Home Screen (`navigator.standalone` or `display-mode: standalone`).
+  - iPadOS is detected by its Mac user agent plus touch points.
+  - Chrome, Firefox, Edge, Opera and Google on iOS are excluded.
+  - It is shown once (recorded as `installTip`), and "Got it" hides it.
+- 17 new checks:
+  - No storage request on page load. The first save asks and records. Later saves don't ask. A refusal is recorded.
+  - The prompt at 15 days with 5 entries, its position at the top, and its backup button. No prompt at 13 days or with 4 entries. A prompt when never backed up. Dismissal persists.
+  - The tip rule for iPhone, iPad, installed, Chrome on iOS, Mac and Android, then the real tip in an iPhone Safari tab: wording, "Got it", shown once.
+  - Storage keys unchanged.
+- **Verified:**
+  - Main suite: 291/291.
+  - 10-device walkthrough: 388/388.
+  - 8-device check: clean.
+  - Accessibility: clean in both themes.
+  - All 135 Matrix nodes framed.
+  - Content audit: 0 defects.
+  - Service worker and offline: 5/5.
+- SW v36.
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.

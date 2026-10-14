@@ -105,7 +105,16 @@ body{padding-bottom:0;}
 .session-view .session-field-text{font-size:16px;line-height:1.65;}
 .session-view .session-actions{margin-top:22px;}
 .aside-actions{display:flex;flex-wrap:wrap;gap:6px;}
-.backup-reminder{margin:0;}
+.backup-reminder{margin:0;padding:12px 14px;gap:10px 12px;}
+.backup-reminder .br-actions .btn{min-height:40px;padding:8px 14px;font-size:14px;}
+.br-title{font-size:15px;}
+.br-sub{font-size:13.5px;}
+/* One-time tip for iPhone and iPad Safari when the site isn't on the Home Screen */
+.install-tip{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid var(--line-strong);border-radius:var(--radius);background:var(--surface-2);}
+.install-tip[hidden]{display:none;}
+.install-tip p{font-size:14px;line-height:1.5;color:var(--stone-dim);margin:0;}
+.install-tip p b{display:block;color:var(--stone);font-weight:600;margin-bottom:2px;}
+.install-tip .btn{min-height:40px;padding:8px 12px;flex-shrink:0;}
 .mobile-only{display:block;}
 a.session-tag-link{color:var(--gold);text-decoration:none;border-color:color-mix(in srgb, var(--gold) 40%, transparent);}
 a.session-tag-link:hover{text-decoration:underline;}
@@ -142,6 +151,20 @@ a.session-tag-link:hover{text-decoration:underline;}
       <h1 class="app-title">Journal</h1>
       <p class="app-head-sub" style="font-size:13.5px">Log every session. Stored privately on this device.</p>
       <button type="button" class="btn btn-primary new-session-btn" id="newSessionBtn">+ New session</button>
+      <div class="backup-reminder" id="backupReminder" role="status" hidden>
+        <div class="br-text">
+          <div class="br-title" id="brTitle"></div>
+          <div class="br-sub" id="brSub"></div>
+        </div>
+        <div class="br-actions">
+          <button type="button" class="btn btn-primary" id="brBackup">⤓ Back up now</button>
+          <button type="button" class="btn btn-ghost" id="brLater">Later</button>
+        </div>
+      </div>
+      <div class="install-tip" id="installTip" role="note" hidden>
+        <p><b>Add to Home Screen to keep your journal safe.</b>Tap Share, then "Add to Home Screen".</p>
+        <button type="button" class="btn btn-ghost" id="installTipClose">Got it</button>
+      </div>
     <select class="app-select" id="jFilterSelect" aria-label="Filter sessions"></select>
     </div>
     <nav class="app-nav-list" id="jFilters" aria-label="Filter sessions"></nav>
@@ -156,16 +179,6 @@ a.session-tag-link:hover{text-decoration:underline;}
       </div>
         <div class="aside-block">
         <div class="aside-title">Backup</div>
-        <div class="backup-reminder" id="backupReminder" role="status" hidden>
-      <div class="br-text">
-        <div class="br-title" id="brTitle"></div>
-        <div class="br-sub" id="brSub"></div>
-      </div>
-      <div class="br-actions">
-        <button type="button" class="btn btn-primary" id="brBackup">⤓ Back up now</button>
-        <button type="button" class="btn btn-ghost" id="brLater">Later</button>
-      </div>
-    </div>
         <p class="aside-text" style="margin:10px 0">Stored only on this device · <span id="lastBackupText">Never backed up</span></p>
         <div class="aside-actions">
           <button class="btn btn-ghost" type="button" onclick="backupJSON()" title="Full backup file you can restore from">⤓ Backup</button>
@@ -259,8 +272,17 @@ function localISODate(d){
   return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 
-// Ask the browser not to evict journal data under storage pressure
-if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+// Ask the browser not to evict journal data. This runs on the first save (a user
+// action, which Safari needs before it will grant it) and the answer is kept in
+// the backup state, so it is asked once.
+function ensurePersist(){
+  if(loadBackupState().persist)return Promise.resolve();
+  const at=new Date().toISOString();
+  if(!(navigator.storage&&navigator.storage.persist)){saveBackupState({persist:{result:"unsupported",at}});return Promise.resolve();}
+  return navigator.storage.persist().then(
+    ok=>saveBackupState({persist:{result:ok?"granted":"denied",at}}),
+    ()=>saveBackupState({persist:{result:"error",at}}));
+}
 
 document.getElementById("fDate").value = localISODate();
 
@@ -328,6 +350,7 @@ function saveSession(){
   const sessions=loadSessions();
   sessions.unshift(session);
   if(!saveSessions(sessions))return; // keep the form filled so nothing is lost
+  ensurePersist();
   clearForm();
   const fb=document.getElementById("saveFeedback");
   fb.style.display="flex";
@@ -533,8 +556,9 @@ function backupJSON(){
 }
 
 // ── Backup reminder ──────────────────────────────────────────
-// Nags only when there's something to lose: 3+ sessions never backed up,
-// 5+ new sessions since the last backup, or any new session and 14+ days.
+// Nags when there's something to lose: 3+ sessions never backed up, 5+ new
+// sessions since the last backup, any new session and 14+ days, or 5+ entries
+// with no backup in 14+ days (iOS can clear storage the owner never sees).
 // "Later" snoozes for 3 days.
 const BACKUP_KEY="chinthe_journal_backup_v1";
 const DAY=864e5;
@@ -550,7 +574,8 @@ function backupStatus(){
   let due=false;
   if(days===null)due=unsaved>=3;
   else due=unsaved>=5||(unsaved>0&&days>=14);
-  return {unsaved,days,due:due&&!snoozed,total:sessions.length};
+  const stale=sessions.length>=5&&(days===null||days>=14);
+  return {unsaved,days,due:(due||stale)&&!snoozed,total:sessions.length};
 }
 function plural(n,w){return n+" "+w+(n===1?"":"s");}
 function renderBackupReminder(){
@@ -562,12 +587,31 @@ function renderBackupReminder(){
   box.hidden=!b.due;
   if(!b.due)return;
   document.getElementById("brTitle").textContent=
-    b.days===null?"Back up your journal":plural(b.unsaved,"session")+" not backed up";
+    b.days===null||!b.unsaved?"Back up your journal":plural(b.unsaved,"session")+" not backed up";
   document.getElementById("brSub").textContent=
-    (b.days===null?"You've logged "+plural(b.unsaved,"session")+" and none are backed up. ":"Last backup was "+plural(b.days,"day")+" ago. ")+
+    (b.days===null?"You've logged "+plural(b.unsaved,"session")+" and none are backed up. ":"Last backup was "+plural(b.days,"day")+" ago"+(b.unsaved?". ":", and backups are your only copy. "))+
     "They live only in this browser — clearing site data or an iOS storage purge would erase them.";
 }
 document.getElementById("brBackup").addEventListener("click",backupJSON);
+
+// iPhone and iPad Safari only, and only when the site isn't running from the Home
+// Screen. iPadOS reports itself as a Mac, so touch points tell them apart. Other
+// iOS browsers (Chrome, Firefox, Edge, Opera, Google) are left out. Shown once.
+function needsInstallTip(nav){
+  nav=nav||navigator;
+  const ua=nav.userAgent||"";
+  const iOS=/iPad|iPhone|iPod/.test(ua)||(/Macintosh/.test(ua)&&nav.maxTouchPoints>1);
+  const safari=/Safari\//.test(ua)&&!/CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(ua);
+  const standalone=nav.standalone===true||!!(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);
+  return iOS&&safari&&!standalone;
+}
+function showInstallTip(){
+  const tip=document.getElementById("installTip");
+  if(loadBackupState().installTip||!needsInstallTip())return;
+  tip.hidden=false;
+  saveBackupState({installTip:new Date().toISOString()});   // one time: never shown again
+}
+document.getElementById("installTipClose").addEventListener("click",()=>{document.getElementById("installTip").hidden=true;});
 document.getElementById("brLater").addEventListener("click",()=>{
   saveBackupState({snoozeUntil:Date.now()+3*DAY});
   renderBackupReminder();
@@ -613,6 +657,7 @@ document.getElementById("restoreInput").addEventListener("change",e=>{
 });
 
 renderAll();
+showInstallTip();
 // Encyclopedia links: autocomplete names, link logged techniques, and accept
 // journal.html?tech=<name> from the home page's "Log it" button.
 const plainName = n => n.replace(/\s*\(.*?\)/g, "").trim().toLowerCase();
