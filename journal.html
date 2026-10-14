@@ -107,6 +107,8 @@ body{padding-bottom:0;}
 .aside-actions{display:flex;flex-wrap:wrap;gap:6px;}
 .backup-reminder{margin:0;}
 .mobile-only{display:block;}
+a.session-tag-link{color:var(--gold);text-decoration:none;border-color:color-mix(in srgb, var(--gold) 40%, transparent);}
+a.session-tag-link:hover{text-decoration:underline;}
 .list-card .session-badge{padding:2px 7px;}
 .app-nav-foot .stat-tile b{font-size:22px;}
 .app-nav-foot .aside-block{padding:12px 0;}
@@ -228,7 +230,8 @@ body{padding-bottom:0;}
       <div class="form-group full">
         <label class="form-label" for="techTagsInput">Techniques Drilled / Used</label>
         <div class="tags-input-wrap" id="techTagsWrap">
-          <input class="tags-text-input" id="techTagsInput" placeholder="Type technique, press Enter…">
+          <input class="tags-text-input" id="techTagsInput" placeholder="Type technique, press Enter…" list="techList" autocomplete="off">
+          <datalist id="techList"></datalist>
         </div>
       </div>
       <div class="form-group full">
@@ -392,7 +395,11 @@ function showSession(id){
     const f = el("div","session-field");
     f.appendChild(el("div","session-field-label","Techniques"));
     const tags = el("div","session-tags");
-    s.techniques.forEach(t=>tags.appendChild(el("span","session-tag",t)));
+    s.techniques.forEach(t=>{
+      const hit = findTechnique(t);
+      if (hit){ const a = el("a","session-tag session-tag-link",t); a.href = hit.url; a.title = "Open in the encyclopedia"; tags.appendChild(a); }
+      else tags.appendChild(el("span","session-tag",t));
+    });
     f.appendChild(tags); v.appendChild(f);
   }
   field("What worked", s.worked);
@@ -621,6 +628,31 @@ document.getElementById("restoreInput").addEventListener("change",e=>{
 });
 
 renderAll();
+// Encyclopedia links: autocomplete names, link logged techniques, and accept
+// journal.html?tech=<name> from the home page's "Log it" button.
+const plainName = n => n.replace(/\s*\(.*?\)/g, "").trim().toLowerCase();
+function findTechnique(t){
+  const list = window.chintheTechniques || [], q = (t || "").trim().toLowerCase();
+  return list.find(x => x.name.toLowerCase() === q) || list.find(x => plainName(x.name) === q) || null;
+}
+function connectTechniques(){
+  const dl = document.getElementById("techList");
+  if (!window.chintheTechniques || dl.childElementCount) return;
+  window.chintheTechniques.forEach(x=>{ const o = document.createElement("option"); o.value = x.name; dl.appendChild(o); });
+  if (viewingId) showSession(viewingId);
+}
+document.addEventListener("chinthe:techniques", connectTechniques);
+connectTechniques();
+techInput.addEventListener("change", ()=>{
+  if (findTechnique(techInput.value)) { addTag(techInput.value.trim()); techInput.value = ""; }
+});
+(function(){
+  const tech = new URLSearchParams(location.search).get("tech");
+  if (!tech) return;
+  showNew();
+  addTag(tech.slice(0, 80));
+  document.getElementById("fTitle").value = document.getElementById("fTitle").value || tech.slice(0, 80);
+})();
 </script>
 <script src="chinthe.js"></script>
 </body>

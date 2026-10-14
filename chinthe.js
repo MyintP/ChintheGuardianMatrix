@@ -7,6 +7,18 @@
   5. Node counts: fills [data-node-count] from the search index.
   Page transitions are CSS-only (@view-transition in chinthe.css).
 */
+// Feedback destination — change this one line to use a form or email instead.
+var FEEDBACK_URL = "https://github.com/MyintP/ChintheGuardianMatrix/issues/new";
+window.chintheFeedback = function (title, body) {
+  var page = (location.pathname.split("/").pop() || "index.html") + location.hash;
+  var text = (body ? body + "\n\n" : "") + "Page: " + page;
+  if (FEEDBACK_URL.indexOf("mailto:") === 0)
+    return FEEDBACK_URL + "?subject=" + encodeURIComponent(title) + "&body=" + encodeURIComponent(text);
+  if (FEEDBACK_URL.indexOf("github.com") > -1)
+    return FEEDBACK_URL + "?title=" + encodeURIComponent(title) + "&body=" + encodeURIComponent(text);
+  return FEEDBACK_URL;
+};
+
 (function () {
   // ── 1. Mobile Nav ────────────────────────────────────────────
   var nav    = document.querySelector(".site-nav");
@@ -64,6 +76,17 @@
     });
     inner.insertBefore(themeBtn, searchBtn.nextSibling);
     applyTheme(currentTheme());
+
+    // Feedback: one tap from every page
+    var fb = document.createElement("a");
+    fb.className = "site-nav-theme site-nav-feedback";
+    fb.target = "_blank"; fb.rel = "noopener noreferrer";
+    fb.setAttribute("aria-label", "Send feedback");
+    fb.setAttribute("title", "Send feedback");
+    fb.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/></svg>';
+    fb.addEventListener("click", function () { fb.href = window.chintheFeedback("Feedback: " + document.title, "What happened, or what would make this better?"); });
+    fb.href = window.chintheFeedback("Feedback: " + document.title, "What happened, or what would make this better?");
+    inner.insertBefore(fb, themeBtn.nextSibling);
 
     var toggle = document.createElement("button");
     toggle.type = "button";
@@ -680,6 +703,9 @@
 
     return items;
   })();
+  // Every technique name and its encyclopedia link, for the journal and home page
+  window.chintheTechniques = IDX.filter(function (i) { return i.c === "T"; }).map(function (i) { return { name: i.t, url: i.u }; });
+  document.dispatchEvent(new Event("chinthe:techniques"));
 
   // Search modal
   var searchOverlay = null;

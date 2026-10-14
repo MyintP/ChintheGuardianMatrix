@@ -68,6 +68,29 @@ body { overflow-x: hidden; }
 .welcome-links { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
 .welcome-links .btn { padding: 9px 16px; }
 
+/* ── Today: technique of the day + weekly focus ── */
+.today { padding-top: 64px; padding-bottom: 64px; }
+.today-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px 32px; margin-bottom: 28px; }
+.disc-pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.disc-pick button { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--stone-dim); background: transparent; border: 1px solid var(--line-strong); border-radius: 999px; padding: 9px 14px; min-height: 40px; cursor: pointer; }
+.disc-pick button[aria-pressed="true"] { color: var(--on-accent); background: var(--gold); border-color: var(--gold); }
+.today-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 900px) { .today-grid { grid-template-columns: 1.2fr 1fr; } }
+.today-card { padding: 28px; border: 1px solid var(--line-strong); border-radius: 14px; background: var(--surface); display: flex; flex-direction: column; }
+.today-card .mod-tag { margin-bottom: 10px; }
+.today-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+.today-chip { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--stone-dim); border: 1px solid var(--line-strong); border-radius: 6px; padding: 3px 8px; }
+.today-name { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: 30px; line-height: 1.05; color: var(--stone); margin: 0; }
+.today-card p { font-size: 15.5px; line-height: 1.6; color: var(--stone-dim); margin: 0 0 14px; }
+.today-drill { border-left: 3px solid var(--gold); padding: 10px 14px; background: var(--bg); border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.55; color: var(--stone); margin: 0 0 18px; }
+.today-drill b { display: block; font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.today-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
+.today-actions .btn { padding: 10px 18px; }
+.week-list { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 8px; }
+.week-list a { display: block; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; color: var(--stone); text-decoration: none; background: var(--bg); }
+.week-list a:hover { border-color: var(--gold); }
+.week-list span { display: block; font-size: 13px; color: var(--stone-dim); margin-top: 2px; }
+
 /* ── Numbers ── */
 .stats { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .stat { padding: 30px 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -214,12 +237,28 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
   </div>
 </section>
 
+<section class="band today" id="today" aria-label="Today">
+  <div class="wrap-w">
+    <div class="today-head">
+      <div>
+        <div class="kicker">Today</div>
+        <h2 class="h2">Train something today.</h2>
+      </div>
+      <div class="disc-pick" role="group" aria-label="Your discipline" id="discPick"></div>
+    </div>
+    <div class="today-grid">
+      <article class="today-card" id="todayCard" aria-live="polite"></article>
+      <article class="today-card" id="weekCard" aria-live="polite"></article>
+    </div>
+  </div>
+</section>
+
 <div class="wrap-w">
   <div class="stats" aria-label="What's in CHINTHE">
     <div class="stat"><b data-node-count="{n}">135</b><span>Positions mapped</span></div>
     <div class="stat"><b id="techCount">393</b><span>Encyclopedia entries</span></div>
     <div class="stat"><b>12</b><span>Core principles</span></div>
-    <div class="stat"><b>3</b><span>Competition rulesets</span></div>
+    <div class="stat"><b>9</b><span>Rulesets, six sports</span></div>
   </div>
 </div>
 
@@ -256,7 +295,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
         <div class="mod-tag">Mat-side</div>
         <div class="mod-name">Compete</div>
         <p>Know the scoring and what to do when you're ahead, level or behind on the clock.</p>
-        <ul><li>ADCC, IBJJF and NAGA scoring</li><li>Tap-to-add score tracker</li><li>Clock strategy</li></ul>
+        <ul><li>BJJ, judo, wrestling, MMA, Muay Thai and Lethwei rules</li><li>A score tracker for each: points, waza-ari, round cards</li><li>What to do ahead, level or behind</li></ul>
         <span class="mod-go">Open Compete →</span>
       </a>
       <a class="mod" href="journal.html">
@@ -410,8 +449,89 @@ footer { border-top: 1px solid var(--line); padding: 40px 0 48px; }
   </div>
 </footer>
 
+<script src="encyclopedia.js"></script>
 <script src="chinthe.js"></script>
 <script>
+// Today: a technique of the day and a weekly focus for the chosen discipline.
+// Data comes from encyclopedia.js; the choice of discipline is remembered on this device.
+(function(){
+  const KB = window.CHINTHE_KB;
+  if (!KB) { document.getElementById("today").hidden = true; return; }
+  const DISC = [
+    { id:"all", name:"All", fmts:null },
+    { id:"bjj", name:"BJJ", fmts:["No-Gi","Gi","Gi & No-Gi"] },
+    { id:"wrestling", name:"Wrestling", fmts:["Wrestling"] },
+    { id:"judo", name:"Judo", fmts:["Judo"] },
+    { id:"mma", name:"MMA", fmts:["MMA"] },
+    { id:"muaythai", name:"Muay Thai", fmts:["Muay Thai"] },
+    { id:"lethwei", name:"Lethwei", fmts:["Lethwei"] }
+  ];
+  const FOCUS = {
+    bjj: [["closed","Closed Guard","Break posture, then sweep or submit."],["passing","Passing the Guard","Pin the legs, pass, settle the pin."],["half","Half Guard","Win the underhook from both sides."],["back","Back Control","Seatbelt, hooks, then the choke."],["legs","Leg Entanglements","Control the knee line before the heel."],["open","Butterfly, Seated & Open Guard","Stay connected, then off-balance."],["mount","Mount","Stay heavy, isolate an arm."],["gi_guard","Gi Guards & Grips","Grips first: spider, lasso, De La Riva."],["side","Side Control & North-South","Pin, advance or attack."],["transitions","Back Takes & Transitions","The moves between positions."]],
+    wrestling: [["standing","Takedowns & Clinch","Stance, ties, shots and finishes."],["wrestling_mat","Mat Work & Rides","Escape from the bottom, turn from the top."]],
+    judo: [["judo","Judo Throws","Grip, off-balance, throw."],["judo_ground","Pins & Ne-Waza","Hold-downs, turnovers and chokes."]],
+    mma: [["striking","Striking","Stance, punches, kicks and defence."],["mma","Cage & Ground","Wall work, getting up, top control."]],
+    muaythai: [["muay_thai","Muay Thai","Kicks, knees, elbows and the clinch."]],
+    lethwei: [["lethwei","Lethwei","Nine limbs, bare knuckle and the clinch."]]
+  };
+  const KEY = "chinthe_discipline";
+  let disc = "all";
+  try { const d = localStorage.getItem(KEY); if (DISC.some(x=>x.id===d)) disc = d; } catch(e){}
+  const now = new Date();
+  const day = Math.floor((now - now.getTimezoneOffset()*60000) / 86400000);   // local calendar day
+  const week = Math.floor((day + 3) / 7);                                      // changes each Monday
+  const usable = KB.entries.filter(e=>!(e.tags||[]).includes("Banned") && e.cat !== "concept");
+  const LVL = { F:"Fundamental", I:"Intermediate", A:"Advanced" };
+  const mk = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+
+  function pool(){ const d = DISC.find(x=>x.id===disc); return d.fmts ? usable.filter(e=>d.fmts.includes(e.meta.fmt)) : usable; }
+  function renderPick(){
+    const box = document.getElementById("discPick"); box.innerHTML = "";
+    DISC.forEach(d=>{
+      const b = mk("button", null, d.name); b.type = "button";
+      b.setAttribute("aria-pressed", String(d.id === disc));
+      b.addEventListener("click", ()=>{ disc = d.id; try { localStorage.setItem(KEY, disc); } catch(e){} render(); });
+      box.appendChild(b);
+    });
+  }
+  function renderToday(){
+    const list = pool(), card = document.getElementById("todayCard");
+    const e = list[(day * 37 + DISC.findIndex(x=>x.id===disc) * 11) % list.length];
+    card.innerHTML = "";
+    card.appendChild(mk("div", "mod-tag", "Technique of the day"));
+    card.appendChild(mk("h3", "today-name", e.name));
+    const meta = mk("div", "today-meta");
+    [e.meta.fmt, LVL[e.meta.lvl]].forEach(t=> meta.appendChild(mk("span", "today-chip", t)));
+    card.appendChild(meta);
+    card.appendChild(mk("p", null, e.tagline));
+    const drill = mk("div", "today-drill"); drill.appendChild(mk("b", null, "Drill it today")); drill.appendChild(document.createTextNode(e.drill));
+    card.appendChild(drill);
+    const acts = mk("div", "today-actions");
+    const open = mk("a", "btn btn-primary", "Open the breakdown →"); open.href = "knowledge.html#" + e.id;
+    const log = mk("a", "btn btn-secondary", "Log it"); log.href = "journal.html?tech=" + encodeURIComponent(e.name.replace(/\s*\(.*?\)/g, ""));
+    acts.appendChild(open); acts.appendChild(log); card.appendChild(acts);
+  }
+  function renderWeek(){
+    const lists = disc === "all" ? Object.values(FOCUS).flat() : FOCUS[disc];
+    const [gid, name, why] = lists[week % lists.length];
+    const fromGroup = KB.entries.filter(e=>e.groups.includes(gid) && e.cat !== "concept" && !(e.tags||[]).includes("Banned"));
+    const order = { F:0, I:1, A:2 };
+    const pick = fromGroup.slice().sort((a,b)=> order[a.meta.lvl]-order[b.meta.lvl]).slice(0, 3);
+    const card = document.getElementById("weekCard"); card.innerHTML = "";
+    card.appendChild(mk("div", "mod-tag", "This week's focus"));
+    card.appendChild(mk("h3", "today-name", name));
+    card.appendChild(mk("p", null, why + " Drill these three this week, then test them in positional sparring."));
+    const ul = mk("ul", "week-list");
+    pick.forEach(e=>{ const li = mk("li"); const a = mk("a", null, e.name); a.href = "knowledge.html#" + e.id; a.appendChild(mk("span", null, e.tagline)); li.appendChild(a); ul.appendChild(li); });
+    card.appendChild(ul);
+    const acts = mk("div", "today-actions");
+    const all = mk("a", "btn btn-secondary", "See the whole section →"); all.href = "knowledge.html#g:" + gid;
+    acts.appendChild(all); card.appendChild(acts);
+  }
+  function render(){ renderPick(); renderToday(); renderWeek(); }
+  render();
+})();
+
 // Returning athletes: show their progress strip (read-only view of the Matrix + Journal stores).
 (function(){
   const read = k => { try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } };

@@ -1592,7 +1592,8 @@ function panelHTML(t){
     </div>` : ""}
     ${inGroups.length ? `<div class="kb-block"><h3>Found in</h3><div class="kb-rel">${inGroups.map(g=>`<button type="button" data-goto="g:${g.id}">${g.name}</button>`).join("")}</div></div>` : ""}
     ${rel.length ? `<div class="kb-block"><h3>Related</h3><div class="kb-rel">${rel.map(r=>`<button type="button" data-open="${r.id}">${r.name}</button>`).join("")}</div></div>` : ""}
-    <div class="kb-block"><h3>Watch</h3><div class="kb-links"><a class="kb-link ext" href="${video}" target="_blank" rel="noopener noreferrer">Search videos: ${plain}</a></div></div>`;
+    <div class="kb-block"><h3>Watch</h3><div class="kb-links">${m.video ? `<a class="kb-link ext" href="${m.video}" target="_blank" rel="noopener noreferrer">Watch: coach's pick</a>` : ""}<a class="kb-link ext" href="${video}" target="_blank" rel="noopener noreferrer">Search videos: ${plain}</a></div></div>
+    <div class="kb-block"><h3>Spotted an error?</h3><div class="kb-links"><a class="kb-link ext kb-correction" href="#" data-entry="${plain}" target="_blank" rel="noopener noreferrer">Report a correction to this entry</a></div></div>`;
 }
 function placeholderHTML(){
   const g = view.startsWith("g:") && GROUPS.find(x=>"g:"+x.id===view);
@@ -1708,6 +1709,11 @@ document.getElementById("searchInput").addEventListener("input", e=>{
 });
 window.matchMedia("(min-width:1100px)").addEventListener("change", ()=>{ applyPanelMode(); updatePanelNav(); });
 
+// Corrections open the shared feedback channel with the entry named
+document.addEventListener("click", e=>{
+  const c = e.target.closest(".kb-correction");
+  if (c && window.chintheFeedback) c.href = window.chintheFeedback("Correction: " + c.dataset.entry, "What is wrong in this entry, and what should it say?");
+});
 renderNav();
 renderCards();
 applyPanelMode();
@@ -1716,6 +1722,7 @@ applyPanelMode();
 // move inside its main position group and opens its detail.
 function applyHash(){
   const id = decodeURIComponent(location.hash.replace(/^#/, ""));
+  if (id.startsWith("g:") && GROUPS.find(x=>"g:"+x.id===id)){ setView(id); return; }
   if(!id || !byId(id)) return;
   activeLvl = "all";
   document.querySelectorAll(".level-btn").forEach(b=>b.classList.toggle("active", b.dataset.lvl==="all"));

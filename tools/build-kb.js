@@ -56,6 +56,7 @@ for (const e of entries) {
   if (!(e.groups || []).length) errors.push(`${where}: no groups`);
   (e.groups || []).forEach(g => groupIds.has(g) || errors.push(`${where}: unknown group ${g}`));
   if (/<|>/.test(TEXT.map(k => e[k]).join('') + e.name)) errors.push(`${where}: markup in text`);
+  if (e.video && !/^https:\/\/(www\.youtube\.com\/watch\?v=|youtu\.be\/|vimeo\.com\/)[\w\-?=&]+$/.test(e.video)) errors.push(`${where}: video must be a YouTube or Vimeo link`);
 }
 for (const g of groups) {
   if (!allIds.has(g.anchor)) errors.push(`group ${g.id}: anchor ${g.anchor} not found`);
@@ -82,7 +83,7 @@ const out = {
   entries: entries.map(e => ({
     id: e.id, cat: e.cat, name: e.name, tagline: e.tagline, tags: e.tags || [],
     objective: e.objective, mechanics: e.mechanics, defense: e.defense, mistake: e.mistake, drill: e.drill,
-    groups: e.groups, meta: Object.fromEntries(Object.entries({ lvl: e.lvl, fmt: e.fmt, aka: e.aka && e.aka.length ? e.aka : undefined, pts: e.pts, rel: e.rel, node: e.node }).filter(([, v]) => v !== undefined)),
+    groups: e.groups, meta: Object.fromEntries(Object.entries({ lvl: e.lvl, fmt: e.fmt, aka: e.aka && e.aka.length ? e.aka : undefined, pts: e.pts, rel: e.rel, node: e.node, video: e.video }).filter(([, v]) => v !== undefined)),
   })),
 };
 fs.writeFileSync(path.join(ROOT, 'encyclopedia.js'),

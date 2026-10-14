@@ -190,7 +190,7 @@ KB.add(
   name:"Knee Strike", aka:["Straight Knee"], tags:["MMA","Knee","Clinch"], rel:["thai_clinch","flying_knee","cage_clinch"],
   tagline:"Drive your knee into their body or head from close range. A key clinch weapon.",
   objective:"Hit them with your knee in the clinch, against the cage or as they shoot for a takedown.",
-  mechanics:"From close range, drive your hips forward and lift your knee into their body or head, pointing your toes down. Pull their head or body into the knee with your hands. Return the leg to stance. Knees to the head of a downed opponent are illegal under the Unified Rules.",
+  mechanics:"From close range, drive your hips forward and lift your knee into their body or head, pointing your toes down. Pull their head or body into the knee with your hands. Return the leg to stance. Knees to the head of a grounded opponent are illegal under the Unified Rules, and commissions define a grounded fighter differently, so check your event.",
   defense:"They block with their forearms, push your hips away or take you down off a single leg.",
   mistake:"Kneeing with your hips back. The hips drive the knee.",
   drill:"Knee strikes on a bag: 3 × 10 each side."
@@ -217,7 +217,7 @@ KB.add(
   name:"Downward Elbow", aka:["Ground Elbow"], tags:["MMA","Elbow","Ground and Pound"], rel:["ground_and_pound","mma_top_control"],
   tagline:"Elbows dropped from top position. One of the most damaging ground strikes.",
   objective:"Strike down from top position with your elbow when you have posture and space.",
-  mechanics:"From top position (half guard, side, mount), create a small space by lifting your posture. Drop your elbow down into their head or body, using your body weight. Return to a controlling position immediately. Under the Unified Rules, straight down 12-to-6 elbows are illegal; angled elbows are allowed.",
+  mechanics:"From top position (half guard, side, mount), create a small space by lifting your posture. Drop your elbow down into their head or body, using your body weight. Return to a controlling position immediately. Straight-down 12-to-6 elbows were banned under the Unified Rules for years; the Association of Boxing Commissions voted in 2024 to allow them, but adoption varies by commission, so check your event.",
   defense:"They hold you tight to stop the space, or frame and move.",
   mistake:"Giving up position to throw elbows. Position first, strikes second.",
   drill:"Ground pads from half guard and side: 3 × 10."

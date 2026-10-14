@@ -187,6 +187,23 @@ Verified: 204/204 checks (new: 350+ complete entries, every entry levelled and g
 - Rules details vary by promotion (Muay Thai scoring, modern Lethwei judging); entries say so rather than state one rulebook.
 - 204/204 checks (section checks now include Muay Thai and Lethwei); SW v29.
 
+#### Pass 15 — Closing the launch gaps
+**Feedback (launch blocker):** a feedback button in the nav on every page, plus "Report a correction to this entry" on all 393 encyclopedia entries (pre-filled with the entry name and page). It goes to GitHub Issues on the public repo by default, so no personal contact details are published. To use a Google Form or email instead, change `FEEDBACK_URL` at the top of `chinthe.js`.
+**Expert review:** per-entry correction links let practitioners review as they use the site. MMA rules claims were hedged: 12-6 elbows (the ABC voted in 2024 to allow them; adoption varies) and the varying definition of a grounded fighter.
+**Compete, six sports, nine rulesets:** ADCC, IBJJF, NAGA, Judo (IJF), Freestyle (UWW), Folkstyle (NCAA), MMA (Unified Rules), Muay Thai and Lethwei (traditional), grouped by sport. Each has a tracker that matches how it is scored:
+- points (BJJ, wrestling);
+- waza-ari and shido (judo: two waza-ari is ippon, a third shido loses);
+- a 10-point-must round card (MMA, Muay Thai);
+- knockdowns and injury time-out (Lethwei: draw unless stopped).
+Guidance and key-technique links are per sport. Every non-ADCC ruleset carries the verify-against-the-rulebook flag.
+**Daily loop:** Home has a **Today** band with a discipline picker (remembered on the device), a technique of the day (with "drill it today", "Open the breakdown" and "Log it"), and a weekly focus (three moves from one section, rotating each Monday). The journal autocompletes technique names from the encyclopedia, links logged techniques back to their entries, and accepts `journal.html?tech=` from "Log it". The encyclopedia supports `#g:<section>` links.
+**Video:** entries accept an optional `video` (YouTube or Vimeo, validated by the build), shown as "Watch: coach's pick" above the video search. No videos have been chosen yet; that is for a coach.
+**Not built, on purpose:**
+- Cross-device sync needs accounts, a backend and a privacy policy. Backup and restore covers it until usage justifies the cost.
+- Analytics needs a third-party account and would change the "no tracking" promise. That is the owner's decision.
+- Position diagrams need an illustrator to be good. Weak diagrams would hurt the brand more than text does.
+Verified: 218/218 checks (new: nine rulesets and six sports, judo ippon, MMA round card, Lethwei draw, feedback links, Today, discipline memory, journal pre-fill, autocomplete and links, section links, correction links). All 135 Matrix nodes framed. Accessibility clean. SW v30.
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.

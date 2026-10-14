@@ -35,6 +35,12 @@
 .tracker { background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 18px 16px 16px; }
 .tracker-scores { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-bottom: 16px; }
 .tracker-col { text-align: center; }
+.tracker-sub { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--stone-dim); margin-top: 4px; min-height: 14px; }
+.add-btn.wide { flex: 1 1 auto; font-size: 12.5px; letter-spacing: 0.04em; padding: 0 12px; }
+.tracker-extra { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.tracker-extra:empty { display: none; }
+.tracker-extra .add-btn { flex: 1 1 140px; font-size: 12.5px; letter-spacing: 0.04em; }
+.app-nav-sub { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); padding: 12px 18px 4px; }
 .tracker-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); margin-bottom: 4px; }
 .tracker-col.you .tracker-label { color: var(--jade-bright); }
 .tracker-col.opp .tracker-label { color: var(--danger-text); }
@@ -114,19 +120,13 @@
     <div class="app-nav-head">
       <div class="app-eyebrow">CHINTHE Mat-side</div>
       <h1 class="app-title">Compete</h1>
-      <p class="app-head-sub" style="font-size:13.5px">Score, scoring and decisions for the corner and the cage-side.</p>
-      <select class="app-select" id="rulesetSelect" aria-label="Ruleset">
-        <option value="adcc">ADCC</option><option value="ibjjf">IBJJF</option><option value="naga">NAGA</option>
-      </select>
+      <p class="app-head-sub" style="font-size:13.5px">Scoring, a score tracker and decisions for BJJ, judo, wrestling, MMA, Muay Thai and Lethwei.</p>
+      <select class="app-select" id="rulesetSelect" aria-label="Ruleset"></select>
     </div>
     <nav class="app-nav-list">
       <div class="app-nav-group">Ruleset</div>
-      <div id="rulesetSwitch" role="tablist" aria-label="Ruleset">
-        <button class="app-nav-item ruleset-btn" type="button" data-rs="adcc" role="tab"><span>ADCC</span></button>
-        <button class="app-nav-item ruleset-btn" type="button" data-rs="ibjjf" role="tab"><span>IBJJF</span></button>
-        <button class="app-nav-item ruleset-btn" type="button" data-rs="naga" role="tab"><span>NAGA</span></button>
-      </div>
-      <div class="app-nav-group">Core positions</div>
+      <div id="rulesetSwitch" role="tablist" aria-label="Ruleset"></div>
+      <div class="app-nav-group">Key techniques</div>
       <div id="qjump"></div>
     </nav>
   </aside>
@@ -135,24 +135,27 @@
     <div class="list-head">
       <div class="app-eyebrow">Your match</div>
       <div class="list-head-title">Score</div>
-      <p class="list-head-sub">Tap to add as points happen. Stays put if you leave and come back.</p>
+      <p class="list-head-sub" id="trackerHint">Tap to add as points happen. Stays put if you leave and come back.</p>
     </div>
     <div class="tracker">
       <div class="tracker-scores">
         <div class="tracker-col you">
           <div class="tracker-label">You</div>
           <div class="tracker-value" id="youScore">0</div>
+          <div class="tracker-sub" id="youSub"></div>
         </div>
         <div class="tracker-diff" id="trackerDiff">NET<strong>0</strong></div>
         <div class="tracker-col opp">
           <div class="tracker-label">Opponent</div>
           <div class="tracker-value" id="oppScore">0</div>
+          <div class="tracker-sub" id="oppSub"></div>
         </div>
       </div>
       <div class="tracker-adds">
         <div class="tracker-add-col you-col" id="youAdds"></div>
         <div class="tracker-add-col opp-col" id="oppAdds"></div>
       </div>
+      <div class="tracker-extra" id="trackerExtra"></div>
       <button class="btn btn-ghost tracker-reset" type="button" id="resetScore">Reset score</button>
     </div>
   </section>
@@ -174,7 +177,7 @@
       <div class="disc" id="guidance"></div>
     </section>
     <section class="compete-section mobile-only">
-      <div class="section-head">Core positions</div>
+      <div class="section-head">Key techniques</div>
       <div class="aside-list" id="qjumpAside"></div>
     </section>
   </main>
@@ -182,14 +185,23 @@
 
 <script>
 // ─── Ruleset data ───────────────────────────────────────────────
-// ADCC aligns to this app's own Matrix values. IBJJF / NAGA use standard
-// published figures — VERIFY against the current official rulebook. Every
-// number lives here so corrections are one line.
+// ADCC aligns to this app's own Matrix values. Every other ruleset uses
+// standard published rules — VERIFY against the current official rulebook.
+// Every number lives here so corrections are one line.
+// tracker: "points" (add points) · "judo" (waza-ari + shido) ·
+//          "rounds" (10-point must) · "ko" (traditional Lethwei: no points)
+const SPORTS = [
+  { id: "bjj",       name: "BJJ & Submission Grappling" },
+  { id: "judo",      name: "Judo" },
+  { id: "wrestling", name: "Wrestling" },
+  { id: "mma",       name: "MMA" },
+  { id: "muaythai",  name: "Muay Thai" },
+  { id: "lethwei",   name: "Lethwei" }
+];
 const RULESETS = {
   adcc: {
-    name: "ADCC",
+    name: "ADCC", sport: "bjj", tracker: "points",
     note: "No positive points in the first half (5 min in qualifiers, 10 min in finals) — but negative points count all match. Points go live in the second half and overtime.",
-    verify: false,
     positive: [
       { action: "Takedown (lands in guard / half guard)", pts: 2 },
       { action: "Clean takedown (lands past guard)", pts: 4 },
@@ -207,9 +219,8 @@ const RULESETS = {
     quickAdd: [2, 3, 4]
   },
   ibjjf: {
-    name: "IBJJF",
+    name: "IBJJF", sport: "bjj", tracker: "points",
     note: "Points live the whole match; advantages break ties. Verify against the current IBJJF rulebook.",
-    verify: true,
     positive: [
       { action: "Takedown", pts: 2 },
       { action: "Sweep", pts: 2 },
@@ -225,9 +236,8 @@ const RULESETS = {
     quickAdd: [2, 3, 4]
   },
   naga: {
-    name: "NAGA",
+    name: "NAGA", sport: "bjj", tracker: "points",
     note: "No-gi points; values vary by division — verify against your event's current rules.",
-    verify: true,
     positive: [
       { action: "Takedown", pts: 2 },
       { action: "Sweep", pts: 2 },
@@ -240,35 +250,204 @@ const RULESETS = {
       { action: "Stalling / penalty", pts: "−1", kind: "neg" }
     ],
     quickAdd: [2, 3, 4]
+  },
+  ijf: {
+    name: "Judo (IJF)", sport: "judo", tracker: "judo",
+    note: "Regular time is 4 minutes. If scores are level, golden score follows with no time limit: the first score or penalty decides. The IJF revises its rules every Olympic cycle — check the current scores (including whether yuko is in use) before you compete.",
+    positive: [
+      { action: "Ippon — throw with control, force and speed onto the back", pts: "Win" },
+      { action: "Waza-ari — a throw missing one ippon element", pts: "W" },
+      { action: "Two waza-ari", pts: "Win" },
+      { action: "Hold-down (osaekomi) for 10 seconds", pts: "W" },
+      { action: "Hold-down for 20 seconds", pts: "Win" },
+      { action: "Submission by choke or armlock", pts: "Win" }
+    ],
+    other: [
+      { action: "Shido (penalty: passivity, false attack, leg grab, grip faults)", pts: "Shido", kind: "neg" },
+      { action: "Third shido = hansoku-make (loss)", pts: "Loss", kind: "neg" },
+      { action: "Dangerous actions (e.g. diving head-first)", pts: "Loss", kind: "neg" }
+    ]
+  },
+  uww: {
+    name: "Freestyle (UWW)", sport: "wrestling", tracker: "points",
+    note: "Two 3-minute periods. Win by fall, technical superiority (a 10-point lead) or points. Ties go to the highest-value move, then fewest cautions, then the last point scored.",
+    positive: [
+      { action: "Takedown", pts: 2 },
+      { action: "Exposure / turn (back toward the mat)", pts: 2 },
+      { action: "Reversal", pts: 1 },
+      { action: "Step out of bounds", pts: 1 },
+      { action: "Grand-amplitude throw", pts: "4–5" },
+      { action: "Passivity: opponent fails to score on the activity clock", pts: 1 }
+    ],
+    other: [
+      { action: "Caution for fleeing or an illegal hold", pts: "1–2 to opp", kind: "neg" },
+      { action: "Technical superiority", pts: "10 lead", kind: "adv" }
+    ],
+    quickAdd: [1, 2, 4]
+  },
+  ncaa: {
+    name: "Folkstyle (NCAA)", sport: "wrestling", tracker: "points",
+    note: "Three periods (3, 2 and 2 minutes). A fall ends the match. Riding time is worth a point with at least a one-minute advantage. Values changed in recent seasons — verify the current NCAA rulebook.",
+    positive: [
+      { action: "Takedown", pts: 3 },
+      { action: "Escape", pts: 1 },
+      { action: "Reversal", pts: 2 },
+      { action: "Near fall (by how long the back is exposed)", pts: "2–4" },
+      { action: "Riding time advantage (1 min+)", pts: 1 }
+    ],
+    other: [
+      { action: "Stalling (after a warning)", pts: "1+ to opp", kind: "neg" },
+      { action: "Technical fall", pts: "15 lead", kind: "adv" }
+    ],
+    quickAdd: [1, 2, 3]
+  },
+  unified: {
+    name: "MMA (Unified Rules)", sport: "mma", tracker: "rounds",
+    note: "Three 5-minute rounds (five for title and main events). Each judge scores every round 10-9 to the winner, 10-8 for a dominant round. Win by KO/TKO, submission or decision.",
+    positive: [
+      { action: "Effective striking and grappling — judged first", pts: "1st" },
+      { action: "Effective aggressiveness — only if the first is even", pts: "2nd" },
+      { action: "Fighting area control — only if both are even", pts: "3rd" },
+      { action: "Clear round", pts: "10-9" },
+      { action: "Dominant round (damage, duration, impact)", pts: "10-8" }
+    ],
+    other: [
+      { action: "Fouls: headbutts, groin strikes, eye gouges", pts: "Foul", kind: "neg" },
+      { action: "Kicks or knees to the head of a grounded opponent", pts: "Foul", kind: "neg" },
+      { action: "12-6 elbows: long banned; the ABC voted to allow them in 2024 — adoption varies by commission", pts: "Check", kind: "adv" }
+    ]
+  },
+  muaythai: {
+    name: "Muay Thai", sport: "muaythai", tracker: "rounds",
+    note: "Usually five 3-minute rounds with 2 minutes' rest, scored 10-9 per round. Judges often weigh the later rounds more heavily. Scoring varies by promotion — check the event's rules.",
+    positive: [
+      { action: "Clean, effective strikes — kicks and knees are valued highly", pts: "Key" },
+      { action: "Balance and composure after exchanges", pts: "Key" },
+      { action: "Dominance and ring control", pts: "Key" },
+      { action: "Clinch control, sweeps and dumps", pts: "Key" },
+      { action: "Clear round", pts: "10-9" },
+      { action: "Knockdown or dominant round", pts: "10-8" }
+    ],
+    other: [
+      { action: "Fouls: headbutts, biting, groin strikes", pts: "Foul", kind: "neg" },
+      { action: "Judo-style hip throws are not allowed", pts: "Foul", kind: "neg" }
+    ]
+  },
+  lethwei: {
+    name: "Lethwei (Traditional)", sport: "lethwei", tracker: "ko",
+    note: "Traditional rules have no points: a fight is won by knockout or when the opponent can't continue. If both fighters finish standing, it's a draw. A fighter may take one injury time-out to recover. Some modern events use judges — check the event's rules.",
+    positive: [
+      { action: "Knockout / opponent can't continue", pts: "Win" },
+      { action: "Both standing at the final bell", pts: "Draw" }
+    ],
+    other: [
+      { action: "Injury time-out (once per fight, traditional rules)", pts: "Once", kind: "adv" },
+      { action: "Headbutts", pts: "Legal", kind: "adv" },
+      { action: "Throws and sweeps from the clinch", pts: "Legal", kind: "adv" }
+    ]
   }
 };
 
-// Decision guidance is general grappling strategy (no ruleset-specific numbers).
-const GUIDANCE = [
-  { state: "Trailing", tone: "tone-warn", text: "Hunt the finish — the submission resets everything a deficit can't. Raise your risk on entries, but never trade your back or concede a sweep chasing a low-percentage attack. Points help; the tap wins." },
-  { state: "Even", tone: "", text: "Play your highest-percentage game. Take the clean score when it's there, keep advancing position, and don't force a submission from a bad grip just because the clock is running." },
-  { state: "Leading", tone: "tone-dim", text: "Protect position first. Bank what you have, keep climbing to more dominant control, and only commit to a finish when the entry is clean. Don't scramble a lead away." }
-];
+// Decision guidance per sport
+const GUIDANCE = {
+  bjj: [
+    { state: "Trailing", tone: "tone-warn", text: "Hunt the finish — the submission resets everything a deficit can't. Raise your risk on entries, but never trade your back or concede a sweep chasing a low-percentage attack. Points help; the tap wins." },
+    { state: "Even", tone: "", text: "Play your highest-percentage game. Take the clean score when it's there, keep advancing position, and don't force a submission from a bad grip just because the clock is running." },
+    { state: "Leading", tone: "tone-dim", text: "Protect position first. Bank what you have, keep climbing to more dominant control, and only commit to a finish when the entry is clean. Don't scramble a lead away." }
+  ],
+  judo: [
+    { state: "Trailing", tone: "tone-warn", text: "Attack in combinations — one clean throw can level or win it. Keep gripping and attacking so the passivity shidos go to them, not you. Don't drop to your knees with false attacks; that's a shido too." },
+    { state: "Even", tone: "", text: "Win the grip fight first: your grip, their grip broken. Throw off your strongest grip. In golden score, the first score or penalty ends it — stay active and stay disciplined." },
+    { state: "Leading", tone: "tone-dim", text: "Keep attacking with safe techniques so you aren't penalised for passivity. Stay away from the edge and don't give them your back. If you go to the ground, protect against turnovers and pins." }
+  ],
+  wrestling: [
+    { state: "Trailing", tone: "tone-warn", text: "Push the pace and go for the big score — a turn or throw scores multiple points. Take shots off your best set-ups, and on top, look for exposure or a turn." },
+    { state: "Even", tone: "", text: "Win the hand fight and the centre. Shoot when it's set up, not out of frustration. In freestyle, step-outs and passivity points decide close bouts." },
+    { state: "Leading", tone: "tone-dim", text: "Stay in the centre with your stance and hands active. Fleeing and passivity are penalised, so keep moving forward while you protect your legs." }
+  ],
+  mma: [
+    { state: "Down on the cards", tone: "tone-warn", text: "You need a clear round or a finish. Raise your output, chain takedowns or finishing sequences, but stay disciplined defensively — getting reckless is how a close fight becomes a stoppage." },
+    { state: "Even", tone: "", text: "Win the round clearly. Effective striking and grappling count first, so land the cleaner, more damaging work and finish rounds strong." },
+    { state: "Up on the cards", tone: "tone-dim", text: "Keep winning minutes — don't coast. Stay off the fence, avoid being taken down late, and keep your hands up. Protecting a lead still means scoring." }
+  ],
+  muaythai: [
+    { state: "Behind", tone: "tone-warn", text: "The later rounds decide. Kick harder and cleaner, dominate the clinch with knees, and show you're unaffected after every exchange." },
+    { state: "Even", tone: "", text: "Clean kicks and knees, balance after every exchange, and control of the centre. Composure scores in Muay Thai." },
+    { state: "Ahead", tone: "tone-dim", text: "Control distance with teeps and the clinch. Stay calm and balanced — looking in control is part of winning the round." }
+  ],
+  lethwei: [
+    { state: "Hurt", tone: "tone-warn", text: "If you're badly hurt, the traditional injury time-out lets you recover once — signal your corner. Clinch to survive, and keep your head beside theirs so they can't headbutt." },
+    { state: "Even", tone: "", text: "Pressure the body and win the clinch with knees. Look for openings for elbows and headbutts. Keep your guard tight — bare fists punish an open guard." },
+    { state: "On top", tone: "tone-dim", text: "Finish it — under traditional rules, a fighter who survives earns a draw. Keep pressure, but don't lunge. Clean shots and clinch elbows end fights." }
+  ]
+};
 
-// Quick-jump targets deep-link into the Matrix tree (hash → jumpTo).
-const QUICK_JUMPS = [
-  { id: "rnc",          name: "Rear Naked Choke", sub: "Back finish" },
-  { id: "guillotine",   name: "Guillotine",       sub: "Front headlock" },
-  { id: "backtake_pass",name: "Back Take",        sub: "Off the pass" },
-  { id: "mount",        name: "Mount",            sub: "Top control" },
-  { id: "pass",         name: "Guard Passing",    sub: "Top game" },
-  { id: "armbar_mount", name: "Armbar",           sub: "From mount" }
-];
+// Key techniques per sport: Matrix for BJJ, the encyclopedia for the rest
+const QUICK_JUMPS = {
+  bjj: [
+    { href: "chinthe-guardian-matrix.html#rnc",           name: "Rear Naked Choke", sub: "Back finish" },
+    { href: "chinthe-guardian-matrix.html#guillotine",    name: "Guillotine",       sub: "Front headlock" },
+    { href: "chinthe-guardian-matrix.html#backtake_pass", name: "Back Take",        sub: "Off the pass" },
+    { href: "chinthe-guardian-matrix.html#mount",         name: "Mount",            sub: "Top control" },
+    { href: "chinthe-guardian-matrix.html#pass",          name: "Guard Passing",    sub: "Top game" },
+    { href: "chinthe-guardian-matrix.html#armbar_mount",  name: "Armbar",           sub: "From mount" }
+  ],
+  judo: [
+    { href: "knowledge.html#kumi_kata",       name: "Kumi-Kata",     sub: "Grips" },
+    { href: "knowledge.html#seoi_nage",       name: "Seoi-Nage",     sub: "Shoulder throw" },
+    { href: "knowledge.html#uchi_mata",       name: "Uchi-Mata",     sub: "Inner thigh" },
+    { href: "knowledge.html#o_soto_gari",     name: "O-Soto-Gari",   sub: "Outer reap" },
+    { href: "knowledge.html#renraku_waza",    name: "Combinations",  sub: "Renraku-waza" },
+    { href: "knowledge.html#osaekomi_rules",  name: "Pins",          sub: "Osaekomi" }
+  ],
+  wrestling: [
+    { href: "knowledge.html#stance_motion",        name: "Stance & Motion", sub: "Foundation" },
+    { href: "knowledge.html#double_leg",           name: "Double Leg",      sub: "Takedown" },
+    { href: "knowledge.html#single_leg_wrestling", name: "Single Leg",      sub: "Takedown" },
+    { href: "knowledge.html#sprawl",               name: "Sprawl",          sub: "Defence" },
+    { href: "knowledge.html#referee_position",     name: "Mat Work",        sub: "Referee's position" },
+    { href: "knowledge.html#half_nelson",          name: "Half Nelson",     sub: "Turn" }
+  ],
+  mma: [
+    { href: "knowledge.html#fighting_stance",  name: "Fighting Stance", sub: "Foundation" },
+    { href: "knowledge.html#cage_clinch",      name: "Cage Clinch",     sub: "Fence" },
+    { href: "knowledge.html#cage_double_leg",  name: "Cage Takedown",   sub: "Double leg" },
+    { href: "knowledge.html#wall_walk",        name: "Wall Walk",       sub: "Get up" },
+    { href: "knowledge.html#ground_and_pound", name: "Ground & Pound",  sub: "Top" },
+    { href: "knowledge.html#rnc",              name: "Rear Naked Choke",sub: "Finish" }
+  ],
+  muaythai: [
+    { href: "knowledge.html#muay_thai_stance",  name: "Thai Stance",    sub: "Foundation" },
+    { href: "knowledge.html#teep",              name: "Teep",           sub: "Distance" },
+    { href: "knowledge.html#body_kick",         name: "Body Kick",      sub: "Scoring kick" },
+    { href: "knowledge.html#clinch_fighting",   name: "Clinch",         sub: "Knees & turns" },
+    { href: "knowledge.html#catch_and_sweep",   name: "Catch & Sweep",  sub: "Counter" },
+    { href: "knowledge.html#muay_thai_scoring", name: "Scoring",        sub: "How it's judged" }
+  ],
+  lethwei: [
+    { href: "knowledge.html#lethwei_rules",         name: "Rules",            sub: "Nine limbs" },
+    { href: "knowledge.html#lethwei_stance",        name: "Stance & Guard",   sub: "Foundation" },
+    { href: "knowledge.html#bare_knuckle_punching", name: "Bare Knuckle",     sub: "Hand safety" },
+    { href: "knowledge.html#headbutt_defence",      name: "Headbutt Defence", sub: "Clinch" },
+    { href: "knowledge.html#lethwei_clinch",        name: "Clinch",           sub: "Knees & throws" },
+    { href: "knowledge.html#lethwei_throws",        name: "Throws",           sub: "Sweeps" }
+  ]
+};
 
 const STORE_KEY = "chinthe_compete_v1";
+const blankSide = () => ({ w: 0, s: 0, kd: 0, to: false });
 let state = loadState();
 
 function loadState(){
+  const base = { ruleset: "adcc", you: 0, opp: 0, j: { you: blankSide(), opp: blankSide() }, rounds: [] };
   try {
     const s = JSON.parse(localStorage.getItem(STORE_KEY));
-    if (s && RULESETS[s.ruleset]) return { ruleset: s.ruleset, you: +s.you||0, opp: +s.opp||0 };
+    if (s && RULESETS[s.ruleset]) return Object.assign(base, {
+      ruleset: s.ruleset, you: +s.you||0, opp: +s.opp||0,
+      j: s.j && s.j.you ? s.j : base.j, rounds: Array.isArray(s.rounds) ? s.rounds : []
+    });
   } catch(e){}
-  return { ruleset: "adcc", you: 0, opp: 0 };
+  return base;
 }
 function saveState(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e){} }
 
@@ -278,83 +457,163 @@ function el(tag, cls, text){
   if (text != null) n.textContent = text;
   return n;
 }
+const rs = () => RULESETS[state.ruleset];
+
+// Left panel: rulesets grouped by sport
+function renderRulesetNav(){
+  const sw = document.getElementById("rulesetSwitch"), sel = document.getElementById("rulesetSelect");
+  sw.innerHTML = ""; sel.innerHTML = "";
+  SPORTS.forEach(sp=>{
+    const ids = Object.keys(RULESETS).filter(k=>RULESETS[k].sport === sp.id);
+    sw.appendChild(el("div", "app-nav-sub", sp.name));
+    const og = document.createElement("optgroup"); og.label = sp.name;
+    ids.forEach(k=>{
+      const b = el("button", "app-nav-item ruleset-btn");
+      b.type = "button"; b.dataset.rs = k; b.setAttribute("role", "tab");
+      b.appendChild(el("span", null, RULESETS[k].name));
+      b.addEventListener("click", ()=> setRuleset(k));
+      sw.appendChild(b);
+      const o = document.createElement("option"); o.value = k; o.textContent = RULESETS[k].name; og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+}
+function setRuleset(k){
+  const changedMode = RULESETS[k].tracker !== rs().tracker;
+  state.ruleset = k;
+  if (changedMode){ state.you = 0; state.opp = 0; state.j = { you: blankSide(), opp: blankSide() }; state.rounds = []; }
+  saveState(); renderRuleset(); renderScore(); renderGuidance(); renderQuickJumps();
+}
 
 function renderRuleset(){
-  const rs = RULESETS[state.ruleset];
+  const r = rs();
   document.querySelectorAll(".ruleset-btn").forEach(b=>{
     const on = b.dataset.rs === state.ruleset;
     b.classList.toggle("active", on);
     b.setAttribute("aria-selected", on ? "true" : "false");
   });
-  document.getElementById("rulesetNote").textContent = rs.note;
-  document.getElementById("rulesetTitle").textContent = rs.name;
-  document.getElementById("scoringTitle").textContent = "Scoring — " + rs.name;
+  document.getElementById("rulesetNote").textContent = r.note;
+  document.getElementById("rulesetTitle").textContent = r.name;
+  document.getElementById("scoringTitle").textContent = "Scoring — " + r.name;
   document.getElementById("rulesetSelect").value = state.ruleset;
 
-  // Scoring table
   const table = document.getElementById("scoreTable");
   table.innerHTML = "";
-  rs.positive.forEach(r=>{
+  r.positive.forEach(p=>{
     const row = el("div", "score-row");
-    row.appendChild(el("span", "score-action", r.action));
-    row.appendChild(el("span", "score-pts", "+" + r.pts));
+    row.appendChild(el("span", "score-action", p.action));
+    row.appendChild(el("span", "score-pts", typeof p.pts === "number" ? "+" + p.pts : p.pts));
     table.appendChild(row);
   });
-  if (rs.other && rs.other.length){
+  if (r.other && r.other.length){
     table.appendChild(el("div", "score-subhead", "Other"));
-    rs.other.forEach(r=>{
+    r.other.forEach(p=>{
       const row = el("div", "score-row neg");
-      row.appendChild(el("span", "score-action", r.action));
-      row.appendChild(el("span", "score-pts " + (r.kind || "neg"), r.pts));
+      row.appendChild(el("span", "score-action", p.action));
+      row.appendChild(el("span", "score-pts " + (p.kind || "neg"), p.pts));
       table.appendChild(row);
     });
   }
-
+  document.getElementById("trackerHint").textContent = {
+    points: "Tap to add as points happen. Stays put if you leave and come back.",
+    judo: "Track waza-ari and shido for each side. Two waza-ari is ippon; a third shido loses.",
+    rounds: "Score each round as it ends, the way a judge would.",
+    ko: "No points under traditional rules. Track knockdowns and each fighter's injury time-out."
+  }[r.tracker];
   renderTrackerButtons();
 }
 
+function btn(label, fn, cls, aria){
+  const b = el("button", "add-btn" + (cls ? " " + cls : ""), label);
+  b.type = "button";
+  if (aria) b.setAttribute("aria-label", aria);
+  b.addEventListener("click", fn);
+  return b;
+}
 function renderTrackerButtons(){
-  const rs = RULESETS[state.ruleset];
+  const r = rs();
   [["youAdds","you"],["oppAdds","opp"]].forEach(([id, who])=>{
     const wrap = document.getElementById(id);
     wrap.innerHTML = "";
     const row = el("div", "add-row");
-    rs.quickAdd.forEach(p=>{
-      const b = el("button", "add-btn", "+" + p);
-      b.type = "button";
-      b.addEventListener("click", ()=> bump(who, p));
-      row.appendChild(b);
-    });
-    const minus = el("button", "add-btn minus", "−");
-    minus.type = "button";
-    minus.setAttribute("aria-label", "Subtract 1 from " + who);
-    minus.addEventListener("click", ()=> bump(who, -1));
-    row.appendChild(minus);
+    const name = who === "you" ? "you" : "opponent";
+    if (r.tracker === "points"){
+      r.quickAdd.forEach(p=> row.appendChild(btn("+" + p, ()=> bump(who, p))));
+      row.appendChild(btn("−", ()=> bump(who, -1), "minus", "Subtract 1 from " + name));
+    } else if (r.tracker === "judo"){
+      row.appendChild(btn("Waza-ari", ()=> judo(who, "w", 1), "wide"));
+      row.appendChild(btn("Shido", ()=> judo(who, "s", 1), "wide"));
+      row.appendChild(btn("−", ()=> { judo(who, "s", -1); }, "minus", "Remove a shido from " + name));
+    } else if (r.tracker === "rounds"){
+      row.appendChild(btn("10-9", ()=> round(who, 9), "wide", "Round to " + name + " 10-9"));
+      row.appendChild(btn("10-8", ()=> round(who, 8), "wide", "Round to " + name + " 10-8"));
+    } else {
+      row.appendChild(btn("Knockdown", ()=> ko(who, "kd", 1), "wide"));
+      row.appendChild(btn("Time-out", ()=> ko(who, "to"), "wide", "Injury time-out used by " + name));
+    }
     wrap.appendChild(row);
   });
+  const extra = document.getElementById("trackerExtra");
+  extra.innerHTML = "";
+  if (r.tracker === "rounds"){
+    extra.appendChild(btn("Even round 10-10", ()=> round(null, 10), "wide"));
+    extra.appendChild(btn("Undo last round", ()=> { state.rounds.pop(); saveState(); renderScore(); }, "minus wide"));
+  }
 }
 
-function bump(who, delta){
-  state[who] = Math.max(0, state[who] + delta);
-  saveState();
-  renderScore();
+function bump(who, delta){ state[who] = Math.max(0, state[who] + delta); saveState(); renderScore(); }
+function judo(who, k, d){ state.j[who][k] = Math.max(0, Math.min(k === "w" ? 2 : 3, state.j[who][k] + d)); saveState(); renderScore(); }
+function round(winner, loser){
+  if (winner === null) state.rounds.push({ you: 10, opp: 10 });
+  else state.rounds.push(winner === "you" ? { you: 10, opp: loser } : { you: loser, opp: 10 });
+  saveState(); renderScore();
+}
+function ko(who, k){
+  if (k === "to") state.j[who].to = !state.j[who].to;
+  else state.j[who].kd += 1;
+  saveState(); renderScore();
 }
 
 function renderScore(){
-  document.getElementById("youScore").textContent = state.you;
-  document.getElementById("oppScore").textContent = state.opp;
-  const diff = state.you - state.opp;
+  const r = rs();
+  let you, opp, youSub = "", oppSub = "", netLabel = "NET", net, verdict = "";
+  if (r.tracker === "points"){
+    you = state.you; opp = state.opp; net = you - opp;
+  } else if (r.tracker === "judo"){
+    const Y = state.j.you, O = state.j.opp;
+    you = Y.w; opp = O.w;
+    youSub = "waza-ari · " + Y.s + " shido"; oppSub = "waza-ari · " + O.s + " shido";
+    netLabel = "SCORE"; net = you - opp;
+    if (Y.w >= 2 || O.s >= 3) verdict = "You win (ippon)";
+    else if (O.w >= 2 || Y.s >= 3) verdict = "Opponent wins";
+    else if (!net) net = O.s - Y.s;   // level on scores: fewer shido is ahead in golden score
+  } else if (r.tracker === "rounds"){
+    you = state.rounds.reduce((t, x)=> t + x.you, 0);
+    opp = state.rounds.reduce((t, x)=> t + x.opp, 0);
+    youSub = state.rounds.length + (state.rounds.length === 1 ? " round" : " rounds"); oppSub = youSub;
+    netLabel = "CARD"; net = you - opp;
+  } else {
+    const Y = state.j.you, O = state.j.opp;
+    you = Y.kd; opp = O.kd;
+    youSub = "knockdowns · time-out " + (Y.to ? "used" : "available");
+    oppSub = "knockdowns · time-out " + (O.to ? "used" : "available");
+    netLabel = "RESULT"; net = 0; verdict = "Draw unless stopped";
+  }
+  document.getElementById("youScore").textContent = you;
+  document.getElementById("oppScore").textContent = opp;
+  document.getElementById("youSub").textContent = youSub;
+  document.getElementById("oppSub").textContent = oppSub;
   const box = document.getElementById("trackerDiff");
-  box.className = "tracker-diff" + (diff > 0 ? " lead" : diff < 0 ? " trail" : "");
+  box.className = "tracker-diff" + (net > 0 ? " lead" : net < 0 ? " trail" : "");
   box.innerHTML = "";
-  box.appendChild(document.createTextNode("NET"));
-  box.appendChild(el("strong", null, (diff > 0 ? "+" : "") + diff));
+  box.appendChild(document.createTextNode(netLabel));
+  box.appendChild(el("strong", null, verdict || ((net > 0 ? "+" : "") + net)));
 }
 
 function renderGuidance(){
   const wrap = document.getElementById("guidance");
   wrap.innerHTML = "";
-  GUIDANCE.forEach((g, i)=>{
+  GUIDANCE[rs().sport].forEach((g, i)=>{
     const sec = el("div", "disc-section" + (i === 0 ? " open" : ""));
     const head = el("button", "disc-head");
     head.type = "button";
@@ -378,30 +637,30 @@ function renderGuidance(){
   });
 }
 
-// Core positions: list items in the left panel (desktop), links in the aside (phone)
+// Key techniques: list items in the left panel (desktop), links in the reading panel (phone)
 function renderQuickJumps(){
   const nav = document.getElementById("qjump"), aside = document.getElementById("qjumpAside");
-  QUICK_JUMPS.forEach(q=>{
+  nav.innerHTML = ""; aside.innerHTML = "";
+  QUICK_JUMPS[rs().sport].forEach(q=>{
     const a = el("a", "app-nav-item");
-    a.href = "chinthe-guardian-matrix.html#" + q.id;
+    a.href = q.href;
     a.appendChild(el("span", null, q.name));
     a.appendChild(el("span", "app-nav-count", q.sub));
     nav.appendChild(a);
     const b = el("a", "aside-link", q.name);
-    b.href = a.href;
+    b.href = q.href;
     aside.appendChild(b);
   });
 }
 
-document.querySelectorAll(".ruleset-btn").forEach(b=>{
-  b.addEventListener("click", ()=>{ state.ruleset = b.dataset.rs; saveState(); renderRuleset(); });
-});
-document.getElementById("rulesetSelect").addEventListener("change", e=>{ state.ruleset = e.target.value; saveState(); renderRuleset(); });
+document.getElementById("rulesetSelect").addEventListener("change", e=> setRuleset(e.target.value));
 document.getElementById("resetScore").addEventListener("click", ()=>{
-  if (!confirm("Reset the score to 0–0?")) return;
-  state.you = 0; state.opp = 0; saveState(); renderScore();
+  if (!confirm("Reset the score?")) return;
+  state.you = 0; state.opp = 0; state.j = { you: blankSide(), opp: blankSide() }; state.rounds = [];
+  saveState(); renderScore();
 });
 
+renderRulesetNav();
 renderRuleset();
 renderScore();
 renderGuidance();
