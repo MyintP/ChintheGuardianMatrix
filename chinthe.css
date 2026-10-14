@@ -249,7 +249,7 @@ a {
   width: 100%; max-width: 100%; padding: 0 var(--gutter);
   display: flex; align-items: center; gap: 4px;
 }
-.site-nav-brand { display: flex; align-items: center; gap: 10px; min-height: 44px; margin-right: 12px; flex-shrink: 0; }
+.site-nav-brand { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; min-width: 44px; margin-right: 12px; flex-shrink: 0; }
 .site-nav-lion { width: 32px; height: 32px; border-radius: var(--radius-sm); flex-shrink: 0; }
 .site-nav-wordmark {
   font-family: var(--font-display); font-weight: 600; font-size: 21px;
@@ -604,18 +604,9 @@ a {
    16. PHASE C — Navigation & Cross-Page UX
 ═══════════════════════════════════════════════════ */
 
-/* C.4 Page Transitions ─────────────────────────── */
-/* Cross-document view transitions: pure CSS, no JS click interception.
-   Browsers without support simply navigate normally, and the page is never
-   hidden waiting on a script. */
-@keyframes ch-fade-in  { from { opacity: 0; } to { opacity: 1; } }
-@keyframes ch-fade-out { from { opacity: 1; } to { opacity: 0; } }
-
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition { navigation: auto; }
-  ::view-transition-old(root) { animation: ch-fade-out 0.12s ease both; }
-  ::view-transition-new(root) { animation: ch-fade-in  0.18s ease both; }
-}
+/* Page transitions: none. Cross-page fades were removed; they add motion the brand doesn't
+   need, and a viewport change mid-navigation made the browser abort them with an error. */
+@keyframes ch-fade-in  { from { opacity: 0; } to { opacity: 1; } }   /* search overlay */
 
 /* C.3 Global Search Modal ──────────────────────── */
 .search-overlay {

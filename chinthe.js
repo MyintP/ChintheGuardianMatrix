@@ -4,7 +4,6 @@
   2. Service worker registration.
   4. C.3 Global search modal (nav button, Ctrl+K, or "/").
   5. Node counts: fills [data-node-count] from the search index.
-  Page transitions are CSS-only (@view-transition in chinthe.css).
 */
 // Feedback destination — change this one line to use a form or email instead.
 var FEEDBACK_URL = "https://github.com/MyintP/ChintheGuardianMatrix/issues/new";

@@ -35,7 +35,7 @@ for (const [id, n] of Object.entries(NODES)) if (!(n.children || []).length && n
 const kreq = ['name', 'tagline', 'objective', 'mechanics', 'defense', 'mistake', 'drill'];
 const knames = {};
 for (const e of DB) {
-  for (const k of kreq) if (!e[k] || e[k].length < 15) flag('knowledge', `${e.id}: missing/short ${k}`);
+  for (const k of kreq) if (!e[k] || e[k].length < (k === 'name' ? 3 : 15)) flag('knowledge', `${e.id}: missing/short ${k}`);   // names are short by nature ("Mount")
   if (!e.tags || !e.tags.length) flag('knowledge', `${e.id}: no tags`);
   (knames[e.name.toLowerCase()] ||= []).push(e.id);
   const all = [e.tagline, e.objective, e.mechanics, e.defense, e.mistake, e.drill].join(' ');
@@ -51,7 +51,7 @@ const hier = [...pr.matchAll(/hier-pts[^>]*>([^<]+)<\/span><span class="hier-nam
 flag('principles-info', 'hierarchy: ' + hier.join(' | '));
 
 // ── Pages
-const pages = ['index.html', 'chinthe-guardian-matrix.html', 'competition.html', 'knowledge.html', 'principles.html', 'journal.html'];
+const pages = ['index.html', 'chinthe-guardian-matrix.html', 'competition.html', 'knowledge.html', 'principles.html', 'journal.html', 'gameplan.html'];
 for (const p of pages) {
   const h = read(p);
   if (!/<html lang="/.test(h)) flag('page', `${p}: no lang attribute`);
@@ -65,7 +65,13 @@ for (const p of pages) {
 }
 // Compete quick-jumps resolve
 const cp = read('competition.html');
-[...cp.matchAll(/\{ id: "([a-z_]+)",\s+name:/g)].forEach(m => { if (!NODES[m[1]]) flag('compete', `quick jump to missing node ${m[1]}`); });
+// Compete quick jumps link into the Matrix and the encyclopedia (core + kb entries)
+global.window = {}; eval(read('encyclopedia.js'));
+const KB_IDS = new Set(DB.map(d => d.id).concat(window.CHINTHE_KB.entries.map(e => e.id)));
+const qjBlock = cp.slice(cp.indexOf('const QUICK_JUMPS = {'), cp.indexOf('\n};', cp.indexOf('const QUICK_JUMPS = {')));
+[...qjBlock.matchAll(/href: "(chinthe-guardian-matrix|knowledge)\.html#([a-z_]+)"/g)].forEach(m => {
+  if (m[1] === 'knowledge' ? !KB_IDS.has(m[2]) : !NODES[m[2]]) flag('compete', `quick jump to missing ${m[1]} entry ${m[2]}`);
+});
 const qr = mx.match(/const QUICK_REF_IDS = \[([^\]]*)\]/)[1].match(/"([a-z_]+)"/g).map(x => x.slice(1, -1));
 qr.forEach(id => { if (!NODES[id]) flag('matrix', `quick ref missing node ${id}`); });
 

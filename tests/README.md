@@ -16,12 +16,13 @@ node tests/serve.js .
   --user-data-dir="$TEMP/chinthe-test-profile" --no-first-run --disable-gpu about:blank
 
 # 3. The suites
-node tests/run.js tests/shots   # main suite (218 checks) — screenshots land in tests/shots/
+node tests/run.js tests/shots   # main suite (274 checks) — screenshots land in tests/shots/
 node tests/frame-all.js         # every Matrix node framed in view, Focus + Full map, at 1440 / 1024 / 390 px
 node tests/sw-test.js           # service worker: network-first freshness + offline fallback
 node tests/audit.js             # static content audit (fields, scoring claims, page meta); writes tests/dump-*.txt
 node tests/device-check.js      # every page on 8 devices (iPhone SE to iPad Pro): sideways scroll, iOS input zoom, small text, cut-off panels
 node tests/a11y-audit.js        # accessibility: labels, names, WCAG contrast (both themes), phone tap targets, overflow
+node tests/qa-live.js [url]     # QA walkthrough on 10 devices x 2 themes, against the live site by default (pass http://localhost:8790/ for local)
 ```
 
 After editing any `kb/*.js` file, rebuild first: `node tools/build-kb.js` (it validates every entry and fails on errors).
@@ -37,4 +38,5 @@ Delete the Chrome profile folder between runs if you change `sw.js`, or the old 
 | `sw-test.js` | Page controlled by the current SW; a changed file is served fresh on the next request; offline falls back to cache. |
 | `audit.js` | Missing/thin fields, point-value mentions, duplicate titles, dead ends, page meta, broken links. |
 | `a11y-audit.js` | Every page at 390 and 1440 px in dark and light: unnamed controls, unlabeled fields, WCAG AA text contrast, tap targets under 32px on phones, one h1, no horizontal overflow. Gradient backgrounds aren't read, so the homepage philosophy band is a known false positive. |
+| `qa-live.js` | Every page on 10 devices (iPhone SE to 1920 desktop) in light and dark: console errors and failed requests, sideways scroll, header fits and marks the current page, menu (6 links, 44px rows, Escape, navigation), footer present and reachable, images and web fonts loaded, contrast. Per device: search, Encyclopedia entry, Matrix move, Compete scoring and reset, Principles, Journal save/backup/restore, Game Plan create and reload, theme toggle. |
 | `shoot.js` | Helper: `node tests/shoot.js <url> <w> <h> <out.png> [1=fullpage] [js-before-shot]`. |

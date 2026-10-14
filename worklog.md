@@ -299,6 +299,28 @@ All copy, anchors and IDs are unchanged.
 - `prefers-reduced-motion` turns off all transitions.
 - SW v34.
 
+#### Pass 20 — Full QA run on every device
+New `tests/qa-live.js` runs every page on 10 devices (iPhone SE 320 to 1920 desktop) in light and dark, against the live site by default, and drives the core flows on each device: search, Encyclopedia, Matrix, Compete, Principles, Journal save/backup/restore, Game Plan, and the theme toggle.
+
+**Defects found and fixed:**
+- **Page transitions (medium, phones and tablets):** the browser aborted the cross-page fade when the viewport changed mid-navigation (rotation, the mobile address bar) and logged an uncaught error. Cross-page transitions are removed: the brief asks for minimal motion and the fade was decorative. The search overlay keeps its in-page fade.
+- **Logo tap target (low, iPad landscape 1024–1199px):** with the wordmark hidden, the logo was a 32px target. It is now at least 44px.
+
+**Test tooling fixed (not site bugs):**
+- `audit.js` flagged every encyclopedia name under 15 characters as "short". Its Compete check matched the sport groups instead of the quick-jump links, and it never checked `gameplan.html`. It now reports 0 defects plus 21 informational notes.
+- The walkthrough hung on a native confirm dialog ("Reset score"), and a late load event from an earlier page could race the next step. Dialogs are now stubbed on every page, and each step waits until the new URL is showing.
+
+**Results after the fixes:**
+- Walkthrough: 388/388.
+- Main suite: 274/274.
+- 8-device check: clean.
+- Accessibility: clean in both themes. The one remaining small target is an inline text link, which WCAG exempts.
+- All 135 Matrix nodes framed.
+- Service worker and offline: 5/5.
+- SW v35.
+
+**Not covered:** real Safari/WebKit and real hardware. Every run is Chrome with device emulation. iOS storage eviction and real touch gestures still need a person on an iPhone.
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.
