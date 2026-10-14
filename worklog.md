@@ -346,6 +346,7 @@ iOS Safari can clear a website's storage, and the journal lives only in that sto
   - All 135 Matrix nodes framed.
   - Content audit: 0 defects.
   - Service worker and offline: 5/5.
+  - After deploy, the live site passed the 10-device walkthrough: 388/388.
 - SW v36.
 
 #### How every pass was verified
@@ -358,10 +359,12 @@ iOS Safari can clear a website's storage, and the journal lives only in that sto
 #### Open items and decisions for the owner
 - Coach review recommended for judo throw mechanics, leg-lock details, wrestle-up scoring and the difficulty levels (borderline calls: straight ankle lock and arm triangle as Fundamental; omoplata and crucifix as Intermediate).
 - Single-leg head position: the absolute rules were removed — set a house standard with your coach.
-- Not yet tested on a real iPhone (iOS storage eviction, touch gestures).
+- Not yet tested on a real iPhone: check in real Safari that the Home Screen tip appears once, that "Back up now" downloads the file, how the Lacquer and Gold type renders, and Matrix touch gestures. Every automated run is Chrome with device emulation.
+- Brief deviations to confirm (pass 19): Game Plan is the sixth tool in the nav and on Home; the Today band sits between the tools and How it works.
+- No coach has chosen videos yet (entries accept a `video` link).
 - `archive/` and `.claude/` remain untracked by design.
 
 #### Current Project Status
 - **Stage 1 (MVP):** 100% — stable, tested, deployed.
-- **Stage 2 (MLP):** ~70% — design system, themes, content depth, learning paths and the game plan builder done; remaining: coach-verified content and a professional design finish.
+- **Stage 2 (MLP):** ~85% — design system (Lacquer and Gold), themes, content depth, learning paths, game plan builder, iOS journal safeguards and a 10-device QA suite done; remaining: coach-verified content and a real-iPhone check.
 - **Stage 3 (Commercial):** 0%.
