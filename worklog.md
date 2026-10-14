@@ -204,6 +204,13 @@ Guidance and key-technique links are per sport. Every non-ADCC ruleset carries t
 - Position diagrams need an illustrator to be good. Weak diagrams would hurt the brand more than text does.
 Verified: 218/218 checks (new: nine rulesets and six sports, judo ippon, MMA round card, Lethwei draw, feedback links, Today, discipline memory, journal pre-fill, autocomplete and links, section links, correction links). All 135 Matrix nodes framed. Accessibility clean. SW v30.
 
+#### Pass 16 — Every device, iOS and Android
+The owner will share one link with friends on phones, tablets and desktops. A new `tests/device-check.js` runs every page on 8 devices (iPhone SE 320, Android 360, iPhone 15 393, Pro Max 430, iPad mini and Air portrait, iPad and iPad Pro landscape) with touch emulation.
+- **Fixed: iOS zoom.** Every text field and dropdown was 13–15px, so iPhones and iPads zoomed the page on every tap into search or the journal. All fields are now 16px on touch devices.
+- **Fixed: iPad Safari height.** The three-panel frame uses `100dvh` (with a `100vh` fallback), so the toolbar can't hide the bottom of the panels.
+- **Fixed:** the Compete "Undo last round" button was squashed on tablets and small phones.
+- Result: all 6 pages are clean on all 8 devices (no sideways scroll, no zooming fields, no cut-off panels). The feedback channel stays GitHub Issues, by the owner's choice.
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.

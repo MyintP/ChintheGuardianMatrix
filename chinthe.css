@@ -933,7 +933,7 @@ a {
 @media (min-width: 900px) {
   .app-shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); align-items: start; }
   .app-nav {
-    position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); overflow-y: auto;
+    position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); height: calc(100dvh - var(--nav-h)); overflow-y: auto;
     border-bottom: none; border-right: 1px solid var(--line); grid-row: 1 / span 2;
   }
   .app-select { display: none; }
@@ -943,7 +943,7 @@ a {
 }
 /* Desktop: all three panels side by side, each scrolling on its own */
 @media (min-width: 1100px) {
-  body.app-page { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  body.app-page { height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
   body.app-page > .site-nav, body.app-page > .breadcrumb { flex-shrink: 0; }
   body.app-page .app-shell { flex: 1 1 auto; min-height: 0; align-items: stretch; grid-template-columns: 260px 400px minmax(0, 1fr); }
   body.app-page .app-nav { position: static; height: auto; min-height: 0; grid-row: 1; }
@@ -978,3 +978,8 @@ a {
 }
 .empty-state-block { padding: 48px 20px; text-align: center; color: var(--stone-dim); font-size: 14px; line-height: 1.6; }
 .empty-state-block .mark { display: block; font-size: 28px; color: var(--gold); margin-bottom: 8px; }
+
+/* Touch devices: text fields at 16px so iOS Safari does not zoom the page when a field is tapped */
+@media (pointer: coarse) {
+  input:not([type=checkbox]):not([type=radio]):not([type=file]), select, textarea { font-size: 16px !important; }
+}

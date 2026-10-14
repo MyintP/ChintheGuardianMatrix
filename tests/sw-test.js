@@ -17,7 +17,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     await ev(`navigator.serviceWorker.ready.then(()=>1)`);
     await send('Page.reload', {}); await sleep(1500);
     ok('Page is controlled by the service worker', await ev(`!!navigator.serviceWorker.controller`));
-    ok('Controller is the new SW (v30)', await ev(`caches.keys().then(k=>k.includes('chinthe-v30'))`), await ev(`caches.keys().then(k=>k.join())`));
+    ok('Controller is the new SW (v31)', await ev(`caches.keys().then(k=>k.includes('chinthe-v31'))`), await ev(`caches.keys().then(k=>k.join())`));
     const v1 = await ev(`fetch('zz-sw-fresh.json').then(r=>r.json()).then(j=>j.v)`);
     fs.writeFileSync(TMP, '{"v":2}');
     const v2 = await ev(`fetch('zz-sw-fresh.json').then(r=>r.json()).then(j=>j.v)`);

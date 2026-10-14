@@ -20,6 +20,7 @@ node tests/run.js tests/shots   # main suite (218 checks) — screenshots land i
 node tests/frame-all.js         # every Matrix node framed in view, Focus + Full map, at 1440 / 1024 / 390 px
 node tests/sw-test.js           # service worker: network-first freshness + offline fallback
 node tests/audit.js             # static content audit (fields, scoring claims, page meta); writes tests/dump-*.txt
+node tests/device-check.js      # every page on 8 devices (iPhone SE to iPad Pro): sideways scroll, iOS input zoom, small text, cut-off panels
 node tests/a11y-audit.js        # accessibility: labels, names, WCAG contrast (both themes), phone tap targets, overflow
 ```
 

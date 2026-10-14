@@ -39,7 +39,8 @@
 .add-btn.wide { flex: 1 1 auto; font-size: 12.5px; letter-spacing: 0.04em; padding: 0 12px; }
 .tracker-extra { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .tracker-extra:empty { display: none; }
-.tracker-extra .add-btn { flex: 1 1 140px; font-size: 12.5px; letter-spacing: 0.04em; }
+.tracker-extra .add-btn { flex: 1 1 140px; font-size: 12.5px; letter-spacing: 0.04em; white-space: nowrap; }
+.add-btn.undo { color: var(--stone-dim); }
 .app-nav-sub { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); padding: 12px 18px 4px; }
 .tracker-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); margin-bottom: 4px; }
 .tracker-col.you .tracker-label { color: var(--jade-bright); }
@@ -557,7 +558,7 @@ function renderTrackerButtons(){
   extra.innerHTML = "";
   if (r.tracker === "rounds"){
     extra.appendChild(btn("Even round 10-10", ()=> round(null, 10), "wide"));
-    extra.appendChild(btn("Undo last round", ()=> { state.rounds.pop(); saveState(); renderScore(); }, "minus wide"));
+    extra.appendChild(btn("Undo last round", ()=> { state.rounds.pop(); saveState(); renderScore(); }, "wide undo"));
   }
 }
 
