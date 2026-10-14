@@ -199,7 +199,10 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   await d.go(BASE + 'knowledge.html'); await sleep(300);
   const cols = await d.ev(`(()=>{const n=document.querySelector('.app-nav').getBoundingClientRect(),m=document.getElementById('kbMid').getBoundingClientRect(),p=document.getElementById('kbPanel').getBoundingClientRect();return {ok:n.right<=m.left+1&&m.right<=p.left+1&&p.width>350&&!document.getElementById('kbPanel').hidden, n:Math.round(n.width), m:Math.round(m.width), p:Math.round(p.width)}})()`);
   ok('[d1440] Knowledge: three panels side by side (database | moves | detail)', cols.ok, JSON.stringify(cols));
-  ok('[d1440] Detail panel shows a placeholder until a move is chosen', await d.ev(`document.getElementById('kbPanel').classList.contains('is-empty') && document.getElementById('kbPanelBody').textContent.includes('Select a move')`));
+  ok('[d1440] Before a move is chosen, the detail panel offers the fundamentals to open', await d.ev(`document.getElementById('kbPanel').classList.contains('is-empty') && document.getElementById('kbPanelBody').textContent.includes('Start with the fundamentals') && document.querySelectorAll('#kbPanelBody .kb-start-list [data-open]').length===8`));
+  await d.ev(`document.querySelector('#kbPanelBody .kb-start-list [data-open="armbar"]').click()`); await sleep(150);
+  ok('[d1440] A fundamental in the start panel opens its entry', await d.ev(`document.getElementById('kbPanelTitle').textContent.startsWith('Armbar')`));
+  await d.go(BASE + 'knowledge.html'); await sleep(300);
   await d.ev(`document.querySelector('.app-nav-item[data-view="g:closed"]').click()`); await sleep(200);
   ok('[d1440] Choosing a position lists its moves and opens the position itself', await d.ev(`document.getElementById('midTitle').textContent==='Closed Guard' && document.querySelectorAll('.tech-card').length===GROUPS.find(g=>g.id==='closed').ids.length && GROUPS.find(g=>g.id==='closed').ids.length>15 && document.getElementById('kbPanelTitle').textContent==='Closed Guard'`));
   await d.ev(`document.getElementById('tech-kimura').click()`); await sleep(150);
@@ -313,6 +316,12 @@ const typeSearch = q => `(()=>{const i=document.querySelector('.search-input');i
   await t2.ev(`setRuleset('lethwei')`); await sleep(100);
   ok('Compete Lethwei: no points, draw unless stopped', await t2.ev(`document.getElementById('trackerDiff').textContent.includes('Draw unless stopped') && document.getElementById('scoringTitle').textContent.includes('Lethwei')`));
   await t2.ev(`setRuleset('adcc')`);
+  await t2.go(BASE + 'principles.html');
+  const sansCheck = `(()=>{const cs=q=>getComputedStyle(document.querySelector(q));return {nav:cs('.site-nav-link').fontFamily.startsWith('Inter')&&cs('.site-nav-link').textTransform==='none', card:cs('.list-card-title').fontFamily.startsWith('Inter')&&cs('.list-card-title').textTransform==='none', title:cs('.app-title').fontFamily.includes('Oswald'), crumb:!document.querySelector('.breadcrumb')}})()`;
+  const sc = await t2.ev(sansCheck);
+  await t2.go(BASE + 'journal.html');
+  const btnSans = await t2.ev(`getComputedStyle(document.querySelector('.btn')).fontFamily.startsWith('Inter') && getComputedStyle(document.querySelector('.btn')).textTransform==='none'`);
+  ok('Design: nav, buttons and list titles in the sans, sentence case; page titles keep the display face; no breadcrumb bar', sc.nav && sc.card && sc.title && sc.crumb && btnSans, JSON.stringify(sc) + ' btn=' + btnSans);
   ok('Feedback: one tap from the nav on every page, pointing at the feedback channel', await t2.ev(`(()=>{const a=document.querySelector('.site-nav-feedback');return !!a && a.href.startsWith('https://github.com/MyintP/ChintheGuardianMatrix/issues/new') && a.target==='_blank'})()`));
   await t2.ev(`localStorage.removeItem('chinthe_discipline')`);
   await t2.go(BASE + 'index.html'); await sleep(400);

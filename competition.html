@@ -32,49 +32,49 @@
 .section-note { font-size: 12.5px; color: var(--stone-dim); line-height: 1.5; margin-bottom: 14px; }
 
 /* ── Net-score tracker ── */
-.tracker { background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 18px 16px 16px; }
+.tracker { background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); padding: 18px 16px 16px; }
 .tracker-scores { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-bottom: 16px; }
 .tracker-col { text-align: center; }
-.tracker-sub { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--stone-dim); margin-top: 4px; min-height: 14px; }
+.tracker-sub { font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.06em; color: var(--stone-dim); margin-top: 4px; min-height: 14px; }
 .add-btn.wide { flex: 1 1 auto; font-size: 12.5px; letter-spacing: 0.04em; padding: 0 12px; }
 .tracker-extra { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .tracker-extra:empty { display: none; }
 .tracker-extra .add-btn { flex: 1 1 140px; font-size: 12.5px; letter-spacing: 0.04em; white-space: nowrap; }
 .add-btn.undo { color: var(--stone-dim); }
-.app-nav-sub { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); padding: 12px 18px 4px; }
-.tracker-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); margin-bottom: 4px; }
-.tracker-col.you .tracker-label { color: var(--jade-bright); }
+.app-nav-sub { font-family: var(--font-ui); font-size: 12px; font-weight: 500; color: var(--stone-dim); padding: 12px 18px 2px; }
+.tracker-label { font-family: var(--font-ui); font-size: 11px; letter-spacing:0.08em; text-transform: uppercase; color: var(--stone-dim); margin-bottom: 4px; }
+.tracker-col.you .tracker-label { color:var(--jade-bright); }
 .tracker-col.opp .tracker-label { color: var(--danger-text); }
 .tracker-value { font-family: var(--font-display); font-size: clamp(52px, 15vw, 76px); line-height: 0.9; color: var(--stone); }
-.tracker-diff { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.06em; color: var(--stone-dim); white-space: nowrap; }
+.tracker-diff { font-family: var(--font-ui); font-size: 13px; letter-spacing: 0.06em; color: var(--stone-dim); white-space: nowrap; }
 .tracker-diff strong { display: block; font-size: 22px; color: var(--gold); margin-top: 2px; }
-.tracker-diff.lead strong { color: var(--jade-bright); }
+.tracker-diff.lead strong { color:var(--jade-bright); }
 .tracker-diff.trail strong { color: var(--danger); }
 .tracker-adds { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .tracker-add-col { display: flex; flex-direction: column; gap: 6px; }
 .tracker-add-col .add-row { display: flex; gap: 6px; flex-wrap: wrap; }
 .add-btn {
   flex: 1; min-width: 44px; min-height: 44px; padding: 10px 6px; border-radius: 10px; cursor: pointer;
-  font-family: var(--font-mono); font-size: 15px; font-weight: 600;
-  background: var(--surface-2); border: 1px solid var(--line); color: var(--stone); transition: background 0.12s, border-color 0.12s;
+  font-family: var(--font-ui); font-size: 15px; font-weight: 600;
+  background: var(--card); border: 1px solid var(--line-strong); color: var(--stone); transition: background 0.12s, border-color 0.12s;
 }
 .tracker-col.you ~ .tracker-adds .you-col .add-btn:hover,
-.you-col .add-btn:hover { border-color: var(--jade-bright); }
+.you-col .add-btn:hover { border-color:var(--gold); }
 .opp-col .add-btn:hover { border-color: var(--danger); }
 .add-btn.minus { flex: 0 0 44px; color: var(--stone-dim); font-size: 18px; }
 .tracker-reset { display: block; margin: 14px auto 0; }
 
 /* ── Scoring cheat-sheet ── */
-.score-table { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.score-table { background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--radius); overflow: hidden; }
 .score-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; border-top: 1px solid var(--line); }
 .score-row:first-child { border-top: none; }
 .score-row.neg { color: var(--stone-dim); }
 .score-action { font-size: 14.5px; color: var(--stone); }
 .score-row.neg .score-action { color: var(--stone-dim); }
-.score-pts { font-family: var(--font-mono); font-size: 15px; font-weight: 600; color: var(--jade-bright); white-space: nowrap; }
+.score-pts { font-family: var(--font-ui); font-size: 15px; font-weight: 600; color:var(--jade-bright); white-space: nowrap; }
 .score-pts.neg { color: var(--danger-text); }
 .score-pts.adv { color: var(--victory); }
-.score-subhead { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-dim); padding: 10px 16px 4px; background: var(--surface-2); }
+.score-subhead { font-family: var(--font-ui); font-size: var(--text-xs); letter-spacing:0.08em; text-transform: uppercase; color: var(--stone-dim); padding: 10px 16px 4px; background: var(--surface-2); }
 
 /* Mat-side tap targets: lift the guidance rows to the 44px floor on this page
    only — the shared .disc-head stays as-is for the study pages. */
@@ -86,7 +86,7 @@
 .section-head { font-family: var(--font-display); font-weight: 400; font-size: 20px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--stone); margin-bottom: 4px; }
 .section-note { font-size: 13px; color: var(--stone-dim); line-height: 1.5; margin-bottom: 12px; }
 .verify-flag { color: var(--victory); }
-.ruleset-btn[aria-selected="true"], .ruleset-btn.active { border-left-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
+.ruleset-btn[aria-selected="true"], .ruleset-btn.active { border-left-color: var(--gold); background: var(--gold-dim); color: var(--stone); font-weight: 600; }
 .mobile-only { display: block; }
 .app-detail .compete-section { max-width: 820px; }
 .app-list .tracker { padding: 16px 12px 14px; }

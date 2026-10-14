@@ -222,6 +222,31 @@ A new page, `gameplan.html`, in the same three-panel frame: your plans on the le
 - Fixed while testing: the home page entry count read the new index twice (showed 491); it counts only the encyclopedia entries again (393).
 Verified: 15 new checks (stage pools for every discipline, saving, quick picks, gaps, drill list, reload, export, restore validation, delete).
 
+#### Pass 18 — Professional design finish
+A design review found the site looked amateur for site-wide reasons, not page-by-page ones: almost every piece of text was condensed or monospaced capitals, each page named itself three times, and four accent colours competed. Fixed at the design-system level so every page changed together.
+- **Type:** one UI sans (Inter) for nav, buttons, labels, list items and card titles, in sentence case. The condensed display face (Oswald, uppercase) is kept only for page and section titles, the logo and the brand words. Monospace is gone from the interface. Small uppercase labels stay, with tighter tracking.
+- **Navigation:**
+  - 14px nav links with an underline on the current page.
+  - The breadcrumb bar is removed; every page is one level below Home.
+  - The repeated "CHINTHE …" eyebrow above each left-panel title is hidden.
+  - Home no longer has its own nav button, so the nav is identical everywhere.
+  - The theme toggle shows a half-filled circle instead of a monitor.
+- **Colour:**
+  - Primary buttons are gold on dark and ink-black on light (black and gold).
+  - Section labels are neutral grey instead of jade.
+  - Jade stays only where it means something: points scored, "got it", success.
+  - Callouts and focus rings are gold.
+- **Surfaces:** cards are white (light) or lifted (dark) with a clear border on the page tone. The reading panel is white like a document. Level chips are quiet pills instead of three colours.
+- **Fixes:**
+  - The Encyclopedia opens on a "Start with the fundamentals" panel (8 entries to open) instead of an empty pane.
+  - The Matrix uses line icons instead of emoji, and its path trail is a quiet gold pill instead of a black one.
+  - On phones, Game Plan shows your plan first and hides the empty list when there are no plans.
+  - The Encyclopedia level filter wraps instead of running off screen.
+  - The Principles quote is in italic body text instead of Cinzel capitals.
+  - Light label colour darkened to pass AA.
+  - The logo and path pills reach the 32px tap height.
+- SW v33.
+
 #### How every pass was verified
 - Headless Chrome driven over the DevTools protocol from Node (`tests/`, see `tests/README.md`): 177 checks across every page at 360 / 390 / 1024 / 1280 / 1440 px, in both themes.
 - All 135 matrix nodes framed in view, in Focus and Full map, at three screen sizes.

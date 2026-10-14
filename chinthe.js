@@ -2,7 +2,6 @@
   CHINTHE — shared page behaviour
   1. Mobile nav: injects a hamburger toggle into .site-nav.
   2. Service worker registration.
-  3. C.1 Breadcrumbs (all non-home pages).
   4. C.3 Global search modal (nav button, Ctrl+K, or "/").
   5. Node counts: fills [data-node-count] from the search index.
   Page transitions are CSS-only (@view-transition in chinthe.css).
@@ -47,7 +46,7 @@ window.chintheFeedback = function (title, body) {
     // the inline script in each <head> applies it before first paint.
     var THEME_KEY = "chinthe_theme";
     var THEME_ICONS = {
-      system: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>',
+      system: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" stroke="none"/></svg>',
       light:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
       dark:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>'
     };
@@ -115,29 +114,8 @@ window.chintheFeedback = function (title, body) {
     navigator.serviceWorker.register("./sw.js").catch(function () {});
   }
 
-  // ── C.1 Breadcrumbs ───────────────────────────────────────────
-  var CRUMB_MAP = {
-    "chinthe-guardian-matrix.html": "Guardian Matrix",
-    "knowledge.html":               "Encyclopedia",
-    "principles.html":              "Principles",
-    "journal.html":                 "Training Journal",
-    "gameplan.html":                "Game Plan",
-    "competition.html":             "Compete"
-  };
-
-  (function () {
-    var pageName = window.location.pathname.split("/").pop() || "index.html";
-    var label = CRUMB_MAP[pageName];
-    if (!label || !nav) return;
-    var bc = document.createElement("nav");
-    bc.className = "breadcrumb";
-    bc.setAttribute("aria-label", "Breadcrumb");
-    bc.innerHTML =
-      '<a href="index.html">Home</a>' +
-      '<span class="bc-sep" aria-hidden="true">›</span>' +
-      '<span class="bc-current">' + label + '</span>';
-    nav.insertAdjacentElement("afterend", bc);
-  })();
+  // Breadcrumbs were removed: the nav already marks the current page, and
+  // every page is one level below Home.
 
   // ── C.3 Global Search ─────────────────────────────────────────
   // Every result deep-links: the Matrix, Knowledge Base and Principles pages
